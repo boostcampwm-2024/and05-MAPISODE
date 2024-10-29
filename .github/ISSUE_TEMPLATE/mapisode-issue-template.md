@@ -1,5 +1,5 @@
 ---
-name: Santa ISSUE TEMPLATE
+name: MAPISODE ISSUE TEMPLATE
 about: default issue template
 title: "[TAG] where / what"
 labels: ''
