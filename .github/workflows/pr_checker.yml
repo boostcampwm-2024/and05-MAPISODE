@@ -47,3 +47,61 @@ jobs:
 
       - name: Build Check
         run: ./gradlew build
+
+     # CI 성공 시 디스코드 알림
+      - name: Notify Success on Discord
+        if: ${{ success() }}
+        uses: Ilshidur/action-discord@0.3.2
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_CI }}
+          DISCORD_USERNAME: CI_CAT
+          DISCORD_AVATAR: https://github.com/user-attachments/assets/f4a333ae-c6e0-43ed-abe7-4e50a519a3be
+          DISCORD_EMBEDS: |
+            [
+              { 
+                "title": "CI 통과됐다냥 🎉",
+                "color": 3066993,
+                "description": "[#${{ github.event.pull_request.number }}] ${{ github.event.pull_request.title }}\n${{ github.event.pull_request.html_url }}",
+                "fields": [
+                  {
+                    "name": "브랜치",
+                    "value": "${{ github.ref }}",
+                    "inline": true
+                  },
+                  {
+                    "name": "작성자",
+                    "value": "${{ github.event.pull_request.user.login }}",
+                    "inline": true
+                  }
+                ]
+              }
+            ]
+
+      # CI 실패 시 디스코드 알림
+      - name: Notify Failure on Discord
+        if: ${{ failure() }}
+        uses: Ilshidur/action-discord@0.3.2
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_CI }}
+          DISCORD_USERNAME: CI_CAT
+          DISCORD_AVATAR: https://github.com/user-attachments/assets/f4a333ae-c6e0-43ed-abe7-4e50a519a3be
+          DISCORD_EMBEDS: |
+            [
+              { 
+                "title": "빌드 실패했다냥 ❌",
+                "color": 15158332,
+                "description": "[#${{ github.event.pull_request.number }}] ${{ github.event.pull_request.title }}\n${{ github.event.pull_request.html_url }}",
+                "fields": [
+                  {
+                    "name": "브랜치",
+                    "value": "${{ github.ref }}",
+                    "inline": true
+                  },
+                  {
+                    "name": "작성자",
+                    "value": "${{ github.event.pull_request.user.login }}",
+                    "inline": true
+                  }
+                ]
+              }
+            ]        
