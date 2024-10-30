@@ -1,0 +1,125 @@
+name: Repository Notifications
+
+on:
+  issues:
+    types: [opened, closed]
+  pull_request:
+    types: [opened, closed]
+
+jobs:
+  notify:
+    name: Discord Notification
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Issue Opened Notification
+        if: ${{ github.event_name == 'issues' && github.event.action == 'opened' }}
+        uses: Ilshidur/action-discord@0.3.2
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_REPO }}
+          DISCORD_USERNAME: REPO_CAT
+          DISCORD_AVATAR: https://github.com/user-attachments/assets/f48ce758-689e-4e2c-8cba-d9397905c90f
+          DISCORD_EMBEDS: |
+            [
+              { 
+                "title": "새 이슈가 왔다냥 🐈‍⬛ \n${{ github.event.issue.title }}",
+                "color": 10478271,
+                "description": "${{ github.event.issue.html_url }}",
+                "fields": [
+                  {
+                    "name": "Issue Number",
+                    "value": "#${{ github.event.issue.number }}",
+                    "inline": true
+                  },
+                  {
+                    "name": "Author",
+                    "value": "${{ github.event.issue.user.login }}",
+                    "inline": true
+                  }
+                ]
+              }
+            ]
+
+      - name: Send Issue Closed Notification
+        if: ${{ github.event_name == 'issues' && github.event.action == 'closed' }}
+        uses: Ilshidur/action-discord@0.3.2
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_REPO }}
+          DISCORD_USERNAME: REPO_CAT
+          DISCORD_AVATAR: https://github.com/user-attachments/assets/f48ce758-689e-4e2c-8cba-d9397905c90f
+          DISCORD_EMBEDS: |
+            [
+              { 
+                "title": "이슈가 닫혔다냥 🛑\n${{ github.event.issue.title }}",
+                "color": 15158332,
+                "description": "${{ github.event.issue.html_url }}",
+                "fields": [
+                  {
+                    "name": "Issue Number",
+                    "value": "#${{ github.event.issue.number }}",
+                    "inline": true
+                  },
+                  {
+                    "name": "Closed by",
+                    "value": "${{ github.event.sender.login }}",
+                    "inline": true
+                  }
+                ]
+              }
+            ]
+
+      - name: Send PR Opened Notification
+        if: ${{ github.event_name == 'pull_request' && github.event.action == 'opened' }}
+        uses: Ilshidur/action-discord@0.3.2
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_REPO }}
+          DISCORD_USERNAME: REPO_CAT
+          DISCORD_AVATAR: https://github.com/user-attachments/assets/f48ce758-689e-4e2c-8cba-d9397905c90f
+          DISCORD_EMBEDS: |
+            [
+              { 
+                "title": "새로운 PR이 생성되었다냥 🚀\n${{ github.event.pull_request.title }}",
+                "color": 5763719,
+                "description": "${{ github.event.pull_request.html_url }}",
+                "fields": [
+                  {
+                    "name": "PR Number",
+                    "value": "#${{ github.event.pull_request.number }}",
+                    "inline": true
+                  },
+                  {
+                    "name": "Author",
+                    "value": "${{ github.event.pull_request.user.login }}",
+                    "inline": true
+                  }
+                ]
+              }
+            ]
+
+      - name: Send PR Merged Notification
+        if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true }}
+        uses: Ilshidur/action-discord@0.3.2
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_REPO }}
+          DISCORD_USERNAME: REPO_CAT
+          DISCORD_AVATAR: https://github.com/user-attachments/assets/f48ce758-689e-4e2c-8cba-d9397905c90f          
+          DISCORD_EMBEDS: |
+            [
+              { 
+                "title": "PR이 머지되었다냥 🎉\n${{ github.event.pull_request.title }}",
+                "color": 15844367,
+                "description": "${{ github.event.pull_request.html_url }}",
+                "fields": [
+                  {
+                    "name": "PR Number",
+                    "value": "#${{ github.event.pull_request.number }}",
+                    "inline": true
+                  },
+                  {
+                    "name": "Merged by",
+                    "value": "${{ github.event.sender.login }}",
+                    "inline": true
+                  }
+                ]
+              }
+            ]
