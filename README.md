@@ -1,6 +1,17 @@
 # 🕰️ 매피소드
 
 ## 👨‍👨‍👦‍👦 팀원 소개 
+<details>
+<summary>감당할 수 있어요..?</summary>
+  
+| 동역-요시미 | 태웅-아이리 | 태희-카즈사 | 사인-나츠 |
+|:---:|:---:|:---:|:---:|
+|<img width="250" alt="image" src="https://github.com/user-attachments/assets/57106eda-94b7-4a38-9dba-a2ac260c60dd" />|<img width="250" alt="image" src="https://github.com/user-attachments/assets/ccf80f0c-259d-495d-a508-d4239f2f4281" />|<img width="250" alt="image" src="https://github.com/user-attachments/assets/56f25859-454e-4c81-a2f8-ab5b9fe7f8e7" />|<img width="250" alt="image" src="https://github.com/user-attachments/assets/d8e04a6d-94df-4a0a-beec-bc10d3cdf9e6" />|
+| 안드가 처음이라고 얕보지마!<br>내 가능성은 엄청나게 크니까! | 여러분…… 보여드릴게요.<br>디자인의 신이 된 제 모습! | 미리 말해두는데,<br>나는 XML 싫어한다고. | MVI에 대하여<br>고찰해 본 적 있어? |
+
+
+
+</details>
 
 | [김동역](https://github.com/Ameri-Kano) | [류태웅](https://github.com/TaewoongR) | [이태희](https://github.com/taeheeL) | [홍사인](https://github.com/shinythinking) |
 |:---:|:---:|:---:|:---:|
