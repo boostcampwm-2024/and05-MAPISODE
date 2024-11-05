@@ -1,4 +1,6 @@
 pluginManagement {
+    includeBuild("build-logic")
+
     repositories {
         google {
             content {
@@ -19,6 +21,15 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "Mapisode"
 include(":app")
- 
+include(":core:network")
+include(":core:datastore")
+include(":core:designsystem")
+include(":core:ui")
+include(":core:model")
+include(":data:auth")
+include(":domain:auth")
+include(":feature:home")
