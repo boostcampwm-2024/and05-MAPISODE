@@ -37,7 +37,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Ktlint Check
-        uses: ScaCap/action-ktlint@v2
+        uses: ScaCap/action-ktlint@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
