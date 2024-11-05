@@ -9,17 +9,17 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
 class HiltPlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        with(target) {
-            pluginManager.apply {
-                apply("dagger.hilt.android.plugin")
-                apply("com.google.devtools.ksp")
-            }
+	override fun apply(target: Project) {
+		with(target) {
+			pluginManager.apply {
+				apply("dagger.hilt.android.plugin")
+				apply("com.google.devtools.ksp")
+			}
 
-            dependencies {
-                implementation(libs.getLibrary("hilt-android"))
-                ksp(libs.getLibrary("hilt-android-compiler"))
-            }
-        }
-    }
+			dependencies {
+				implementation(libs.getLibrary("hilt-android"))
+				ksp(libs.getLibrary("hilt-android-compiler"))
+			}
+		}
+	}
 }

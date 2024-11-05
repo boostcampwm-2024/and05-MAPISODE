@@ -12,18 +12,18 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
 class AndroidLibraryPlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        with(target) {
-            pluginManager.apply("com.android.library")
+	override fun apply(target: Project) {
+		with(target) {
+			pluginManager.apply("com.android.library")
 
-            extensions.configure<LibraryExtension> {
-                configureKotlinAndroid(this)
-                configureKotlinCoroutine(this)
-            }
+			extensions.configure<LibraryExtension> {
+				configureKotlinAndroid(this)
+				configureKotlinCoroutine(this)
+			}
 
-            dependencies {
-                implementation(libs.getLibrary("timber"))
-            }
-        }
-    }
+			dependencies {
+				implementation(libs.getLibrary("timber"))
+			}
+		}
+	}
 }

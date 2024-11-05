@@ -8,19 +8,19 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 
 class MapisodeFeaturePlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        with(target) {
-            pluginManager.apply {
-                apply("mapisode.android.library")
-                apply("mapisode.android.compose")
-            }
+	override fun apply(target: Project) {
+		with(target) {
+			pluginManager.apply {
+				apply("mapisode.android.library")
+				apply("mapisode.android.compose")
+			}
 
-            dependencies {
-                implementation(project(":core:ui"))
-                implementation(project(":core:designsystem"))
-                implementation(project(":core:model"))
-                implementation(libs.getBundle("compose"))
-            }
-        }
-    }
+			dependencies {
+				implementation(project(":core:ui"))
+				implementation(project(":core:designsystem"))
+				implementation(project(":core:model"))
+				implementation(libs.getBundle("compose"))
+			}
+		}
+	}
 }
