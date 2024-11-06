@@ -15,3 +15,7 @@ allprojects {
 		plugin(rootProject.libs.plugins.ktlint.get().pluginId)
 	}
 }
+
+apply {
+	from("gradle/projectDependencyGraph.gradle")
+}
