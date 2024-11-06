@@ -9,7 +9,7 @@ import org.gradle.kotlin.dsl.configure
 class AndroidComposePlugin : Plugin<Project> {
 	override fun apply(target: Project) {
 		with(target) {
-			pluginManager.apply("mapisode.android.compose")
+			pluginManager.apply("mapisode.android.library")
 
 			extensions.configure<LibraryExtension> {
 				configureComposeAndroid(this)
