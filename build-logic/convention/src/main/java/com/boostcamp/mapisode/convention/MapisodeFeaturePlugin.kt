@@ -11,7 +11,8 @@ class MapisodeFeaturePlugin : Plugin<Project> {
 	override fun apply(target: Project) {
 		with(target) {
 			pluginManager.apply {
-				apply("mapisode.android.library")
+				apply("com.android.library")
+				apply("mapisode.android.hilt")
 				apply("mapisode.android.compose")
 			}
 
