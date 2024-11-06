@@ -1,107 +1,107 @@
 name: PR Checker
 
 on:
-  pull_request:
-    branches: [ "main", "develop" ]
-  push:
-    paths:
-      - '**.kt'
+    pull_request:
+        branches: [ "main", "develop" ]
+    push:
+        paths:
+            - '**.kt'
 
 jobs:
-  build:
-    name: Check Code Quality and Build
-    runs-on: ubuntu-latest
+    build:
+        name: Check Code Quality and Build
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code 
-        uses: actions/checkout@v3
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v3
 
-      - name: Cache Gradle packages
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/buildSrc/**/*.kt') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+            -   name: Cache Gradle packages
+                uses: actions/cache@v2
+                with:
+                    path: |
+                        ~/.gradle/caches
+                        ~/.gradle/wrapper
+                    key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/buildSrc/**/*.kt') }}
+                    restore-keys: |
+                        ${{ runner.os }}-gradle-
 
-      - name: set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: gradle
+            -   name: set up JDK 17
+                uses: actions/setup-java@v3
+                with:
+                    java-version: '17'
+                    distribution: 'temurin'
+                    cache: gradle
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+            -   name: Grant execute permission for gradlew
+                run: chmod +x gradlew
 
-      - name: Ktlint Check
-        uses: ScaCap/action-ktlint@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          android: true
-          fail_on_error: true
-          level: warning
+            -   name: Ktlint Check
+                uses: ScaCap/action-ktlint@master
+                with:
+                    github_token: ${{ secrets.GITHUB_TOKEN }}
+                    reporter: github-pr-review
+                    android: true
+                    fail_on_error: true
+                    level: warning
 
-      - name: Build Check
-        run: ./gradlew build
+            -   name: Build Check
+                run: ./gradlew build
 
-     # CI 성공 시 디스코드 알림
-      - name: Notify Success on Discord
-        if: ${{ success() }}
-        uses: Ilshidur/action-discord@0.3.2
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_CI }}
-          DISCORD_USERNAME: CI_CAT
-          DISCORD_AVATAR: https://github.com/user-attachments/assets/f4a333ae-c6e0-43ed-abe7-4e50a519a3be
-          DISCORD_EMBEDS: |
-            [
-              { 
-                "title": "CI 통과됐다냥 🎉",
-                "color": 3066993,
-                "description": "[#${{ github.event.pull_request.number }}] ${{ github.event.pull_request.title }}\n${{ github.event.pull_request.html_url }}",
-                "fields": [
-                  {
-                    "name": "브랜치",
-                    "value": "${{ github.ref }}",
-                    "inline": true
-                  },
-                  {
-                    "name": "작성자",
-                    "value": "${{ github.event.pull_request.user.login }}",
-                    "inline": true
-                  }
-                ]
-              }
-            ]
+            # CI 성공 시 디스코드 알림
+            -   name: Notify Success on Discord
+                if: ${{ success() }}
+                uses: Ilshidur/action-discord@0.3.2
+                env:
+                    DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_CI }}
+                    DISCORD_USERNAME: CI_CAT
+                    DISCORD_AVATAR: https://github.com/user-attachments/assets/f4a333ae-c6e0-43ed-abe7-4e50a519a3be
+                    DISCORD_EMBEDS: |
+                        [
+                          {
+                            "title": "CI 통과됐다냥 🎉",
+                            "color": 3066993,
+                            "description": "[#${{ github.event.pull_request.number }}] ${{ github.event.pull_request.title }}\n${{ github.event.pull_request.html_url }}",
+                            "fields": [
+                              {
+                                "name": "브랜치",
+                                "value": "${{ github.ref }}",
+                                "inline": true
+                              },
+                              {
+                                "name": "작성자",
+                                "value": "${{ github.event.pull_request.user.login }}",
+                                "inline": true
+                              }
+                            ]
+                          }
+                        ]
 
-      # CI 실패 시 디스코드 알림
-      - name: Notify Failure on Discord
-        if: ${{ failure() }}
-        uses: Ilshidur/action-discord@0.3.2
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_CI }}
-          DISCORD_USERNAME: CI_CAT
-          DISCORD_AVATAR: https://github.com/user-attachments/assets/f4a333ae-c6e0-43ed-abe7-4e50a519a3be
-          DISCORD_EMBEDS: |
-            [
-              { 
-                "title": "빌드 실패했다냥 ❌",
-                "color": 15158332,
-                "description": "[#${{ github.event.pull_request.number }}] ${{ github.event.pull_request.title }}\n${{ github.event.pull_request.html_url }}",
-                "fields": [
-                  {
-                    "name": "브랜치",
-                    "value": "${{ github.ref }}",
-                    "inline": true
-                  },
-                  {
-                    "name": "작성자",
-                    "value": "${{ github.event.pull_request.user.login }}",
-                    "inline": true
-                  }
-                ]
-              }
-            ]        
+            # CI 실패 시 디스코드 알림
+            -   name: Notify Failure on Discord
+                if: ${{ failure() }}
+                uses: Ilshidur/action-discord@0.3.2
+                env:
+                    DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_CI }}
+                    DISCORD_USERNAME: CI_CAT
+                    DISCORD_AVATAR: https://github.com/user-attachments/assets/f4a333ae-c6e0-43ed-abe7-4e50a519a3be
+                    DISCORD_EMBEDS: |
+                        [
+                          {
+                            "title": "빌드 실패했다냥 ❌",
+                            "color": 15158332,
+                            "description": "[#${{ github.event.pull_request.number }}] ${{ github.event.pull_request.title }}\n${{ github.event.pull_request.html_url }}",
+                            "fields": [
+                              {
+                                "name": "브랜치",
+                                "value": "${{ github.ref }}",
+                                "inline": true
+                              },
+                              {
+                                "name": "작성자",
+                                "value": "${{ github.event.pull_request.user.login }}",
+                                "inline": true
+                              }
+                            ]
+                          }
+                        ]
