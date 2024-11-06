@@ -29,3 +29,5 @@ dependencies {
 	implementation(projects.core.network)
 	implementation(projects.data.auth)
 }
+
+apply(from = "https://raw.githubusercontent.com/JakeWharton/SdkSearch/3351cad9bfacb0a364858e843774147143f58c7a/gradle/projectDependencyGraph.gradle")
