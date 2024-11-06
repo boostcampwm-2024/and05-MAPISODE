@@ -23,7 +23,6 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
 		compileOptions {
 			sourceCompatibility = JavaVersion.VERSION_17
 			targetCompatibility = JavaVersion.VERSION_17
-			isCoreLibraryDesugaringEnabled = true
 		}
 
 		buildTypes {
@@ -60,7 +59,7 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, 
 						"-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
 						"-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
 						"-opt-in=androidx.lifecycle.compose.ExperimentalLifecycleComposeApi",
-					)
+					),
 				)
 			}
 		}
