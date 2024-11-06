@@ -20,32 +20,37 @@ gradlePlugin {
 	plugins {
 		register("androidApplication") {
 			id = "mapisode.android.application"
-			implementationClass = "AndroidApplicationPlugin"
+			implementationClass = "com.boostcamp.mapisode.convention.AndroidApplicationPlugin"
 		}
 
 		register("androidLibrary") {
 			id = "mapisode.android.library"
-			implementationClass = "AndroidLibraryPlugin"
+			implementationClass = "com.boostcamp.mapisode.convention.AndroidLibraryPlugin"
 		}
 
 		register("androidCompose") {
 			id = "mapisode.android.compose"
-			implementationClass = "AndroidComposePlugin"
+			implementationClass = "com.boostcamp.mapisode.convention.AndroidComposePlugin"
 		}
 
 		register("androidHilt") {
 			id = "mapisode.android.hilt"
-			implementationClass = "HiltPlugin"
+			implementationClass = "com.boostcamp.mapisode.convention.HiltPlugin"
 		}
 
 		register("feature") {
 			id = "mapisode.feature"
-			implementationClass = "MapisodeFeaturePlugin"
+			implementationClass = "com.boostcamp.mapisode.convention.MapisodeFeaturePlugin"
 		}
 
 		register("data") {
 			id = "mapisode.data"
-			implementationClass = "MapisodeDataPlugin"
+			implementationClass = "com.boostcamp.mapisode.convention.MapisodeDataPlugin"
+		}
+
+		register("javaLibrary") {
+			id = "mapisode.java.library"
+			implementationClass = "com.boostcamp.mapisode.convention.JavaLibraryPlugin"
 		}
 	}
 }
