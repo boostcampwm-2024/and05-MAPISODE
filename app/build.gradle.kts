@@ -1,44 +1,31 @@
 plugins {
-	alias(libs.plugins.android.application)
-	alias(libs.plugins.kotlin.android)
-	alias(libs.plugins.compose.compiler)
+	alias(libs.plugins.mapisode.android.application)
+	alias(libs.plugins.mapisode.android.hilt)
 }
 
 android {
 	namespace = "com.boostcamp.mapisode"
-	compileSdk = 34
 
 	defaultConfig {
 		applicationId = "com.boostcamp.mapisode"
-		minSdk = 23
-		targetSdk = 34
-		versionCode = 1
-		versionName = "1.0"
-
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-		vectorDrawables {
-			useSupportLibrary = true
-		}
 	}
 
-	compileOptions {
-		sourceCompatibility = JavaVersion.VERSION_17
-		targetCompatibility = JavaVersion.VERSION_17
-	}
-	kotlinOptions {
-		jvmTarget = "17"
-	}
-	buildFeatures {
-		compose = true
-	}
 	packaging {
 		resources {
 			excludes += "/META-INF/{AL2.0,LGPL2.1}"
 		}
 	}
+
+	buildFeatures {
+		buildConfig = true
+	}
 }
 
 dependencies {
-	implementation(libs.bundles.compose)
-	implementation(libs.bundles.androidx.core)
+	implementation(projects.core.ui)
+	implementation(projects.core.designsystem)
+	implementation(projects.core.datastore)
+	implementation(projects.core.network)
+	implementation(projects.data.auth)
 }
