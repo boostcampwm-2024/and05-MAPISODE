@@ -22,7 +22,7 @@ class MapisodeDataPlugin : Plugin<Project> {
 				implementation(platform(retrofitBom))
 				implementation(project(":core:model"))
 				implementation(project(":core:network"))
-				implementation(libs.getLibrary("kotlinx-serialization"))
+				implementation(libs.getLibrary("kotlinx.serialization.json"))
 				implementation(libs.getBundle("retrofit"))
 			}
 		}
