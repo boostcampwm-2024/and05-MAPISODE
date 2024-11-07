@@ -22,6 +22,7 @@ dependencyResolutionManagement {
 }
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
 
 rootProject.name = "Mapisode"
 include(":app")
@@ -33,3 +34,7 @@ include(":core:model")
 include(":data:auth")
 include(":domain:auth")
 include(":feature:home")
+include(":feature:episode")
+include(":feature:mypage")
+include(":feature:mygroup")
+include(":feature:main")
