@@ -20,7 +20,9 @@ class MapisodeFeaturePlugin : Plugin<Project> {
 				implementation(project(":core:ui"))
 				implementation(project(":core:designsystem"))
 				implementation(project(":core:model"))
+				implementation(project(":core:navigation"))
 				implementation(libs.getBundle("compose"))
+				implementation(libs.getBundle("navigation"))
 			}
 		}
 	}
