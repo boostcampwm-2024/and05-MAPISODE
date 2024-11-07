@@ -9,6 +9,13 @@ trim_trailing_whitespace = true
 ktlint_function_naming_ignore_when_annotated_with = Composable, Test
 
 [*.{kt,kts}]
+ktlint_code_style = android_studio
+ktlint_standard_function-signature = disabled
+ktlint_standard_import-ordering = disabled
+ktlint_standard_comment-spacing = disabled
+ktlint_standard_no-empty-first-line-in-method-block = disabled
+ktlint_standard_no-blank-line-before-rbrace = disabled
+ktlint_no-multi-spaces = disabled
 ij_kotlin_allow_trailing_comma = true
 ij_kotlin_allow_trailing_comma_on_call_site = true
 ktlint_standard_multiline_expression_wrapping = disabled
