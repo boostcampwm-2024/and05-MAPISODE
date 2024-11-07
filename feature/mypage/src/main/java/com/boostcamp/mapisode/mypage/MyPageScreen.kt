@@ -14,8 +14,7 @@ internal fun MyPageRoute() {
 }
 
 @Composable
-private fun MyPageScreen(
-) {
+private fun MyPageScreen() {
 	Box(
 		modifier = Modifier.fillMaxSize(),
 		contentAlignment = Alignment.Center,
