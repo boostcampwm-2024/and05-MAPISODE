@@ -52,9 +52,8 @@ internal class MainNavigator(
 		}
 	}
 
-	private inline fun <reified T : MainRoute> isSameCurrentDestination(): Boolean {
-		return navController.currentDestination?.hasRoute<T>() == true
-	}
+	private inline fun <reified T : MainRoute> isSameCurrentDestination(): Boolean =
+		navController.currentDestination?.hasRoute<T>() == true
 
 	@Composable
 	fun shouldShowBottomBar() = MainNavTab.contains {
