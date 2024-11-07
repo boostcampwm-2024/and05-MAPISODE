@@ -1,10 +1,10 @@
 package com.boostcamp.mapisode
 
 import android.app.Application
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
-@AndroidEntryPoint
+@HiltAndroidApp
 class MapisodeApplication : Application() {
 	override fun onCreate() {
 		super.onCreate()
