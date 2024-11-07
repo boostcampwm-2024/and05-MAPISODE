@@ -14,8 +14,7 @@ internal fun HomeRoute() {
 }
 
 @Composable
-private fun HomeScreen(
-) {
+private fun HomeScreen() {
 	Box(
 		modifier = Modifier.fillMaxSize(),
 		contentAlignment = Alignment.Center,

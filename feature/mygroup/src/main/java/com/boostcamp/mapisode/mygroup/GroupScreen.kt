@@ -14,8 +14,7 @@ internal fun GroupRoute() {
 }
 
 @Composable
-private fun GroupScreen(
-) {
+private fun GroupScreen() {
 	Box(
 		modifier = Modifier.fillMaxSize(),
 		contentAlignment = Alignment.Center,

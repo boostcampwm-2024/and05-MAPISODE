@@ -14,8 +14,7 @@ internal fun EpisodeRoute() {
 }
 
 @Composable
-private fun EpisodeScreen(
-) {
+private fun EpisodeScreen() {
 	Box(
 		modifier = Modifier.fillMaxSize(),
 		contentAlignment = Alignment.Center,
