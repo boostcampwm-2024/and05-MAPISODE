@@ -16,9 +16,7 @@
 | [김동역](https://github.com/Ameri-Kano) | [류태웅](https://github.com/TaewoongR) | [이태희](https://github.com/taeheeL) | [홍사인](https://github.com/shinythinking) |
 |:---:|:---:|:---:|:---:|
 |<img width="250" alt="image" src="https://github.com/user-attachments/assets/f7ef338d-ce54-4435-b7fb-3180dfaf0059" />|<img width="250" alt="image" src="https://github.com/user-attachments/assets/97081ec7-e86e-4f77-89b9-1548ad837a09" />|<img width="250" alt="image" src="https://github.com/user-attachments/assets/eb231a8a-d0e4-47c2-9ca8-a80f51f95e6f" />|<img width="250" alt="image" src="https://github.com/user-attachments/assets/1555b029-7449-41da-80a1-dc1b4562bcdc" />|
-| 서버 담당 | 디자인 담당 | 클라이언트 담당 | 기획 담당 |
-| 새 에피소드 | 그룹 화면 | 메인 화면 | 온보딩, 마이페이지 |
-| Network 모듈 | DesignSystem 모듈 | Navigation 모듈 | 구글 로그인 |
+
 
 ## 🔗 바로가기 
 
