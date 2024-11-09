@@ -47,7 +47,7 @@ fun TestScreen() {
 				verticalArrangement = Arrangement.spacedBy(16.dp),
 			) {
 				Button(
-					onClick = { /*TODO*/ },
+					onClick = { },
 					modifier = Modifier.testTag("Button1"),
 					colors = ButtonDefaults.buttonColors(
 						MapisodeTheme.colorScheme.accentSelected,
@@ -57,7 +57,7 @@ fun TestScreen() {
 				}
 
 				OutlinedButton(
-					onClick = { /*TODO*/ },
+					onClick = { },
 					modifier = Modifier.testTag("Button2"),
 				) {
 					Text("Secondary Button")
