@@ -1,11 +1,19 @@
 package com.boostcamp.mapisode.designsystem.theme
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.takeOrElse
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.takeOrElse
 import com.boostcamp.mapisode.designsystem.R
 
 // FontFamily 정의
@@ -18,91 +26,128 @@ val maruBuriFontFamily = FontFamily(
 )
 
 @Immutable
+data class MapisodeTextStyle(
+	val fontFamily: FontFamily = maruBuriFontFamily,
+	val fontWeight: FontWeight = FontWeight.Medium,
+	val fontSize: Dp = Dp.Unspecified,
+	val lineHeight: Dp = Dp.Unspecified,
+	val color: Color = Color.Unspecified,
+	val textAlign: TextAlign = TextAlign.Start,
+) {
+	@Composable
+	fun toTextStyle() = TextStyle(
+		fontFamily = fontFamily,
+		fontWeight = fontWeight,
+		fontSize = with(LocalDensity.current) { fontSize.toSp() },
+		lineHeight = with(LocalDensity.current) { lineHeight.toSp() },
+		color = color,
+		textAlign = textAlign,
+	)
+
+	fun merge(other: MapisodeTextStyle?): MapisodeTextStyle {
+		if (other == null || other == Default) return this
+		return MapisodeTextStyle(
+			fontFamily = other.fontFamily,
+			fontWeight = other.fontWeight,
+			fontSize = this.fontSize.takeOrElse { other.fontSize },
+			lineHeight = this.lineHeight.takeOrElse { other.lineHeight },
+			color = this.color.takeOrElse { other.color },
+			textAlign = other.textAlign,
+		)
+	}
+
+	companion object {
+		@Stable
+		val Default = MapisodeTextStyle()
+	}
+}
+
+@Immutable
 data class MaruBuriTypography(
 
 	// display styles
-	val displayLarge: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val displayLarge: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.Normal,
-		fontSize = 57.sp,
+		fontSize = 57.dp,
+		lineHeight = 64.dp,
 	),
-	val displayMedium: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val displayMedium: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.Normal,
-		fontSize = 45.sp,
+		fontSize = 45.dp,
+		lineHeight = 52.dp,
 	),
-	val displaySmall: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val displaySmall: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.Normal,
-		fontSize = 36.sp,
+		fontSize = 36.dp,
+		lineHeight = 40.dp,
 	),
 
 	// headline styles
-	val headlineLarge: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val headlineLarge: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.Bold,
-		fontSize = 32.sp,
+		fontSize = 32.dp,
+		lineHeight = 36.dp,
 	),
-	val headlineMedium: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val headlineMedium: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.SemiBold,
-		fontSize = 28.sp,
+		fontSize = 28.dp,
+		lineHeight = 32.dp,
 	),
-	val headlineSmall: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val headlineSmall: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.SemiBold,
-		fontSize = 24.sp,
+		fontSize = 24.dp,
+		lineHeight = 28.dp,
 	),
 
 	// title styles
-	val titleLarge: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val titleLarge: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.Bold,
-		fontSize = 22.sp,
+		fontSize = 22.dp,
+		lineHeight = 26.dp,
 	),
-	val titleMedium: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val titleMedium: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.Normal,
-		fontSize = 16.sp,
+		fontSize = 16.dp,
+		lineHeight = 20.dp,
 	),
-	val titleSmall: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val titleSmall: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.Medium,
-		fontSize = 14.sp,
+		fontSize = 14.dp,
+		lineHeight = 18.dp,
 	),
 
 	// body styles
-	val bodyLarge: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val bodyLarge: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.Normal,
-		fontSize = 16.sp,
+		fontSize = 16.dp,
+		lineHeight = 20.dp,
 	),
-	val bodyMedium: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val bodyMedium: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.Normal,
-		fontSize = 14.sp,
+		fontSize = 14.dp,
+		lineHeight = 18.dp,
 	),
-	val bodySmall: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val bodySmall: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.Light,
-		fontSize = 12.sp,
+		fontSize = 12.dp,
+		lineHeight = 16.dp,
 	),
 
 	// label styles
-	val labelLarge: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val labelLarge: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.Medium,
-		fontSize = 14.sp,
+		fontSize = 14.dp,
+		lineHeight = 18.dp,
 	),
-	val labelMedium: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val labelMedium: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.Medium,
-		fontSize = 12.sp,
+		fontSize = 12.dp,
+		lineHeight = 16.dp,
 	),
-	val labelSmall: TextStyle = TextStyle(
-		fontFamily = maruBuriFontFamily,
+	val labelSmall: MapisodeTextStyle = MapisodeTextStyle(
 		fontWeight = FontWeight.ExtraLight,
-		fontSize = 10.sp,
+		fontSize = 10.dp,
+		lineHeight = 14.dp,
 	),
 )
 
