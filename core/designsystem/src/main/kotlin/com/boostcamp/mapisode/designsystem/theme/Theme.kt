@@ -16,7 +16,8 @@ internal val LocalMapisodeTypography = staticCompositionLocalOf { AppTypography 
 
 object MapisodeTheme {
 	val colorScheme: CustomColorScheme
-		@Composable @ReadOnlyComposable get() = LocalMapisodeColorScheme.current
+		@Composable @ReadOnlyComposable
+		get() = LocalMapisodeColorScheme.current
 }
 
 @Composable
