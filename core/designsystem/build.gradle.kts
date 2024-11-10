@@ -1,6 +1,5 @@
 plugins {
 	alias(libs.plugins.mapisode.android.compose)
-	alias(libs.plugins.compose.compiler)
 }
 
 android {
