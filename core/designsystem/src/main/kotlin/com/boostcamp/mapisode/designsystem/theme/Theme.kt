@@ -31,7 +31,7 @@ fun MapisodeTheme(
 		SideEffect {
 			val window = (view.context as Activity).window
 			// 시스템 status bar 는 투명 (기본값)
-			window.navigationBarColor = colors.accentSelected.toArgb()
+			window.navigationBarColor = colors.systemNavBar.toArgb()
 			WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars =
 				!darkTheme
 		}
