@@ -32,7 +32,7 @@ val lightColorScheme = CustomColorScheme(
 	bodyText = Neutral80,
 	background = Neutral10,
 	foreground = Neutral110,
-	systemNavBar = Neutral30
+	systemNavBar = Neutral30,
 )
 
 // Dark Theme Color Scheme
@@ -48,5 +48,5 @@ val darkColorScheme = CustomColorScheme(
 	bodyText = Neutral50,
 	background = Neutral110,
 	foreground = Neutral10,
-	systemNavBar = Neutral100
+	systemNavBar = Neutral100,
 )
