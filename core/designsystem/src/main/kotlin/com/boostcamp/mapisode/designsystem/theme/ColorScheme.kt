@@ -16,34 +16,37 @@ data class CustomColorScheme(
 	val bodyText: Color,
 	val background: Color,
 	val foreground: Color,
+	val systemNavBar: Color,
 )
 
 // Light Theme Color Scheme
 val lightColorScheme = CustomColorScheme(
-	primaryText = ColorPrimaryText,
-	accentIcon = ColorAccentIcon,
-	accentSelected = ColorAccentSelected,
-	accentStroke = ColorAccentStroke,
-	backgroundChip = ColorBackgroundChip,
-	errorText = ColorErrorText,
-	secondaryText = ColorSecondaryText,
-	hintStroke = ColorHintStroke,
-	bodyText = ColorBodyText,
-	background = ColorBackground,
-	foreground = ColorForeground,
+	primaryText = Primary90,
+	accentIcon = Primary50,
+	accentSelected = Primary30,
+	accentStroke = Primary20,
+	backgroundChip = Neutral20,
+	errorText = Error20,
+	secondaryText = Neutral90,
+	hintStroke = Neutral60,
+	bodyText = Neutral80,
+	background = Neutral10,
+	foreground = Neutral110,
+	systemNavBar = Neutral30
 )
 
 // Dark Theme Color Scheme
 val darkColorScheme = CustomColorScheme(
-	primaryText = ColorPrimaryTextDark,
-	accentIcon = ColorAccentIconDark,
-	accentSelected = ColorAccentSelectedDark,
-	accentStroke = ColorAccentStrokeDark,
-	backgroundChip = ColorBackgroundChipDark,
-	errorText = ColorErrorTextDark,
-	secondaryText = ColorSecondaryTextDark,
-	hintStroke = ColorHintStrokeDark,
-	bodyText = ColorBodyTextDark,
-	background = ColorBackgroundDark,
-	foreground = ColorForegroundDark,
+	primaryText = Primary10,
+	accentIcon = Primary40,
+	accentSelected = Primary60,
+	accentStroke = Primary70,
+	backgroundChip = Primary80,
+	errorText = Error10,
+	secondaryText = Neutral40,
+	hintStroke = Neutral70,
+	bodyText = Neutral50,
+	background = Neutral110,
+	foreground = Neutral10,
+	systemNavBar = Neutral100
 )
