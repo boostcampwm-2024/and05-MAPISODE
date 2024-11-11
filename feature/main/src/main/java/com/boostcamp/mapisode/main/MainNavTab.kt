@@ -27,7 +27,7 @@ internal enum class MainNavTab(
 		iconResId = R.drawable.ic_account_circle_24,
 		contentDescription = "마이페이지",
 		route = MainRoute.Mypage,
-	);
+	),;
 
 	companion object {
 		@Composable
