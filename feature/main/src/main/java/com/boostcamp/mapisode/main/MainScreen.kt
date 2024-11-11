@@ -2,10 +2,11 @@ package com.boostcamp.mapisode.main
 
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.boostcamp.mapisode.main.component.MainBottomBar
+import com.boostcamp.mapisode.designsystem.compose.BottomBar
+import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
+import com.boostcamp.mapisode.main.component.MainBottomBarItem
 import com.boostcamp.mapisode.main.component.MainNavHost
 import kotlinx.collections.immutable.toPersistentList
 
@@ -25,16 +26,21 @@ internal fun MainScreenContent(
 	modifier: Modifier = Modifier,
 	navigator: MainNavigator,
 ) {
-	Scaffold(
+	MapisodeScaffold(
 		modifier = modifier,
 		bottomBar = {
-			MainBottomBar(
+			BottomBar(
 				modifier = Modifier.navigationBarsPadding(),
 				visible = navigator.shouldShowBottomBar(),
-				mainNavTabs = MainNavTab.entries.toPersistentList(),
-				currentTab = navigator.currentTab,
-				onTabSelected = { navigator.navigate(it) },
-			)
+			) {
+				MainNavTab.entries.toPersistentList().forEach { tab ->
+					MainBottomBarItem(
+						tab = tab,
+						isSelected = tab == navigator.currentTab,
+						onClick = { navigator.navigate(tab) },
+					)
+				}
+			}
 		},
 	) { paddingValue ->
 		MainNavHost(

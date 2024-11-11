@@ -3,7 +3,7 @@ package com.boostcamp.mapisode.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.MaterialTheme
+import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
 		setContent {
 			val navigator: MainNavigator = rememberMainNavigator()
 
-			MaterialTheme {
+			MapisodeTheme {
 				MainScreen(navigator = navigator)
 			}
 		}
