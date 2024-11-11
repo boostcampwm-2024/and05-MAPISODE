@@ -12,6 +12,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.takeOrElse
 import com.boostcamp.mapisode.designsystem.R
@@ -38,8 +39,16 @@ data class MapisodeTextStyle(
 	fun toTextStyle() = TextStyle(
 		fontFamily = fontFamily,
 		fontWeight = fontWeight,
-		fontSize = with(LocalDensity.current) { fontSize.toSp() },
-		lineHeight = with(LocalDensity.current) { lineHeight.toSp() },
+		fontSize = if (fontSize != Dp.Unspecified) {
+			with(LocalDensity.current) { fontSize.toSp() }
+		} else {
+			TextUnit.Unspecified
+		},
+		lineHeight = if (lineHeight != Dp.Unspecified) {
+			with(LocalDensity.current) { lineHeight.toSp() }
+		} else {
+			TextUnit.Unspecified
+		},
 		color = color,
 		textAlign = textAlign,
 	)
