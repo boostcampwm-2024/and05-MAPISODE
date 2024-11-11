@@ -18,10 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 
-data class ToastTransitionItem(
-	val toastData: ToastData?,
-	val opacityTransition: OpacityTransition,
-)
+data class ToastTransitionItem(val toastData: ToastData?, val opacityTransition: OpacityTransition)
 
 typealias OpacityTransition = @Composable (toast: @Composable () -> Unit) -> Unit
 

@@ -18,14 +18,12 @@ internal val LocalMapisodeTypography = staticCompositionLocalOf { AppTypography 
 internal val LocalMapisodeContentColor = compositionLocalOf { lightColorScheme.foreground }
 internal val LocalMapisodeContentAlpha = compositionLocalOf { 1f }
 
-private fun CustomColorScheme.pressedColorFor(color: Color): Color {
-	return when (color) {
-		accentSelected -> background
-		background -> accentSelected
-		hintStroke -> secondaryText
-		secondaryText -> hintStroke
-		else -> color
-	}
+private fun CustomColorScheme.pressedColorFor(color: Color): Color = when (color) {
+	accentSelected -> background
+	background -> accentSelected
+	hintStroke -> secondaryText
+	secondaryText -> hintStroke
+	else -> color
 }
 
 object MapisodeTheme {
@@ -39,9 +37,7 @@ object MapisodeTheme {
 
 	@Composable
 	@ReadOnlyComposable
-	fun pressedColorFor(color: Color): Color {
-		return colorScheme.pressedColorFor(color)
-	}
+	fun pressedColorFor(color: Color): Color = colorScheme.pressedColorFor(color)
 }
 
 @Composable
