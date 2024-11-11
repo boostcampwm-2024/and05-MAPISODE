@@ -71,24 +71,24 @@ fun MapisodeDivider(
 ) {
 	Box(
 		modifier = Modifier
-            .then(modifier)
-            .background(
-                color = when (thickness) {
-                    Thickness.Thin -> MapisodeTheme.colorScheme.hintStroke
-                    Thickness.Thick -> MapisodeTheme.colorScheme.background
-                },
-            )
-            .then(
-                when (direction) {
-                    Direction.Horizontal -> Modifier
-                        .fillMaxWidth()
-                        .height(thickness.value)
+			.then(modifier)
+			.background(
+				color = when (thickness) {
+					Thickness.Thin -> MapisodeTheme.colorScheme.hintStroke
+					Thickness.Thick -> MapisodeTheme.colorScheme.background
+				},
+			)
+			.then(
+				when (direction) {
+					Direction.Horizontal -> Modifier
+						.fillMaxWidth()
+						.height(thickness.value)
 
-                    Direction.Vertical -> Modifier
-                        .fillMaxHeight()
-                        .width(thickness.value)
-                },
-            ),
+					Direction.Vertical -> Modifier
+						.fillMaxHeight()
+						.width(thickness.value)
+				},
+			),
 	)
 }
 
