@@ -30,6 +30,7 @@ fun TopAppBar(
 	) {
 		Box(
 			modifier = Modifier.fillMaxWidth()
+				.padding(horizontal = 8.dp)
 		) {
 			Row(
 				verticalAlignment = Alignment.CenterVertically, modifier = Modifier
