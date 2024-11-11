@@ -31,12 +31,13 @@ enum class MapisodeBorder(val dp: Dp) {
 }
 
 enum class Direction {
-	Horizontal, Vertical
+	Horizontal,
+	Vertical,
 }
 
 enum class Thickness(val value: Dp) {
 	Thin(MapisodeBorder.Thin.dp),
-	Thick(MapisodeBorder.Thick.dp)
+	Thick(MapisodeBorder.Thick.dp),
 }
 
 @Composable
@@ -80,13 +81,15 @@ fun MapisodeDivider(
 			)
 			.then(
 				when (direction) {
-					Direction.Horizontal -> Modifier
-						.fillMaxWidth()
-						.height(thickness.value)
+					Direction.Horizontal ->
+						Modifier
+							.fillMaxWidth()
+							.height(thickness.value)
 
-					Direction.Vertical -> Modifier
-						.fillMaxHeight()
-						.width(thickness.value)
+					Direction.Vertical ->
+						Modifier
+							.fillMaxHeight()
+							.width(thickness.value)
 				},
 			),
 	)
