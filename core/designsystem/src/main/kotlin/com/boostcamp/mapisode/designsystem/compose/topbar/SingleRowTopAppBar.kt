@@ -51,10 +51,10 @@ private fun AppBar(
 		modifier = modifier,
 	) {
 		Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(contentPadding)
-                .height(56.dp),
+			Modifier
+				.fillMaxWidth()
+				.padding(contentPadding)
+				.height(56.dp),
 			horizontalArrangement = Arrangement.Start,
 			verticalAlignment = Alignment.CenterVertically,
 			content = content,

@@ -115,7 +115,7 @@ data class MaruBuriTypography(
 		lineHeight = 26.dp,
 	),
 	val titleMedium: MapisodeTextStyle = MapisodeTextStyle(
-		fontFamily = FontFamily.Default ,
+		fontFamily = FontFamily.Default,
 		fontWeight = FontWeight.Normal,
 		fontSize = 16.dp,
 		lineHeight = 20.dp,

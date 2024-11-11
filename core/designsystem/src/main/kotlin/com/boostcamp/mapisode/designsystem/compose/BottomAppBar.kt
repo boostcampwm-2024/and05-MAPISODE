@@ -29,8 +29,8 @@ fun BottomBar(
 		color = backgroundColor,
 		contentColor = contentColor,
 		modifier = modifier
-            .fillMaxWidth()
-            .height(68.dp),
+			.fillMaxWidth()
+			.height(68.dp),
 	) {
 		Column {
 			MapisodeDivider(thickness = Thickness.Thin)

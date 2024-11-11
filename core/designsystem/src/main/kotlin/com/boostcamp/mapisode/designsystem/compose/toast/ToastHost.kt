@@ -83,8 +83,8 @@ fun ToastHost(
 		}
 	}
 	FadeInFadeOut(
-        newToastData = toastHostState.currentToastData,
-        modifier = modifier,
-        toast = toast,
-    )
+		newToastData = toastHostState.currentToastData,
+		modifier = modifier,
+		toast = toast,
+	)
 }

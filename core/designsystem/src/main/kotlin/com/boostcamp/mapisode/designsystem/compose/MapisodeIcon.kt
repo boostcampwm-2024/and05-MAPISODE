@@ -88,15 +88,15 @@ fun Icon(
 		Modifier
 	}
 	Box(
-        modifier
-            .toolingGraphicsLayer()
-            .size(iconSize.value)
-            .paint(
-                painter = painter,
-                colorFilter = colorFilter,
-                contentScale = ContentScale.Fit,
-            )
-            .then(semantics),
+		modifier
+			.toolingGraphicsLayer()
+			.size(iconSize.value)
+			.paint(
+				painter = painter,
+				colorFilter = colorFilter,
+				contentScale = ContentScale.Fit,
+			)
+			.then(semantics),
 	)
 }
 
@@ -104,37 +104,37 @@ fun Icon(
 @Composable
 fun IconPreview() {
 	Column(
-        modifier = Modifier
-            .padding(4.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
+		modifier = Modifier
+			.padding(4.dp),
+		verticalArrangement = Arrangement.spacedBy(8.dp),
+		horizontalAlignment = Alignment.CenterHorizontally,
+	) {
 		MapisodeText(text = "Extra Small Icon", style = MapisodeTheme.typography.labelMedium)
 		Icon(
-            id = R.drawable.ic_account_circle_24,
-            iconSize = IconSize.ExtraSmall,
-            tint = MapisodeTheme.colorScheme.accentSelected,
-        )
+			id = R.drawable.ic_account_circle_24,
+			iconSize = IconSize.ExtraSmall,
+			tint = MapisodeTheme.colorScheme.accentSelected,
+		)
 
 		MapisodeText(text = "Small Icon", style = MapisodeTheme.typography.labelMedium)
 		Icon(
-            id = R.drawable.ic_account_circle_24,
-            iconSize = IconSize.Small,
-            tint = MapisodeTheme.colorScheme.secondaryText,
-        )
+			id = R.drawable.ic_account_circle_24,
+			iconSize = IconSize.Small,
+			tint = MapisodeTheme.colorScheme.secondaryText,
+		)
 
 		MapisodeText(text = "Medium Icon", style = MapisodeTheme.typography.labelMedium)
 		Icon(
-            id = R.drawable.ic_account_circle_24,
-            iconSize = IconSize.Medium,
-            tint = MapisodeTheme.colorScheme.accentSelected,
-        )
+			id = R.drawable.ic_account_circle_24,
+			iconSize = IconSize.Medium,
+			tint = MapisodeTheme.colorScheme.accentSelected,
+		)
 
 		MapisodeText(text = "Large Icon", style = MapisodeTheme.typography.labelMedium)
 		Icon(
-            id = R.drawable.ic_account_circle_24,
-            iconSize = IconSize.Large,
-            tint = MapisodeTheme.colorScheme.secondaryText,
-        )
+			id = R.drawable.ic_account_circle_24,
+			iconSize = IconSize.Large,
+			tint = MapisodeTheme.colorScheme.secondaryText,
+		)
 	}
 }

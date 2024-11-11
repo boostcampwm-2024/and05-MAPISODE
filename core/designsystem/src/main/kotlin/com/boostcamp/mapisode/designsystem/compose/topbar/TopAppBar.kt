@@ -26,17 +26,19 @@ fun TopAppBar(
 		modifier = modifier
 			.fillMaxWidth()
 			.height(56.dp),
-		contentPadding = PaddingValues(horizontal = 4.dp)
+		contentPadding = PaddingValues(horizontal = 4.dp),
 	) {
 		Box(
-			modifier = Modifier.fillMaxWidth()
-				.padding(horizontal = 8.dp)
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(horizontal = 8.dp),
 		) {
 			Row(
-				verticalAlignment = Alignment.CenterVertically, modifier = Modifier
+				verticalAlignment = Alignment.CenterVertically,
+				modifier = Modifier
 					.fillMaxHeight()
 					.align(Alignment.TopStart)
-					.padding(0.dp)
+					.padding(0.dp),
 			) {
 				navigationIcon()
 			}
@@ -51,7 +53,7 @@ fun TopAppBar(
 				MapisodeText(
 					text = title,
 					style = MapisodeTheme.typography.titleLarge,
-					color = MapisodeTheme.colorScheme.foreground
+					color = MapisodeTheme.colorScheme.foreground,
 				)
 			}
 
@@ -60,7 +62,7 @@ fun TopAppBar(
 					.fillMaxHeight()
 					.padding(0.dp)
 					.align(Alignment.TopEnd),
-				verticalAlignment = Alignment.CenterVertically
+				verticalAlignment = Alignment.CenterVertically,
 			) {
 				actions()
 			}

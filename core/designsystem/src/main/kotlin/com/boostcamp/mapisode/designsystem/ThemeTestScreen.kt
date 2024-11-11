@@ -49,8 +49,8 @@ fun TestScreen() {
 	) { paddingValues ->
 		Column(
 			modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
+				.fillMaxSize()
+				.padding(paddingValues),
 			horizontalAlignment = Alignment.CenterHorizontally,
 			verticalArrangement = Arrangement.spacedBy(16.dp),
 		) {

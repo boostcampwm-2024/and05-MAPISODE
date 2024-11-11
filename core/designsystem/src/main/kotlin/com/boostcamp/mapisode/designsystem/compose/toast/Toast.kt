@@ -32,9 +32,9 @@ fun Toast(
 			.background(backgroundColor, RoundedCornerShape(8.dp))
 			.padding(
 				horizontal = ToastHorizontalPadding,
-				vertical = ToastVerticalPadding
+				vertical = ToastVerticalPadding,
 			)
-			.fillMaxWidth()
+			.fillMaxWidth(),
 	) {
 		MapisodeText(
 			text = toastData.message,
@@ -48,8 +48,8 @@ fun Toast(
 					Alignment.Center
 				} else {
 					Alignment.CenterStart
-				}
-			)
+				},
+			),
 		)
 	}
 }
