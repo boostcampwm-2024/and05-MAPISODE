@@ -18,17 +18,17 @@ import androidx.compose.ui.unit.takeOrElse
 import com.boostcamp.mapisode.designsystem.R
 
 // FontFamily 정의
-val maruBuriFontFamily = FontFamily(
-	Font(R.font.maru_buri_bold, FontWeight.Bold),
-	Font(R.font.maru_buri_semi_bold, FontWeight.SemiBold),
-	Font(R.font.maru_buri_regular, FontWeight.Normal),
-	Font(R.font.maru_buri_light, FontWeight.Light),
-	Font(R.font.maru_buri_extra_light, FontWeight.ExtraLight),
+val pretendardFontFamily = FontFamily(
+	Font(R.font.pretendard_bold, FontWeight.Bold),
+	Font(R.font.pretendard_semibold, FontWeight.SemiBold),
+	Font(R.font.pretendard_regular, FontWeight.Normal),
+	Font(R.font.pretendard_light, FontWeight.Light),
+	Font(R.font.pretendard_extralight, FontWeight.ExtraLight),
 )
 
 @Immutable
 data class MapisodeTextStyle(
-	val fontFamily: FontFamily = maruBuriFontFamily,
+	val fontFamily: FontFamily = pretendardFontFamily,
 	val fontWeight: FontWeight = FontWeight.Medium,
 	val fontSize: Dp = Dp.Unspecified,
 	val lineHeight: Dp = Dp.Unspecified,
@@ -115,6 +115,7 @@ data class MaruBuriTypography(
 		lineHeight = 26.dp,
 	),
 	val titleMedium: MapisodeTextStyle = MapisodeTextStyle(
+		fontFamily = FontFamily.Default ,
 		fontWeight = FontWeight.Normal,
 		fontSize = 16.dp,
 		lineHeight = 20.dp,

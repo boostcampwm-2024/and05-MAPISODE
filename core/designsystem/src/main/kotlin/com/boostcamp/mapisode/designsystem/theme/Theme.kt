@@ -20,8 +20,8 @@ internal val LocalMapisodeContentAlpha = compositionLocalOf { 1f }
 
 private fun CustomColorScheme.pressedColorFor(color: Color): Color {
 	return when (color) {
-		accentSelected -> foreground
-		foreground -> accentSelected
+		accentSelected -> background
+		background -> accentSelected
 		hintStroke -> secondaryText
 		secondaryText -> hintStroke
 		else -> color
@@ -55,10 +55,12 @@ fun MapisodeTheme(
 	if (!view.isInEditMode) {
 		SideEffect {
 			val window = (view.context as Activity).window
-			// 시스템 status bar 는 투명 (기본값)
+			window.statusBarColor = colors.systemNavBar.toArgb()
 			window.navigationBarColor = colors.systemNavBar.toArgb()
-			WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars =
-				!darkTheme
+
+			val insetsController = WindowCompat.getInsetsController(window, view)
+			insetsController.isAppearanceLightNavigationBars = !darkTheme
+			insetsController.isAppearanceLightStatusBars = !darkTheme
 		}
 	}
 
