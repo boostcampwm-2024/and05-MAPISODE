@@ -20,24 +20,14 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
-internal val minBorderWidth = 0.34.dp
-internal val normalBorderWidth = 1.dp
-internal val thickBorderWidth = 8.dp
-
-enum class MapisodeBorder(val dp: Dp) {
-	Thin(minBorderWidth),
-	Normal(normalBorderWidth),
-	Thick(thickBorderWidth),
-}
-
 enum class Direction {
 	Horizontal,
 	Vertical,
 }
 
 enum class Thickness(val value: Dp) {
-	Thin(MapisodeBorder.Thin.dp),
-	Thick(MapisodeBorder.Thick.dp),
+	Thin(1.dp),
+	Thick(8.dp),
 }
 
 @Composable

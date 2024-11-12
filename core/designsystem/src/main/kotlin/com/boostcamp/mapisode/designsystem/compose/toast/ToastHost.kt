@@ -27,8 +27,7 @@ enum class ToastResult {
 }
 
 enum class ToastDuration(val milli: Long) {
-	SHORT(1500L),
-	LONG(3000L),
+	NORMAL(1500L),
 }
 
 @Stable
@@ -40,7 +39,7 @@ class ToastHostState {
 
 	suspend fun showToast(
 		message: String,
-		duration: ToastDuration = ToastDuration.SHORT,
+		duration: ToastDuration = ToastDuration.NORMAL,
 	): ToastResult = mutex.withLock {
 		try {
 			return suspendCancellableCoroutine { continuation ->
