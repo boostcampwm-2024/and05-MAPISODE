@@ -33,6 +33,9 @@ coil = "3.0.0-rc02"
 # Hilt
 hilt = "2.48.1"
 
+# Firebase
+firebase-bom = "33.5.1"
+
 # Java
 javax = "1"
 
@@ -93,6 +96,12 @@ compose-foundation = { group = "androidx.compose.foundation", name = "foundation
 compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+
+# Firebase
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
+firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
 
 # Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
@@ -180,6 +189,13 @@ coil = [
 datastore = [
 	"androidx-datastore-core",
 	"androidx-datatore-preferences"
+]
+
+# Firebase
+firebase = [
+	"firebase-auth",
+	"firebase-firestore",
+	"firebase-storage"
 ]
 
 # Navigation
