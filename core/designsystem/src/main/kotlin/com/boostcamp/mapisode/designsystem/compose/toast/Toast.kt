@@ -28,7 +28,7 @@ enum class ToastConstraintType(val value: Dp) {
 @Composable
 fun Toast(
 	modifier: Modifier = Modifier,
-	backgroundColor: Color = MapisodeTheme.colorScheme.background,
+	backgroundColor: Color = MapisodeTheme.colorScheme.chipIconThird,
 	contentColor: Color = MapisodeTheme.colorScheme.foreground,
 	toastData: ToastData,
 ) {
