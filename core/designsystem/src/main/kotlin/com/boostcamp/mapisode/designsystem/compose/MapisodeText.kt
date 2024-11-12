@@ -1,5 +1,3 @@
-@file:JvmName("MapisodeTextKt")
-
 package com.boostcamp.mapisode.designsystem.compose
 
 import androidx.compose.foundation.layout.Column

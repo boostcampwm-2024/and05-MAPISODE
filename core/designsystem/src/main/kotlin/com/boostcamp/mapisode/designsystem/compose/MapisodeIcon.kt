@@ -12,12 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toolingGraphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
@@ -37,44 +34,10 @@ sealed class IconSize(val value: Dp) {
 }
 
 @Composable
-fun Icon(
+fun MapisodeIcon(
 	@DrawableRes id: Int,
 	modifier: Modifier = Modifier,
 	contentDescription: String? = null,
-	iconSize: IconSize = IconSize.Medium,
-	tint: Color = LocalMapisodeContentColor.current,
-) {
-	Icon(
-		imageVector = ImageVector.vectorResource(id = id),
-		modifier = modifier,
-		contentDescription = contentDescription,
-		iconSize = iconSize,
-		tint = tint,
-	)
-}
-
-@Composable
-fun Icon(
-	imageVector: ImageVector,
-	modifier: Modifier = Modifier,
-	contentDescription: String? = null,
-	iconSize: IconSize = IconSize.Medium,
-	tint: Color = LocalMapisodeContentColor.current,
-) {
-	Icon(
-		painter = rememberVectorPainter(imageVector),
-		contentDescription = contentDescription,
-		modifier = modifier,
-		iconSize = iconSize,
-		tint = tint,
-	)
-}
-
-@Composable
-fun Icon(
-	painter: Painter,
-	contentDescription: String?,
-	modifier: Modifier = Modifier,
 	iconSize: IconSize = IconSize.Medium,
 	tint: Color = LocalMapisodeContentColor.current,
 ) {
@@ -92,7 +55,7 @@ fun Icon(
 			.toolingGraphicsLayer()
 			.size(iconSize.value)
 			.paint(
-				painter = painter,
+				painter = painterResource(id = id),
 				colorFilter = colorFilter,
 				contentScale = ContentScale.Fit,
 			)
@@ -110,28 +73,28 @@ fun IconPreview() {
 		horizontalAlignment = Alignment.CenterHorizontally,
 	) {
 		MapisodeText(text = "Extra Small Icon", style = MapisodeTheme.typography.labelMedium)
-		Icon(
+		MapisodeIcon(
 			id = R.drawable.ic_account_circle_24,
 			iconSize = IconSize.ExtraSmall,
 			tint = MapisodeTheme.colorScheme.accentSelected,
 		)
 
 		MapisodeText(text = "Small Icon", style = MapisodeTheme.typography.labelMedium)
-		Icon(
+		MapisodeIcon(
 			id = R.drawable.ic_account_circle_24,
 			iconSize = IconSize.Small,
 			tint = MapisodeTheme.colorScheme.secondaryText,
 		)
 
 		MapisodeText(text = "Medium Icon", style = MapisodeTheme.typography.labelMedium)
-		Icon(
+		MapisodeIcon(
 			id = R.drawable.ic_account_circle_24,
 			iconSize = IconSize.Medium,
 			tint = MapisodeTheme.colorScheme.accentSelected,
 		)
 
 		MapisodeText(text = "Large Icon", style = MapisodeTheme.typography.labelMedium)
-		Icon(
+		MapisodeIcon(
 			id = R.drawable.ic_account_circle_24,
 			iconSize = IconSize.Large,
 			tint = MapisodeTheme.colorScheme.secondaryText,

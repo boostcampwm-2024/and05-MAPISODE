@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.compose.toast.ToastHost
 import com.boostcamp.mapisode.designsystem.compose.toast.ToastHostState
@@ -36,6 +37,10 @@ fun MapisodeScaffold(
 	}
 }
 
+enum class ToastPosition(val offsetFromBottom: Dp) {
+	Default(72.dp),
+}
+
 @Composable
 private fun ScaffoldLayout(
 	topBar: @Composable () -> Unit,
@@ -43,7 +48,7 @@ private fun ScaffoldLayout(
 	toast: @Composable () -> Unit,
 	content: @Composable (PaddingValues) -> Unit,
 ) {
-	val pxValue = LocalDensity.current.run { ToastApartFromBottom.toPx() }.toInt()
+	val pxValue = LocalDensity.current.run { ToastPosition.Default.offsetFromBottom.toPx() }.toInt()
 
 	SubcomposeLayout { constraints ->
 		val layoutWidth = constraints.maxWidth
@@ -99,5 +104,3 @@ private fun ScaffoldLayout(
 		}
 	}
 }
-
-private val ToastApartFromBottom = 72.dp

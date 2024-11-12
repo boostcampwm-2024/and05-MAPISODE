@@ -26,10 +26,10 @@ internal fun SingleRowTopAppBar(
 	content: @Composable RowScope.() -> Unit,
 ) {
 	AppBar(
-		backgroundColor,
-		contentColor,
-		contentPadding,
-		RectangleShape,
+		backgroundColor = backgroundColor,
+		contentColor = contentColor,
+		contentPadding = contentPadding,
+		shape = RectangleShape,
 		modifier = modifier,
 		content = content,
 	)

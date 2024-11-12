@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.compose.BottomBar
-import com.boostcamp.mapisode.designsystem.compose.Icon
+import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
@@ -27,14 +27,14 @@ fun TestScreen() {
 				title = "커스텀 테마 앱 바",
 				modifier = Modifier.testTag("TopAppBar"),
 				navigationIcon = {
-					Icon(
+					MapisodeIcon(
 						id = R.drawable.ic_arrow_back_24,
 					)
 				},
 				actions = {
 					Row {
-						Icon(id = R.drawable.ic_groups_2_24)
-						Icon(id = R.drawable.ic_house_24)
+						MapisodeIcon(id = R.drawable.ic_groups_2_24)
+						MapisodeIcon(id = R.drawable.ic_house_24)
 					}
 				},
 			)

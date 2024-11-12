@@ -13,10 +13,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTextStyle
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+
+enum class ToastConstraintType(val value: Dp) {
+	HorizontalPadding(24.dp),
+	VerticalPadding(16.dp),
+	HorizontalMargin(8.dp),
+}
 
 @Composable
 fun Toast(
@@ -26,13 +33,14 @@ fun Toast(
 	toastData: ToastData,
 ) {
 	var lineCount by remember { mutableIntStateOf(1) }
+
 	Box(
 		modifier = modifier
-			.padding(horizontal = ToastHorizontalMargin)
+			.padding(horizontal = ToastConstraintType.HorizontalMargin.value)
 			.background(backgroundColor, RoundedCornerShape(8.dp))
 			.padding(
-				horizontal = ToastHorizontalPadding,
-				vertical = ToastVerticalPadding,
+				horizontal = ToastConstraintType.HorizontalPadding.value,
+				vertical = ToastConstraintType.VerticalPadding.value,
 			)
 			.fillMaxWidth(),
 	) {
@@ -53,7 +61,3 @@ fun Toast(
 		)
 	}
 }
-
-private val ToastHorizontalPadding = 24.dp
-private val ToastVerticalPadding = 16.dp
-private val ToastHorizontalMargin = 8.dp
