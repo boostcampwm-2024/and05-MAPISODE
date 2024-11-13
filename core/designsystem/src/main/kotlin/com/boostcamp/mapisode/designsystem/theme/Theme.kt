@@ -15,14 +15,14 @@ import androidx.core.view.WindowCompat
 
 internal val LocalMapisodeColorScheme = staticCompositionLocalOf { lightColorScheme }
 internal val LocalMapisodeTypography = staticCompositionLocalOf { AppTypography }
-internal val LocalMapisodeContentColor = compositionLocalOf { lightColorScheme.foreground }
+internal val LocalMapisodeContentColor = compositionLocalOf { lightColorScheme.textContent }
 internal val LocalMapisodeContentAlpha = compositionLocalOf { 1f }
 
 private fun CustomColorScheme.pressedColorFor(color: Color): Color = when (color) {
-	accentSelected -> background
-	background -> accentSelected
-	hintStroke -> secondaryText
-	secondaryText -> hintStroke
+	navBackground -> dialogBackground
+	dialogBackground -> navBackground
+	textFieldBackground -> chipStroke
+	chipStroke -> textFieldBackground
 	else -> color
 }
 
@@ -51,8 +51,8 @@ fun MapisodeTheme(
 	if (!view.isInEditMode) {
 		SideEffect {
 			val window = (view.context as Activity).window
-			window.statusBarColor = colors.systemNavBar.toArgb()
-			window.navigationBarColor = colors.systemNavBar.toArgb()
+			window.statusBarColor = colors.toastBackground.toArgb()
+			window.navigationBarColor = colors.toastBackground.toArgb()
 
 			val insetsController = WindowCompat.getInsetsController(window, view)
 			insetsController.isAppearanceLightNavigationBars = !darkTheme

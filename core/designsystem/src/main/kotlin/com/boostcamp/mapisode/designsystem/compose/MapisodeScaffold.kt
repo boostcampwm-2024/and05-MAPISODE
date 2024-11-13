@@ -20,7 +20,7 @@ fun MapisodeScaffold(
 	topBar: @Composable () -> Unit = {},
 	bottomBar: @Composable () -> Unit = {},
 	toastHost: @Composable (ToastHostState) -> Unit = { ToastHost(it) },
-	backgroundColor: Color = MapisodeTheme.colorScheme.background,
+	backgroundColor: Color = MapisodeTheme.colorScheme.scaffoldBackground,
 	contentColor: Color = LocalMapisodeContentColor.current,
 	content: @Composable (PaddingValues) -> Unit,
 ) {

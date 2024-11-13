@@ -65,8 +65,8 @@ fun MapisodeDivider(
 			.then(modifier)
 			.background(
 				color = when (thickness) {
-					Thickness.Thin -> MapisodeTheme.colorScheme.hintStroke
-					Thickness.Thick -> MapisodeTheme.colorScheme.background
+					Thickness.Thin -> MapisodeTheme.colorScheme.dividerThinColor
+					Thickness.Thick -> MapisodeTheme.colorScheme.dividerThickColor
 				},
 			)
 			.then(
