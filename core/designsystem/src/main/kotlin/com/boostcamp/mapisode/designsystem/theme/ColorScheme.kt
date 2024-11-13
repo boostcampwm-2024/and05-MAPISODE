@@ -45,7 +45,7 @@ data class CustomColorScheme(
 val lightColorScheme = CustomColorScheme(
 	navSelectedItem = Primary30,
 	navUnselectedItem = Neutral90,
-	navBackground = Primary30,
+	navBackground = Neutral10,
 	topAppBarTitle = Primary90,
 	scaffoldBackground = Neutral10,
 	buttonBackground = Primary30,
@@ -83,7 +83,7 @@ val lightColorScheme = CustomColorScheme(
 val darkColorScheme = CustomColorScheme(
 	navSelectedItem = Primary30,
 	navUnselectedItem = Neutral40,
-	navBackground = Primary30,
+	navBackground = Neutral110,
 	topAppBarTitle = Primary10,
 	scaffoldBackground = Neutral110,
 	buttonBackground = Primary60,
