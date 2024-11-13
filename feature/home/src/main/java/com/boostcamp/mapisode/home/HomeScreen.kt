@@ -91,7 +91,6 @@ private fun HomeScreen(
 				}
 			}
 		}
-
 	}
 }
 
