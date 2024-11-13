@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
 	alias(libs.plugins.mapisode.android.application)
 	alias(libs.plugins.mapisode.android.hilt)
@@ -9,6 +11,11 @@ android {
 	defaultConfig {
 		applicationId = "com.boostcamp.mapisode"
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+		val naverMapClientId =
+			gradleLocalProperties(rootDir, providers).getProperty("NAVER_MAP_CLIENT_ID")
+		buildConfigField("String", "NAVER_MAP_CLIENT_ID", "\"$naverMapClientId\"")
+
+		manifestPlaceholders["NAVER_MAPS_CLIENT_ID"] = naverMapClientId
 	}
 
 	packaging {
