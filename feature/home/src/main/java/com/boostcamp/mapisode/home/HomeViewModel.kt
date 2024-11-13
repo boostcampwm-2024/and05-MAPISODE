@@ -1,26 +1,21 @@
 package com.boostcamp.mapisode.home
 
+import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
 import com.boostcamp.mapisode.ui.base.BaseViewModel
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraPosition
 
 class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
-	fun onIntent(intent: HomeIntent) {
-		when (intent) {
-			is HomeIntent.Increment -> increment()
-			is HomeIntent.Decrement -> decrement()
-		}
+	init {
+		postSideEffect(HomeSideEffect.SetInitialLocation)
 	}
 
-	private fun increment() {
+	fun setInitialLocation(latLng: LatLng) {
 		intent {
-			copy(count = count + 1)
+			copy(
+				cameraPosition = CameraPosition(latLng, DEFAULT_ZOOM),
+				isInitialLocationSet = true,
+			)
 		}
-		postSideEffect(HomeSideEffect.ShowToast("Incremented ${currentState.count}"))
-	}
-
-	private fun decrement() {
-		intent {
-			copy(count = count - 1)
-		}
-		postSideEffect(HomeSideEffect.ShowToast("Decremented ${currentState.count}"))
 	}
 }
