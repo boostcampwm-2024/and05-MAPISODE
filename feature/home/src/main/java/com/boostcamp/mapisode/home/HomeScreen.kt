@@ -57,7 +57,8 @@ internal fun HomeRoute(
 				is HomeSideEffect.SetInitialLocation -> {
 					if (!uiState.isInitialLocationSet) {
 						// 현재 위치 가져오기
-						if (ActivityCompat.checkSelfPermission(
+						if (
+							ActivityCompat.checkSelfPermission(
 								context,
 								Manifest.permission.ACCESS_FINE_LOCATION,
 							) != PackageManager.PERMISSION_GRANTED &&
