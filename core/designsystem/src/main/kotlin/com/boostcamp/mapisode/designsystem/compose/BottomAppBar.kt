@@ -21,8 +21,8 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 fun BottomBar(
 	modifier: Modifier = Modifier,
 	visible: Boolean = true,
-	backgroundColor: Color = MapisodeTheme.colorScheme.background,
-	contentColor: Color = MapisodeTheme.colorScheme.secondaryText,
+	backgroundColor: Color = MapisodeTheme.colorScheme.navBackground,
+	contentColor: Color = MapisodeTheme.colorScheme.navUnselectedItem,
 	content: @Composable RowScope.() -> Unit,
 ) {
 	Surface(

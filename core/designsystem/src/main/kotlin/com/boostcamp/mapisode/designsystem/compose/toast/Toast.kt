@@ -28,8 +28,8 @@ enum class ToastConstraintType(val value: Dp) {
 @Composable
 fun Toast(
 	modifier: Modifier = Modifier,
-	backgroundColor: Color = MapisodeTheme.colorScheme.chipIconThird,
-	contentColor: Color = MapisodeTheme.colorScheme.foreground,
+	backgroundColor: Color = MapisodeTheme.colorScheme.toastBackground,
+	contentColor: Color = MapisodeTheme.colorScheme.toastContent,
 	toastData: ToastData,
 ) {
 	var lineCount by remember { mutableIntStateOf(1) }

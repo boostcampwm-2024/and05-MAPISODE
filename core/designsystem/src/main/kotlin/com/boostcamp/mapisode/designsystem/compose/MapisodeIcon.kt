@@ -76,28 +76,28 @@ fun IconPreview() {
 		MapisodeIcon(
 			id = R.drawable.ic_account_circle_24,
 			iconSize = IconSize.ExtraSmall,
-			tint = MapisodeTheme.colorScheme.accentSelected,
+			tint = MapisodeTheme.colorScheme.iconColor,
 		)
 
 		MapisodeText(text = "Small Icon", style = MapisodeTheme.typography.labelMedium)
 		MapisodeIcon(
 			id = R.drawable.ic_account_circle_24,
 			iconSize = IconSize.Small,
-			tint = MapisodeTheme.colorScheme.secondaryText,
+			tint = MapisodeTheme.colorScheme.iconColor,
 		)
 
 		MapisodeText(text = "Medium Icon", style = MapisodeTheme.typography.labelMedium)
 		MapisodeIcon(
 			id = R.drawable.ic_account_circle_24,
 			iconSize = IconSize.Medium,
-			tint = MapisodeTheme.colorScheme.accentSelected,
+			tint = MapisodeTheme.colorScheme.iconColor,
 		)
 
 		MapisodeText(text = "Large Icon", style = MapisodeTheme.typography.labelMedium)
 		MapisodeIcon(
 			id = R.drawable.ic_account_circle_24,
 			iconSize = IconSize.Large,
-			tint = MapisodeTheme.colorScheme.secondaryText,
+			tint = MapisodeTheme.colorScheme.iconColor,
 		)
 	}
 }

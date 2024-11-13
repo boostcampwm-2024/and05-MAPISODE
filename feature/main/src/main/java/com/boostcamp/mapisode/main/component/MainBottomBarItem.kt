@@ -39,8 +39,8 @@ internal fun RowScope.MainBottomBarItem(
 		horizontalAlignment = Alignment.CenterHorizontally,
 		verticalArrangement = Arrangement.Center,
 	) {
-		val selectedColor = MapisodeTheme.colorScheme.accentSelected
-		val unselectedColor = MapisodeTheme.colorScheme.secondaryText
+		val selectedColor = MapisodeTheme.colorScheme.navSelectedItem
+		val unselectedColor = MapisodeTheme.colorScheme.navUnselectedItem
 
 		Spacer(modifier = Modifier.height(8.dp))
 

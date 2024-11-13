@@ -20,8 +20,8 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 @Composable
 internal fun SingleRowTopAppBar(
 	modifier: Modifier = Modifier,
-	backgroundColor: Color = MapisodeTheme.colorScheme.background,
-	contentColor: Color = MapisodeTheme.colorScheme.foreground,
+	backgroundColor: Color = MapisodeTheme.colorScheme.scaffoldBackground,
+	contentColor: Color = MapisodeTheme.colorScheme.topAppBarTitle,
 	contentPadding: PaddingValues,
 	content: @Composable RowScope.() -> Unit,
 ) {
