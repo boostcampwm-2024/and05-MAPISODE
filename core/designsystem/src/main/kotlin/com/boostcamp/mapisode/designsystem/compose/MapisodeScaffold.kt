@@ -56,8 +56,10 @@ private fun ScaffoldLayout(
 	toast: @Composable () -> Unit,
 	content: @Composable (PaddingValues) -> Unit,
 ) {
-	val topPadding = if (isStatusBarPaddingExist) WindowInsets.systemBars.asPaddingValues()
-		.calculateTopPadding() else 0.dp
+	val topPadding = if (isStatusBarPaddingExist) {
+		WindowInsets.systemBars.asPaddingValues()
+			.calculateTopPadding()
+	} else 0.dp
 	val systemBar = WindowInsets(top = topPadding, bottom = 0.dp)
 
 	SubcomposeLayout { constraints ->
