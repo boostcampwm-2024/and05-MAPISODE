@@ -1,8 +1,8 @@
 [versions]
 # SDK Versions
-compileSdk = "34"
+compileSdk = "35"
 minSdk = "28"
-targetSdk = "34"
+targetSdk = "35"
 jdkVersion = "17"
 
 # App Version
@@ -52,6 +52,11 @@ ksp = "2.0.21-1.0.25"
 
 ## Ktlint
 ktlint = "11.6.1"
+
+## Naver Map
+naverMapCompose = "1.8.0"
+naverMapLocation = "21.0.2"
+playServicesLocation = "21.0.1"
 
 # Network
 okhttp = "4.12.0"
@@ -120,6 +125,11 @@ kotlinx-serialization-convertor = { group = "com.jakewharton.retrofit", name = "
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-immutable" }
+
+# Naver Map
+naver-map-compose = { module = "io.github.fornewid:naver-map-compose", version.ref = "naverMapCompose" }
+naver-map-location = { module = "io.github.fornewid:naver-map-location", version.ref = "naverMapLocation" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 
 # Network
 okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttp" }
@@ -202,6 +212,13 @@ firebase = [
 navigation = [
 	"compose-navigation",
 	"compose-hilt-navigation"
+]
+
+# Naver Map
+naverMap = [
+	"naver-map-compose",
+	"naver-map-location",
+	"play-services-location"
 ]
 
 # Network Libraries
