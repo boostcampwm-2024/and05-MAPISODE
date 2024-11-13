@@ -33,6 +33,12 @@ jobs:
                     distribution: 'temurin'
                     cache: gradle
 
+            -   name: Add Local Properties
+                env:
+                    NAVER_MAP_CLIENT_ID: ${{ secrets.NAVER_MAP_CLIENT_ID }}
+                run: |
+                    echo NAVER_MAP_CLIENT_ID=$NAVER_MAP_CLIENT_ID > ./local.properties
+
             -   name: Grant execute permission for gradlew
                 run: chmod +x gradlew
 
@@ -47,12 +53,6 @@ jobs:
 
             -   name: Build Check
                 run: ./gradlew build
-
-            -   name: Add Local Properties
-                env:
-                    NAVER_MAP_CLIENT_ID: ${{ secrets.NAVER_MAP_CLIENT_ID }}
-                run: |
-                    echo NAVER_MAP_CLIENT_ID=$NAVER_MAP_CLIENT_ID > ./local.properties
 
             # CI 성공 시 디스코드 알림
             -   name: Notify Success on Discord
