@@ -12,9 +12,11 @@ android {
 		applicationId = "com.boostcamp.mapisode"
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		val naverMapClientId =
-			gradleLocalProperties(rootDir, providers).getProperty("NAVER_MAP_CLIENT_ID")
+			gradleLocalProperties(rootDir, providers).getProperty("NAVER_MAP_CLIENT_ID") ?: ""
+		if (naverMapClientId.isEmpty()) {
+			throw GradleException("NAVER_MAP_CLIENT_ID is not set.")
+		}
 		buildConfigField("String", "NAVER_MAP_CLIENT_ID", "\"$naverMapClientId\"")
-
 		manifestPlaceholders["NAVER_MAPS_CLIENT_ID"] = naverMapClientId
 	}
 
