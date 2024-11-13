@@ -100,8 +100,11 @@ private fun ScaffoldLayout(
 
 			val bodyContentHeight =
 				layoutHeight - topBarHeight +
-					if (isStatusBarsPaddingEnabled) statusBarPadding.toPx()
-						.toInt() else 0
+					if (isStatusBarsPaddingEnabled) {
+						statusBarPadding.toPx().toInt()
+					} else {
+						0
+					}
 
 			val bodyContentPlaceables = subcompose(ScaffoldLayoutContent.MainContent) {
 				val innerPadding = PaddingValues(bottom = bottomBarHeight.toDp())
