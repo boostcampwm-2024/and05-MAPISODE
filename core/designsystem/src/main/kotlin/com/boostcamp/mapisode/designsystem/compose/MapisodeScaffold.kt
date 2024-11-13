@@ -59,7 +59,7 @@ private fun ScaffoldLayout(
 	val topPadding = if (isStatusBarPaddingExist) {
 		WindowInsets.systemBars.asPaddingValues()
 			.calculateTopPadding()
-	} else{
+	} else {
 		0.dp
 	}
 	val systemBar = WindowInsets(top = topPadding, bottom = 0.dp)
