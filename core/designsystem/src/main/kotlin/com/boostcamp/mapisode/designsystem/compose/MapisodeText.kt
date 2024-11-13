@@ -15,12 +15,13 @@ import com.boostcamp.mapisode.designsystem.theme.AppTypography
 import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentAlpha
 import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTextStyle
+import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
 fun MapisodeText(
 	text: String,
 	modifier: Modifier = Modifier,
-	color: Color = Color.Unspecified,
+	color: Color = MapisodeTheme.colorScheme.textContent,
 	onTextLayout: (TextLayoutResult) -> Unit = {},
 	style: MapisodeTextStyle = LocalTextStyle.current,
 	overflow: TextOverflow = TextOverflow.Clip,
