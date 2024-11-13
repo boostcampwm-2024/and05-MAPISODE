@@ -1,17 +1,12 @@
 package com.boostcamp.mapisode.designsystem.theme
 
-import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
 
 internal val LocalMapisodeColorScheme = staticCompositionLocalOf { lightColorScheme }
 internal val LocalMapisodeTypography = staticCompositionLocalOf { AppTypography }
@@ -46,19 +41,6 @@ fun MapisodeTheme(
 	content: @Composable () -> Unit,
 ) {
 	val colors = if (!darkTheme) lightColorScheme else darkColorScheme
-
-	val view = LocalView.current
-	if (!view.isInEditMode) {
-		SideEffect {
-			val window = (view.context as Activity).window
-			window.statusBarColor = colors.toastBackground.toArgb()
-			window.navigationBarColor = colors.toastBackground.toArgb()
-
-			val insetsController = WindowCompat.getInsetsController(window, view)
-			insetsController.isAppearanceLightNavigationBars = !darkTheme
-			insetsController.isAppearanceLightStatusBars = !darkTheme
-		}
-	}
 
 	CompositionLocalProvider(
 		LocalMapisodeColorScheme provides colors,
