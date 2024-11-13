@@ -10,6 +10,16 @@ plugins {
 	alias(libs.plugins.ktlint) apply false
 }
 
+buildscript {
+	repositories {
+		google()
+		mavenCentral()
+		maven {
+			url = uri("https://repository.map.naver.com/archive/maven")
+		}
+	}
+}
+
 allprojects {
 	apply {
 		plugin(rootProject.libs.plugins.ktlint.get().pluginId)

@@ -1,3 +1,5 @@
+import com.boostcamp.mapisode.convention.extension.implementation
+
 plugins {
 	alias(libs.plugins.mapisode.feature)
 }
@@ -7,6 +9,5 @@ android {
 }
 
 dependencies {
-	// TODO : 도메인 참조 변경
-	implementation(projects.domain.auth)
+	implementation(libs.bundles.naverMap)
 }
