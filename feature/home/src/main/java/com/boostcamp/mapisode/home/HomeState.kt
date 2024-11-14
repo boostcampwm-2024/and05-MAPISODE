@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.home
 
+import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
 import com.boostcamp.mapisode.ui.base.UiState
 import com.naver.maps.geometry.LatLng
@@ -17,4 +18,5 @@ data class HomeState(
 	val isInitialLocationSet: Boolean = false, // 사용자의 현재 위치가 초기 설정되었는지 여부
 	val isLocationPermissionGranted: Boolean = false, // 위치 권한이 허용되었는지 여부
 	val hasRequestedPermission: Boolean = false, // 위치 권한을 요청한 적이 있는지 여부
+	val selectedChip: ChipType? = null,
 ) : UiState

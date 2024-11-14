@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.home
 
+import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.naver.maps.geometry.LatLng
@@ -33,7 +34,18 @@ class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
 			is HomeIntent.MarkPermissionRequested -> {
 				setHasRequestedPermission()
 			}
+
+			is HomeIntent.SelectChip -> {
+				setSelectedChip(intent.chipType)
+			}
 		}
+	}
+
+	private fun setSelectedChip(chipType: ChipType) {
+		intent {
+			copy(selectedChip = chipType)
+		}
+		// TODO: 여기에 선택된 Chip에 따라 데이터를 조회하는 로직을 추가
 	}
 
 	private fun setHasRequestedPermission() {

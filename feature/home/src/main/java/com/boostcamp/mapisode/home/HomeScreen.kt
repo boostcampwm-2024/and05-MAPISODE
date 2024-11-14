@@ -3,19 +3,29 @@ package com.boostcamp.mapisode.home
 import android.Manifest
 import android.content.pm.PackageManager
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
+import com.boostcamp.mapisode.home.common.getChipIconTint
+import com.boostcamp.mapisode.home.component.MapisodeChip
 import com.google.android.gms.location.LocationServices
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
@@ -101,6 +111,9 @@ internal fun HomeRoute(
 	HomeScreen(
 		state = uiState,
 		cameraPositionState = cameraPositionState,
+		onChipSelected = { chipType ->
+			viewModel.onIntent(HomeIntent.SelectChip(chipType))
+		},
 	)
 }
 
@@ -109,7 +122,10 @@ internal fun HomeRoute(
 private fun HomeScreen(
 	state: HomeState,
 	cameraPositionState: CameraPositionState,
+	onChipSelected: (ChipType) -> Unit = {},
 ) {
+	val context = LocalContext.current
+
 	Box(
 		modifier = Modifier.fillMaxSize(),
 	) {
@@ -133,6 +149,29 @@ private fun HomeScreen(
 				// TODO : 마커 찍기 구현
 			},
 		)
+
+		Column(
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(top = 46.dp),
+			horizontalAlignment = Alignment.CenterHorizontally,
+		) {
+			Row(
+				horizontalArrangement = Arrangement.spacedBy(23.dp),
+				verticalAlignment = Alignment.CenterVertically,
+			) {
+				ChipType.entries.forEach { chipType ->
+					MapisodeChip(
+						text = context.getString(chipType.textResId),
+						iconId = chipType.iconResId,
+						onClick = { onChipSelected(chipType) },
+						isSelected = state.selectedChip == chipType,
+						iconTint = getChipIconTint(chipType),
+					)
+				}
+			}
+		}
+
 	}
 }
 
