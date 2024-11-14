@@ -4,9 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -92,7 +89,6 @@ internal fun HomeRoute(
 	HomeScreen(
 		state = uiState,
 		cameraPositionState = cameraPositionState,
-		snackbarHostState = snackbarHostState,
 	)
 }
 
@@ -101,37 +97,30 @@ internal fun HomeRoute(
 private fun HomeScreen(
 	state: HomeState,
 	cameraPositionState: CameraPositionState,
-	snackbarHostState: SnackbarHostState,
 ) {
-	Scaffold(
-		snackbarHost = { SnackbarHost(snackbarHostState) },
+	Box(
+		modifier = Modifier.fillMaxSize(),
 	) {
-		Box(
-			modifier = Modifier
-				.fillMaxSize()
-				.padding(it),
-		) {
-			NaverMap(
-				modifier = Modifier.fillMaxSize(),
-				cameraPositionState = cameraPositionState,
-				properties = MapProperties(
-					locationTrackingMode = LocationTrackingMode.NoFollow,
-					isIndoorEnabled = true,
-				),
-				uiSettings = MapUiSettings(
-					isZoomGesturesEnabled = true,
-					isZoomControlEnabled = false,
-					isLocationButtonEnabled = true,
-					isLogoClickEnabled = false,
-					isScaleBarEnabled = false,
-					isCompassEnabled = false,
-				),
-				locationSource = rememberFusedLocationSource(),
-				onMapClick = { _, _ ->
-					// TODO : 마커 찍기 구현
-				},
-			)
-		}
+		NaverMap(
+			modifier = Modifier.fillMaxSize(),
+			cameraPositionState = cameraPositionState,
+			properties = MapProperties(
+				locationTrackingMode = LocationTrackingMode.NoFollow,
+				isIndoorEnabled = true,
+			),
+			uiSettings = MapUiSettings(
+				isZoomGesturesEnabled = true,
+				isZoomControlEnabled = false,
+				isLocationButtonEnabled = true,
+				isLogoClickEnabled = false,
+				isScaleBarEnabled = false,
+				isCompassEnabled = false,
+			),
+			locationSource = rememberFusedLocationSource(),
+			onMapClick = { _, _ ->
+				// TODO : 마커 찍기 구현
+			},
+		)
 	}
 }
 
@@ -146,6 +135,5 @@ private fun HomeScreenPreview() {
 				DEFAULT_ZOOM,
 			)
 		},
-		snackbarHostState = SnackbarHostState(),
 	)
 }
