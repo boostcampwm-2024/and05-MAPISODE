@@ -65,7 +65,7 @@ internal fun HomeRoute(
 				}
 
 				is HomeSideEffect.SetInitialLocation -> {
-					// 초기 위치 설정: 권한이 허용된 경우 현재 위치를 가져온다. 
+					// 초기 위치 설정: 권한이 허용된 경우 현재 위치를 가져온다.
 					if (ContextCompat.checkSelfPermission(
 							context,
 							Manifest.permission.ACCESS_FINE_LOCATION,
