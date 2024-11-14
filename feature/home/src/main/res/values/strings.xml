@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="home_location_permission_needed">위치 권한이 필요합니다.</string>
+	<string name="home_cannot_bring_location_error">위치 정보를 가져올 수 없습니다.</string>
 </resources>

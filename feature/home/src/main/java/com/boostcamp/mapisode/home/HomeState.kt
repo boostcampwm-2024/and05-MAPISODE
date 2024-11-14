@@ -14,7 +14,7 @@ data class HomeState(
 		),
 		DEFAULT_ZOOM,
 	),
-	val isInitialLocationSet: Boolean = false,
-	val isLocationPermissionGranted: Boolean = false,
-	val hasRequestedPermission: Boolean = false,
+	val isInitialLocationSet: Boolean = false, // 사용자의 현재 위치가 초기 설정되었는지 여부
+	val isLocationPermissionGranted: Boolean = false, // 위치 권한이 허용되었는지 여부
+	val hasRequestedPermission: Boolean = false, // 위치 권한을 요청한 적이 있는지 여부
 ) : UiState

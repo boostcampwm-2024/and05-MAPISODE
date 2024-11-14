@@ -56,6 +56,7 @@ internal fun HomeRoute(
 				}
 
 				is HomeSideEffect.RequestLocationPermission -> {
+					// 위치 권한이 허용되지 않은 경우 권한 요청
 					if (!uiState.isLocationPermissionGranted) {
 						launcherLocationPermissions.launch(
 							arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -64,10 +65,12 @@ internal fun HomeRoute(
 				}
 
 				is HomeSideEffect.SetInitialLocation -> {
+					// 초기 위치 설정: 권한이 허용된 경우 현재 위치를 가져온다. 
 					if (ContextCompat.checkSelfPermission(
 							context,
 							Manifest.permission.ACCESS_FINE_LOCATION,
-						) == PackageManager.PERMISSION_GRANTED && !uiState.isInitialLocationSet
+						) == PackageManager.PERMISSION_GRANTED &&
+						!uiState.isInitialLocationSet
 					) {
 						fusedLocationClient.lastLocation.addOnSuccessListener { location ->
 							if (location != null) {
@@ -77,7 +80,7 @@ internal fun HomeRoute(
 								cameraPositionState.position =
 									CameraPosition(userLatLng, DEFAULT_ZOOM)
 							} else {
-								Timber.e("위치 정보를 가져올 수 없습니다.")
+								Timber.e(context.getString(R.string.home_cannot_bring_location_error))
 							}
 						}
 					}

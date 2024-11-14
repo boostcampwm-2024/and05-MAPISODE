@@ -10,6 +10,7 @@ class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
 	fun onIntent(intent: HomeIntent) {
 		when (intent) {
 			is HomeIntent.RequestLocationPermission -> {
+				// 위치 권한 요청이 아직 이루어지지 않은 경우에만 요청
 				if (!currentState.hasRequestedPermission) {
 					postSideEffect(HomeSideEffect.RequestLocationPermission)
 					onIntent(HomeIntent.MarkPermissionRequested)
@@ -30,10 +31,14 @@ class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
 			}
 
 			is HomeIntent.MarkPermissionRequested -> {
-				intent {
-					copy(hasRequestedPermission = true)
-				}
+				setHasRequestedPermission()
 			}
+		}
+	}
+
+	private fun setHasRequestedPermission() {
+		intent {
+			copy(hasRequestedPermission = true)
 		}
 	}
 
