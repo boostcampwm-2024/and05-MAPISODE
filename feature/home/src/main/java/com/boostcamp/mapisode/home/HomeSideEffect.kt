@@ -5,4 +5,5 @@ import com.boostcamp.mapisode.ui.base.SideEffect
 sealed class HomeSideEffect : SideEffect {
 	data class ShowToast(val message: String) : HomeSideEffect()
 	data object SetInitialLocation : HomeSideEffect()
+	data object RequestLocationPermission : HomeSideEffect()
 }

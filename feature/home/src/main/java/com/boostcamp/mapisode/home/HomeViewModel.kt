@@ -6,16 +6,49 @@ import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 
 class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
-	init {
-		postSideEffect(HomeSideEffect.SetInitialLocation)
+
+	fun onIntent(intent: HomeIntent) {
+		when (intent) {
+			is HomeIntent.RequestLocationPermission -> {
+				if (!currentState.hasRequestedPermission) {
+					postSideEffect(HomeSideEffect.RequestLocationPermission)
+					onIntent(HomeIntent.MarkPermissionRequested)
+				}
+			}
+
+			is HomeIntent.SetInitialLocation -> {
+				setInitialLocation(intent.latLng)
+			}
+
+			is HomeIntent.UpdateLocationPermission -> {
+				updateLocationPermission(intent.isGranted)
+				if (intent.isGranted) {
+					postSideEffect(HomeSideEffect.SetInitialLocation)
+				} else {
+					postSideEffect(HomeSideEffect.ShowToast("위치 권한이 필요합니다."))
+				}
+			}
+
+			is HomeIntent.MarkPermissionRequested -> {
+				intent {
+					copy(hasRequestedPermission = true)
+				}
+			}
+		}
 	}
 
-	fun setInitialLocation(latLng: LatLng) {
+	private fun setInitialLocation(latLng: LatLng) {
 		intent {
 			copy(
 				cameraPosition = CameraPosition(latLng, DEFAULT_ZOOM),
 				isInitialLocationSet = true,
 			)
+		}
+	}
+
+	private fun updateLocationPermission(isGranted: Boolean) {
+		intent {
+			copy(isLocationPermissionGranted = isGranted)
 		}
 	}
 }

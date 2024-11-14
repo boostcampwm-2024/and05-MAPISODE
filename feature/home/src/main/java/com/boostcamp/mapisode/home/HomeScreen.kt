@@ -2,9 +2,9 @@ package com.boostcamp.mapisode.home
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -12,7 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
@@ -34,9 +34,8 @@ internal fun HomeRoute(
 	viewModel: HomeViewModel = hiltViewModel(),
 ) {
 	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-	val snackbarHostState = remember { SnackbarHostState() }
 	val context = LocalContext.current
-	val focusLocationProviderClient = remember {
+	val fusedLocationClient = remember {
 		LocationServices.getFusedLocationProviderClient(context)
 	}
 
@@ -44,36 +43,35 @@ internal fun HomeRoute(
 		position = uiState.cameraPosition
 	}
 
+	val launcherLocationPermissions = getPermissionsLauncher { isGranted ->
+		viewModel.onIntent(HomeIntent.UpdateLocationPermission(isGranted))
+	}
+
 	LaunchedEffect(viewModel) {
 		viewModel.sideEffect.collect { sideEffect ->
 			when (sideEffect) {
 				is HomeSideEffect.ShowToast -> {
-					snackbarHostState.showSnackbar(sideEffect.message)
+					Toast.makeText(context, sideEffect.message, Toast.LENGTH_SHORT).show()
+				}
+
+				is HomeSideEffect.RequestLocationPermission -> {
+					if (!uiState.isLocationPermissionGranted) {
+						launcherLocationPermissions.launch(
+							arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+						)
+					}
 				}
 
 				is HomeSideEffect.SetInitialLocation -> {
-					if (!uiState.isInitialLocationSet) {
-						// 현재 위치 가져오기
-						if (
-							ActivityCompat.checkSelfPermission(
-								context,
-								Manifest.permission.ACCESS_FINE_LOCATION,
-							) != PackageManager.PERMISSION_GRANTED &&
-							ActivityCompat.checkSelfPermission(
-								context,
-								Manifest.permission.ACCESS_COARSE_LOCATION,
-							) != PackageManager.PERMISSION_GRANTED
-						) {
-							// 권한이 없을 경우 요청 필요
-							snackbarHostState.showSnackbar("위치 권한이 필요합니다.")
-							return@collect
-						}
-						focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+					if (ContextCompat.checkSelfPermission(
+							context, Manifest.permission.ACCESS_FINE_LOCATION,
+						) == PackageManager.PERMISSION_GRANTED && !uiState.isInitialLocationSet
+					) {
+						fusedLocationClient.lastLocation.addOnSuccessListener { location ->
 							if (location != null) {
 								val userLatLng = LatLng(location.latitude, location.longitude)
-								// ViewModel의 상태 업데이트
-								viewModel.setInitialLocation(userLatLng)
-								// 카메라 위치 업데이트
+
+								viewModel.onIntent(HomeIntent.SetInitialLocation(userLatLng))
 								cameraPositionState.position =
 									CameraPosition(userLatLng, DEFAULT_ZOOM)
 							} else {
@@ -85,6 +83,15 @@ internal fun HomeRoute(
 			}
 		}
 	}
+
+	HomePermissionHandler(
+		context = context,
+		uiState = uiState,
+		launcherLocationPermissions = launcherLocationPermissions,
+		updatePermission = { isGranted ->
+			viewModel.onIntent(HomeIntent.UpdateLocationPermission(isGranted))
+		},
+	)
 
 	HomeScreen(
 		state = uiState,
