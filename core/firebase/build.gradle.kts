@@ -1,6 +1,5 @@
 plugins {
 	alias(libs.plugins.mapisode.android.library)
-	alias(libs.plugins.mapisode.android.hilt)
 }
 
 android {
