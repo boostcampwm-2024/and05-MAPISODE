@@ -8,6 +8,7 @@ plugins {
 	alias(libs.plugins.ksp) apply false
 	alias(libs.plugins.android.library) apply false
 	alias(libs.plugins.ktlint) apply false
+	id("com.google.gms.google-services") version "4.4.2" apply false
 }
 
 buildscript {
