@@ -65,7 +65,8 @@ internal fun HomeRoute(
 
 				is HomeSideEffect.SetInitialLocation -> {
 					if (ContextCompat.checkSelfPermission(
-							context, Manifest.permission.ACCESS_FINE_LOCATION,
+							context,
+							Manifest.permission.ACCESS_FINE_LOCATION,
 						) == PackageManager.PERMISSION_GRANTED && !uiState.isInitialLocationSet
 					) {
 						fusedLocationClient.lastLocation.addOnSuccessListener { location ->
