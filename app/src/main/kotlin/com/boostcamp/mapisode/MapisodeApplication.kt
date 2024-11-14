@@ -1,6 +1,7 @@
 package com.boostcamp.mapisode
 
 import android.app.Application
+import com.google.firebase.FirebaseApp
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -10,6 +11,7 @@ class MapisodeApplication : Application() {
 		super.onCreate()
 
 		initTimber()
+		FirebaseApp.initializeApp(this)
 	}
 
 	private fun initTimber() {
