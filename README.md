@@ -1,5 +1,10 @@
 # 🕰️ 매피소드
 
+## 📌 프로젝트 소개
+
+<img src="/docs/image/MapisodeMockup.png" width="780" height="243" alt ="">
+
+
 ## 👨‍👨‍👦‍👦 팀원 소개 
 <details>
 <summary>감당할 수 있어요..?</summary>
