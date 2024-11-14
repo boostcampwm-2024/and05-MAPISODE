@@ -51,7 +51,8 @@ internal fun HomeRoute(
 		viewModel.sideEffect.collect { sideEffect ->
 			when (sideEffect) {
 				is HomeSideEffect.ShowToast -> {
-					Toast.makeText(context, sideEffect.message, Toast.LENGTH_SHORT).show()
+					val message = context.getString(sideEffect.messageResId)
+					Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 				}
 
 				is HomeSideEffect.RequestLocationPermission -> {

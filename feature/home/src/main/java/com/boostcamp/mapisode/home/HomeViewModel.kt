@@ -25,7 +25,7 @@ class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
 				if (intent.isGranted) {
 					postSideEffect(HomeSideEffect.SetInitialLocation)
 				} else {
-					postSideEffect(HomeSideEffect.ShowToast("위치 권한이 필요합니다."))
+					postSideEffect(HomeSideEffect.ShowToast(R.string.home_location_permission_needed))
 				}
 			}
 

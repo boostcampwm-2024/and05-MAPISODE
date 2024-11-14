@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="home_location_permission_needed">위치 권한이 필요합니다.</string>
+</resources>
