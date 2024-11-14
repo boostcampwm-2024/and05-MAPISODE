@@ -5,6 +5,6 @@ import com.naver.maps.geometry.LatLng
 sealed class HomeIntent {
 	data object RequestLocationPermission : HomeIntent()
 	data class SetInitialLocation(val latLng: LatLng) : HomeIntent()
-	data class UpdateLocationPermission(val isGranted: Boolean) : HomeIntent()
-	data object MarkPermissionRequested : HomeIntent()
+	data class UpdateLocationPermission(val isGranted: Boolean) : HomeIntent() // 위치 권한 설정 여부 업데이트
+	data object MarkPermissionRequested : HomeIntent() // 위치 권한 요청 기록
 }

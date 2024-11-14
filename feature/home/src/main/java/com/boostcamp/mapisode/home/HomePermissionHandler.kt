@@ -17,6 +17,7 @@ fun HomePermissionHandler(
 	launcherLocationPermissions: ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>>,
 	updatePermission: (Boolean) -> Unit,
 ) {
+	// 위치 권한 설정을 감시하고, 권한이 없으면 요청한다.
 	LaunchedEffect(uiState.isLocationPermissionGranted) {
 		val isFineLocationGranted = ContextCompat.checkSelfPermission(
 			context,
@@ -24,12 +25,14 @@ fun HomePermissionHandler(
 		) == PackageManager.PERMISSION_GRANTED
 
 		if (!uiState.isLocationPermissionGranted && !isFineLocationGranted) {
+			// 위치 권한이 허용되지 않은 경우 권한을 요청
 			launcherLocationPermissions.launch(
 				arrayOf(
 					Manifest.permission.ACCESS_FINE_LOCATION,
 				),
 			)
 		} else if (isFineLocationGranted) {
+			// 위치 권한이 허용된 경우 권한 상태를 업데이트
 			updatePermission(true)
 		}
 	}
@@ -38,11 +41,10 @@ fun HomePermissionHandler(
 @Composable
 fun getPermissionsLauncher(
 	updatePermission: (Boolean) -> Unit,
-): ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>> {
-	return rememberLauncherForActivityResult(
+): ManagedActivityResultLauncher<Array<String>, Map<String, Boolean>> =
+	rememberLauncherForActivityResult(
 		ActivityResultContracts.RequestMultiplePermissions(),
 	) { permissions ->
 		val isGranted = permissions.values.all { it }
 		updatePermission(isGranted)
 	}
-}
