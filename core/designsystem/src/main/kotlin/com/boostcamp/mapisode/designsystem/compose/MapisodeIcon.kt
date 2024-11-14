@@ -22,11 +22,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
-import com.boostcamp.mapisode.designsystem.R
 
 sealed class IconSize(val value: Dp) {
+	data object EExtraSmall : IconSize(12.dp)
 	data object ExtraSmall : IconSize(16.dp)
 	data object Small : IconSize(20.dp)
 	data object Medium : IconSize(24.dp)
