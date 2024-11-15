@@ -21,9 +21,9 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
 fun MapisodeFilledButton(
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     text: String,
-    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     @DrawableRes leftIcon: Int? = null,
     @DrawableRes rightIcon: Int? = null,
@@ -37,10 +37,7 @@ fun MapisodeFilledButton(
             MapisodeTheme.colorScheme.filledButtonDisableBackground
         },
         contentColor = MapisodeTheme.colorScheme.filledButtonContent,
-        modifier = Modifier
-            .width(320.dp)
-            .height(52.dp)
-            .then(modifier),
+        modifier = Modifier.width(320.dp).height(52.dp).then(modifier),
         enabled = enabled,
         showBorder = false,
         interactionSource = interactionSource,

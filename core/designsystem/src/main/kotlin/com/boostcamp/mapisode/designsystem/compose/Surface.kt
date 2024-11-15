@@ -36,14 +36,11 @@ fun Surface(
 		LocalMapisodeContentColor provides contentColor,
 	) {
 		Box(
-			modifier = modifier
-                .surface(
+			modifier = modifier.surface(
                     shape = shape,
                     backgroundColor = color,
                     border = border,
-                )
-                .semantics { isTraversalGroup = true }
-                .pointerInput(Unit) {},
+                ).semantics { isTraversalGroup = true }.pointerInput(Unit) {},
 			propagateMinConstraints = true,
 		) {
 			content()
@@ -68,19 +65,16 @@ fun Surface(
 		LocalMapisodeContentColor provides contentColor,
 	) {
 		Box(
-			modifier = modifier
-                .surface(
+			modifier = modifier.surface(
                     shape = shape,
                     backgroundColor = color,
                     border = border,
-                )
-                .clickable(
+                ).clickable(
                     interactionSource = interactionSource,
                     indication = null,
                     enabled = enabled,
                     onClick = onClick,
-                )
-                .mapisodeRippleEffect(
+                ).mapisodeRippleEffect(
                     enabled = enabled,
                     rippleColor = contentColor.copy(alpha = 0.3f),
                 ),
@@ -95,7 +89,10 @@ private fun Modifier.surface(
 	shape: Shape,
 	backgroundColor: Color,
 	border: BorderStroke?,
-): Modifier = this
-    .then(if (border != null) Modifier.border(border, shape) else Modifier)
-    .background(color = backgroundColor, shape = shape)
-    .clip(shape)
+): Modifier = this.then(
+        if (border != null) {
+            Modifier.border(border, shape)
+        } else {
+            Modifier
+        },
+    ).background(color = backgroundColor, shape = shape).clip(shape)

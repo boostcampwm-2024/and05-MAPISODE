@@ -21,9 +21,9 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
 fun MapisodeOutlinedButton(
+	modifier: Modifier = Modifier,
 	onClick: () -> Unit,
 	text: String,
-	modifier: Modifier = Modifier,
 	enabled: Boolean = true,
 	@DrawableRes leftIcon: Int? = null,
 	@DrawableRes rightIcon: Int? = null,
@@ -33,10 +33,7 @@ fun MapisodeOutlinedButton(
         onClick = onClick,
         backgroundColors = MapisodeTheme.colorScheme.outlineButtonBackground,
         contentColor = MapisodeTheme.colorScheme.outlineButtonContent,
-        modifier = Modifier
-            .then(modifier)
-            .width(320.dp)
-            .height(40.dp),
+        modifier = Modifier.width(320.dp).height(40.dp).then(modifier),
         enabled = enabled,
         showBorder = true,
         borderColor = MapisodeTheme.colorScheme.outlineButtonStroke,
