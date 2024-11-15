@@ -44,7 +44,7 @@ fun Modifier.mapisodeRippleEffect(
 		.pointerInput(enabled) {
 			if (enabled) {
 				detectTapGestures(
-					onTap = { offset ->
+					onPress = { offset ->
 						rippleState.rippleCenter = offset
 						coroutineScope.launch {
 							val maxRadius = size.width.coerceAtLeast(size.height) * 1.5f
@@ -56,6 +56,8 @@ fun Modifier.mapisodeRippleEffect(
 							) { value, _ ->
 								rippleState.rippleRadius = value
 							}
+
+							tryAwaitRelease()
 
 							animate(
 								initialValue = maxRadius,
