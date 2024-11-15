@@ -1,8 +1,10 @@
 package com.boostcamp.mapisode.home
 
 import android.Manifest
+import android.app.Activity
 import android.content.pm.PackageManager
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -58,6 +62,18 @@ internal fun HomeRoute(
 
 	val launcherLocationPermissions = getPermissionsLauncher { isGranted ->
 		viewModel.onIntent(HomeIntent.UpdateLocationPermission(isGranted))
+	}
+
+	var backPressedTime by remember { mutableLongStateOf(0L) }
+
+	BackHandler(enabled = true) {
+		if (System.currentTimeMillis() - backPressedTime <= 2000L) {
+			(context as Activity).finish()
+		} else {
+			Toast.makeText(context, context.getString(R.string.home_exit_alert), Toast.LENGTH_SHORT)
+				.show()
+		}
+		backPressedTime = System.currentTimeMillis()
 	}
 
 	LaunchedEffect(viewModel) {
