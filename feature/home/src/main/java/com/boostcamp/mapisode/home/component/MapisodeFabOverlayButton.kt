@@ -22,8 +22,8 @@ fun MapisodeFabOverlayButton(
 	onClick: () -> Unit,
 	modifier: Modifier = Modifier,
 	iconId: Int = R.drawable.ic_group,
-	backgroundColor: Color = MapisodeTheme.colorScheme.fabContent,
-	iconTint: Color = MapisodeTheme.colorScheme.fabBackground,
+	backgroundColor: Color = MapisodeTheme.colorScheme.fabBackground,
+	iconTint: Color = MapisodeTheme.colorScheme.fabContent,
 ) {
 	Surface(
 		modifier = modifier
