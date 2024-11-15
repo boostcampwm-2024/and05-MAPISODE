@@ -1,15 +1,17 @@
 package com.boostcamp.mapisode.mygroup
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
-import com.boostcamp.mapisode.designsystem.compose.MapisodeText
+import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
+import com.boostcamp.mapisode.designsystem.compose.button.MapisodeOutlinedButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
-import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
 internal fun GroupRoute() {
@@ -28,15 +30,27 @@ private fun GroupScreen() {
 			)
 		},
 	) {
-		Box(
+		Column(
 			modifier = Modifier
-				.fillMaxSize()
-				.padding(it),
-			contentAlignment = Alignment.Center,
+                .fillMaxSize()
+                .padding(it),
+			verticalArrangement = Arrangement.spacedBy(16.dp),
+			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
-			MapisodeText(
-				text = "Group",
-				style = MapisodeTheme.typography.displayMedium,
+			MapisodeFilledButton(
+				onClick = { },
+				text = "활성화 버튼",
+			)
+
+			MapisodeFilledButton(
+				onClick = { },
+				text = "비활성화 버튼",
+				enabled = false,
+			)
+
+			MapisodeOutlinedButton(
+				onClick = { },
+				text = "아웃라인 버튼",
 			)
 		}
 	}

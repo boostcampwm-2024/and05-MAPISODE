@@ -37,13 +37,13 @@ fun Surface(
 	) {
 		Box(
 			modifier = modifier
-				.surface(
-					shape = shape,
-					backgroundColor = color,
-					border = border,
-				)
-				.semantics { isTraversalGroup = true }
-				.pointerInput(Unit) {},
+                .surface(
+                    shape = shape,
+                    backgroundColor = color,
+                    border = border,
+                )
+                .semantics { isTraversalGroup = true }
+                .pointerInput(Unit) {},
 			propagateMinConstraints = true,
 		) {
 			content()
@@ -69,17 +69,21 @@ fun Surface(
 	) {
 		Box(
 			modifier = modifier
-				.surface(
-					shape = shape,
-					backgroundColor = color,
-					border = border,
-				)
-				.clickable(
-					interactionSource = interactionSource,
-					indication = null,
-					enabled = enabled,
-					onClick = onClick,
-				),
+                .surface(
+                    shape = shape,
+                    backgroundColor = color,
+                    border = border,
+                )
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    enabled = enabled,
+                    onClick = onClick,
+                )
+                .mapisodeRippleEffect(
+                    enabled = enabled,
+                    rippleColor = contentColor.copy(alpha = 0.3f),
+                ),
 			propagateMinConstraints = true,
 		) {
 			content()
@@ -92,6 +96,6 @@ private fun Modifier.surface(
 	backgroundColor: Color,
 	border: BorderStroke?,
 ): Modifier = this
-	.then(if (border != null) Modifier.border(border, shape) else Modifier)
-	.background(color = backgroundColor, shape = shape)
-	.clip(shape)
+    .then(if (border != null) Modifier.border(border, shape) else Modifier)
+    .background(color = backgroundColor, shape = shape)
+    .clip(shape)
