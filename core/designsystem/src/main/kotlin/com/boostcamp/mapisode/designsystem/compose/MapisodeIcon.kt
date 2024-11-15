@@ -141,7 +141,6 @@ fun MarkerIconsPreview() {
 	}
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun OtherIconsPreview() {
