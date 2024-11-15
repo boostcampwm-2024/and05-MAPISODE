@@ -15,7 +15,7 @@ import com.boostcamp.mapisode.designsystem.compose.IconSize
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.Surface
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
-import com.boostcamp.mapisode.home.R
+import com.boostcamp.mapisode.designsystem.R
 
 @Composable
 fun MapisodeFabOverlayButton(
