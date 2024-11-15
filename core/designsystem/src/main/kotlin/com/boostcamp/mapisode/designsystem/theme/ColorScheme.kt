@@ -91,9 +91,9 @@ val lightColorScheme = CustomColorScheme(
 	filledButtonEnableBackground = Primary30,
 	filledButtonDisableBackground = Neutral60,
 	filledButtonContent = Neutral10,
-	outlineButtonBackground = Neutral110,
+	outlineButtonBackground = Neutral10,
 	outlineButtonStroke = Neutral60,
-	outlineButtonContent = Neutral60,
+	outlineButtonContent = Neutral70,
 
 	// Chip
 	chipUnselectedBackground = Neutral10,
