@@ -27,6 +27,7 @@ fun MapisodeOutlinedButton(
 	enabled: Boolean = true,
 	@DrawableRes leftIcon: Int? = null,
 	@DrawableRes rightIcon: Int? = null,
+	showRipple: Boolean = false,
 	interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
 	MapisodeButton(
@@ -40,6 +41,7 @@ fun MapisodeOutlinedButton(
 		enabled = enabled,
 		showBorder = true,
 		borderColor = MapisodeTheme.colorScheme.outlineButtonStroke,
+		showRipple = showRipple,
 		interactionSource = interactionSource,
 		rounding = 8.dp,
 		contentPadding = PaddingValues(horizontal = 16.dp),

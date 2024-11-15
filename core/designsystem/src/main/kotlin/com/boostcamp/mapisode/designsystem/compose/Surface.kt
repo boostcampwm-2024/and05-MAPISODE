@@ -61,6 +61,7 @@ fun Surface(
 	color: Color = MapisodeTheme.colorScheme.surfaceBackground,
 	contentColor: Color = LocalMapisodeContentColor.current,
 	border: BorderStroke? = null,
+	showRipple: Boolean = false,
 	interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 	content: @Composable () -> Unit,
 ) {
@@ -76,9 +77,13 @@ fun Surface(
 					enabled = enabled,
 					onClick = onClick,
 				)
-				.mapisodeRippleEffect(
-					enabled = enabled,
-					rippleColor = contentColor.copy(alpha = 0.3f),
+				.then(
+					Modifier
+						.mapisodeRippleEffect(
+							enabled = enabled,
+							rippleColor = contentColor.copy(alpha = 0.3f),
+						)
+						.takeIf { showRipple } ?: Modifier,
 				),
 			propagateMinConstraints = true,
 		) {

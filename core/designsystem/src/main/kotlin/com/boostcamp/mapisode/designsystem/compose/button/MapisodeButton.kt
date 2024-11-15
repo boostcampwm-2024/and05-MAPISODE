@@ -31,6 +31,7 @@ internal fun MapisodeButton(
 	borderColor: Color = Color.Transparent,
 	rounding: Dp = 8.dp,
 	contentPadding: PaddingValues = MapisodeButtonDefaults.ContentPadding,
+	showRipple: Boolean = false,
 	interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 	content: @Composable RowScope.() -> Unit,
 ) {
@@ -42,6 +43,7 @@ internal fun MapisodeButton(
 		color = backgroundColors,
 		contentColor = contentColor,
 		border = if (showBorder) BorderStroke(Thickness.Thin.value, borderColor) else null,
+		showRipple = showRipple,
 		interactionSource = interactionSource,
 	) {
 		ProvideTextStyle(value = MapisodeTheme.typography.labelLarge) {
