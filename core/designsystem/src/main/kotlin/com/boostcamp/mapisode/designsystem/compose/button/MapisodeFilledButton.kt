@@ -29,6 +29,7 @@ fun MapisodeFilledButton(
 	enabled: Boolean = true,
 	@DrawableRes leftIcon: Int? = null,
 	@DrawableRes rightIcon: Int? = null,
+	showRipple: Boolean = false,
 	interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
 	MapisodeButton(
@@ -45,6 +46,7 @@ fun MapisodeFilledButton(
 			.then(modifier),
 		enabled = enabled,
 		showBorder = false,
+		showRipple = showRipple,
 		interactionSource = interactionSource,
 		rounding = 8.dp,
 		contentPadding = PaddingValues(horizontal = 16.dp),

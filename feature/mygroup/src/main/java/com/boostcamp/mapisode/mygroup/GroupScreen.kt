@@ -38,6 +38,7 @@ private fun GroupScreen() {
 			MapisodeFilledButton(
 				onClick = { },
 				text = "활성화 버튼",
+				showRipple = true,
 			)
 
 			MapisodeFilledButton(
@@ -49,6 +50,7 @@ private fun GroupScreen() {
 			MapisodeOutlinedButton(
 				onClick = { },
 				text = "아웃라인 버튼",
+				showRipple = true,
 			)
 		}
 	}
