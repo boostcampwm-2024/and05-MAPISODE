@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.compose.IconSize
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
+import com.boostcamp.mapisode.designsystem.theme.MapisodeTextStyle
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
@@ -24,6 +25,7 @@ fun MapisodeFilledButton(
 	modifier: Modifier = Modifier,
 	onClick: () -> Unit,
 	text: String,
+	textStyle: MapisodeTextStyle = MapisodeTheme.typography.titleLarge,
 	enabled: Boolean = true,
 	@DrawableRes leftIcon: Int? = null,
 	@DrawableRes rightIcon: Int? = null,
@@ -58,7 +60,7 @@ fun MapisodeFilledButton(
 		MapisodeText(
 			text = text,
 			color = MapisodeTheme.colorScheme.filledButtonContent,
-			style = MapisodeTheme.typography.titleLarge,
+			style = textStyle,
 		)
 
 		leftIcon ?: rightIcon?.let { icon ->
