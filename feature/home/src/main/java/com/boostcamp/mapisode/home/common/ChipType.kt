@@ -17,10 +17,8 @@ enum class ChipType(
 }
 
 @Composable
-fun getChipIconTint(chipType: ChipType): Color {
-	return when (chipType) {
-		ChipType.EATERY -> MapisodeTheme.colorScheme.eatIconColor
-		ChipType.SEEING -> MapisodeTheme.colorScheme.seeIconColor
-		ChipType.OTHER -> MapisodeTheme.colorScheme.otherIconColor
-	}
+fun getChipIconTint(chipType: ChipType): Color = when (chipType) {
+	ChipType.EATERY -> MapisodeTheme.colorScheme.eatIconColor
+	ChipType.SEEING -> MapisodeTheme.colorScheme.seeIconColor
+	ChipType.OTHER -> MapisodeTheme.colorScheme.otherIconColor
 }
