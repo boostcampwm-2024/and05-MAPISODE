@@ -1,6 +1,7 @@
 package com.boostcamp.mapisode.episode.model
 
-import com.boostcamp.mapisode.episode.EpisodeDTO
+import com.boostcamp.mapisode.episode.EpisodeLatLng
+import com.boostcamp.mapisode.episode.EpisodeModel
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.GeoPoint
@@ -17,14 +18,14 @@ data class EpisodeFirestoreModel(
 	val title: String = "",
 	val createdAt: Timestamp = Timestamp.now(),
 ) {
-	fun toDTO(id: String): EpisodeDTO = EpisodeDTO(
+	fun toDomainModel(id: String): EpisodeModel = EpisodeModel(
 		id = id,
 		category = category,
 		content = content,
 		createdBy = createdBy?.id ?: "",
 		group = group?.id ?: "",
 		imageUrls = imageUrls,
-		location = requireNotNull(location?.let { Pair(it.latitude, it.longitude) }),
+		location = requireNotNull(location?.let { EpisodeLatLng(it.latitude, it.longitude) }),
 		memoryDate = memoryDate.toDate(),
 		tags = tags,
 		title = title,
