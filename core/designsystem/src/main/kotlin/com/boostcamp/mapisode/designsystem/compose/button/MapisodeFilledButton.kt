@@ -76,7 +76,7 @@ fun MapisodeFilledButton(
 fun MapisodeFilledButtonPreview() {
 	Column(
 		modifier = Modifier.padding(16.dp),
-		verticalArrangement = Arrangement.spacedBy(8.dp)
+		verticalArrangement = Arrangement.spacedBy(8.dp),
 	) {
 		MapisodeFilledButton(
 			onClick = { },
