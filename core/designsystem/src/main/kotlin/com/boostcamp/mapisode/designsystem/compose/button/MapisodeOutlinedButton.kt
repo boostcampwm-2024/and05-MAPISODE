@@ -30,37 +30,40 @@ fun MapisodeOutlinedButton(
 	interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
 	MapisodeButton(
-        onClick = onClick,
-        backgroundColors = MapisodeTheme.colorScheme.outlineButtonBackground,
-        contentColor = MapisodeTheme.colorScheme.outlineButtonContent,
-        modifier = Modifier.width(320.dp).height(40.dp).then(modifier),
-        enabled = enabled,
-        showBorder = true,
-        borderColor = MapisodeTheme.colorScheme.outlineButtonStroke,
-        interactionSource = interactionSource,
-        rounding = 8.dp,
-        contentPadding = PaddingValues(horizontal = 16.dp),
-    ) {
+		onClick = onClick,
+		backgroundColors = MapisodeTheme.colorScheme.outlineButtonBackground,
+		contentColor = MapisodeTheme.colorScheme.outlineButtonContent,
+		modifier = Modifier
+			.width(320.dp)
+			.height(40.dp)
+			.then(modifier),
+		enabled = enabled,
+		showBorder = true,
+		borderColor = MapisodeTheme.colorScheme.outlineButtonStroke,
+		interactionSource = interactionSource,
+		rounding = 8.dp,
+		contentPadding = PaddingValues(horizontal = 16.dp),
+	) {
 		leftIcon?.let { icon ->
 			MapisodeIcon(
-                id = icon,
-                iconSize = IconSize.Small,
-            )
+				id = icon,
+				iconSize = IconSize.Small,
+			)
 			Spacer(modifier = Modifier.width(8.dp))
 		}
 
 		MapisodeText(
-            text = text,
-            color = MapisodeTheme.colorScheme.outlineButtonContent,
-            style = MapisodeTheme.typography.labelLarge,
-        )
+			text = text,
+			color = MapisodeTheme.colorScheme.outlineButtonContent,
+			style = MapisodeTheme.typography.labelLarge,
+		)
 
 		leftIcon ?: rightIcon?.let { icon ->
 			Spacer(modifier = Modifier.width(8.dp))
 			MapisodeIcon(
-                id = icon,
-                iconSize = IconSize.Small,
-            )
+				id = icon,
+				iconSize = IconSize.Small,
+			)
 		}
 	}
 }
@@ -69,12 +72,12 @@ fun MapisodeOutlinedButton(
 @Composable
 fun MapisodeOutlinedButtonPreview() {
 	Column(
-        modifier = Modifier.padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
+		modifier = Modifier.padding(16.dp),
+		verticalArrangement = Arrangement.spacedBy(8.dp),
+	) {
 		MapisodeOutlinedButton(
-            onClick = { },
-            text = "아웃라인 버튼",
-        )
+			onClick = { },
+			text = "아웃라인 버튼",
+		)
 	}
 }
