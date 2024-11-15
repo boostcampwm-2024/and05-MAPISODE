@@ -31,6 +31,7 @@ sealed class IconSize(val value: Dp) {
 	data object ExtraSmall : IconSize(16.dp)
 	data object Small : IconSize(20.dp)
 	data object Medium : IconSize(24.dp)
+	data object Normal : IconSize(30.dp)
 	data object Large : IconSize(48.dp)
 }
 
