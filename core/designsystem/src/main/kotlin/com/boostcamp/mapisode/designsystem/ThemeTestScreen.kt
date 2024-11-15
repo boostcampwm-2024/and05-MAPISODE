@@ -28,13 +28,13 @@ fun TestScreen() {
 				modifier = Modifier.testTag("TopAppBar"),
 				navigationIcon = {
 					MapisodeIcon(
-						id = R.drawable.ic_arrow_back_24,
+						id = R.drawable.ic_arrow_back,
 					)
 				},
 				actions = {
 					Row {
-						MapisodeIcon(id = R.drawable.ic_groups_2_24)
-						MapisodeIcon(id = R.drawable.ic_house_24)
+						MapisodeIcon(id = R.drawable.ic_groups_2)
+						MapisodeIcon(id = R.drawable.ic_house)
 					}
 				},
 			)
