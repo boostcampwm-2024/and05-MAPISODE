@@ -33,14 +33,14 @@ fun MapisodeChip(
 	isSelected: Boolean = false,
 ) {
 	val backgroundColor = if (isSelected) {
-		MapisodeTheme.colorScheme.chipBackground
+		MapisodeTheme.colorScheme.chipSelectedBackground
 	} else {
-		MapisodeTheme.colorScheme.navBackground
+		MapisodeTheme.colorScheme.chipUnselectedBackground
 	}
 	val strokeColor = if (isSelected) {
-		MapisodeTheme.colorScheme.navSelectedItem
+		MapisodeTheme.colorScheme.chipSelectedStroke
 	} else {
-		MapisodeTheme.colorScheme.dividerThickColor
+		MapisodeTheme.colorScheme.chipUnselectedStroke
 	}
 	val rippleColor = MapisodeTheme.colorScheme.otherIconColor
 
@@ -65,7 +65,7 @@ fun MapisodeChip(
 			Spacer(modifier = Modifier.width(2.dp))
 			MapisodeText(
 				text = text,
-				color = MapisodeTheme.colorScheme.topAppBarTitle,
+				color = MapisodeTheme.colorScheme.chipText,
 				style = AppTypography.titleSmall,
 			)
 		}
