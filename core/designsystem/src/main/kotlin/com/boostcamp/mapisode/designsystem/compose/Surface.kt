@@ -36,11 +36,14 @@ fun Surface(
 		LocalMapisodeContentColor provides contentColor,
 	) {
 		Box(
-			modifier = modifier.surface(
-                    shape = shape,
-                    backgroundColor = color,
-                    border = border,
-                ).semantics { isTraversalGroup = true }.pointerInput(Unit) {},
+			modifier = modifier
+				.surface(
+					shape = shape,
+					backgroundColor = color,
+					border = border,
+				)
+				.semantics { isTraversalGroup = true }
+				.pointerInput(Unit) {},
 			propagateMinConstraints = true,
 		) {
 			content()
@@ -65,19 +68,18 @@ fun Surface(
 		LocalMapisodeContentColor provides contentColor,
 	) {
 		Box(
-			modifier = modifier.surface(
-                    shape = shape,
-                    backgroundColor = color,
-                    border = border,
-                ).clickable(
-                    interactionSource = interactionSource,
-                    indication = null,
-                    enabled = enabled,
-                    onClick = onClick,
-                ).mapisodeRippleEffect(
-                    enabled = enabled,
-                    rippleColor = contentColor.copy(alpha = 0.3f),
-                ),
+			modifier = modifier
+				.surface(shape = shape, backgroundColor = color, border = border)
+				.clickable(
+					interactionSource = interactionSource,
+					indication = null,
+					enabled = enabled,
+					onClick = onClick,
+				)
+				.mapisodeRippleEffect(
+					enabled = enabled,
+					rippleColor = contentColor.copy(alpha = 0.3f),
+				),
 			propagateMinConstraints = true,
 		) {
 			content()
@@ -89,10 +91,13 @@ private fun Modifier.surface(
 	shape: Shape,
 	backgroundColor: Color,
 	border: BorderStroke?,
-): Modifier = this.then(
-        if (border != null) {
-            Modifier.border(border, shape)
-        } else {
-            Modifier
-        },
-    ).background(color = backgroundColor, shape = shape).clip(shape)
+): Modifier = this@surface
+	.then(
+		if (border != null) {
+			Modifier.border(border, shape)
+		} else {
+			Modifier
+		},
+	)
+	.background(color = backgroundColor, shape = shape)
+	.clip(shape)

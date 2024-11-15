@@ -21,69 +21,72 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
 fun MapisodeFilledButton(
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit,
-    text: String,
-    enabled: Boolean = true,
-    @DrawableRes leftIcon: Int? = null,
-    @DrawableRes rightIcon: Int? = null,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+	modifier: Modifier = Modifier,
+	onClick: () -> Unit,
+	text: String,
+	enabled: Boolean = true,
+	@DrawableRes leftIcon: Int? = null,
+	@DrawableRes rightIcon: Int? = null,
+	interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-    MapisodeButton(
-        onClick = onClick,
-        backgroundColors = if (enabled) {
-            MapisodeTheme.colorScheme.filledButtonEnableBackground
-        } else {
-            MapisodeTheme.colorScheme.filledButtonDisableBackground
-        },
-        contentColor = MapisodeTheme.colorScheme.filledButtonContent,
-        modifier = Modifier.width(320.dp).height(52.dp).then(modifier),
-        enabled = enabled,
-        showBorder = false,
-        interactionSource = interactionSource,
-        rounding = 8.dp,
-        contentPadding = PaddingValues(horizontal = 16.dp),
-    ) {
-        leftIcon?.let { icon ->
-            MapisodeIcon(
-                id = icon,
-                iconSize = IconSize.Medium
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-        }
+	MapisodeButton(
+		onClick = onClick,
+		backgroundColors = if (enabled) {
+			MapisodeTheme.colorScheme.filledButtonEnableBackground
+		} else {
+			MapisodeTheme.colorScheme.filledButtonDisableBackground
+		},
+		contentColor = MapisodeTheme.colorScheme.filledButtonContent,
+		modifier = Modifier
+			.width(320.dp)
+			.height(52.dp)
+			.then(modifier),
+		enabled = enabled,
+		showBorder = false,
+		interactionSource = interactionSource,
+		rounding = 8.dp,
+		contentPadding = PaddingValues(horizontal = 16.dp),
+	) {
+		leftIcon?.let { icon ->
+			MapisodeIcon(
+				id = icon,
+				iconSize = IconSize.Medium
+			)
+			Spacer(modifier = Modifier.width(8.dp))
+		}
 
-        MapisodeText(
-            text = text,
-            color = MapisodeTheme.colorScheme.filledButtonContent,
-            style = MapisodeTheme.typography.titleLarge
-        )
+		MapisodeText(
+			text = text,
+			color = MapisodeTheme.colorScheme.filledButtonContent,
+			style = MapisodeTheme.typography.titleLarge
+		)
 
-        leftIcon ?: rightIcon?.let { icon ->
-            Spacer(modifier = Modifier.width(8.dp))
-            MapisodeIcon(
-                id = icon,
-                iconSize = IconSize.Medium
-            )
-        }
-    }
+		leftIcon ?: rightIcon?.let { icon ->
+			Spacer(modifier = Modifier.width(8.dp))
+			MapisodeIcon(
+				id = icon,
+				iconSize = IconSize.Medium
+			)
+		}
+	}
 }
 
 @Preview(showBackground = true)
 @Composable
 fun MapisodeFilledButtonPreview() {
-    Column(
-        modifier = Modifier.padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        MapisodeFilledButton(
-            onClick = { },
-            text = "활성화 버튼"
-        )
+	Column(
+		modifier = Modifier.padding(16.dp),
+		verticalArrangement = Arrangement.spacedBy(8.dp)
+	) {
+		MapisodeFilledButton(
+			onClick = { },
+			text = "활성화 버튼"
+		)
 
-        MapisodeFilledButton(
-            onClick = { },
-            text = "비활성화 버튼",
-            enabled = false
-        )
-    }
+		MapisodeFilledButton(
+			onClick = { },
+			text = "비활성화 버튼",
+			enabled = false
+		)
+	}
 }
