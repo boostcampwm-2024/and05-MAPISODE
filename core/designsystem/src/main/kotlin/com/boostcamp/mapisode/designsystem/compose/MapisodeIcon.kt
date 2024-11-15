@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.R
-import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 sealed class IconSize(val value: Dp) {
@@ -41,9 +40,9 @@ fun MapisodeIcon(
 	modifier: Modifier = Modifier,
 	contentDescription: String? = null,
 	iconSize: IconSize = IconSize.Medium,
-	tint: Color = LocalMapisodeContentColor.current,
+	tint: Color? = Color.Unspecified,
 ) {
-	val colorFilter = ColorFilter.tint(tint)
+	val colorFilter = tint?.let { ColorFilter.tint(it) }
 	val semantics = if (contentDescription != null) {
 		Modifier.semantics {
 			this.contentDescription = contentDescription
@@ -100,6 +99,59 @@ fun IconPreview() {
 			id = R.drawable.ic_account_circle_24,
 			iconSize = IconSize.Large,
 			tint = MapisodeTheme.colorScheme.iconColor,
+		)
+	}
+}
+
+@Preview(showBackground = true)
+@Composable
+fun IconTintPreview() {
+	Column(
+		modifier = Modifier
+			.padding(4.dp),
+		verticalArrangement = Arrangement.spacedBy(8.dp),
+		horizontalAlignment = Alignment.CenterHorizontally,
+	) {
+		MapisodeText(text = "Eat Marker Light Icon", style = MapisodeTheme.typography.labelMedium)
+		MapisodeIcon(
+			id = R.drawable.ic_eat_marker_light,
+			iconSize = IconSize.Medium,
+			tint = null,
+		)
+
+		MapisodeText(text = "Eat Marker Dark Icon", style = MapisodeTheme.typography.labelMedium)
+		MapisodeIcon(
+			id = R.drawable.ic_eat_marker_dark,
+			iconSize = IconSize.Medium,
+			tint = null,
+		)
+
+		MapisodeText(text = "See Marker Light Icon", style = MapisodeTheme.typography.labelMedium)
+		MapisodeIcon(
+			id = R.drawable.ic_see_marker_light,
+			iconSize = IconSize.Medium,
+			tint = null,
+		)
+
+		MapisodeText(text = "See Marker Dark Icon", style = MapisodeTheme.typography.labelMedium)
+		MapisodeIcon(
+			id = R.drawable.ic_see_marker_dark,
+			iconSize = IconSize.Medium,
+			tint = null,
+		)
+
+		MapisodeText(text = "Other Marker Light Icon", style = MapisodeTheme.typography.labelMedium)
+		MapisodeIcon(
+			id = R.drawable.ic_other_marker_light,
+			iconSize = IconSize.Medium,
+			tint = null,
+		)
+
+		MapisodeText(text = "See Marker Dark Icon", style = MapisodeTheme.typography.labelMedium)
+		MapisodeIcon(
+			id = R.drawable.ic_other_marker_dark,
+			iconSize = IconSize.Medium,
+			tint = null,
 		)
 	}
 }
