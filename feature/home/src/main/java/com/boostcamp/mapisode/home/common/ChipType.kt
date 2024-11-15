@@ -5,8 +5,8 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
-import com.boostcamp.mapisode.home.R as Home
 import com.boostcamp.mapisode.designsystem.R as Design
+import com.boostcamp.mapisode.home.R as Home
 
 enum class ChipType(
 	@StringRes val textResId: Int,
