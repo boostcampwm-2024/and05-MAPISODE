@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,6 +28,7 @@ import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
 import com.boostcamp.mapisode.home.common.getChipIconTint
 import com.boostcamp.mapisode.home.component.MapisodeChip
+import com.boostcamp.mapisode.home.component.MapisodeFabOverlayButton
 import com.google.android.gms.location.LocationServices
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
@@ -170,8 +173,21 @@ private fun HomeScreen(
 					)
 				}
 			}
-		}
 
+			Spacer(modifier = Modifier.height(22.dp))
+
+			Box(
+				modifier = Modifier.fillMaxWidth(),
+				contentAlignment = Alignment.CenterEnd,
+			) {
+				MapisodeFabOverlayButton(
+					onClick = {
+						// TODO : FAB 클릭 시 동작 구현
+					},
+					modifier = Modifier.padding(end = 20.dp),
+				)
+			}
+		}
 	}
 }
 
