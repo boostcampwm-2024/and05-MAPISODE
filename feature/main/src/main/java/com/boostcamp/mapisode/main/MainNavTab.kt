@@ -10,22 +10,22 @@ internal enum class MainNavTab(
 	val route: MainRoute,
 ) {
 	HOME(
-		iconResId = R.drawable.ic_house_24,
+		iconResId = R.drawable.ic_house,
 		contentDescription = "홈",
 		route = MainRoute.Home,
 	),
 	EPISODE(
-		iconResId = R.drawable.ic_edit_note_24,
+		iconResId = R.drawable.ic_edit_note,
 		contentDescription = "새 에피소드",
 		route = MainRoute.Episode,
 	),
 	GROUP(
-		iconResId = R.drawable.ic_groups_2_24,
+		iconResId = R.drawable.ic_groups_2,
 		contentDescription = "그룹",
 		route = MainRoute.Group,
 	),
 	MYPAGE(
-		iconResId = R.drawable.ic_account_circle_24,
+		iconResId = R.drawable.ic_account_circle,
 		contentDescription = "마이페이지",
 		route = MainRoute.Mypage,
 	), ;
