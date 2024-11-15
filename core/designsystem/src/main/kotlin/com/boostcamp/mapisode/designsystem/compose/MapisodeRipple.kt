@@ -30,44 +30,43 @@ fun Modifier.mapisodeRippleEffect(
 	val rippleState = remember { MapisodeRippleState() }
 	val coroutineScope = rememberCoroutineScope()
 
-    this
-        .graphicsLayer(alpha = 0.99f)
-        .drawWithContent {
-            drawContent()
-            if (rippleState.rippleRadius > 0) {
-                drawCircle(
-                    color = rippleColor,
-                    radius = rippleState.rippleRadius,
-                    center = rippleState.rippleCenter,
-                )
-            }
-        }
-        .pointerInput(enabled) {
-            if (enabled) {
-                detectTapGestures(
-                    onTap = { offset ->
-                        rippleState.rippleCenter = offset
-                        coroutineScope.launch {
-                            val maxRadius = size.width.coerceAtLeast(size.height) * 1.5f
+	Modifier.graphicsLayer(alpha = 0.99f)
+		.drawWithContent {
+			drawContent()
+			if (rippleState.rippleRadius > 0) {
+				drawCircle(
+					color = rippleColor,
+					radius = rippleState.rippleRadius,
+					center = rippleState.rippleCenter,
+				)
+			}
+		}
+		.pointerInput(enabled) {
+			if (enabled) {
+				detectTapGestures(
+					onTap = { offset ->
+						rippleState.rippleCenter = offset
+						coroutineScope.launch {
+							val maxRadius = size.width.coerceAtLeast(size.height) * 1.5f
 
-                            animate(
-                                initialValue = 0f,
-                                targetValue = maxRadius,
-                                animationSpec = tween(50),
-                            ) { value, _ ->
-                                rippleState.rippleRadius = value
-                            }
+							animate(
+								initialValue = 0f,
+								targetValue = maxRadius,
+								animationSpec = tween(50),
+							) { value, _ ->
+								rippleState.rippleRadius = value
+							}
 
-                            animate(
-                                initialValue = maxRadius,
-                                targetValue = 0f,
-                                animationSpec = tween(50),
-                            ) { value, _ ->
-                                rippleState.rippleRadius = value
-                            }
-                        }
-                    },
-                )
-            }
-        }
+							animate(
+								initialValue = maxRadius,
+								targetValue = 0f,
+								animationSpec = tween(50),
+							) { value, _ ->
+								rippleState.rippleRadius = value
+							}
+						}
+					},
+				)
+			}
+		}
 }
