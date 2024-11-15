@@ -38,9 +38,9 @@ fun MapisodeFilledButton(
         },
         contentColor = MapisodeTheme.colorScheme.filledButtonContent,
         modifier = Modifier
-            .then(modifier)
             .width(320.dp)
-            .height(52.dp),
+            .height(52.dp)
+            .then(modifier),
         enabled = enabled,
         showBorder = false,
         interactionSource = interactionSource,
