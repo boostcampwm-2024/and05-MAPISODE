@@ -13,7 +13,7 @@ enum class ChipType(
 ) {
 	EATERY(R.string.home_chip_eat, R.drawable.ic_eat),
 	SEEING(R.string.home_chip_see, R.drawable.ic_see),
-	OTHER(R.string.home_chip_other, R.drawable.ic_other)
+	OTHER(R.string.home_chip_other, R.drawable.ic_other),
 }
 
 @Composable
