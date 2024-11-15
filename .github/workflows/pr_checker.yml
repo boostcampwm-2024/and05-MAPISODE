@@ -39,6 +39,9 @@ jobs:
                 run: |
                     echo NAVER_MAP_CLIENT_ID=$NAVER_MAP_CLIENT_ID > ./local.properties
 
+            -   name: Create google-services.json
+                run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
+
             -   name: Grant execute permission for gradlew
                 run: chmod +x gradlew
 
@@ -50,9 +53,6 @@ jobs:
                     android: true
                     fail_on_error: true
                     level: warning
-
-            -   name: Create google-services.json
-                run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
 
             -   name: Build Check
                 run: ./gradlew build
