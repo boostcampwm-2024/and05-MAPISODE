@@ -50,7 +50,7 @@ fun MapisodeFilledButton(
 		leftIcon?.let { icon ->
 			MapisodeIcon(
 				id = icon,
-				iconSize = IconSize.Medium
+				iconSize = IconSize.Medium,
 			)
 			Spacer(modifier = Modifier.width(8.dp))
 		}
@@ -58,14 +58,14 @@ fun MapisodeFilledButton(
 		MapisodeText(
 			text = text,
 			color = MapisodeTheme.colorScheme.filledButtonContent,
-			style = MapisodeTheme.typography.titleLarge
+			style = MapisodeTheme.typography.titleLarge,
 		)
 
 		leftIcon ?: rightIcon?.let { icon ->
 			Spacer(modifier = Modifier.width(8.dp))
 			MapisodeIcon(
 				id = icon,
-				iconSize = IconSize.Medium
+				iconSize = IconSize.Medium,
 			)
 		}
 	}
@@ -80,13 +80,13 @@ fun MapisodeFilledButtonPreview() {
 	) {
 		MapisodeFilledButton(
 			onClick = { },
-			text = "활성화 버튼"
+			text = "활성화 버튼",
 		)
 
 		MapisodeFilledButton(
 			onClick = { },
 			text = "비활성화 버튼",
-			enabled = false
+			enabled = false,
 		)
 	}
 }
