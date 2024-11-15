@@ -3,7 +3,12 @@ package com.boostcamp.mapisode.designsystem.compose
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
@@ -25,7 +30,8 @@ fun Modifier.mapisodeRippleEffect(
 	val rippleState = remember { MapisodeRippleState() }
 	val coroutineScope = rememberCoroutineScope()
 
-    this.graphicsLayer(alpha = 0.99f)
+    this
+        .graphicsLayer(alpha = 0.99f)
         .drawWithContent {
             drawContent()
             if (rippleState.rippleRadius > 0) {
