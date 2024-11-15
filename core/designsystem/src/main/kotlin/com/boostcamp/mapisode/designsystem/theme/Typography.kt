@@ -145,7 +145,7 @@ data class MaruBuriTypography(
 
 	// label styles
 	val labelLarge: MapisodeTextStyle = MapisodeTextStyle(
-		fontWeight = FontWeight.Medium,
+		fontWeight = FontWeight.Bold,
 		fontSize = 14.dp,
 		lineHeight = 18.dp,
 	),
