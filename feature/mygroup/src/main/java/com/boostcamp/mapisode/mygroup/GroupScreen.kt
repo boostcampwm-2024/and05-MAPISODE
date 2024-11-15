@@ -31,9 +31,7 @@ private fun GroupScreen() {
 		},
 	) {
 		Column(
-			modifier = Modifier
-                .fillMaxSize()
-                .padding(it),
+			modifier = Modifier.fillMaxSize().padding(it),
 			verticalArrangement = Arrangement.spacedBy(16.dp),
 			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
