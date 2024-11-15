@@ -17,7 +17,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 	private val episodeCollection = database.collection(FirestoreConstants.COLLECTION_EPISODE)
 	private val groupCollection = database.collection(FirestoreConstants.COLLECTION_GROUP)
 
-	override suspend fun getEpisodesByGroup(groupId: String): List<EpisodeDTO> {
+	override suspend fun getEpisodesByGroup(groupId: String): List<EpisodeModel> {
 		val query = episodeCollection
 			.whereEqualTo(
 				"group",
@@ -43,7 +43,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 		groupId: String,
 		start: Pair<Double, Double>,
 		end: Pair<Double, Double>,
-	): List<EpisodeDTO> {
+	): List<EpisodeModel> {
 		val query = episodeCollection
 			.whereEqualTo("group", groupCollection.document(groupId))
 			.whereGreaterThanOrEqualTo("location", GeoPoint(start.first, start.second))
@@ -68,7 +68,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 	override suspend fun getEpisodesByGroupAndCategory(
 		groupId: String,
 		category: String,
-	): List<EpisodeDTO> {
+	): List<EpisodeModel> {
 		val query = episodeCollection
 			.whereEqualTo("group", groupCollection.document(groupId))
 			.whereEqualTo("category", category)
@@ -89,18 +89,18 @@ class EpisodeRepositoryImpl @Inject constructor(
 		}
 	}
 
-	override suspend fun getEpisodeById(episodeId: String): EpisodeDTO? {
+	override suspend fun getEpisodeById(episodeId: String): EpisodeModel? {
 		return episodeCollection.document(episodeId)
 			.get()
 			.await()
 			.toObject(EpisodeFirestoreModel::class.java)
-			?.toDTO(episodeId)
+			?.toDomainModel(episodeId)
 	}
 
-	override suspend fun createEpisode(episodeDTO: EpisodeDTO): String {
+	override suspend fun createEpisode(episodeModel: EpisodeModel): String {
 		val newEpisodeId = UUID.randomUUID().toString().replace("-", "")
 		return try {
-			episodeCollection.document(newEpisodeId).set(episodeDTO.toFirestoreModel(database))
+			episodeCollection.document(newEpisodeId).set(episodeModel.toFirestoreModel(database))
 				.await()
 			newEpisodeId
 		} catch (e: Exception) {
@@ -110,10 +110,10 @@ class EpisodeRepositoryImpl @Inject constructor(
 		}
 	}
 
-	private fun QuerySnapshot.toDTOList(): List<EpisodeDTO> {
+	private fun QuerySnapshot.toDTOList(): List<EpisodeModel> {
 		return documents.map { document ->
 			val model = requireNotNull(document.toObject(EpisodeFirestoreModel::class.java))
-			model.toDTO(document.id)
+			model.toDomainModel(document.id)
 		}
 	}
 }
