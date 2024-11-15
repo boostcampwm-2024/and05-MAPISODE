@@ -21,7 +21,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.Surface
 import com.boostcamp.mapisode.designsystem.theme.AppTypography
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
-import com.boostcamp.mapisode.home.R
+import com.boostcamp.mapisode.designsystem.R
 
 @Composable
 fun MapisodeChip(

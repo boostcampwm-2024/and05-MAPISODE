@@ -2,6 +2,7 @@ package com.boostcamp.mapisode.main
 
 import androidx.compose.runtime.Composable
 import com.boostcamp.mapisode.navigation.MainRoute
+import com.boostcamp.mapisode.designsystem.R
 
 internal enum class MainNavTab(
 	val iconResId: Int,
