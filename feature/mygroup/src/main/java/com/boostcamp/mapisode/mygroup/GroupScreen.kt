@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.mygroup
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
@@ -27,9 +30,16 @@ internal fun GroupRoute() {
 
 @Composable
 private fun GroupScreen() {
+	val focusManager = LocalFocusManager.current
+
 	MapisodeScaffold(
 		modifier = Modifier
-			.fillMaxSize(),
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTapGestures {
+					focusManager.clearFocus()
+                }
+            },
 		isStatusBarPaddingExist = true,
 		topBar = {
 			TopAppBar(
@@ -38,7 +48,9 @@ private fun GroupScreen() {
 		},
 	) {
 		Column(
-			modifier = Modifier.fillMaxSize().padding(it),
+			modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
 			verticalArrangement = Arrangement.spacedBy(16.dp),
 			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
@@ -64,13 +76,13 @@ private fun GroupScreen() {
 			var submittedText by remember { mutableStateOf("") }
 
 			MapisodeTextField(
-				value = inputText,
-				onValueChange = { text -> inputText = text },
-				placeholder = "텍스트 필드",
-				onSubmitInput = { text ->
-					submittedText = text
-				}
-			)
+                value = inputText,
+                onValueChange = { text -> inputText = text },
+                placeholder = "텍스트 필드",
+                onSubmitInput = { text ->
+                    submittedText = text
+				},
+            )
 
 			MapisodeText(
 				text = submittedText,
@@ -86,7 +98,7 @@ private fun GroupScreen() {
 				placeholder = "텍스트 필드",
 				onSubmitInput = { text ->
 					submittedText2 = text
-				}
+				},
 			)
 		}
 	}
