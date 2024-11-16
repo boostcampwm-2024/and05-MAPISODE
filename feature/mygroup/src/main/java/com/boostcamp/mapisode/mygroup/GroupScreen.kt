@@ -34,12 +34,14 @@ private fun GroupScreen() {
 
 	MapisodeScaffold(
 		modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectTapGestures {
-					focusManager.clearFocus()
-                }
-            },
+			.fillMaxSize()
+			.pointerInput(Unit) {
+				detectTapGestures(
+					onPress = {
+						focusManager.clearFocus()
+					},
+				)
+			},
 		isStatusBarPaddingExist = true,
 		topBar = {
 			TopAppBar(
@@ -49,13 +51,19 @@ private fun GroupScreen() {
 	) {
 		Column(
 			modifier = Modifier
-                .fillMaxSize()
-                .padding(it),
+				.fillMaxSize()
+				.padding(it)
+				.padding(horizontal = 46.dp),
 			verticalArrangement = Arrangement.spacedBy(16.dp),
 			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
+			var inputText by remember { mutableStateOf("") }
+			var submittedText by remember { mutableStateOf("") }
+
 			MapisodeFilledButton(
-				onClick = { },
+				onClick = {
+					focusManager.clearFocus()
+				},
 				text = "활성화 버튼",
 				showRipple = true,
 			)
@@ -67,38 +75,23 @@ private fun GroupScreen() {
 			)
 
 			MapisodeOutlinedButton(
-				onClick = { },
+				onClick = { submittedText = "아웃라인 버튼 클릭" },
 				text = "아웃라인 버튼",
 				showRipple = true,
 			)
 
-			var inputText by remember { mutableStateOf("") }
-			var submittedText by remember { mutableStateOf("") }
-
 			MapisodeTextField(
-                value = inputText,
-                onValueChange = { text -> inputText = text },
-                placeholder = "텍스트 필드",
-                onSubmitInput = { text ->
-                    submittedText = text
+				value = inputText,
+				onValueChange = { text -> inputText = text },
+				placeholder = "텍스트 필드",
+				onSubmitInput = { text ->
+					submittedText = text
 				},
-            )
+			)
 
 			MapisodeText(
 				text = submittedText,
 				style = MapisodeTheme.typography.bodyLarge,
-			)
-
-			var inputText2 by remember { mutableStateOf("") }
-			var submittedText2 by remember { mutableStateOf("") }
-
-			MapisodeTextField(
-				value = inputText2,
-				onValueChange = { text -> inputText2 = text },
-				placeholder = "텍스트 필드",
-				onSubmitInput = { text ->
-					submittedText2 = text
-				},
 			)
 		}
 	}

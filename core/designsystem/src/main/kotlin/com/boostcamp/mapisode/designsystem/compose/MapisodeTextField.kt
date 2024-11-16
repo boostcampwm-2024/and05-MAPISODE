@@ -17,11 +17,13 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
@@ -78,8 +80,8 @@ fun MapisodeTextField(
 ) {
 	@Suppress("NAME_SHADOWING")
 	val interactionSource = interactionSource ?: remember { MutableInteractionSource() }
-	val focusRequester = remember { FocusRequester() }
 	val focusManager = LocalFocusManager.current
+	var isFocused by remember { mutableStateOf(false) }
 
 	Box(
 		modifier = modifier
@@ -94,6 +96,12 @@ fun MapisodeTextField(
                 indication = null,
                 enabled = enabled && !readOnly,
             ) { }
+            .onFocusChanged { focusState ->
+                if (isFocused && !focusState.isFocused) {
+                    onSubmitInput(value)
+                }
+                isFocused = focusState.isFocused
+            }
             .border(strokeWidth, strokeColor, shape)
             .background(if (isError) errorContainerColor else containerColor, shape)
             .padding(vertical = 12.dp, horizontal = 16.dp),
@@ -113,8 +121,7 @@ fun MapisodeTextField(
 				onValueChange = onValueChange,
 				modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester),
+                    .fillMaxWidth(),
 				enabled = enabled,
 				readOnly = readOnly,
 				textStyle = textStyle.copy(color = textColor).toTextStyle(),
@@ -123,7 +130,6 @@ fun MapisodeTextField(
 				keyboardOptions = keyboardOptions,
 				keyboardActions = KeyboardActions(
 					onDone = {
-						onSubmitInput(value)
 						focusManager.clearFocus()
 					},
 				),
