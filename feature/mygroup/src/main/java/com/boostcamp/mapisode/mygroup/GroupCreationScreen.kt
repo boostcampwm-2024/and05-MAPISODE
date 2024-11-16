@@ -12,12 +12,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
-import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
-import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
+import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 
 @Composable
 fun GroupCreationScreen() {
