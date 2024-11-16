@@ -48,7 +48,7 @@ fun Modifier.mapisodeRippleEffect(
 						val event = awaitPointerEvent()
 						val pointer = event.changes.firstOrNull()
 
-						if (pointer!=null && pointer.pressed) {
+						if (pointer != null && pointer.pressed) {
 							rippleState.rippleCenter = pointer.position
 							coroutineScope.launch {
 								val maxRadius = size.width.coerceAtLeast(size.height) * 1.5f
