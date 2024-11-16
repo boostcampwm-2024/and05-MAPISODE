@@ -13,10 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
+import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.MapisodeTextField
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeOutlinedButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
+import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
 internal fun GroupRoute() {
@@ -59,11 +61,21 @@ private fun GroupScreen() {
 			)
 
 			var inputText by remember { mutableStateOf("") }
+			var submittedText by remember { mutableStateOf("") }
 
 			MapisodeTextField(
 				value = inputText,
 				onValueChange = { text -> inputText = text },
 				placeholder = "텍스트 필드",
+				onSubmitInput = { text ->
+					submittedText = text
+					inputText = ""
+				}
+			)
+
+			MapisodeText(
+				text = submittedText,
+				style = MapisodeTheme.typography.bodyLarge,
 			)
 		}
 	}
