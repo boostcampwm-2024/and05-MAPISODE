@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -54,8 +55,15 @@ fun MapisodeTextField(
 	suffix: @Composable (() -> Unit)? = null,
 	isError: Boolean = false,
 	visualTransformation: VisualTransformation = VisualTransformation.None,
-	keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-	keyboardActions: KeyboardActions = KeyboardActions.Default,
+	onSubmitInput: (String) -> Unit = {},
+	keyboardOptions: KeyboardOptions = KeyboardOptions(
+		imeAction = ImeAction.Done,
+	),
+	keyboardActions: KeyboardActions = KeyboardActions(
+		onDone = {
+			onSubmitInput(value)
+		}
+	),
 	singleLine: Boolean = false,
 	maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
 	minLines: Int = 1,
