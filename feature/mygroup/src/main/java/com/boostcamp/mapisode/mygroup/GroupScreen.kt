@@ -13,7 +13,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
-import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.MapisodeTextField
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeOutlinedButton
@@ -64,7 +63,7 @@ private fun GroupScreen() {
 			MapisodeTextField(
 				value = inputText,
 				onValueChange = { text -> inputText = text },
-				placeholder = { MapisodeText("텍스트 필드") },
+				placeholder = "텍스트 필드",
 			)
 		}
 	}
