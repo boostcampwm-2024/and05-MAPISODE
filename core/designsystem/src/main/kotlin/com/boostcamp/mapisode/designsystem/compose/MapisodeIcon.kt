@@ -49,7 +49,7 @@ fun MapisodeIcon(
 	},
 ) {
 	val colorFilter = tint?.let { ColorFilter.tint(it) }
-	val semantics = if (contentDescription!=null) {
+	val semantics = if (contentDescription != null) {
 		Modifier.semantics {
 			this.contentDescription = contentDescription
 			this.role = Role.Image
