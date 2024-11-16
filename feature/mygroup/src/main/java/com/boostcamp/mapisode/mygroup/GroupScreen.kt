@@ -69,13 +69,24 @@ private fun GroupScreen() {
 				placeholder = "텍스트 필드",
 				onSubmitInput = { text ->
 					submittedText = text
-					inputText = ""
 				}
 			)
 
 			MapisodeText(
 				text = submittedText,
 				style = MapisodeTheme.typography.bodyLarge,
+			)
+
+			var inputText2 by remember { mutableStateOf("") }
+			var submittedText2 by remember { mutableStateOf("") }
+
+			MapisodeTextField(
+				value = inputText2,
+				onValueChange = { text -> inputText2 = text },
+				placeholder = "텍스트 필드",
+				onSubmitInput = { text ->
+					submittedText2 = text
+				}
 			)
 		}
 	}
