@@ -47,6 +47,11 @@ data class CustomColorScheme(
 	val toastStroke: Color,
 	val toastContent: Color,
 
+	// Icon Button
+	val iconButtonBackground: Color,
+	val iconButtonEnabled: Color,
+	val iconButtonDisabled: Color,
+
 	// Icon
 	val iconColor: Color,
 	val eatIconColor: Color,
@@ -118,6 +123,11 @@ val lightColorScheme = CustomColorScheme(
 	toastStroke = Color.Unspecified,
 	toastContent = Neutral110,
 
+	// Icon Button
+	iconButtonBackground = Neutral10,
+	iconButtonEnabled = Neutral110,
+	iconButtonDisabled = Neutral50,
+
 	// Icon
 	iconColor = Neutral110,
 	eatIconColor = Tertiary10,
@@ -188,6 +198,11 @@ val darkColorScheme = CustomColorScheme(
 	toastBackground = Neutral100,
 	toastStroke = Color.Unspecified,
 	toastContent = Neutral10,
+
+	// Icon Button
+	iconButtonBackground = Neutral110,
+	iconButtonEnabled = Neutral10,
+	iconButtonDisabled = Neutral50,
 
 	// Icon
 	iconColor = Neutral10,
