@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
-import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentColor
+import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeIconColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
@@ -50,7 +50,10 @@ fun MapisodeIconButton(
 			?: MapisodeTheme.colorScheme.run {
 				if (enabled) iconButtonEnabled else iconButtonDisabled
 			}
-		CompositionLocalProvider(LocalMapisodeContentColor provides finalContentColor, content = content)
+		CompositionLocalProvider(
+			value = LocalMapisodeIconColor provides finalContentColor,
+			content = content,
+		)
 	}
 }
 
