@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.R
+import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeIconColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 sealed class IconSize(val value: Dp) {
@@ -43,10 +44,12 @@ fun MapisodeIcon(
 	modifier: Modifier = Modifier,
 	contentDescription: String? = null,
 	iconSize: IconSize = IconSize.Medium,
-	tint: Color? = MapisodeTheme.colorScheme.iconColor,
+	tint: Color? = LocalMapisodeIconColor.current.let {
+		if (it == Color.Unspecified) MapisodeTheme.colorScheme.iconColor else it
+	},
 ) {
 	val colorFilter = tint?.let { ColorFilter.tint(it) }
-	val semantics = if (contentDescription != null) {
+	val semantics = if (contentDescription!=null) {
 		Modifier.semantics {
 			this.contentDescription = contentDescription
 			this.role = Role.Image
