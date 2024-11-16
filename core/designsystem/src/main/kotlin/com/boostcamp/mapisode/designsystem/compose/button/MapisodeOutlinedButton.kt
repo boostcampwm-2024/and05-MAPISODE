@@ -35,9 +35,9 @@ fun MapisodeOutlinedButton(
 		backgroundColors = MapisodeTheme.colorScheme.outlineButtonBackground,
 		contentColor = MapisodeTheme.colorScheme.outlineButtonContent,
 		modifier = Modifier
+			.then(modifier)
 			.width(320.dp)
-			.height(40.dp)
-			.then(modifier),
+			.height(40.dp),
 		enabled = enabled,
 		showBorder = true,
 		borderColor = MapisodeTheme.colorScheme.outlineButtonStroke,

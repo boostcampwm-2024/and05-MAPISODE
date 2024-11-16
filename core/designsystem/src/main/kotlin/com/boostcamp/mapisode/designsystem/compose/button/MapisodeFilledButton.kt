@@ -41,9 +41,9 @@ fun MapisodeFilledButton(
 		},
 		contentColor = MapisodeTheme.colorScheme.filledButtonContent,
 		modifier = Modifier
+			.then(modifier)
 			.width(320.dp)
-			.height(52.dp)
-			.then(modifier),
+			.height(52.dp),
 		enabled = enabled,
 		showBorder = false,
 		showRipple = showRipple,
