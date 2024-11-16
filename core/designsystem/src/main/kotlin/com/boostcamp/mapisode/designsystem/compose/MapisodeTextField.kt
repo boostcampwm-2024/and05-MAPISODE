@@ -159,4 +159,3 @@ fun MapisodeTextField(
 		}
 	}
 }
-
