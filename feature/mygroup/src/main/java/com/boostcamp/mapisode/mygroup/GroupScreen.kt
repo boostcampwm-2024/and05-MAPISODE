@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
+import com.boostcamp.mapisode.designsystem.R
+import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.MapisodeTextField
@@ -92,6 +94,20 @@ private fun GroupScreen() {
 			MapisodeText(
 				text = submittedText,
 				style = MapisodeTheme.typography.bodyLarge,
+			)
+
+			MapisodeTextField(
+				value = inputText,
+				onValueChange = { text -> inputText = text },
+				placeholder = "위치를 입력하세요",
+				onSubmitInput = { text ->
+					submittedText = text
+				},
+				trailingIcon = {
+					MapisodeIcon(
+						id = R.drawable.ic_location,
+					)
+				},
 			)
 		}
 	}

@@ -112,9 +112,7 @@ fun MapisodeTextField(
 			horizontalArrangement = Arrangement.SpaceBetween,
 		) {
 			if (leadingIcon != null) {
-				Box(modifier = Modifier.padding(end = 16.dp)) {
-					leadingIcon()
-				}
+				leadingIcon()
 			}
 			BasicTextField(
 				value = value,
@@ -162,6 +160,9 @@ fun MapisodeTextField(
 					}
 				},
 			)
+			if (trailingIcon != null) {
+				trailingIcon()
+			}
 		}
 	}
 }
