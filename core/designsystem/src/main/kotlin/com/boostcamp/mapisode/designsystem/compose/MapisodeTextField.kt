@@ -30,6 +30,15 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTextStyle
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
+fun MapisodePlaceHolder(value: String) {
+	MapisodeText(
+        text = value,
+        style = MapisodeTheme.typography.labelLarge,
+        color = MapisodeTheme.colorScheme.textFieldContent,
+    )
+}
+
+@Composable
 fun MapisodeTextField(
 	value: String,
 	onValueChange: (String) -> Unit,
@@ -38,7 +47,7 @@ fun MapisodeTextField(
 	readOnly: Boolean = false,
 	textStyle: MapisodeTextStyle = MapisodeTheme.typography.labelLarge,
 	label: @Composable (() -> Unit)? = null,
-	placeholder: @Composable (() -> Unit)? = null,
+	placeholder: String,
 	leadingIcon: @Composable (() -> Unit)? = null,
 	trailingIcon: @Composable (() -> Unit)? = null,
 	prefix: @Composable (() -> Unit)? = null,
@@ -66,20 +75,20 @@ fun MapisodeTextField(
 
 	Box(
 		modifier = modifier
-			.width(320.dp)
-			.height(42.dp)
-			.defaultMinSize(
-				minWidth = 320.dp,
-				minHeight = 42.dp,
-			)
-			.clickable(
-				interactionSource = interactionSource,
-				indication = null,
-				enabled = enabled && !readOnly,
-			) { }
-			.border(strokeWidth, strokeColor, shape)
-			.background(if (isError) errorContainerColor else containerColor, shape)
-			.padding(vertical = 12.dp, horizontal = 16.dp),
+            .width(320.dp)
+            .height(42.dp)
+            .defaultMinSize(
+                minWidth = 320.dp,
+                minHeight = 42.dp,
+            )
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                enabled = enabled && !readOnly,
+            ) { }
+            .border(strokeWidth, strokeColor, shape)
+            .background(if (isError) errorContainerColor else containerColor, shape)
+            .padding(vertical = 12.dp, horizontal = 16.dp),
 	) {
 		Row(
 			modifier = Modifier.fillMaxWidth(),
@@ -92,28 +101,48 @@ fun MapisodeTextField(
 				}
 			}
 			BasicTextField(
-				value = value,
-				onValueChange = onValueChange,
-				modifier = Modifier
-					.weight(1f)
-					.fillMaxWidth(),
-				enabled = enabled,
-				readOnly = readOnly,
-				textStyle = mergedTextStyle,
-				cursorBrush = SolidColor(cursorColor),
-				visualTransformation = visualTransformation,
-				keyboardOptions = keyboardOptions,
-				keyboardActions = keyboardActions,
-				interactionSource = interactionSource,
-				singleLine = singleLine,
-				maxLines = maxLines,
-				minLines = minLines,
-			)
-			if (trailingIcon != null) {
-				Box(modifier = Modifier.padding(start = 16.dp)) {
-					trailingIcon()
-				}
-			}
+                value = value,
+                onValueChange = onValueChange,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+                enabled = enabled,
+                readOnly = readOnly,
+                textStyle = mergedTextStyle,
+                cursorBrush = SolidColor(cursorColor),
+                visualTransformation = visualTransformation,
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
+                interactionSource = interactionSource,
+                singleLine = singleLine,
+                maxLines = maxLines,
+                minLines = minLines,
+                decorationBox = { innerTextField ->
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.CenterStart,
+                    ) {
+                        if (prefix != null) {
+                            Box(modifier = Modifier.padding(end = 8.dp)) {
+                                prefix()
+                            }
+                        }
+
+                        if (value.isEmpty() && placeholder.isNotBlank()) {
+                            MapisodePlaceHolder(value = placeholder)
+                        }
+
+                        innerTextField()
+
+                        if (suffix != null) {
+                            Box(modifier = Modifier.padding(start = 8.dp)) {
+                                suffix()
+                            }
+                        }
+                    }
+                },
+            )
 		}
 	}
 }
+
