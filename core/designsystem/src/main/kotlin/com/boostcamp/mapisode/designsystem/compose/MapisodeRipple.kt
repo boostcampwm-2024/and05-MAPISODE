@@ -2,7 +2,6 @@ package com.boostcamp.mapisode.designsystem.compose
 
 import androidx.compose.animation.core.animate
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -30,7 +29,8 @@ fun Modifier.mapisodeRippleEffect(
 	val rippleState = remember { MapisodeRippleState() }
 	val coroutineScope = rememberCoroutineScope()
 
-	Modifier.graphicsLayer(alpha = 0.99f)
+	Modifier
+		.graphicsLayer(alpha = 0.99f)
 		.drawWithContent {
 			drawContent()
 			if (rippleState.rippleRadius > 0) {
@@ -43,32 +43,35 @@ fun Modifier.mapisodeRippleEffect(
 		}
 		.pointerInput(enabled) {
 			if (enabled) {
-				detectTapGestures(
-					onPress = { offset ->
-						rippleState.rippleCenter = offset
-						coroutineScope.launch {
-							val maxRadius = size.width.coerceAtLeast(size.height) * 1.5f
+				awaitPointerEventScope {
+					while (true) {
+						val event = awaitPointerEvent()
+						val pointer = event.changes.firstOrNull()
 
-							animate(
-								initialValue = 0f,
-								targetValue = maxRadius,
-								animationSpec = tween(50),
-							) { value, _ ->
-								rippleState.rippleRadius = value
-							}
+						if (pointer!=null && pointer.pressed) {
+							rippleState.rippleCenter = pointer.position
+							coroutineScope.launch {
+								val maxRadius = size.width.coerceAtLeast(size.height) * 1.5f
 
-							tryAwaitRelease()
+								animate(
+									initialValue = 0f,
+									targetValue = maxRadius,
+									animationSpec = tween(50),
+								) { value, _ ->
+									rippleState.rippleRadius = value
+								}
 
-							animate(
-								initialValue = maxRadius,
-								targetValue = 0f,
-								animationSpec = tween(50),
-							) { value, _ ->
-								rippleState.rippleRadius = value
+								animate(
+									initialValue = maxRadius,
+									targetValue = 0f,
+									animationSpec = tween(50),
+								) { value, _ ->
+									rippleState.rippleRadius = value
+								}
 							}
 						}
-					},
-				)
+					}
+				}
 			}
 		}
 }
