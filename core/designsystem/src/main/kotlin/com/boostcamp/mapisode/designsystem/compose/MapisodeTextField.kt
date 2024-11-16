@@ -85,26 +85,26 @@ fun MapisodeTextField(
 
 	Box(
 		modifier = modifier
-            .width(320.dp)
-            .height(42.dp)
-            .defaultMinSize(
-                minWidth = 320.dp,
-                minHeight = 42.dp,
-            )
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                enabled = enabled && !readOnly,
-            ) { }
-            .onFocusChanged { focusState ->
-                if (isFocused && !focusState.isFocused) {
-                    onSubmitInput(value)
-                }
-                isFocused = focusState.isFocused
-            }
-            .border(strokeWidth, strokeColor, shape)
-            .background(if (isError) errorContainerColor else containerColor, shape)
-            .padding(vertical = 12.dp, horizontal = 16.dp),
+			.width(320.dp)
+			.height(42.dp)
+			.defaultMinSize(
+				minWidth = 320.dp,
+				minHeight = 42.dp,
+			)
+			.clickable(
+				interactionSource = interactionSource,
+				indication = null,
+				enabled = enabled && !readOnly,
+			) { }
+			.onFocusChanged { focusState ->
+				if (isFocused && !focusState.isFocused) {
+					onSubmitInput(value)
+				}
+				isFocused = focusState.isFocused
+			}
+			.border(strokeWidth, strokeColor, shape)
+			.background(if (isError) errorContainerColor else containerColor, shape)
+			.padding(vertical = 12.dp, horizontal = 16.dp),
 	) {
 		Row(
 			modifier = Modifier.fillMaxWidth(),
@@ -118,8 +118,8 @@ fun MapisodeTextField(
 				value = value,
 				onValueChange = onValueChange,
 				modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
+					.weight(1f)
+					.fillMaxWidth(),
 				enabled = enabled,
 				readOnly = readOnly,
 				textStyle = textStyle.copy(color = textColor).toTextStyle(),
