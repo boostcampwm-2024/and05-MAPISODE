@@ -20,9 +20,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
@@ -33,10 +36,10 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 @Composable
 fun MapisodePlaceHolder(value: String) {
 	MapisodeText(
-        text = value,
-        style = MapisodeTheme.typography.labelLarge,
-        color = MapisodeTheme.colorScheme.textFieldContent,
-    )
+		text = value,
+		style = MapisodeTheme.typography.labelLarge,
+		color = MapisodeTheme.colorScheme.textFieldContent,
+	)
 }
 
 @Composable
@@ -59,11 +62,7 @@ fun MapisodeTextField(
 	keyboardOptions: KeyboardOptions = KeyboardOptions(
 		imeAction = ImeAction.Done,
 	),
-	keyboardActions: KeyboardActions = KeyboardActions(
-		onDone = {
-			onSubmitInput(value)
-		}
-	),
+	keyboardActions: KeyboardActions = KeyboardActions.Default,
 	singleLine: Boolean = false,
 	maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
 	minLines: Int = 1,
@@ -79,7 +78,8 @@ fun MapisodeTextField(
 ) {
 	@Suppress("NAME_SHADOWING")
 	val interactionSource = interactionSource ?: remember { MutableInteractionSource() }
-	val mergedTextStyle = textStyle.copy(color = textColor).toTextStyle()
+	val focusRequester = remember { FocusRequester() }
+	val focusManager = LocalFocusManager.current
 
 	Box(
 		modifier = modifier
@@ -109,47 +109,53 @@ fun MapisodeTextField(
 				}
 			}
 			BasicTextField(
-                value = value,
-                onValueChange = onValueChange,
-                modifier = Modifier
+				value = value,
+				onValueChange = onValueChange,
+				modifier = Modifier
                     .weight(1f)
-                    .fillMaxWidth(),
-                enabled = enabled,
-                readOnly = readOnly,
-                textStyle = mergedTextStyle,
-                cursorBrush = SolidColor(cursorColor),
-                visualTransformation = visualTransformation,
-                keyboardOptions = keyboardOptions,
-                keyboardActions = keyboardActions,
-                interactionSource = interactionSource,
-                singleLine = singleLine,
-                maxLines = maxLines,
-                minLines = minLines,
-                decorationBox = { innerTextField ->
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.CenterStart,
-                    ) {
-                        if (prefix != null) {
-                            Box(modifier = Modifier.padding(end = 8.dp)) {
-                                prefix()
-                            }
-                        }
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
+				enabled = enabled,
+				readOnly = readOnly,
+				textStyle = textStyle.copy(color = textColor).toTextStyle(),
+				cursorBrush = SolidColor(cursorColor),
+				visualTransformation = visualTransformation,
+				keyboardOptions = keyboardOptions,
+				keyboardActions = KeyboardActions(
+					onDone = {
+						onSubmitInput(value)
+						focusManager.clearFocus()
+					},
+				),
+				interactionSource = interactionSource,
+				singleLine = singleLine,
+				maxLines = maxLines,
+				minLines = minLines,
+				decorationBox = { innerTextField ->
+					Box(
+						modifier = Modifier.fillMaxWidth(),
+						contentAlignment = Alignment.CenterStart,
+					) {
+						if (prefix != null) {
+							Box(modifier = Modifier.padding(end = 8.dp)) {
+								prefix()
+							}
+						}
 
-                        if (value.isEmpty() && placeholder.isNotBlank()) {
-                            MapisodePlaceHolder(value = placeholder)
-                        }
+						if (value.isEmpty() && placeholder.isNotBlank()) {
+							MapisodePlaceHolder(value = placeholder)
+						}
 
-                        innerTextField()
+						innerTextField()
 
-                        if (suffix != null) {
-                            Box(modifier = Modifier.padding(start = 8.dp)) {
-                                suffix()
-                            }
-                        }
-                    }
-                },
-            )
+						if (suffix != null) {
+							Box(modifier = Modifier.padding(start = 8.dp)) {
+								suffix()
+							}
+						}
+					}
+				},
+			)
 		}
 	}
 }
