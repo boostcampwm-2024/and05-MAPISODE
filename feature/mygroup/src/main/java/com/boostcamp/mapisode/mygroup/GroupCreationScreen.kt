@@ -20,7 +20,7 @@ import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 
 @Composable
-fun GroupCreationScreen() {
+fun GroupCreationScreen(onBack: () -> Unit) {
 	var isNavigationIconEnabled by remember { mutableStateOf(true) }
 
 	MapisodeScaffold(
@@ -30,7 +30,7 @@ fun GroupCreationScreen() {
 				title = "그룹 생성",
 				navigationIcon = {
 					MapisodeIconButton(
-						onClick = { },
+						onClick = { onBack()},
 						enabled = isNavigationIconEnabled,
 					) {
 						MapisodeIcon(

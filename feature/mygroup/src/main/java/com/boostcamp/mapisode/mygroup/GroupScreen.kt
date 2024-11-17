@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
+import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.MapisodeTextField
@@ -27,11 +28,17 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
 internal fun GroupRoute() {
-	GroupScreen()
+	var isGroupCreationScreenVisible by remember { mutableStateOf(false) }
+
+	if (isGroupCreationScreenVisible) {
+		GroupCreationScreen(onBack = { isGroupCreationScreenVisible = false })
+	} else {
+		GroupScreen(onAddGroupClick = { isGroupCreationScreenVisible = true })
+	}
 }
 
 @Composable
-private fun GroupScreen() {
+private fun GroupScreen(onAddGroupClick: () -> Unit) {
 	val focusManager = LocalFocusManager.current
 
 	MapisodeScaffold(
@@ -48,6 +55,17 @@ private fun GroupScreen() {
 		topBar = {
 			TopAppBar(
 				title = "나의 그룹",
+				actions = {
+					MapisodeIconButton(
+						onClick = {
+							onAddGroupClick()
+						},
+					) {
+						MapisodeIcon(
+							id = R.drawable.ic_add,
+						)
+					}
+				},
 			)
 		},
 	) {
@@ -64,6 +82,7 @@ private fun GroupScreen() {
 
 			MapisodeFilledButton(
 				onClick = {
+					submittedText = "활성화 버튼"
 					focusManager.clearFocus()
 				},
 				text = "활성화 버튼",
