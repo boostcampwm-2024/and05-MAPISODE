@@ -62,7 +62,13 @@ private fun ScaffoldLayout(
 	} else {
 		0.dp
 	}
-	val systemBar = WindowInsets(top = topPadding, bottom = 0.dp)
+	val bottomPadding = if (bottomBar != { }) {
+		WindowInsets.systemBars.asPaddingValues()
+			.calculateTopPadding()
+	} else {
+		0.dp
+	}
+	val systemBar = WindowInsets(top = topPadding, bottom = bottomPadding)
 
 	SubcomposeLayout { constraints ->
 		val layoutWidth = constraints.maxWidth
