@@ -25,6 +25,7 @@ private enum class ScaffoldLayoutContent { TopBar, MainContent, Snackbar, Bottom
 fun MapisodeScaffold(
 	modifier: Modifier = Modifier,
 	isStatusBarPaddingExist: Boolean = false,
+	isNavigationBarPaddingExist: Boolean = false,
 	toastHostState: ToastHostState = rememberToastHostState(),
 	topBar: @Composable () -> Unit = {},
 	bottomBar: @Composable () -> Unit = {},
@@ -40,6 +41,7 @@ fun MapisodeScaffold(
 	) {
 		ScaffoldLayout(
 			isStatusBarPaddingExist = isStatusBarPaddingExist,
+			isNavigationBarPaddingExist = isNavigationBarPaddingExist,
 			topBar = topBar,
 			bottomBar = bottomBar,
 			toast = { toastHost(toastHostState) },
@@ -51,6 +53,7 @@ fun MapisodeScaffold(
 @Composable
 private fun ScaffoldLayout(
 	isStatusBarPaddingExist: Boolean,
+	isNavigationBarPaddingExist: Boolean = false,
 	topBar: @Composable () -> Unit,
 	bottomBar: @Composable () -> Unit,
 	toast: @Composable () -> Unit,
@@ -62,7 +65,7 @@ private fun ScaffoldLayout(
 	} else {
 		0.dp
 	}
-	val bottomPadding = if (bottomBar != { }) {
+	val bottomPadding = if (isNavigationBarPaddingExist) {
 		WindowInsets.systemBars.asPaddingValues()
 			.calculateTopPadding()
 	} else {
