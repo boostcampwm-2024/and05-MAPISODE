@@ -23,7 +23,8 @@ object MapisodeRippleBIndication : IndicationNodeFactory {
 	override fun equals(other: Any?) = other === this
 
 	private class MapisodeIndicationInstance(private val interactionSource: InteractionSource) :
-		Modifier.Node(), DrawModifierNode {
+		Modifier.Node(),
+		DrawModifierNode {
 		private var isPressed = false
 		private var isHovered = false
 		private var isFocused = false
