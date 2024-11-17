@@ -69,12 +69,12 @@ object MapisodeRippleBIndication : IndicationNodeFactory {
 			if (isPressed) {
 				drawCircle(
 					color = Color.Gray.copy(alpha = 0.4f),
-					radius = size.maxDimension
+					radius = size.maxDimension,
 				)
 			} else if (isHovered || isFocused) {
 				drawCircle(
 					color = Color.LightGray.copy(alpha = 0.4f),
-					radius = size.maxDimension
+					radius = size.maxDimension,
 				)
 			}
 		}
