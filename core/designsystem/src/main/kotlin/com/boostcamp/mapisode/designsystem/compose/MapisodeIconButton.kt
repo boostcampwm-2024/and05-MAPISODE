@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
+import com.boostcamp.mapisode.designsystem.compose.ripple.MapisodeRippleBIndication
 import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeIconColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
@@ -33,16 +34,12 @@ fun MapisodeIconButton(
 				shape = RoundedCornerShape(100),
 			)
 			.background(color = backgroundColor)
-			.mapisodeRippleEffect(
-				enabled = enabled,
-				rippleColor = MapisodeTheme.colorScheme.iconButtonDisabled.copy(alpha = 0.1f),
-			)
 			.clickable(
 				onClick = onClick,
 				enabled = enabled,
 				role = Role.Button,
 				interactionSource = interactionSource,
-				indication = null,
+				indication = MapisodeRippleBIndication,
 			),
 		contentAlignment = Alignment.Center,
 	) {

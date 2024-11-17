@@ -19,6 +19,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
+import com.boostcamp.mapisode.designsystem.compose.ripple.MapisodeIndication
 import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
@@ -73,17 +74,13 @@ fun Surface(
 				.surface(shape = shape, backgroundColor = color, border = border)
 				.clickable(
 					interactionSource = interactionSource,
-					indication = null,
+					indication = if (showRipple) {
+						MapisodeIndication
+					} else {
+						null
+					},
 					enabled = enabled,
 					onClick = onClick,
-				)
-				.then(
-					Modifier
-						.mapisodeRippleEffect(
-							enabled = enabled,
-							rippleColor = contentColor.copy(alpha = 0.3f),
-						)
-						.takeIf { showRipple } ?: Modifier,
 				),
 			propagateMinConstraints = true,
 		) {
