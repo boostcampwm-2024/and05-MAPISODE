@@ -30,7 +30,7 @@ fun GroupCreationScreen(onBack: () -> Unit) {
 				title = "그룹 생성",
 				navigationIcon = {
 					MapisodeIconButton(
-						onClick = { onBack()},
+						onClick = { onBack() },
 						enabled = isNavigationIconEnabled,
 					) {
 						MapisodeIcon(
