@@ -17,7 +17,7 @@ import androidx.compose.ui.node.DrawModifierNode
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-object MapisodeIndication : IndicationNodeFactory {
+object MapisodeRippleAIndication : IndicationNodeFactory {
 
 	override fun create(interactionSource: InteractionSource): DelegatableNode =
 		MapisodeIndicationInstance(interactionSource)
@@ -26,9 +26,9 @@ object MapisodeIndication : IndicationNodeFactory {
 
 	override fun equals(other: Any?) = other === this
 
-	private class MapisodeIndicationInstance(
-		private val interactionSource: InteractionSource,
-	) : Modifier.Node(), DrawModifierNode {
+	private class MapisodeIndicationInstance(private val interactionSource: InteractionSource) :
+		Modifier.Node(),
+		DrawModifierNode {
 		var currentPressPosition: Offset = Offset.Zero
 		val animatedProgress = Animatable(0f)
 		val animatedPressAlpha = Animatable(1f)
@@ -71,27 +71,27 @@ object MapisodeIndication : IndicationNodeFactory {
 			val maxDimension = size.maxDimension
 			val brush = animateBrush(
 				center = currentPressPosition,
-				radius = maxDimension * animatedProgress.value
+				radius = maxDimension * animatedProgress.value,
 			)
 			val alpha = animatedPressAlpha.value
 
 			drawContent()
 			drawRect(
 				brush = brush,
-				alpha = alpha * 0.3f
+				alpha = alpha * 0.3f,
 			)
 		}
 
 		private fun animateBrush(
 			center: Offset,
-			radius: Float
+			radius: Float,
 		): Brush {
 			if (radius == 0f) return TransparentBrush
 
 			return radialGradient(
 				colors = listOf(White, Black),
 				center = center,
-				radius = radius
+				radius = radius,
 			)
 		}
 
