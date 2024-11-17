@@ -53,7 +53,7 @@ fun MapisodeTextField(
 	readOnly: Boolean = false,
 	textStyle: MapisodeTextStyle = MapisodeTheme.typography.labelLarge,
 	label: @Composable (() -> Unit)? = null,
-	placeholder: String,
+	placeholder: String = "",
 	leadingIcon: @Composable (() -> Unit)? = null,
 	trailingIcon: @Composable (() -> Unit)? = null,
 	prefix: @Composable (() -> Unit)? = null,
