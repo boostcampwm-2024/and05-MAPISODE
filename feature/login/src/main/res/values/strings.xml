@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="login_app_long_description">당신의 순간을 지도에 담아 공유해보세요.\n소중한 사람들과 함께 해보세요!.</string>
+	<string name="login_app_short_description">우리의 순간이 모인 지도, 메피소드</string>
+	<string name="login_mapisode_subicon">Mapisode subIcon</string>
+	<string name="login_nickname">닉네임</string>
+	<string name="login_profile_image">프로필 이미지</string>
+	<string name="login_next">다음</string>
+	<string name="login_signup">회원가입</string>
+</resources>
