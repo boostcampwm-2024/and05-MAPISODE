@@ -90,8 +90,7 @@ fun SignUpScreen(
 }
 
 @Composable
-fun SignUpTopBar(
-) {
+fun SignUpTopBar() {
 	TopAppBar(
 		navigationIcon = {
 			MapisodeIcon(
