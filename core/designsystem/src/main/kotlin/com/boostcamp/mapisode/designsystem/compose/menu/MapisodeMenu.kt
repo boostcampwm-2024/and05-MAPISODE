@@ -138,15 +138,28 @@ internal fun MapisodeDropdownMenuContent(
 		modifier = Modifier
 			.heightIn(min = 0.dp, max = 300.dp)
 			.graphicsLayer {
-				scaleX =
-					if (!isInspecting) scale
-					else if (expandedState.targetState) EXPANDED_SCALE_TARGET else CLOSED_SCALE_TARGET
-				scaleY =
-					if (!isInspecting) scale
-					else if (expandedState.targetState) EXPANDED_SCALE_TARGET else CLOSED_SCALE_TARGET
-				this.alpha =
-					if (!isInspecting) alpha
-					else if (expandedState.targetState) EXPANDED_ALPHA_TARGET else CLOSED_ALPHA_TARGET
+				scaleX = if (!isInspecting) {
+					scale
+				} else if (expandedState.targetState) {
+					EXPANDED_SCALE_TARGET
+				} else {
+					CLOSED_SCALE_TARGET
+				}
+				scaleY = if (!isInspecting) {
+					scale
+				} else if (expandedState.targetState) {
+					EXPANDED_SCALE_TARGET
+				} else {
+					CLOSED_SCALE_TARGET
+				}
+				this.alpha = if (!isInspecting) {
+					alpha
+				}
+				else if (expandedState.targetState) {
+					EXPANDED_ALPHA_TARGET
+				} else {
+					CLOSED_ALPHA_TARGET
+				}
 				transformOrigin = transformOriginState.value
 			},
 		shape = shape,
