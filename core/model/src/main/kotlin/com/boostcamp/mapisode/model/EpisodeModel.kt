@@ -1,4 +1,4 @@
-package com.boostcamp.mapisode.episode
+package com.boostcamp.mapisode.model
 
 import java.util.Date
 
