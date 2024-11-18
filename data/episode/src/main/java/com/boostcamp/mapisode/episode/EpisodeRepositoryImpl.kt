@@ -31,7 +31,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 		}
 
 		return try {
-			querySnapshot.toDTOList()
+			querySnapshot.toDomainModelList()
 		} catch (e: Exception) {
 			Timber.tag("getEpisodesByGroup")
 				.e(e)
@@ -57,7 +57,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 		}
 
 		return try {
-			querySnapshot.toDTOList()
+			querySnapshot.toDomainModelList()
 		} catch (e: Exception) {
 			Timber.tag("getEpisodesByGroupAndLocation")
 				.e(e)
@@ -81,7 +81,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 		}
 
 		return try {
-			querySnapshot.toDTOList()
+			querySnapshot.toDomainModelList()
 		} catch (e: Exception) {
 			Timber.tag("getEpisodesByGroupAndLocation")
 				.e(e)
@@ -110,7 +110,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 		}
 	}
 
-	private fun QuerySnapshot.toDTOList(): List<EpisodeModel> {
+	private fun QuerySnapshot.toDomainModelList(): List<EpisodeModel> {
 		return documents.map { document ->
 			val model = requireNotNull(document.toObject(EpisodeFirestoreModel::class.java))
 			model.toDomainModel(document.id)
