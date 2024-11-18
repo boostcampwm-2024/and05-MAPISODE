@@ -25,8 +25,6 @@ class EpisodeRepositoryImpl @Inject constructor(
 			)
 		val querySnapshot = query.get().await()
 		if (querySnapshot.isEmpty) {
-			Timber.tag("getEpisodesByGroup")
-				.d("No such document")
 			return emptyList()
 		}
 
@@ -35,7 +33,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 		} catch (e: Exception) {
 			Timber.tag("getEpisodesByGroup")
 				.e(e)
-			emptyList()
+			throw e
 		}
 	}
 
@@ -57,8 +55,6 @@ class EpisodeRepositoryImpl @Inject constructor(
 		val querySnapshot = query.get().await()
 
 		if (querySnapshot.isEmpty) {
-			Timber.tag("getEpisodesByGroupAndLocation")
-				.d("No such document")
 			return emptyList()
 		}
 
@@ -67,7 +63,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 		} catch (e: Exception) {
 			Timber.tag("getEpisodesByGroupAndLocation")
 				.e(e)
-			emptyList()
+			throw e
 		}
 	}
 
@@ -81,8 +77,6 @@ class EpisodeRepositoryImpl @Inject constructor(
 		val querySnapshot = query.get().await()
 
 		if (querySnapshot.isEmpty) {
-			Timber.tag("getEpisodesByGroupAndLocation")
-				.d("No such document")
 			return emptyList()
 		}
 
@@ -91,7 +85,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 		} catch (e: Exception) {
 			Timber.tag("getEpisodesByGroupAndLocation")
 				.e(e)
-			emptyList()
+			throw e
 		}
 	}
 
