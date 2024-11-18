@@ -154,8 +154,7 @@ internal fun MapisodeDropdownMenuContent(
 				}
 				this.alpha = if (!isInspecting) {
 					alpha
-				}
-				else if (expandedState.targetState) {
+				} else if (expandedState.targetState) {
 					EXPANDED_ALPHA_TARGET
 				} else {
 					CLOSED_ALPHA_TARGET
