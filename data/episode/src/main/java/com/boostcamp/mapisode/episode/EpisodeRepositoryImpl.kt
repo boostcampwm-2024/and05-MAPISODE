@@ -41,13 +41,13 @@ class EpisodeRepositoryImpl @Inject constructor(
 
 	override suspend fun getEpisodesByGroupAndLocation(
 		groupId: String,
-		start: Pair<Double, Double>,
-		end: Pair<Double, Double>,
+		start: EpisodeLatLng,
+		end: EpisodeLatLng,
 	): List<EpisodeModel> {
 		val query = episodeCollection
 			.whereEqualTo("group", groupCollection.document(groupId))
-			.whereGreaterThanOrEqualTo("location", GeoPoint(start.first, start.second))
-			.whereLessThanOrEqualTo("location", GeoPoint(end.first, end.second))
+			.whereGreaterThanOrEqualTo("location", GeoPoint(start.latitude, start.longitude))
+			.whereLessThanOrEqualTo("location", GeoPoint(end.latitude, end.longitude))
 		val querySnapshot = query.get().await()
 
 		if (querySnapshot.isEmpty) {
