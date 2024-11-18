@@ -166,6 +166,7 @@ fun OtherIconsPreview() {
 				Pair("ic_settings", R.drawable.ic_settings),
 				Pair("ic_calendar", R.drawable.ic_calendar),
 				Pair("ic_group", R.drawable.ic_group),
+				Pair("ic_image", R.drawable.ic_image),
 				Pair("ic_eat", R.drawable.ic_eat),
 				Pair("ic_see", R.drawable.ic_see),
 				Pair("ic_other", R.drawable.ic_other),
