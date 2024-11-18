@@ -12,14 +12,7 @@ internal val LocalMapisodeColorScheme = staticCompositionLocalOf { lightColorSch
 internal val LocalMapisodeTypography = staticCompositionLocalOf { AppTypography }
 internal val LocalMapisodeContentColor = compositionLocalOf { lightColorScheme.textContent }
 internal val LocalMapisodeContentAlpha = compositionLocalOf { 1f }
-
-private fun CustomColorScheme.pressedColorFor(color: Color): Color = when (color) {
-	navBackground -> dialogBackground
-	dialogBackground -> navBackground
-	textFieldBackground -> chipStroke
-	chipStroke -> textFieldBackground
-	else -> color
-}
+internal val LocalMapisodeIconColor = compositionLocalOf { Color.Unspecified }
 
 object MapisodeTheme {
 	val colorScheme: CustomColorScheme
@@ -29,10 +22,6 @@ object MapisodeTheme {
 	val typography: MaruBuriTypography
 		@Composable @ReadOnlyComposable
 		get() = LocalMapisodeTypography.current
-
-	@Composable
-	@ReadOnlyComposable
-	fun pressedColorFor(color: Color): Color = colorScheme.pressedColorFor(color)
 }
 
 @Composable

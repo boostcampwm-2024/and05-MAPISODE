@@ -19,6 +19,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
+import com.boostcamp.mapisode.designsystem.compose.ripple.MapisodeRippleAIndication
 import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
@@ -61,6 +62,7 @@ fun Surface(
 	color: Color = MapisodeTheme.colorScheme.surfaceBackground,
 	contentColor: Color = LocalMapisodeContentColor.current,
 	border: BorderStroke? = null,
+	showRipple: Boolean = false,
 	interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 	content: @Composable () -> Unit,
 ) {
@@ -69,14 +71,14 @@ fun Surface(
 	) {
 		Box(
 			modifier = modifier
-				.surface(
-					shape = shape,
-					backgroundColor = color,
-					border = border,
-				)
+				.surface(shape = shape, backgroundColor = color, border = border)
 				.clickable(
 					interactionSource = interactionSource,
-					indication = null,
+					indication = if (showRipple) {
+						MapisodeRippleAIndication
+					} else {
+						null
+					},
 					enabled = enabled,
 					onClick = onClick,
 				),
@@ -91,7 +93,13 @@ private fun Modifier.surface(
 	shape: Shape,
 	backgroundColor: Color,
 	border: BorderStroke?,
-): Modifier = this
-	.then(if (border != null) Modifier.border(border, shape) else Modifier)
+): Modifier = this@surface
+	.then(
+		if (border != null) {
+			Modifier.border(border, shape)
+		} else {
+			Modifier
+		},
+	)
 	.background(color = backgroundColor, shape = shape)
 	.clip(shape)

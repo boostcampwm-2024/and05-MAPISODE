@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="home_location_permission_needed">위치 권한이 필요합니다.</string>
+	<string name="home_cannot_bring_location_error">위치 정보를 가져올 수 없습니다.</string>
+	<string name="home_chip_eat">먹거리</string>
+	<string name="home_chip_see">볼거리</string>
+	<string name="home_chip_other">나머지</string>
+	<string name="home_exit_alert">한 번 더 누르시면 앱이 종료됩니다.</string>
+</resources>

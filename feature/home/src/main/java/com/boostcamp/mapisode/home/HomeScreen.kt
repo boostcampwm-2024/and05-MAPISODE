@@ -1,24 +1,38 @@
 package com.boostcamp.mapisode.home
 
 import android.Manifest
+import android.app.Activity
 import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.app.ActivityCompat
+import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
+import com.boostcamp.mapisode.home.common.getChipIconTint
+import com.boostcamp.mapisode.home.component.MapisodeChip
+import com.boostcamp.mapisode.home.component.MapisodeFabOverlayButton
 import com.google.android.gms.location.LocationServices
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
@@ -37,9 +51,8 @@ internal fun HomeRoute(
 	viewModel: HomeViewModel = hiltViewModel(),
 ) {
 	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-	val snackbarHostState = remember { SnackbarHostState() }
 	val context = LocalContext.current
-	val focusLocationProviderClient = remember {
+	val fusedLocationClient = remember {
 		LocationServices.getFusedLocationProviderClient(context)
 	}
 
@@ -47,40 +60,56 @@ internal fun HomeRoute(
 		position = uiState.cameraPosition
 	}
 
+	val launcherLocationPermissions = getPermissionsLauncher { isGranted ->
+		viewModel.onIntent(HomeIntent.UpdateLocationPermission(isGranted))
+	}
+
+	var backPressedTime by remember { mutableLongStateOf(0L) }
+
+	BackHandler(enabled = true) {
+		if (System.currentTimeMillis() - backPressedTime <= 2000L) {
+			(context as Activity).finish()
+		} else {
+			Toast.makeText(context, context.getString(R.string.home_exit_alert), Toast.LENGTH_SHORT)
+				.show()
+		}
+		backPressedTime = System.currentTimeMillis()
+	}
+
 	LaunchedEffect(viewModel) {
 		viewModel.sideEffect.collect { sideEffect ->
 			when (sideEffect) {
 				is HomeSideEffect.ShowToast -> {
-					snackbarHostState.showSnackbar(sideEffect.message)
+					val message = context.getString(sideEffect.messageResId)
+					Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+				}
+
+				is HomeSideEffect.RequestLocationPermission -> {
+					// 위치 권한이 허용되지 않은 경우 권한 요청
+					if (!uiState.isLocationPermissionGranted) {
+						launcherLocationPermissions.launch(
+							arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+						)
+					}
 				}
 
 				is HomeSideEffect.SetInitialLocation -> {
-					if (!uiState.isInitialLocationSet) {
-						// 현재 위치 가져오기
-						if (
-							ActivityCompat.checkSelfPermission(
-								context,
-								Manifest.permission.ACCESS_FINE_LOCATION,
-							) != PackageManager.PERMISSION_GRANTED &&
-							ActivityCompat.checkSelfPermission(
-								context,
-								Manifest.permission.ACCESS_COARSE_LOCATION,
-							) != PackageManager.PERMISSION_GRANTED
-						) {
-							// 권한이 없을 경우 요청 필요
-							snackbarHostState.showSnackbar("위치 권한이 필요합니다.")
-							return@collect
-						}
-						focusLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+					// 초기 위치 설정: 권한이 허용된 경우 현재 위치를 가져온다.
+					if (ContextCompat.checkSelfPermission(
+							context,
+							Manifest.permission.ACCESS_FINE_LOCATION,
+						) == PackageManager.PERMISSION_GRANTED &&
+						!uiState.isInitialLocationSet
+					) {
+						fusedLocationClient.lastLocation.addOnSuccessListener { location ->
 							if (location != null) {
 								val userLatLng = LatLng(location.latitude, location.longitude)
-								// ViewModel의 상태 업데이트
-								viewModel.setInitialLocation(userLatLng)
-								// 카메라 위치 업데이트
+
+								viewModel.onIntent(HomeIntent.SetInitialLocation(userLatLng))
 								cameraPositionState.position =
 									CameraPosition(userLatLng, DEFAULT_ZOOM)
 							} else {
-								Timber.e("위치 정보를 가져올 수 없습니다.")
+								Timber.e(context.getString(R.string.home_cannot_bring_location_error))
 							}
 						}
 					}
@@ -89,10 +118,21 @@ internal fun HomeRoute(
 		}
 	}
 
+	HomePermissionHandler(
+		context = context,
+		uiState = uiState,
+		launcherLocationPermissions = launcherLocationPermissions,
+		updatePermission = { isGranted ->
+			viewModel.onIntent(HomeIntent.UpdateLocationPermission(isGranted))
+		},
+	)
+
 	HomeScreen(
 		state = uiState,
 		cameraPositionState = cameraPositionState,
-		snackbarHostState = snackbarHostState,
+		onChipSelected = { chipType ->
+			viewModel.onIntent(HomeIntent.SelectChip(chipType))
+		},
 	)
 }
 
@@ -101,36 +141,68 @@ internal fun HomeRoute(
 private fun HomeScreen(
 	state: HomeState,
 	cameraPositionState: CameraPositionState,
-	snackbarHostState: SnackbarHostState,
+	onChipSelected: (ChipType) -> Unit = {},
 ) {
-	Scaffold(
-		snackbarHost = { SnackbarHost(snackbarHostState) },
+	val context = LocalContext.current
+
+	Box(
+		modifier = Modifier.fillMaxSize(),
 	) {
-		Box(
+		NaverMap(
+			modifier = Modifier.fillMaxSize(),
+			cameraPositionState = cameraPositionState,
+			properties = MapProperties(
+				locationTrackingMode = LocationTrackingMode.NoFollow,
+				isIndoorEnabled = true,
+			),
+			uiSettings = MapUiSettings(
+				isZoomGesturesEnabled = true,
+				isZoomControlEnabled = false,
+				isLocationButtonEnabled = true,
+				isLogoClickEnabled = false,
+				isScaleBarEnabled = false,
+				isCompassEnabled = false,
+			),
+			locationSource = rememberFusedLocationSource(),
+			onMapClick = { _, _ ->
+				// TODO : 마커 찍기 구현
+			},
+		)
+
+		Column(
 			modifier = Modifier
-				.fillMaxSize()
-				.padding(it),
+				.fillMaxWidth()
+				.padding(top = 46.dp),
+			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
-			NaverMap(
-				modifier = Modifier.fillMaxSize(),
-				cameraPositionState = cameraPositionState,
-				properties = MapProperties(
-					locationTrackingMode = LocationTrackingMode.NoFollow,
-					isIndoorEnabled = true,
-				),
-				uiSettings = MapUiSettings(
-					isZoomGesturesEnabled = true,
-					isZoomControlEnabled = false,
-					isLocationButtonEnabled = true,
-					isLogoClickEnabled = false,
-					isScaleBarEnabled = false,
-					isCompassEnabled = false,
-				),
-				locationSource = rememberFusedLocationSource(),
-				onMapClick = { _, _ ->
-					// TODO : 마커 찍기 구현
-				},
-			)
+			Row(
+				horizontalArrangement = Arrangement.spacedBy(23.dp),
+				verticalAlignment = Alignment.CenterVertically,
+			) {
+				ChipType.entries.forEach { chipType ->
+					MapisodeChip(
+						text = context.getString(chipType.textResId),
+						iconId = chipType.iconResId,
+						onClick = { onChipSelected(chipType) },
+						isSelected = state.selectedChip == chipType,
+						iconTint = getChipIconTint(chipType),
+					)
+				}
+			}
+
+			Spacer(modifier = Modifier.height(22.dp))
+
+			Box(
+				modifier = Modifier.fillMaxWidth(),
+				contentAlignment = Alignment.CenterEnd,
+			) {
+				MapisodeFabOverlayButton(
+					onClick = {
+						// TODO : FAB 클릭 시 동작 구현
+					},
+					modifier = Modifier.padding(end = 20.dp),
+				)
+			}
 		}
 	}
 }
@@ -146,6 +218,5 @@ private fun HomeScreenPreview() {
 				DEFAULT_ZOOM,
 			)
 		},
-		snackbarHostState = SnackbarHostState(),
 	)
 }
