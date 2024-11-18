@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
@@ -23,6 +24,8 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.MapisodeTextField
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeOutlinedButton
+import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenu
+import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
@@ -40,6 +43,7 @@ internal fun GroupRoute() {
 @Composable
 private fun GroupScreen(onAddGroupClick: () -> Unit) {
 	val focusManager = LocalFocusManager.current
+	var isMenuPoppedUp by remember { mutableStateOf(false) }
 
 	MapisodeScaffold(
 		modifier = Modifier
@@ -58,12 +62,33 @@ private fun GroupScreen(onAddGroupClick: () -> Unit) {
 				actions = {
 					MapisodeIconButton(
 						onClick = {
-							onAddGroupClick()
+							isMenuPoppedUp = true
 						},
 					) {
 						MapisodeIcon(
 							id = R.drawable.ic_add,
 						)
+						MapisodeDropdownMenu(
+							expanded = isMenuPoppedUp,
+							onDismissRequest = { isMenuPoppedUp = false },
+							offset = DpOffset(0.dp, 0.dp).minus(DpOffset(41.dp, 0.dp)),
+						) {
+							MapisodeDropdownMenuItem(
+								onClick = onAddGroupClick
+							) {
+								MapisodeText(
+									text = "그룹 생성",
+								)
+							}
+							MapisodeDropdownMenuItem(
+								onClick = {  },
+							) {
+								MapisodeText(
+									text = "그룹 생성",
+								)
+							}
+						}
+
 					}
 				},
 			)

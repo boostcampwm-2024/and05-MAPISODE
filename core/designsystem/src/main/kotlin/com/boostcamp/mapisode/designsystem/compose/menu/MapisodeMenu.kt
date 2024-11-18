@@ -117,6 +117,7 @@ internal fun MapisodeDropdownMenuContent(
 	}
 
 	val isInspecting = LocalInspectionMode.current
+
 	Surface(
 		modifier = Modifier
 			.heightIn(min = 0.dp, max = 300.dp)
