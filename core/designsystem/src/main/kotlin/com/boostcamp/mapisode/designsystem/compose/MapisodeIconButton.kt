@@ -29,7 +29,7 @@ fun MapisodeIconButton(
 ) {
 	Box(
 		modifier = modifier
-			.size(IconSize.Large.value)
+			.size(IconSize.ExtraLarge.value)
 			.clip(
 				shape = RoundedCornerShape(100),
 			)
