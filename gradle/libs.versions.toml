@@ -30,14 +30,14 @@ compose-material3 = "1.2.1"
 # Coil
 coil = "3.0.0-rc02"
 
-# Hilt
-hilt = "2.48.1"
-
 # Firebase
 firebase-bom = "33.5.1"
 
 # Google
 google-services = "4.4.2"
+
+# Hilt
+hilt = "2.48.1"
 
 # Java
 javax = "1"
