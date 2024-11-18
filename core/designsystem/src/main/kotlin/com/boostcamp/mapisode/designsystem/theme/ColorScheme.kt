@@ -135,7 +135,7 @@ val lightColorScheme = CustomColorScheme(
 	otherIconColor = Primary40,
 
 	// Surface
-	surfaceBackground = Neutral30,
+	surfaceBackground = Neutral10,
 
 	// Divider
 	dividerThinColor = Neutral50,
@@ -211,7 +211,7 @@ val darkColorScheme = CustomColorScheme(
 	otherIconColor = Primary20,
 
 	// Surface
-	surfaceBackground = Neutral90,
+	surfaceBackground = Neutral110,
 
 	// Divider
 	dividerThinColor = Neutral80,
