@@ -4,8 +4,8 @@ interface EpisodeRepository {
 	suspend fun getEpisodesByGroup(groupId: String): List<EpisodeModel>
 	suspend fun getEpisodesByGroupAndLocation(
 		groupId: String,
-		start: Pair<Double, Double>,
-		end: Pair<Double, Double>,
+		start: EpisodeLatLng,
+		end: EpisodeLatLng,
 	): List<EpisodeModel>
 
 	suspend fun getEpisodesByGroupAndCategory(
