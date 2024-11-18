@@ -20,7 +20,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 	override suspend fun getEpisodesByGroup(groupId: String): List<EpisodeModel> {
 		val query = episodeCollection
 			.whereEqualTo(
-				"group",
+				FirestoreConstants.FIELD_GROUP,
 				groupCollection.document(groupId),
 			)
 		val querySnapshot = query.get().await()
@@ -45,9 +45,15 @@ class EpisodeRepositoryImpl @Inject constructor(
 		end: EpisodeLatLng,
 	): List<EpisodeModel> {
 		val query = episodeCollection
-			.whereEqualTo("group", groupCollection.document(groupId))
-			.whereGreaterThanOrEqualTo("location", GeoPoint(start.latitude, start.longitude))
-			.whereLessThanOrEqualTo("location", GeoPoint(end.latitude, end.longitude))
+			.whereEqualTo(FirestoreConstants.FIELD_GROUP, groupCollection.document(groupId))
+			.whereGreaterThanOrEqualTo(
+				FirestoreConstants.FIELD_LOCATION,
+				GeoPoint(start.latitude, start.longitude),
+			)
+			.whereLessThanOrEqualTo(
+				FirestoreConstants.FIELD_LOCATION,
+				GeoPoint(end.latitude, end.longitude),
+			)
 		val querySnapshot = query.get().await()
 
 		if (querySnapshot.isEmpty) {
@@ -70,8 +76,8 @@ class EpisodeRepositoryImpl @Inject constructor(
 		category: String,
 	): List<EpisodeModel> {
 		val query = episodeCollection
-			.whereEqualTo("group", groupCollection.document(groupId))
-			.whereEqualTo("category", category)
+			.whereEqualTo(FirestoreConstants.FIELD_GROUP, groupCollection.document(groupId))
+			.whereEqualTo(FirestoreConstants.FIELD_CATEGORY, category)
 		val querySnapshot = query.get().await()
 
 		if (querySnapshot.isEmpty) {
