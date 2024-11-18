@@ -13,9 +13,8 @@ import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
-class EpisodeRepositoryImpl @Inject constructor(
-	private val database: FirebaseFirestore,
-) : EpisodeRepository {
+class EpisodeRepositoryImpl @Inject constructor(private val database: FirebaseFirestore) :
+	EpisodeRepository {
 	private val episodeCollection = database.collection(FirestoreConstants.COLLECTION_EPISODE)
 	private val groupCollection = database.collection(FirestoreConstants.COLLECTION_GROUP)
 
@@ -91,13 +90,12 @@ class EpisodeRepositoryImpl @Inject constructor(
 		}
 	}
 
-	override suspend fun getEpisodeById(episodeId: String): EpisodeModel? {
-		return episodeCollection.document(episodeId)
+	override suspend fun getEpisodeById(episodeId: String): EpisodeModel? =
+		episodeCollection.document(episodeId)
 			.get()
 			.await()
 			.toObject(EpisodeFirestoreModel::class.java)
 			?.toDomainModel(episodeId)
-	}
 
 	override suspend fun createEpisode(episodeModel: EpisodeModel): String {
 		val newEpisodeId = UUID.randomUUID().toString().replace("-", "")
@@ -112,10 +110,9 @@ class EpisodeRepositoryImpl @Inject constructor(
 		}
 	}
 
-	private fun QuerySnapshot.toDomainModelList(): List<EpisodeModel> {
-		return documents.map { document ->
+	private fun QuerySnapshot.toDomainModelList(): List<EpisodeModel> =
+		documents.map { document ->
 			val model = requireNotNull(document.toObject(EpisodeFirestoreModel::class.java))
 			model.toDomainModel(document.id)
 		}
-	}
 }
