@@ -1,6 +1,6 @@
 package com.boostcamp.mapisode.episode.model
 
-import com.boostcamp.mapisode.episode.EpisodeModel
+import com.boostcamp.mapisode.model.EpisodeModel
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
