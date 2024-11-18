@@ -36,6 +36,9 @@ hilt = "2.48.1"
 # Firebase
 firebase-bom = "33.5.1"
 
+# Google
+google-services = "4.4.2"
+
 # Java
 javax = "1"
 
@@ -244,6 +247,7 @@ test = [
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
