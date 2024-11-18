@@ -22,6 +22,7 @@ fun MapisodeImageButton(
 	modifier: Modifier = Modifier,
 	onClick: () -> Unit,
 	text: String,
+	showImage: Boolean = true,
 	enabled: Boolean = true,
 	showRipple: Boolean = true,
 	interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
@@ -42,7 +43,7 @@ fun MapisodeImageButton(
 		rounding = 8.dp,
 		contentPadding = PaddingValues(16.dp),
 	) {
-		if (enabled) {
+		if (showImage) {
 			Column(
 				verticalArrangement = Arrangement.Center,
 				horizontalAlignment = Alignment.CenterHorizontally,
