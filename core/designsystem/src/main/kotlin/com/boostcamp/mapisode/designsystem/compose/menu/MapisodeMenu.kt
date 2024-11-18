@@ -37,6 +37,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import com.boostcamp.mapisode.designsystem.compose.Surface
+import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuDefaults.CLOSED_ALPHA_TARGET
+import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuDefaults.CLOSED_SCALE_TARGET
+import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuDefaults.EXPANDED_ALPHA_TARGET
+import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuDefaults.EXPANDED_SCALE_TARGET
+import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuDefaults.IN_TRANSITION_DURATION
+import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuDefaults.OUT_TRANSITION_DURATION
+
+private object MapisodeDropdownMenuDefaults {
+	const val IN_TRANSITION_DURATION = 120
+	const val OUT_TRANSITION_DURATION = 75
+	const val EXPANDED_SCALE_TARGET = 1f
+	const val CLOSED_SCALE_TARGET = 0.8f
+	const val EXPANDED_ALPHA_TARGET = 1f
+	const val CLOSED_ALPHA_TARGET = 0f
+}
 
 @Composable
 fun MapisodeDropdownMenu(
@@ -90,15 +105,15 @@ internal fun MapisodeDropdownMenuContent(
 		transitionSpec = {
 			if (false isTransitioningTo true) {
 				// 확장
-				tween(durationMillis = InTransitionDuration, easing = LinearOutSlowInEasing)
+				tween(durationMillis = IN_TRANSITION_DURATION, easing = LinearOutSlowInEasing)
 			} else {
 				// 축소
-				tween(durationMillis = 1, delayMillis = OutTransitionDuration - 1)
+				tween(durationMillis = 1, delayMillis = OUT_TRANSITION_DURATION - 1)
 			}
 		},
 		label = "FloatAnimation",
 	) { expanded ->
-		if (expanded) ExpandedScaleTarget else ClosedScaleTarget
+		if (expanded) EXPANDED_SCALE_TARGET else CLOSED_SCALE_TARGET
 	}
 
 	val alpha by transition.animateFloat(
@@ -108,12 +123,12 @@ internal fun MapisodeDropdownMenuContent(
 				tween(durationMillis = 30)
 			} else {
 				// 축소
-				tween(durationMillis = OutTransitionDuration)
+				tween(durationMillis = OUT_TRANSITION_DURATION)
 			}
 		},
 		label = "FloatAnimation",
 	) { expanded ->
-		if (expanded) ExpandedAlphaTarget else ClosedAlphaTarget
+		if (expanded) EXPANDED_ALPHA_TARGET else CLOSED_ALPHA_TARGET
 	}
 
 	val isInspecting = LocalInspectionMode.current
@@ -124,13 +139,13 @@ internal fun MapisodeDropdownMenuContent(
 			.graphicsLayer {
 				scaleX =
 					if (!isInspecting) scale
-					else if (expandedState.targetState) ExpandedScaleTarget else ClosedScaleTarget
+					else if (expandedState.targetState) EXPANDED_SCALE_TARGET else CLOSED_SCALE_TARGET
 				scaleY =
 					if (!isInspecting) scale
-					else if (expandedState.targetState) ExpandedScaleTarget else ClosedScaleTarget
+					else if (expandedState.targetState) EXPANDED_SCALE_TARGET else CLOSED_SCALE_TARGET
 				this.alpha =
 					if (!isInspecting) alpha
-					else if (expandedState.targetState) ExpandedAlphaTarget else ClosedAlphaTarget
+					else if (expandedState.targetState) EXPANDED_ALPHA_TARGET else CLOSED_ALPHA_TARGET
 				transformOrigin = transformOriginState.value
 			},
 		shape = shape,
@@ -138,8 +153,7 @@ internal fun MapisodeDropdownMenuContent(
 		border = border,
 	) {
 		Column(
-			modifier =
-			modifier
+			modifier = modifier
 				.padding(vertical = 8.dp)
 				.width(IntrinsicSize.Max)
 				.verticalScroll(scrollState),
@@ -170,10 +184,3 @@ private class MapisodeDropdownMenuPositionProvider(
 		)
 	}
 }
-
-internal const val InTransitionDuration = 120
-internal const val OutTransitionDuration = 75
-internal const val ExpandedScaleTarget = 1f
-internal const val ClosedScaleTarget = 0.8f
-internal const val ExpandedAlphaTarget = 1f
-internal const val ClosedAlphaTarget = 0f

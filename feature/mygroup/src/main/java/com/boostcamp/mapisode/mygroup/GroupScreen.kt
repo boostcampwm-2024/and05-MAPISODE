@@ -74,21 +74,27 @@ private fun GroupScreen(onAddGroupClick: () -> Unit) {
 							offset = DpOffset(0.dp, 0.dp).minus(DpOffset(41.dp, 0.dp)),
 						) {
 							MapisodeDropdownMenuItem(
-								onClick = onAddGroupClick
+								onClick = onAddGroupClick,
 							) {
 								MapisodeText(
 									text = "그룹 생성",
 								)
 							}
 							MapisodeDropdownMenuItem(
-								onClick = {  },
+								onClick = { },
+							) {
+								MapisodeText(
+									text = "그룹 생성",
+								)
+							}
+							MapisodeDropdownMenuItem(
+								onClick = { },
 							) {
 								MapisodeText(
 									text = "그룹 생성",
 								)
 							}
 						}
-
 					}
 				},
 			)
