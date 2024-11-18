@@ -1,6 +1,5 @@
 package com.boostcamp.mapisode.login
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.R.drawable
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
+import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.MapisodeTextField
@@ -104,11 +104,11 @@ fun SignUpScreen(
 fun SignUpTopBar() {
 	TopAppBar(
 		navigationIcon = {
-			MapisodeIcon(
-				id = drawable.ic_arrow_back_ios,
-				modifier = Modifier
-					.clickable { },
-			)
+			MapisodeIconButton(
+				onClick = { },
+			) {
+				MapisodeIcon(id = drawable.ic_arrow_back_ios)
+			}
 		},
 		title = stringResource(R.string.login_signup),
 	)
