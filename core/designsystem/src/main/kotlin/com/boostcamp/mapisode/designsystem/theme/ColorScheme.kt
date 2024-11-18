@@ -16,6 +16,14 @@ data class CustomColorScheme(
 	// Scaffold
 	val scaffoldBackground: Color,
 
+	// Scrim
+	val scrim: Color,
+
+	// Menu
+	val menuBackground: Color,
+	val menuStroke: Color,
+	val menuItemBackground: Color,
+
 	// Button
 	val filledButtonEnableBackground: Color,
 	val filledButtonDisableBackground: Color,
@@ -92,6 +100,14 @@ val lightColorScheme = CustomColorScheme(
 	// Scaffold
 	scaffoldBackground = Neutral10,
 
+	// Scrim
+	scrim = Neutral110.copy(alpha = 0.32f),
+
+	// Menu
+	menuBackground = Neutral10,
+	menuStroke = Neutral110,
+	menuItemBackground = Neutral10,
+
 	// Button
 	filledButtonEnableBackground = Primary30,
 	filledButtonDisableBackground = Neutral60,
@@ -167,6 +183,14 @@ val darkColorScheme = CustomColorScheme(
 
 	// Scaffold
 	scaffoldBackground = Neutral110,
+
+	// Scrim
+	scrim = Neutral10.copy(alpha = 0.32f),
+
+	// Menu
+	menuBackground = Neutral110,
+	menuStroke = Neutral20,
+	menuItemBackground = Neutral110,
 
 	// Button
 	filledButtonEnableBackground = Primary50,
