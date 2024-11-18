@@ -43,6 +43,7 @@ import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuDefa
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuDefaults.EXPANDED_SCALE_TARGET
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuDefaults.IN_TRANSITION_DURATION
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuDefaults.OUT_TRANSITION_DURATION
+import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 private object MapisodeDropdownMenuDefaults {
 	const val IN_TRANSITION_DURATION = 120
@@ -78,8 +79,8 @@ fun MapisodeDropdownMenu(
 				transformOriginState = transformOriginState,
 				scrollState = ScrollState(0),
 				shape = RoundedCornerShape(1.dp),
-				containerColor = Color.White,
-				border = BorderStroke(1.dp, Color.Gray),
+				containerColor = MapisodeTheme.colorScheme.menuBackground,
+				border = BorderStroke(1.dp, MapisodeTheme.colorScheme.menuStroke),
 				content = content,
 			)
 		}

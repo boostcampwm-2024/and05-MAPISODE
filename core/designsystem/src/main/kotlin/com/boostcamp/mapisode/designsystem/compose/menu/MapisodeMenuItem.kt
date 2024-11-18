@@ -38,9 +38,9 @@ fun MapisodeDropdownMenuItem(
 			)
 			.fillMaxWidth(),
 		color = if (enabled) {
-			MapisodeTheme.colorScheme.surfaceBackground
+			MapisodeTheme.colorScheme.menuItemBackground
 		} else {
-			MapisodeTheme.colorScheme.surfaceBackground.copy(alpha = 0.38f)
+			MapisodeTheme.colorScheme.scrim
 		},
 	) {
 		Row(
