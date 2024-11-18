@@ -1,5 +1,8 @@
 package com.boostcamp.mapisode.episode
 
+import com.boostcamp.mapisode.model.EpisodeLatLng
+import com.boostcamp.mapisode.model.EpisodeModel
+
 interface EpisodeRepository {
 	suspend fun getEpisodesByGroup(groupId: String): List<EpisodeModel>
 	suspend fun getEpisodesByGroupAndLocation(

@@ -3,6 +3,8 @@ package com.boostcamp.mapisode.episode
 import com.boostcamp.mapisode.episode.model.EpisodeFirestoreModel
 import com.boostcamp.mapisode.episode.model.toFirestoreModel
 import com.boostcamp.mapisode.firebase.firestore.FirestoreConstants
+import com.boostcamp.mapisode.model.EpisodeLatLng
+import com.boostcamp.mapisode.model.EpisodeModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.QuerySnapshot
