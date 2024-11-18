@@ -11,10 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.compose.Surface
-import com.boostcamp.mapisode.designsystem.compose.mapisodeRippleEffect
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
@@ -24,13 +22,10 @@ fun MapisodeDropdownMenuItem(
 	enabled: Boolean = true,
 	contentPadding: PaddingValues = MapisodeMenuDefaults.DropdownMenuItemContentPadding,
 	interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-	content: @Composable RowScope.() -> Unit
+	content: @Composable RowScope.() -> Unit,
 ) {
 	Surface(
 		modifier = modifier
-			.mapisodeRippleEffect(
-				rippleColor = Color.Black.copy(alpha = 0.1f),
-			)
 			.clickable(
 				enabled = enabled,
 				onClick = onClick,
@@ -42,12 +37,12 @@ fun MapisodeDropdownMenuItem(
 			MapisodeTheme.colorScheme.surfaceBackground
 		} else {
 			MapisodeTheme.colorScheme.surfaceBackground.copy(alpha = 0.38f)
-		}
+		},
 	) {
 		Row(
 			modifier = Modifier.padding(contentPadding),
 			verticalAlignment = Alignment.CenterVertically,
-			content = content
+			content = content,
 		)
 	}
 }
@@ -55,6 +50,6 @@ fun MapisodeDropdownMenuItem(
 private object MapisodeMenuDefaults {
 	val DropdownMenuItemContentPadding = PaddingValues(
 		horizontal = 16.dp,
-		vertical = 8.dp
+		vertical = 8.dp,
 	)
 }
