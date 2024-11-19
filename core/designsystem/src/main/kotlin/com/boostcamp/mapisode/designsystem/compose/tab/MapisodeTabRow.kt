@@ -46,7 +46,7 @@ fun MapisodeTabRow(
 	indicator:
 	@Composable
 	@UiComposable
-	(tabPositions: List<TabPosition>) -> Unit = { tabPositions ->
+	( tabPositions: List<TabPosition> ) -> Unit = { tabPositions ->
 		Box(
 			Modifier
 				.tabIndicatorOffset(tabPositions[selectedTabIndex])
@@ -57,7 +57,7 @@ fun MapisodeTabRow(
 	divider:
 	@Composable
 	@UiComposable
-	() -> Unit =
+	( ) -> Unit =
 		@Composable {
 			MapisodeDivider(
 				direction = Direction.Horizontal,
@@ -69,7 +69,7 @@ fun MapisodeTabRow(
 	tabs:
 	@Composable
 	@UiComposable
-	() -> Unit,
+	( ) -> Unit,
 ) {
 	Surface(
 		modifier = modifier.selectableGroup(),
