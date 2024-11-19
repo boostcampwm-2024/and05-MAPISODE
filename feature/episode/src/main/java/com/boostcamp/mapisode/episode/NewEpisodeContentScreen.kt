@@ -35,8 +35,7 @@ internal fun NewEpisodeContentScreen(navController: NavController) {
 			NewEpisodeTopbar(navController)
 		},
 		isStatusBarPaddingExist = true,
-	)
-	{ innerPadding ->
+	) { innerPadding ->
 		Column(
 			modifier = Modifier
 				.padding(innerPadding)
@@ -84,7 +83,9 @@ internal fun NewEpisodeContentScreen(navController: NavController) {
 							Surface(Modifier.size(150.dp)) {
 								Image(
 									contentDescription = null,
-									imageVector = ImageVector.vectorResource(com.boostcamp.mapisode.designsystem.R.drawable.ic_see),
+									imageVector = ImageVector.vectorResource(
+										com.boostcamp.mapisode.designsystem.R.drawable.ic_see,
+									),
 								)
 							}
 						}
@@ -107,5 +108,3 @@ internal fun NewEpisodeContentScreen(navController: NavController) {
 internal fun NewEpisodeContentScreenPreview() {
 	NewEpisodeContentScreen(rememberNavController())
 }
-
-

@@ -33,8 +33,7 @@ internal fun NewEpisodePicsScreen(navController: NavController) {
 			)
 		},
 		isStatusBarPaddingExist = true,
-	)
-	{ innerPadding ->
+	) { innerPadding ->
 		Box(
 			Modifier
 				.fillMaxSize()
