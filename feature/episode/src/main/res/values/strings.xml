@@ -14,4 +14,13 @@
 	<string name="new_episode_info_placeholder_category">카테고리를 선택해주세요</string>
 	<string name="new_episode_info_placeholder_tags">태그를 입력해주세요</string>
 	<string name="new_episode_info_placeholder_date">날짜를 입력해주세요</string>
+
+	<string name="new_episode_content_title">제목</string>
+	<string name="new_episode_content_description">내용</string>
+	<string name="new_episode_content_image">이미지</string>
+
+	<string name="new_episode_content_placeholder_title">제목을 입력해주세요</string>
+	<string name="new_episode_content_placeholder_description">내용을 입력해주세요</string>
+
+	<string name="new_episode_create_episode">생성하기</string>
 </resources>
