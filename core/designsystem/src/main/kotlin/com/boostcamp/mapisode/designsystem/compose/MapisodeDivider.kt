@@ -60,7 +60,7 @@ fun MapisodeDivider(
 	direction: Direction,
 	thickness: Thickness,
 	modifier: Modifier = Modifier,
-	color: Color? = null
+	color: Color? = null,
 ) {
 	Box(
 		modifier = Modifier
