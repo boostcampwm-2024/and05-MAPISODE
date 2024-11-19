@@ -14,10 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,8 +32,10 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeModalBottomSheet
 import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
 import com.boostcamp.mapisode.home.common.getChipIconTint
+import com.boostcamp.mapisode.home.component.GroupBottomSheetContent
 import com.boostcamp.mapisode.home.component.MapisodeChip
 import com.boostcamp.mapisode.home.component.MapisodeFabOverlayButton
+import com.boostcamp.mapisode.model.GroupItem
 import com.google.android.gms.location.LocationServices
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
@@ -49,6 +47,7 @@ import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
+import kotlinx.collections.immutable.persistentListOf
 import timber.log.Timber
 
 @Composable
@@ -215,27 +214,38 @@ private fun HomeScreen(
 		MapisodeModalBottomSheet(
 			isVisible = state.isBottomSheetVisible,
 			onDismiss = onGroupFabClick,
-			sheetContent = { BottomSheetContent() },
+			sheetContent = {
+				GroupBottomSheetContent(
+					myProfileImage = "https://github.com/user-attachments/assets/34d47b54-1ba6-48c7-adc6-a1d3f050e131",
+					groupList = persistentListOf(
+						GroupItem(
+							adminUser = "",
+							name = "그룹1",
+							description = "그룹1 설명",
+							imageUrl = "https://github.com/user-attachments/assets/ed530b8c-a030-42b4-b22d-5c6ef9424b0b",
+							createdAt = "2021-09-01",
+						),
+						GroupItem(
+							adminUser = "",
+							name = "그룹2",
+							description = "그룹2 설명",
+							imageUrl = "https://github.com/user-attachments/assets/ed530b8c-a030-42b4-b22d-5c6ef9424b0b",
+							createdAt = "2021-09-01",
+						),
+						GroupItem(
+							adminUser = "",
+							name = "그룹3",
+							description = "그룹3 설명",
+							imageUrl = "https://github.com/user-attachments/assets/ed530b8c-a030-42b4-b22d-5c6ef9424b0b",
+							createdAt = "2021-09-01",
+						),
+					),
+					onDismiss = onGroupFabClick,
+				)
+			},
 		)
 	}
 
-}
-
-@Composable
-private fun BottomSheetContent() {
-	Column(
-		modifier = Modifier
-			.fillMaxWidth()
-			.padding(16.dp)
-			.verticalScroll(rememberScrollState()),
-	) {
-		// 바텀 시트 내용
-		Text(
-			text = "Bottom Sheet Content",
-			style = MaterialTheme.typography.displayMedium,
-			modifier = Modifier.padding(bottom = 16.dp),
-		)
-	}
 }
 
 @Preview(showBackground = true, showSystemUi = true)

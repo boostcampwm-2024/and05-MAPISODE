@@ -10,4 +10,5 @@ android {
 
 dependencies {
 	implementation(libs.bundles.naverMap)
+	implementation(libs.bundles.coil)
 }
