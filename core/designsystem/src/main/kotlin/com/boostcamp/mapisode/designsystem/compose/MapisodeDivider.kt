@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -59,14 +60,15 @@ fun MapisodeDivider(
 	direction: Direction,
 	thickness: Thickness,
 	modifier: Modifier = Modifier,
+	color: Color? = null
 ) {
 	Box(
 		modifier = Modifier
 			.then(modifier)
 			.background(
 				color = when (thickness) {
-					Thickness.Thin -> MapisodeTheme.colorScheme.dividerThinColor
-					Thickness.Thick -> MapisodeTheme.colorScheme.dividerThickColor
+					Thickness.Thin -> color ?: MapisodeTheme.colorScheme.dividerThinColor
+					Thickness.Thick -> color ?: MapisodeTheme.colorScheme.dividerThickColor
 				},
 			)
 			.then(
