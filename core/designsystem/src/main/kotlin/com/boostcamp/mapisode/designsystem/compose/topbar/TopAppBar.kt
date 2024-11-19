@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
-import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentColor
+import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeLightContentColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
@@ -54,7 +54,7 @@ fun TopAppBar(
 				MapisodeText(
 					text = title,
 					style = MapisodeTheme.typography.titleLarge,
-					color = LocalMapisodeContentColor.current,
+					color = LocalMapisodeLightContentColor.current,
 				)
 			}
 

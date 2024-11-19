@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.semantics.Role
 import com.boostcamp.mapisode.designsystem.compose.ProvideTextStyle
 import com.boostcamp.mapisode.designsystem.compose.ripple.MapisodeRippleBIndication
-import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentColor
+import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeLightContentColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
@@ -31,7 +31,7 @@ fun MapisodeTab(
 	val color = if (selected) {
 		MapisodeTheme.colorScheme.tabItemTextSelected
 	} else {
-		MapisodeTheme.colorScheme.tabItemTextUnselected
+		MapisodeTheme.colorScheme.tabItemTextUnselected.copy(alpha = 0.3f)
 	}
 	val ripple = MapisodeRippleBIndication
 	val styledText: @Composable (() -> Unit)? =
@@ -42,7 +42,7 @@ fun MapisodeTab(
 					content = text,
 				)
 				CompositionLocalProvider(
-					value = LocalMapisodeContentColor provides color,
+					value = LocalMapisodeLightContentColor provides color,
 					content = text,
 				)
 			}

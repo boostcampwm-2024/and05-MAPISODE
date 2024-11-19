@@ -20,7 +20,7 @@ import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import com.boostcamp.mapisode.designsystem.compose.ripple.MapisodeRippleAIndication
-import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentColor
+import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeLightContentColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
@@ -29,12 +29,12 @@ fun Surface(
 	rounding: Dp? = null,
 	shape: Shape = rounding?.let { RoundedCornerShape(it) } ?: RectangleShape,
 	color: Color = MapisodeTheme.colorScheme.surfaceBackground,
-	contentColor: Color = LocalMapisodeContentColor.current,
+	contentColor: Color = LocalMapisodeLightContentColor.current,
 	border: BorderStroke? = null,
 	content: @Composable () -> Unit,
 ) {
 	CompositionLocalProvider(
-		LocalMapisodeContentColor provides contentColor,
+		LocalMapisodeLightContentColor provides contentColor,
 	) {
 		Box(
 			modifier = modifier
@@ -60,14 +60,14 @@ fun Surface(
 	rounding: Dp? = null,
 	shape: Shape = rounding?.let { RoundedCornerShape(it) } ?: RectangleShape,
 	color: Color = MapisodeTheme.colorScheme.surfaceBackground,
-	contentColor: Color = LocalMapisodeContentColor.current,
+	contentColor: Color = LocalMapisodeLightContentColor.current,
 	border: BorderStroke? = null,
 	showRipple: Boolean = false,
 	interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 	content: @Composable () -> Unit,
 ) {
 	CompositionLocalProvider(
-		LocalMapisodeContentColor provides contentColor,
+		LocalMapisodeLightContentColor provides contentColor,
 	) {
 		Box(
 			modifier = modifier

@@ -16,7 +16,6 @@ import androidx.compose.ui.util.fastMaxBy
 import com.boostcamp.mapisode.designsystem.compose.toast.ToastHost
 import com.boostcamp.mapisode.designsystem.compose.toast.ToastHostState
 import com.boostcamp.mapisode.designsystem.compose.toast.rememberToastHostState
-import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 private enum class ScaffoldLayoutContent { TopBar, MainContent, Snackbar, BottomBar }
@@ -31,7 +30,7 @@ fun MapisodeScaffold(
 	bottomBar: @Composable () -> Unit = {},
 	toastHost: @Composable (ToastHostState) -> Unit = { ToastHost(it) },
 	backgroundColor: Color = MapisodeTheme.colorScheme.scaffoldBackground,
-	contentColor: Color = LocalMapisodeContentColor.current,
+	contentColor: Color = MapisodeTheme.colorScheme.systemBarTransparent,
 	content: @Composable (PaddingValues) -> Unit,
 ) {
 	Surface(

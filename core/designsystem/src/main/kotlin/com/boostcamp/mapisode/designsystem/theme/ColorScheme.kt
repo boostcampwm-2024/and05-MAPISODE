@@ -184,7 +184,7 @@ val lightColorScheme = CustomColorScheme(
 
 	// System Bar
 	systemBarTransparent = Color.Transparent,
-	systemBarColored = Neutral20,
+	systemBarColored = Primary10,
 )
 
 // Dark Theme Color Scheme
@@ -276,5 +276,5 @@ val darkColorScheme = CustomColorScheme(
 
 	// System Bar
 	systemBarTransparent = Color.Transparent,
-	systemBarColored = Neutral100,
+	systemBarColored = Primary90,
 )
