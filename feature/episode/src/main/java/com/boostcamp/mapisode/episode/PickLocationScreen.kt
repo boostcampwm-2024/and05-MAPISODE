@@ -1,13 +1,15 @@
 package com.boostcamp.mapisode.episode
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
@@ -44,19 +46,23 @@ internal fun PickLocationScreen(
 	) {
 		Column {
 			NaverMap(
-				modifier = Modifier.fillMaxHeight(0.8f),
+				modifier = Modifier.fillMaxHeight(0.75f),
 				uiSettings = MapUiSettings(
 					isZoomControlEnabled = false,
 					isLocationButtonEnabled = true,
+					isLogoClickEnabled = false
 				),
 			) {
 				Marker(state = markerState)
 			}
 			Box(
-				modifier = Modifier
-					.height(420.dp),
+				modifier = Modifier.fillMaxHeight(),
+				contentAlignment = Alignment.Center,
 			) {
-				Column(Modifier.padding(horizontal = 20.dp)) {
+				Column(
+					modifier = Modifier.padding(20.dp),
+					verticalArrangement = Arrangement.spacedBy(20.dp),
+				) {
 					MapisodeText(
 						text = stringResource(R.string.new_episode_pick_location),
 						style = MapisodeTheme.typography.headlineSmall,
