@@ -33,7 +33,7 @@ internal fun PickLocationScreen(
 		isStatusBarPaddingExist = true,
 		topBar = {
 			TopAppBar(
-				title = "새 에피소드",
+				title = stringResource(R.string.new_episode_menu_title),
 				navigationIcon = {
 					MapisodeIconButton(onClick = { navController.navigateUp() }) {
 						MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_arrow_back_ios)
@@ -58,13 +58,11 @@ internal fun PickLocationScreen(
 			) {
 				Column(Modifier.padding(horizontal = 20.dp)) {
 					MapisodeText(
-						modifier = Modifier.padding(vertical = 10.dp),
-						text = "이 장소로 할래요",
-						style = MapisodeTheme.typography.labelLarge,
+						text = stringResource(R.string.new_episode_pick_location),
+						style = MapisodeTheme.typography.headlineSmall,
 					)
 					MapisodeText(
-						modifier = Modifier.padding(vertical = 10.dp),
-						text = "주소",
+						text = stringResource(R.string.new_episode_info_placeholder_location),
 						style = MapisodeTheme.typography.bodyLarge,
 					)
 					MapisodeFilledButton(
@@ -72,6 +70,8 @@ internal fun PickLocationScreen(
 							.padding(vertical = 10.dp)
 							.fillMaxWidth(),
 						text = "장소 선택하기",
+						modifier = Modifier.fillMaxWidth(),
+						text = stringResource(R.string.new_episode_pick_location_button),
 						onClick = { navController.navigate("new_episode_content") },
 						showRipple = true,
 					)

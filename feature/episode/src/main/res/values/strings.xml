@@ -15,6 +15,9 @@
 	<string name="new_episode_info_placeholder_tags">태그를 입력해주세요</string>
 	<string name="new_episode_info_placeholder_date">날짜를 입력해주세요</string>
 
+	<string name="new_episode_pick_location">이 장소로 할래요</string>
+	<string name="new_episode_pick_location_button">장소 선택하기</string>
+
 	<string name="new_episode_content_title">제목</string>
 	<string name="new_episode_content_description">내용</string>
 	<string name="new_episode_content_image">이미지</string>
