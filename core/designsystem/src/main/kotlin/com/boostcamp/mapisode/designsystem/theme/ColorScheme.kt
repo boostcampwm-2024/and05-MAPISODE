@@ -24,6 +24,13 @@ data class CustomColorScheme(
 	val menuStroke: Color,
 	val menuItemBackground: Color,
 
+	// Tab
+	val tabBackground: Color,
+	val tabItemBackground: Color,
+	val tabItemText: Color,
+	val tabItemIcon: Color,
+	val tabIndicator: Color,
+
 	// Button
 	val filledButtonEnableBackground: Color,
 	val filledButtonDisableBackground: Color,
@@ -108,6 +115,13 @@ val lightColorScheme = CustomColorScheme(
 	menuStroke = Neutral110,
 	menuItemBackground = Neutral10,
 
+	// Tab
+	tabBackground = Neutral10,
+	tabItemBackground = Neutral10,
+	tabItemText = Neutral110,
+	tabItemIcon = Neutral10,
+	tabIndicator = Primary30,
+
 	// Button
 	filledButtonEnableBackground = Primary30,
 	filledButtonDisableBackground = Neutral60,
@@ -154,7 +168,7 @@ val lightColorScheme = CustomColorScheme(
 	surfaceBackground = Neutral10,
 
 	// Divider
-	dividerThinColor = Neutral50,
+	dividerThinColor = Neutral30,
 	dividerThickColor = Neutral80,
 
 	// Text
@@ -191,6 +205,13 @@ val darkColorScheme = CustomColorScheme(
 	menuBackground = Neutral110,
 	menuStroke = Neutral20,
 	menuItemBackground = Neutral110,
+
+	// Tab
+	tabBackground = Neutral110,
+	tabItemBackground = Neutral110,
+	tabItemText = Neutral10,
+	tabItemIcon = Neutral40,
+	tabIndicator = Primary30,
 
 	// Button
 	filledButtonEnableBackground = Primary50,
@@ -238,7 +259,7 @@ val darkColorScheme = CustomColorScheme(
 	surfaceBackground = Neutral110,
 
 	// Divider
-	dividerThinColor = Neutral80,
+	dividerThinColor = Neutral40,
 	dividerThickColor = Neutral50,
 
 	// Text
