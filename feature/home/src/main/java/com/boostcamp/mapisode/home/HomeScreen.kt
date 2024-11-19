@@ -31,11 +31,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.boostcamp.mapisode.designsystem.compose.MapisodeModalBottomSheet
 import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
+import com.boostcamp.mapisode.home.common.HomeConstant.tempGroupList
 import com.boostcamp.mapisode.home.common.getChipIconTint
 import com.boostcamp.mapisode.home.component.GroupBottomSheetContent
 import com.boostcamp.mapisode.home.component.MapisodeChip
 import com.boostcamp.mapisode.home.component.MapisodeFabOverlayButton
-import com.boostcamp.mapisode.model.GroupItem
 import com.google.android.gms.location.LocationServices
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
@@ -47,7 +47,6 @@ import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
-import kotlinx.collections.immutable.persistentListOf
 import timber.log.Timber
 
 @Composable
@@ -216,30 +215,8 @@ private fun HomeScreen(
 			onDismiss = onGroupFabClick,
 			sheetContent = {
 				GroupBottomSheetContent(
-					myProfileImage = "https://github.com/user-attachments/assets/34d47b54-1ba6-48c7-adc6-a1d3f050e131",
-					groupList = persistentListOf(
-						GroupItem(
-							adminUser = "",
-							name = "그룹1",
-							description = "그룹1 설명",
-							imageUrl = "https://github.com/user-attachments/assets/ed530b8c-a030-42b4-b22d-5c6ef9424b0b",
-							createdAt = "2021-09-01",
-						),
-						GroupItem(
-							adminUser = "",
-							name = "그룹2",
-							description = "그룹2 설명",
-							imageUrl = "https://github.com/user-attachments/assets/ed530b8c-a030-42b4-b22d-5c6ef9424b0b",
-							createdAt = "2021-09-01",
-						),
-						GroupItem(
-							adminUser = "",
-							name = "그룹3",
-							description = "그룹3 설명",
-							imageUrl = "https://github.com/user-attachments/assets/ed530b8c-a030-42b4-b22d-5c6ef9424b0b",
-							createdAt = "2021-09-01",
-						),
-					),
+					myProfileImage = "https://avatars.githubusercontent.com/u/98825364?v=4?s=100",
+					groupList = tempGroupList,
 					onDismiss = onGroupFabClick,
 				)
 			},
