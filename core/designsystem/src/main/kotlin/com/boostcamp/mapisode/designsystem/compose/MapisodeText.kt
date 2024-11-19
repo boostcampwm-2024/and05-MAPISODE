@@ -15,26 +15,20 @@ import com.boostcamp.mapisode.designsystem.theme.AppTypography
 import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentAlpha
 import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTextStyle
-import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
 fun MapisodeText(
 	text: String,
 	modifier: Modifier = Modifier,
-	color: Color = MapisodeTheme.colorScheme.textContent,
+	color: Color = LocalMapisodeContentColor.current
+		.copy(alpha = LocalMapisodeContentAlpha.current),
 	onTextLayout: (TextLayoutResult) -> Unit = {},
 	style: MapisodeTextStyle = LocalTextStyle.current,
 	overflow: TextOverflow = TextOverflow.Clip,
 	maxLines: Int = Int.MAX_VALUE,
 	minLines: Int = 1,
 ) {
-	val textColor = color.takeOrElse {
-		style.color.takeOrElse {
-			LocalMapisodeContentColor.current.copy(alpha = LocalMapisodeContentAlpha.current)
-		}
-	}
-
-	val mergedStyle = style.copy(color = textColor).toTextStyle()
+	val mergedStyle = style.copy(color = color).toTextStyle()
 
 	BasicText(
 		text = text,

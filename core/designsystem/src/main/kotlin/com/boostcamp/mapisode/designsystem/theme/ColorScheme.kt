@@ -27,7 +27,8 @@ data class CustomColorScheme(
 	// Tab
 	val tabBackground: Color,
 	val tabItemBackground: Color,
-	val tabItemText: Color,
+	val tabItemTextSelected: Color,
+	val tabItemTextUnselected: Color,
 	val tabItemIcon: Color,
 	val tabIndicator: Color,
 
@@ -118,7 +119,8 @@ val lightColorScheme = CustomColorScheme(
 	// Tab
 	tabBackground = Neutral10,
 	tabItemBackground = Neutral10,
-	tabItemText = Neutral110,
+	tabItemTextSelected = Neutral110,
+	tabItemTextUnselected = Neutral40,
 	tabItemIcon = Neutral10,
 	tabIndicator = Primary30,
 
@@ -209,7 +211,8 @@ val darkColorScheme = CustomColorScheme(
 	// Tab
 	tabBackground = Neutral110,
 	tabItemBackground = Neutral110,
-	tabItemText = Neutral10,
+	tabItemTextSelected = Neutral10,
+	tabItemTextUnselected = Neutral90,
 	tabItemIcon = Neutral40,
 	tabIndicator = Primary30,
 
