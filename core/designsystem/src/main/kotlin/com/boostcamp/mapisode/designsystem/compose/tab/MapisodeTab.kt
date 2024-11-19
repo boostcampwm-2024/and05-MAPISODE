@@ -1,6 +1,7 @@
 package com.boostcamp.mapisode.designsystem.compose.tab
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -15,6 +16,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.semantics.Role
 import com.boostcamp.mapisode.designsystem.compose.ProvideTextStyle
 import com.boostcamp.mapisode.designsystem.compose.ripple.MapisodeRippleBIndication
+import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeDarkContentColor
 import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeLightContentColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
@@ -31,7 +33,7 @@ fun MapisodeTab(
 	val color = if (selected) {
 		MapisodeTheme.colorScheme.tabItemTextSelected
 	} else {
-		MapisodeTheme.colorScheme.tabItemTextUnselected.copy(alpha = 0.3f)
+		MapisodeTheme.colorScheme.tabItemTextUnselected
 	}
 	val ripple = MapisodeRippleBIndication
 	val styledText: @Composable (() -> Unit)? =
@@ -42,7 +44,11 @@ fun MapisodeTab(
 					content = text,
 				)
 				CompositionLocalProvider(
-					value = LocalMapisodeLightContentColor provides color,
+					value = if (isSystemInDarkTheme()) {
+						LocalMapisodeDarkContentColor
+					} else {
+						LocalMapisodeLightContentColor
+					} provides color,
 					content = text,
 				)
 			}

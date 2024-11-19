@@ -103,7 +103,7 @@ val lightColorScheme = CustomColorScheme(
 	navBackground = Neutral10,
 
 	// Top App Bar
-	topAppBarTitle = Primary90,
+	topAppBarTitle = Neutral110,
 
 	// Scaffold
 	scaffoldBackground = Neutral10,
@@ -195,7 +195,7 @@ val darkColorScheme = CustomColorScheme(
 	navBackground = Neutral110,
 
 	// Top App Bar
-	topAppBarTitle = Primary10,
+	topAppBarTitle = Neutral10,
 
 	// Scaffold
 	scaffoldBackground = Neutral110,
@@ -220,7 +220,7 @@ val darkColorScheme = CustomColorScheme(
 	filledButtonEnableBackground = Primary50,
 	filledButtonDisableBackground = Neutral80,
 	filledButtonContent = Neutral110,
-	outlineButtonBackground = Neutral40,
+	outlineButtonBackground = Neutral110,
 	outlineButtonStroke = Neutral40,
 	outlineButtonContent = Neutral40,
 
