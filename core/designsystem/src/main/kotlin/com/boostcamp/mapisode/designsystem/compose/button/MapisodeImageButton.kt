@@ -21,7 +21,7 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 fun MapisodeImageButton(
 	modifier: Modifier = Modifier,
 	onClick: () -> Unit,
-	text: String,
+	text: String = "",
 	showImage: Boolean = true,
 	enabled: Boolean = true,
 	showRipple: Boolean = true,
@@ -30,11 +30,11 @@ fun MapisodeImageButton(
 ) {
 	MapisodeButton(
 		onClick = onClick,
-		backgroundColors = MapisodeTheme.colorScheme.outlineButtonBackground,
-		contentColor = MapisodeTheme.colorScheme.outlineButtonContent,
 		modifier = modifier
 			.widthIn(150.dp)
 			.heightIn(150.dp),
+		backgroundColors = MapisodeTheme.colorScheme.outlineButtonBackground,
+		contentColor = MapisodeTheme.colorScheme.outlineButtonContent,
 		enabled = enabled,
 		showBorder = true,
 		borderColor = MapisodeTheme.colorScheme.outlineButtonStroke,
@@ -53,11 +53,13 @@ fun MapisodeImageButton(
 					iconSize = IconSize.Large,
 					tint = MapisodeTheme.colorScheme.outlineButtonContent,
 				)
-				MapisodeText(
-					text = text,
-					color = MapisodeTheme.colorScheme.outlineButtonContent,
-					style = MapisodeTheme.typography.bodyMedium,
-				)
+				if (text != "") {
+					MapisodeText(
+						text = text,
+						color = MapisodeTheme.colorScheme.outlineButtonContent,
+						style = MapisodeTheme.typography.bodyMedium,
+					)
+				}
 			}
 		} else {
 			imageContent()
