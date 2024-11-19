@@ -127,11 +127,6 @@ private fun Placeable.PlacementScope.placeTextAndIcon(
 private val SmallTabHeight = 42.dp
 private val LargeTabHeight = 72.dp
 
-// Tab transition 애니메이션 사양
-const val TabFadeInAnimationDuration = 150
-const val TabFadeInAnimationDelay = 100
-const val TabFadeOutAnimationDuration = 100
-
 private val HorizontalTextPadding = 16.dp
 private val SingleLineTextBaselineWithIcon = 14.dp
 private val DoubleLineTextBaselineWithIcon = 6.dp
