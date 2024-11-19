@@ -12,6 +12,7 @@ import com.naver.maps.map.compose.rememberMarkerState
 internal fun EpisodeRoute() {
 	val newEpisodeNavController = rememberNavController()
 	val markerState = rememberMarkerState()
+
 	NavHost(newEpisodeNavController, startDestination = "new_episode_pics") {
 		composable("new_episode_pics") {
 			NewEpisodePicsScreen(

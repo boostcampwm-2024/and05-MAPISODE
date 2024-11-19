@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -21,7 +20,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
-import com.boostcamp.mapisode.designsystem.compose.MapisodeTextField
 import com.boostcamp.mapisode.designsystem.compose.Surface
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
@@ -44,32 +42,15 @@ internal fun NewEpisodeContentScreen(navController: NavController) {
 			verticalArrangement = Arrangement.SpaceBetween,
 		) {
 			Column {
-				Column(textFieldModifier, verticalArrangement = textFieldVerticalArrangement) {
-					MapisodeText(
-						text = stringResource(R.string.new_episode_content_title),
-						style = MapisodeTheme.typography.labelLarge,
-					)
-					MapisodeTextField(
-						modifier = Modifier.fillMaxWidth(),
-						value = "",
-						placeholder = stringResource(R.string.new_episode_content_placeholder_title),
-						onValueChange = {},
-					)
-				}
-				Column(textFieldModifier, verticalArrangement = textFieldVerticalArrangement) {
-					MapisodeText(
-						text = stringResource(R.string.new_episode_content_description),
-						style = MapisodeTheme.typography.labelLarge,
-					)
-					MapisodeTextField(
-						modifier = Modifier
-							.fillMaxWidth()
-							.fillMaxHeight(0.3f),
-						value = "",
-						placeholder = stringResource(R.string.new_episode_content_placeholder_description),
-						onValueChange = {},
-					)
-				}
+				EpisodeTextFieldGroup(
+					labelRes = R.string.new_episode_content_title,
+					placeholderRes = R.string.new_episode_content_placeholder_title,
+				)
+				EpisodeTextFieldGroup(
+					modifier = Modifier.fillMaxHeight(0.3f),
+					labelRes = R.string.new_episode_content_description,
+					placeholderRes = R.string.new_episode_content_placeholder_description,
+				)
 				Column(textFieldModifier, verticalArrangement = textFieldVerticalArrangement) {
 					MapisodeText(
 						text = stringResource(R.string.new_episode_content_image),
