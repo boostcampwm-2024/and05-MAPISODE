@@ -41,7 +41,7 @@ internal fun NewEpisodeContentScreen(navController: NavController) {
 			modifier = Modifier
 				.padding(innerPadding)
 				.fillMaxSize()
-				.padding(10.dp),
+				.padding(20.dp),
 			verticalArrangement = Arrangement.SpaceBetween,
 		) {
 			Column {
