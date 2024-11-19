@@ -25,7 +25,7 @@ import com.boostcamp.mapisode.designsystem.compose.button.MapisodeImageButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 
 @Composable
-fun GroupEditScreen() {
+fun GroupEditScreen(onBack: () -> Unit) {
 	val focusManager = LocalFocusManager.current
 
 	MapisodeScaffold(
@@ -44,8 +44,7 @@ fun GroupEditScreen() {
 				title = "나의 그룹",
 				navigationIcon = {
 					MapisodeIconButton(
-						onClick = {
-						},
+						onClick = { onBack() },
 					) {
 						MapisodeIcon(
 							id = R.drawable.ic_arrow_back_ios,

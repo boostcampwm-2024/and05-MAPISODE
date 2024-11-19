@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.R
+import com.boostcamp.mapisode.designsystem.compose.MapisodeDialog
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
@@ -42,7 +43,9 @@ fun GroupCreationScreen(onBack: () -> Unit) {
 		},
 	) {
 		Column(
-			modifier = Modifier.fillMaxSize().padding(it),
+			modifier = Modifier
+				.fillMaxSize()
+				.padding(it),
 			verticalArrangement = Arrangement.spacedBy(16.dp),
 			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
@@ -51,6 +54,31 @@ fun GroupCreationScreen(onBack: () -> Unit) {
 				text = "네비게이션 아이콘 활성/비활성화",
 				showRipple = true,
 			)
+			DialogExample()
 		}
+	}
+}
+
+@Composable
+fun DialogExample() {
+	var showDialog by remember { mutableStateOf(false) }
+
+	MapisodeFilledButton(onClick = { showDialog = true }, text = "다이얼로그 열기")
+
+	if (showDialog) {
+		MapisodeDialog(
+			onDismissRequest = { showDialog = false },
+			onResultRequest = { result ->
+				if (result) {
+					// TODO: 삭제 버튼 클릭 시 처리
+				} else {
+					// TODO: 취소 버튼 클릭 시 처리
+				}
+			},
+			titleText = "정말 삭제하시겠습니까?",
+			contentText = "영구적으로 삭제됩니다.",
+			cancelText = "취소",
+			confirmText = "확인",
+		)
 	}
 }
