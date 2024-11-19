@@ -19,4 +19,5 @@ data class HomeState(
 	val isLocationPermissionGranted: Boolean = false, // 위치 권한이 허용되었는지 여부
 	val hasRequestedPermission: Boolean = false, // 위치 권한을 요청한 적이 있는지 여부
 	val selectedChip: ChipType? = null,
+	val isBottomSheetVisible: Boolean = false,
 ) : UiState

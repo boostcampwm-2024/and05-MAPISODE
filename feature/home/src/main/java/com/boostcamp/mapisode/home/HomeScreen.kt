@@ -14,6 +14,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.boostcamp.mapisode.designsystem.compose.MapisodeModalBottomSheet
 import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
 import com.boostcamp.mapisode.home.common.getChipIconTint
@@ -133,6 +138,9 @@ internal fun HomeRoute(
 		onChipSelected = { chipType ->
 			viewModel.onIntent(HomeIntent.SelectChip(chipType))
 		},
+		onGroupFabClick = {
+			viewModel.onIntent(HomeIntent.ShowBottomSheet)
+		},
 	)
 }
 
@@ -142,6 +150,7 @@ private fun HomeScreen(
 	state: HomeState,
 	cameraPositionState: CameraPositionState,
 	onChipSelected: (ChipType) -> Unit = {},
+	onGroupFabClick: () -> Unit = {},
 ) {
 	val context = LocalContext.current
 
@@ -197,13 +206,35 @@ private fun HomeScreen(
 				contentAlignment = Alignment.CenterEnd,
 			) {
 				MapisodeFabOverlayButton(
-					onClick = {
-						// TODO : FAB 클릭 시 동작 구현
-					},
+					onClick = onGroupFabClick,
 					modifier = Modifier.padding(end = 20.dp),
 				)
 			}
 		}
+
+		MapisodeModalBottomSheet(
+			isVisible = state.isBottomSheetVisible,
+			onDismiss = onGroupFabClick,
+			sheetContent = { BottomSheetContent() },
+		)
+	}
+
+}
+
+@Composable
+private fun BottomSheetContent() {
+	Column(
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(16.dp)
+			.verticalScroll(rememberScrollState()),
+	) {
+		// 바텀 시트 내용
+		Text(
+			text = "Bottom Sheet Content",
+			style = MaterialTheme.typography.displayMedium,
+			modifier = Modifier.padding(bottom = 16.dp),
+		)
 	}
 }
 

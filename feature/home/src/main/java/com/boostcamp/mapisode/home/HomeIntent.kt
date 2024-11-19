@@ -9,4 +9,5 @@ sealed class HomeIntent {
 	data class UpdateLocationPermission(val isGranted: Boolean) : HomeIntent() // 위치 권한 설정 여부 업데이트
 	data object MarkPermissionRequested : HomeIntent() // 위치 권한 요청 기록
 	data class SelectChip(val chipType: ChipType) : HomeIntent()
+	data object ShowBottomSheet : HomeIntent()
 }
