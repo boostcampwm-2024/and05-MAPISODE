@@ -10,8 +10,8 @@ import androidx.compose.ui.graphics.Color
 
 internal val LocalMapisodeColorScheme = staticCompositionLocalOf { lightColorScheme }
 internal val LocalMapisodeTypography = staticCompositionLocalOf { AppTypography }
-internal val LocalMapisodeContentColor = compositionLocalOf { lightColorScheme.textContent }
-internal val LocalMapisodeContentAlpha = compositionLocalOf { 1f }
+internal val LocalMapisodeLightContentColor = compositionLocalOf { lightColorScheme.textContent }
+internal val LocalMapisodeDarkContentColor = compositionLocalOf { darkColorScheme.textContent }
 internal val LocalMapisodeIconColor = compositionLocalOf { Color.Unspecified }
 
 object MapisodeTheme {

@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.designsystem.compose
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
@@ -7,28 +8,36 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.boostcamp.mapisode.designsystem.theme.AppTypography
-import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentAlpha
-import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeContentColor
+import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeDarkContentColor
+import com.boostcamp.mapisode.designsystem.theme.LocalMapisodeLightContentColor
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTextStyle
 
 @Composable
 fun MapisodeText(
 	text: String,
 	modifier: Modifier = Modifier,
-	color: Color = LocalMapisodeContentColor.current
-		.copy(alpha = LocalMapisodeContentAlpha.current),
+	color: Color = Color.Unspecified,
 	onTextLayout: (TextLayoutResult) -> Unit = {},
 	style: MapisodeTextStyle = LocalTextStyle.current,
 	overflow: TextOverflow = TextOverflow.Clip,
 	maxLines: Int = Int.MAX_VALUE,
 	minLines: Int = 1,
 ) {
-	val mergedStyle = style.copy(color = color).toTextStyle()
+	val textColor = if (color==Color.Unspecified) {
+		if (isSystemInDarkTheme()) {
+			LocalMapisodeDarkContentColor.current
+		} else {
+			LocalMapisodeLightContentColor.current
+		}
+	} else {
+		color
+	}
+
+	val mergedStyle = style.copy(color = textColor).toTextStyle()
 
 	BasicText(
 		text = text,
