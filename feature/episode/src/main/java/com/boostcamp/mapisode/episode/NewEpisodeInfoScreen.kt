@@ -19,14 +19,11 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.MapisodeTextField
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.textFieldModifier
+import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.textFieldVerticalArrangement
 
 @Composable
 internal fun NewEpisodeInfoScreen(navController: NavController) {
-	val textFieldModifier = Modifier
-		.fillMaxWidth()
-		.padding(vertical = 15.dp)
-	val textFieldVerticalArrangement = Arrangement.spacedBy(12.dp)
-
 	MapisodeScaffold(
 		topBar = {
 			NewEpisodeTopbar(navController)
