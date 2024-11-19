@@ -22,8 +22,8 @@ fun MapisodeTabBaselineLayout(text: @Composable (() -> Unit)?, icon: @Composable
 			if (text != null) {
 				Box(
 					Modifier
-					.layoutId("text")
-					.padding(horizontal = HorizontalTextPadding)
+						.layoutId("text")
+						.padding(horizontal = HorizontalTextPadding),
 				) {
 					text()
 				}
