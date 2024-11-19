@@ -43,10 +43,7 @@ fun MapisodeTabRow(
 	modifier: Modifier = Modifier,
 	backgroundColor: Color = MapisodeTheme.colorScheme.tabBackground,
 	contentColor: Color = MapisodeTheme.colorScheme.tabItemTextSelected,
-	indicator:
-	@Composable
-	@UiComposable
-	( tabPositions: List<TabPosition> ) -> Unit = { tabPositions ->
+	indicator: @Composable (tabPositions: List<TabPosition>) -> Unit = { tabPositions ->
 		Box(
 			Modifier
 				.tabIndicatorOffset(tabPositions[selectedTabIndex])
@@ -54,11 +51,7 @@ fun MapisodeTabRow(
 				.background(MapisodeTheme.colorScheme.tabIndicator),
 		)
 	},
-	divider:
-	@Composable
-	@UiComposable
-	( ) -> Unit =
-		@Composable {
+	divider: @Composable () -> Unit = @Composable {
 			MapisodeDivider(
 				direction = Direction.Horizontal,
 				thickness = Thickness.Thin,
@@ -66,10 +59,7 @@ fun MapisodeTabRow(
 				color = MapisodeTheme.colorScheme.dividerThinColor,
 			)
 		},
-	tabs:
-	@Composable
-	@UiComposable
-	( ) -> Unit,
+	tabs: @Composable () -> Unit,
 ) {
 	Surface(
 		modifier = modifier.selectableGroup(),
