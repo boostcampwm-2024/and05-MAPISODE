@@ -22,9 +22,9 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.theme.AppTypography
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.boostcamp.mapisode.home.common.HomeConstant.tempGroupList
 import com.boostcamp.mapisode.model.GroupItem
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 fun GroupBottomSheetContent(
@@ -86,29 +86,7 @@ fun GroupBottomSheetContentPreview() {
 	MapisodeTheme {
 		GroupBottomSheetContent(
 			myProfileImage = "",
-			groupList = persistentListOf(
-				GroupItem(
-					adminUser = "",
-					name = "그룹1",
-					description = "그룹1 설명",
-					imageUrl = "https://github.com/user-attachments/assets/ed530b8c-a030-42b4-b22d-5c6ef9424b0b",
-					createdAt = "2021-09-01",
-				),
-				GroupItem(
-					adminUser = "",
-					name = "그룹2",
-					description = "그룹2 설명",
-					imageUrl = "https://github.com/user-attachments/assets/ed530b8c-a030-42b4-b22d-5c6ef9424b0b",
-					createdAt = "2021-09-01",
-				),
-				GroupItem(
-					adminUser = "",
-					name = "그룹3",
-					description = "그룹3 설명",
-					imageUrl = "https://github.com/user-attachments/assets/ed530b8c-a030-42b4-b22d-5c6ef9424b0b",
-					createdAt = "2021-09-01",
-				),
-			),
+			groupList = tempGroupList,
 		)
 	}
 }
