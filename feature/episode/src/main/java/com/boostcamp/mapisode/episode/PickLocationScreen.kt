@@ -66,10 +66,6 @@ internal fun PickLocationScreen(
 						style = MapisodeTheme.typography.bodyLarge,
 					)
 					MapisodeFilledButton(
-						modifier = Modifier
-							.padding(vertical = 10.dp)
-							.fillMaxWidth(),
-						text = "장소 선택하기",
 						modifier = Modifier.fillMaxWidth(),
 						text = stringResource(R.string.new_episode_pick_location_button),
 						onClick = { navController.navigate("new_episode_content") },
