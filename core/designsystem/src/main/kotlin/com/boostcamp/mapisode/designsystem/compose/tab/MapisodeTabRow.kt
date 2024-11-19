@@ -52,13 +52,13 @@ fun MapisodeTabRow(
 		)
 	},
 	divider: @Composable () -> Unit = @Composable {
-			MapisodeDivider(
-				direction = Direction.Horizontal,
-				thickness = Thickness.Thin,
-				modifier = modifier,
-				color = MapisodeTheme.colorScheme.dividerThinColor,
-			)
-		},
+		MapisodeDivider(
+			direction = Direction.Horizontal,
+			thickness = Thickness.Thin,
+			modifier = modifier,
+			color = MapisodeTheme.colorScheme.dividerThinColor,
+		)
+	},
 	tabs: @Composable () -> Unit,
 ) {
 	Surface(
