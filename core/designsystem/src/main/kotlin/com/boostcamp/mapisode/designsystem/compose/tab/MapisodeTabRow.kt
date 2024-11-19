@@ -43,8 +43,10 @@ fun MapisodeTabRow(
 	modifier: Modifier = Modifier,
 	backgroundColor: Color = MapisodeTheme.colorScheme.tabBackground,
 	contentColor: Color = MapisodeTheme.colorScheme.tabItemTextSelected,
-	indicator: @Composable @UiComposable
-		(tabPositions: List<TabPosition>) -> Unit = {tabPositions ->
+	indicator:
+	@Composable
+	@UiComposable
+		(tabPositions: List<TabPosition>) -> Unit = { tabPositions ->
 		Box(
 			Modifier
 				.tabIndicatorOffset(tabPositions[selectedTabIndex])
@@ -52,7 +54,10 @@ fun MapisodeTabRow(
 				.background(MapisodeTheme.colorScheme.tabIndicator),
 		)
 	},
-	divider: @Composable @UiComposable () -> Unit =
+	divider:
+	@Composable
+	@UiComposable
+		() -> Unit =
 		@Composable {
 			MapisodeDivider(
 				direction = Direction.Horizontal,
@@ -61,7 +66,10 @@ fun MapisodeTabRow(
 				color = MapisodeTheme.colorScheme.dividerThinColor,
 			)
 		},
-	tabs: @Composable @UiComposable () -> Unit,
+	tabs:
+	@Composable
+	@UiComposable
+		() -> Unit,
 ) {
 	Surface(
 		modifier = modifier.selectableGroup(),
@@ -115,11 +123,19 @@ object TabRowDefaults {
 	) {
 		val currentTabWidth by animateDpAsState(
 			targetValue = currentTabPosition.width,
-			animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing), label = "",
+			animationSpec = tween(
+				durationMillis = 250,
+				easing = FastOutSlowInEasing
+			),
+			label = "",
 		)
 		val indicatorOffset by animateDpAsState(
 			targetValue = currentTabPosition.left,
-			animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing), label = "",
+			animationSpec = tween(
+				durationMillis = 250,
+				easing = FastOutSlowInEasing
+			),
+			label = "",
 		)
 		fillMaxWidth()
 			.wrapContentSize(Alignment.BottomStart)
@@ -134,5 +150,5 @@ class TabPosition internal constructor(val left: Dp, val width: Dp)
 enum class TabSlots {
 	Tabs,
 	Divider,
-	Indicator
+	Indicator,
 }

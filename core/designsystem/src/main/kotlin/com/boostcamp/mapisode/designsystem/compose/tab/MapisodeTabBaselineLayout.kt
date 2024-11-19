@@ -17,21 +17,23 @@ import kotlin.math.max
 
 @Composable
 fun MapisodeTabBaselineLayout(text: @Composable (() -> Unit)?, icon: @Composable (() -> Unit)?) {
-	Layout({
-		if (text != null) {
-			Box(Modifier.layoutId("text").padding(horizontal = HorizontalTextPadding)) { text() }
-		}
-		if (icon != null) {
-			Box(Modifier.layoutId("icon")) { icon() }
-		}
-	}) { measurables, constraints ->
+	Layout(
+		{
+			if (text != null) {
+				Box(Modifier
+					.layoutId("text")
+					.padding(horizontal = HorizontalTextPadding)) { text() }
+			}
+			if (icon != null) {
+				Box(Modifier.layoutId("icon")) { icon() }
+			}
+		},
+	) { measurables, constraints ->
 		val textPlaceable =
 			text?.let {
 				measurables
 					.fastFirst { it.layoutId == "text" }
-					.measure(
-						constraints.copy(minHeight = 0)
-					)
+					.measure(constraints.copy(minHeight = 0))
 			}
 
 		val iconPlaceable =
@@ -52,7 +54,7 @@ fun MapisodeTabBaselineLayout(text: @Composable (() -> Unit)?, icon: @Composable
 				specHeight,
 				(iconPlaceable?.height ?: 0) +
 					(textPlaceable?.height ?: 0) +
-					IconDistanceFromBaseline.roundToPx()
+					IconDistanceFromBaseline.roundToPx(),
 			)
 
 		val firstBaseline = textPlaceable?.get(FirstBaseline)
@@ -68,8 +70,9 @@ fun MapisodeTabBaselineLayout(text: @Composable (() -> Unit)?, icon: @Composable
 						tabWidth = tabWidth,
 						tabHeight = tabHeight,
 						firstBaseline = firstBaseline!!,
-						lastBaseline = lastBaseline!!
+						lastBaseline = lastBaseline!!,
 					)
+
 				textPlaceable != null -> placeTextOrIcon(textPlaceable, tabHeight)
 				iconPlaceable != null -> placeTextOrIcon(iconPlaceable, tabHeight)
 				else -> {}
@@ -80,7 +83,7 @@ fun MapisodeTabBaselineLayout(text: @Composable (() -> Unit)?, icon: @Composable
 
 private fun Placeable.PlacementScope.placeTextOrIcon(
 	textOrIconPlaceable: Placeable,
-	tabHeight: Int
+	tabHeight: Int,
 ) {
 	val contentY = (tabHeight - textOrIconPlaceable.height) / 2
 	textOrIconPlaceable.placeRelative(0, contentY)
@@ -93,7 +96,7 @@ private fun Placeable.PlacementScope.placeTextAndIcon(
 	tabWidth: Int,
 	tabHeight: Int,
 	firstBaseline: Int,
-	lastBaseline: Int
+	lastBaseline: Int,
 ) {
 	val baselineOffset =
 		if (firstBaseline == lastBaseline) {

@@ -27,7 +27,7 @@ fun MapisodeText(
 	maxLines: Int = Int.MAX_VALUE,
 	minLines: Int = 1,
 ) {
-	val textColor = if (color==Color.Unspecified) {
+	val textColor = if (color == Color.Unspecified) {
 		if (isSystemInDarkTheme()) {
 			LocalMapisodeDarkContentColor.current
 		} else {
