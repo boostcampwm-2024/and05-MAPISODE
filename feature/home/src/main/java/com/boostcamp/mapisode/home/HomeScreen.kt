@@ -245,7 +245,6 @@ private fun HomeScreen(
 			},
 		)
 	}
-
 }
 
 @Preview(showBackground = true, showSystemUi = true)
