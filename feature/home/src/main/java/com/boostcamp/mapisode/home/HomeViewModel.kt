@@ -38,6 +38,10 @@ class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
 			is HomeIntent.SelectChip -> {
 				setSelectedChip(intent.chipType)
 			}
+
+			is HomeIntent.ShowBottomSheet -> {
+				toggleBottomSheet()
+			}
 		}
 	}
 
@@ -66,6 +70,12 @@ class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
 	private fun updateLocationPermission(isGranted: Boolean) {
 		intent {
 			copy(isLocationPermissionGranted = isGranted)
+		}
+	}
+
+	private fun toggleBottomSheet() {
+		intent {
+			copy(isBottomSheetVisible = !isBottomSheetVisible)
 		}
 	}
 }
