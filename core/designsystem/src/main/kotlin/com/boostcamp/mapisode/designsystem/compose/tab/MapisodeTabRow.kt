@@ -42,7 +42,7 @@ fun MapisodeTabRow(
 	selectedTabIndex: Int,
 	modifier: Modifier = Modifier,
 	backgroundColor: Color = MapisodeTheme.colorScheme.tabBackground,
-	contentColor: Color = MapisodeTheme.colorScheme.tabItemText,
+	contentColor: Color = MapisodeTheme.colorScheme.tabItemTextSelected,
 	indicator: @Composable @UiComposable
 		(tabPositions: List<TabPosition>) -> Unit = {tabPositions ->
 		Box(

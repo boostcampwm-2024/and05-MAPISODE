@@ -11,21 +11,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
-import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
-import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTab
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTabRow
+import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import kotlinx.coroutines.launch
 
 @Composable
 fun GroupDetailScreen(onBack: () -> Unit) {
-	val pagerState = rememberPagerState ( pageCount = { 2 })
+	val pagerState = rememberPagerState(pageCount = { 2 })
 	val list = listOf("그룹 상세", "에피소드")
 	val scope = rememberCoroutineScope()
 
@@ -69,12 +68,9 @@ fun GroupDetailScreen(onBack: () -> Unit) {
 				list.forEachIndexed { index, _ ->
 					MapisodeTab(
 						text = {
-							MapisodeText(
-								list[index],
-								color = if (pagerState.currentPage == index) Color.Black else Color.LightGray,
-							)
+							MapisodeText(list[index])
 						},
-						selected = pagerState.currentPage==index,
+						selected = pagerState.currentPage == index,
 						onClick = {
 							scope.launch {
 								pagerState.animateScrollToPage(index)
@@ -90,7 +86,7 @@ fun GroupDetailScreen(onBack: () -> Unit) {
 
 @Composable
 fun TabsContent(pagerState: PagerState) {
-	HorizontalPager(state = pagerState) {page ->
+	HorizontalPager(state = pagerState) { page ->
 		when (page) {
 			0 -> TabContentScreen(data = "그룹 상세")
 			1 -> TabContentScreen(data = "에피소드")
@@ -103,7 +99,7 @@ fun TabContentScreen(data: String) {
 	Column(
 		modifier = Modifier.fillMaxSize(),
 		horizontalAlignment = Alignment.CenterHorizontally,
-		verticalArrangement = Arrangement.Center
+		verticalArrangement = Arrangement.Center,
 	) {
 		MapisodeText(text = data)
 	}

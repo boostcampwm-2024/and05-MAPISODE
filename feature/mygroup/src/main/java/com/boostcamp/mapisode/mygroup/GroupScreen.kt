@@ -34,7 +34,7 @@ internal fun GroupRoute() {
 	var isGroupCreationScreenVisible by remember { mutableStateOf(false) }
 
 	if (isGroupCreationScreenVisible) {
-		GroupCreationScreen(onBack = { isGroupCreationScreenVisible = false })
+		GroupDetailScreen(onBack = { isGroupCreationScreenVisible = false })
 	} else {
 		GroupScreen(onAddGroupClick = { isGroupCreationScreenVisible = true })
 	}
