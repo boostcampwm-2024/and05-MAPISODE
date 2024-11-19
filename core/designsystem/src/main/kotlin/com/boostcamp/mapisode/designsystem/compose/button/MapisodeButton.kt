@@ -23,9 +23,9 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 @Composable
 internal fun MapisodeButton(
 	onClick: () -> Unit,
+	modifier: Modifier = Modifier,
 	backgroundColors: Color,
 	contentColor: Color,
-	modifier: Modifier = Modifier,
 	enabled: Boolean = true,
 	showBorder: Boolean = false,
 	borderColor: Color = Color.Transparent,

@@ -6,9 +6,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -32,12 +33,12 @@ fun MapisodeOutlinedButton(
 ) {
 	MapisodeButton(
 		onClick = onClick,
-		backgroundColors = MapisodeTheme.colorScheme.outlineButtonBackground,
-		contentColor = MapisodeTheme.colorScheme.outlineButtonContent,
 		modifier = Modifier
 			.then(modifier)
-			.width(320.dp)
-			.height(40.dp),
+			.widthIn(320.dp)
+			.heightIn(40.dp),
+		backgroundColors = MapisodeTheme.colorScheme.outlineButtonBackground,
+		contentColor = MapisodeTheme.colorScheme.outlineButtonContent,
 		enabled = enabled,
 		showBorder = true,
 		borderColor = MapisodeTheme.colorScheme.outlineButtonStroke,
