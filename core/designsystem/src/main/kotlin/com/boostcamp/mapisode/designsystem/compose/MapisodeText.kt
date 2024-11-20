@@ -9,6 +9,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.boostcamp.mapisode.designsystem.theme.AppTypography
@@ -20,6 +21,7 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTextStyle
 fun MapisodeText(
 	text: String,
 	modifier: Modifier = Modifier,
+	textAlignment: TextAlignment = TextAlignment.Start,
 	color: Color = Color.Unspecified,
 	onTextLayout: (TextLayoutResult) -> Unit = {},
 	style: MapisodeTextStyle = LocalTextStyle.current,
@@ -37,7 +39,14 @@ fun MapisodeText(
 		color
 	}
 
-	val mergedStyle = style.copy(color = textColor).toTextStyle()
+	val mergedStyle = style.copy(
+		color = textColor,
+		textAlign = when(textAlignment) {
+			TextAlignment.Start -> TextAlign.Start
+			TextAlignment.Center -> TextAlign.Center
+			TextAlignment.End -> TextAlign.End
+		}
+	).toTextStyle()
 
 	BasicText(
 		text = text,
@@ -56,6 +65,10 @@ val LocalTextStyle = compositionLocalOf { MapisodeTextStyle.Default }
 fun ProvideTextStyle(value: MapisodeTextStyle, content: @Composable () -> Unit) {
 	val mergedStyle = LocalTextStyle.current.merge(value)
 	CompositionLocalProvider(LocalTextStyle provides mergedStyle, content = content)
+}
+
+enum class TextAlignment {
+	Start, Center, End
 }
 
 @Preview(showBackground = true)
