@@ -12,14 +12,14 @@ enum class ChipType(
 	@StringRes val textResId: Int,
 	@DrawableRes val iconResId: Int,
 ) {
-	EATERY(Home.string.home_chip_eat, Design.drawable.ic_eat),
-	SEEING(Home.string.home_chip_see, Design.drawable.ic_see),
+	EAT(Home.string.home_chip_eat, Design.drawable.ic_eat),
+	SEE(Home.string.home_chip_see, Design.drawable.ic_see),
 	OTHER(Home.string.home_chip_other, Design.drawable.ic_other),
 }
 
 @Composable
 fun getChipIconTint(chipType: ChipType): Color = when (chipType) {
-	ChipType.EATERY -> MapisodeTheme.colorScheme.eatIconColor
-	ChipType.SEEING -> MapisodeTheme.colorScheme.seeIconColor
+	ChipType.EAT -> MapisodeTheme.colorScheme.eatIconColor
+	ChipType.SEE -> MapisodeTheme.colorScheme.seeIconColor
 	ChipType.OTHER -> MapisodeTheme.colorScheme.otherIconColor
 }
