@@ -35,6 +35,7 @@ import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
 import com.boostcamp.mapisode.home.common.HomeConstant.EXTRA_RANGE
 import com.boostcamp.mapisode.home.common.HomeConstant.tempGroupList
 import com.boostcamp.mapisode.home.common.getChipIconTint
+import com.boostcamp.mapisode.home.common.mapCategoryToChipType
 import com.boostcamp.mapisode.home.component.GroupBottomSheetContent
 import com.boostcamp.mapisode.home.component.MapisodeChip
 import com.boostcamp.mapisode.home.component.MapisodeFabOverlayButton
@@ -47,11 +48,15 @@ import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.LocationTrackingMode
 import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
+import com.naver.maps.map.compose.Marker
+import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
+import com.naver.maps.map.overlay.OverlayImage
 import kotlinx.coroutines.flow.distinctUntilChanged
 import timber.log.Timber
+import com.boostcamp.mapisode.designsystem.R as Design
 
 @Composable
 internal fun HomeRoute(
@@ -202,7 +207,28 @@ private fun HomeScreen(
 			onMapClick = { _, _ ->
 				// TODO : 마커 찍기 구현
 			},
-		)
+		) {
+			state.episodes.forEach { episode ->
+				val chipType = mapCategoryToChipType(episode.category)
+				val icon = when (chipType) {
+					ChipType.EAT -> OverlayImage.fromResource(Design.drawable.ic_eat_marker_light)
+					ChipType.SEE -> OverlayImage.fromResource(Design.drawable.ic_see_marker_light)
+					ChipType.OTHER -> OverlayImage.fromResource(Design.drawable.ic_other_marker_light)
+					else -> OverlayImage.fromResource(Design.drawable.ic_other_marker_light)
+				}
+
+				Marker(
+					state = MarkerState(
+						position = LatLng(episode.location.latitude, episode.location.longitude),
+					),
+					icon = icon,
+					onClick = {
+						// TODO : 마커 클릭 시 이벤트 구현
+						true
+					},
+				)
+			}
+		}
 
 		Column(
 			modifier = Modifier
