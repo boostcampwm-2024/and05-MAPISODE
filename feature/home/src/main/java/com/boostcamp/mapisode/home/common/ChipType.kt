@@ -23,3 +23,6 @@ fun getChipIconTint(chipType: ChipType): Color = when (chipType) {
 	ChipType.SEE -> MapisodeTheme.colorScheme.seeIconColor
 	ChipType.OTHER -> MapisodeTheme.colorScheme.otherIconColor
 }
+
+fun mapCategoryToChipType(category: String): ChipType? =
+	ChipType.entries.find { it.name.equals(category, ignoreCase = true) }

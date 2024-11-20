@@ -28,4 +28,5 @@ object HomeConstant {
 			createdAt = "2021-09-01",
 		),
 	)
+	const val EXTRA_RANGE = 0.01 // 약 1 ~ 1.5km
 }
