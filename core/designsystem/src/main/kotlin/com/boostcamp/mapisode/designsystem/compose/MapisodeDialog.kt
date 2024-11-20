@@ -76,7 +76,7 @@ fun MapisodeDialog(
 						modifier = Modifier.clickable(
 							enabled = true,
 							onClick = {
-								onResultRequest(false)
+								onResultRequest(true)
 								onDismissRequest()
 							},
 							indication = MapisodeRippleBIndication,
