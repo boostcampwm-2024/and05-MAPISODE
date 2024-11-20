@@ -19,18 +19,27 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
+import com.naver.maps.map.compose.LocationTrackingMode
+import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.Marker
-import com.naver.maps.map.compose.MarkerState
 import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.compose.rememberFusedLocationSource
+import com.naver.maps.map.compose.rememberMarkerState
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 internal fun PickLocationScreen(
-	markerState: MarkerState,
+	cameraPositionState: CameraPositionState,
 	navController: NavController,
+	updateLocation: (LatLng) -> Unit,
 ) {
+	val episodeMarkerState = rememberMarkerState()
+	episodeMarkerState.position = cameraPositionState.position.target
+
 	MapisodeScaffold(
 		isStatusBarPaddingExist = true,
 		topBar = {
@@ -47,13 +56,18 @@ internal fun PickLocationScreen(
 		Column {
 			NaverMap(
 				modifier = Modifier.fillMaxHeight(0.75f),
+				cameraPositionState = cameraPositionState,
+				properties = MapProperties(
+					locationTrackingMode = LocationTrackingMode.Follow,
+				),
 				uiSettings = MapUiSettings(
 					isZoomControlEnabled = false,
 					isLocationButtonEnabled = true,
 					isLogoClickEnabled = false,
 				),
+				locationSource = rememberFusedLocationSource(),
 			) {
-				Marker(state = markerState)
+				Marker(state = episodeMarkerState)
 			}
 			Box(
 				modifier = Modifier.fillMaxHeight(),
@@ -74,7 +88,10 @@ internal fun PickLocationScreen(
 					MapisodeFilledButton(
 						modifier = Modifier.fillMaxWidth(),
 						text = stringResource(R.string.new_episode_pick_location_button),
-						onClick = { navController.navigate("new_episode_content") },
+						onClick = {
+							updateLocation(episodeMarkerState.position)
+							navController.popBackStack("new_episode_info", false)
+						},
 						showRipple = true,
 					)
 				}

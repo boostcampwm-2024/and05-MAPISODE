@@ -20,8 +20,11 @@ fun EpisodeTextFieldGroup(
 	@StringRes placeholderRes: Int,
 	value: String = "",
 	onValueChange: (String) -> Unit = { },
+	readOnly: Boolean = false,
 	trailingIcon: @Composable (() -> Unit)? = null,
 	onTrailingIconClick: (() -> Unit)? = null,
+	isError: Boolean = false,
+	onSubmitInput: (String) -> Unit = {},
 ) {
 	Column(textFieldModifier, verticalArrangement = textFieldVerticalArrangement) {
 		MapisodeText(
@@ -33,6 +36,7 @@ fun EpisodeTextFieldGroup(
 			value = value,
 			placeholder = stringResource(placeholderRes),
 			onValueChange = onValueChange,
+			readOnly = readOnly,
 			trailingIcon = {
 				trailingIcon?.let {
 					MapisodeIconButton(
@@ -40,6 +44,8 @@ fun EpisodeTextFieldGroup(
 					) { it() }
 				}
 			},
+			isError = isError,
+			onSubmitInput = onSubmitInput,
 		)
 	}
 }
