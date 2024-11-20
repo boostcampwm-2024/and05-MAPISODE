@@ -18,6 +18,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import coil3.compose.AsyncImage
 import com.boostcamp.mapisode.designsystem.R
+import com.boostcamp.mapisode.designsystem.compose.LocalMapisodeShowBotBar
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
@@ -27,6 +28,8 @@ import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 @Composable
 fun GroupEditScreen(onBack: () -> Unit) {
 	val focusManager = LocalFocusManager.current
+	val bottomBarController = LocalMapisodeShowBotBar.current
+	bottomBarController.off()
 
 	MapisodeScaffold(
 		modifier = Modifier
@@ -44,7 +47,10 @@ fun GroupEditScreen(onBack: () -> Unit) {
 				title = "나의 그룹",
 				navigationIcon = {
 					MapisodeIconButton(
-						onClick = { onBack() },
+						onClick = {
+							bottomBarController.on()
+							onBack()
+						},
 					) {
 						MapisodeIcon(
 							id = R.drawable.ic_arrow_back_ios,
