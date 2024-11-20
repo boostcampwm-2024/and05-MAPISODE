@@ -29,7 +29,7 @@ fun MapisodeText(
 	maxLines: Int = Int.MAX_VALUE,
 	minLines: Int = 1,
 ) {
-	val textColor = if (color == Color.Unspecified) {
+	val textColor = if (color==Color.Unspecified) {
 		if (isSystemInDarkTheme()) {
 			LocalMapisodeDarkContentColor.current
 		} else {
@@ -41,11 +41,11 @@ fun MapisodeText(
 
 	val mergedStyle = style.copy(
 		color = textColor,
-		textAlign = when(textAlignment) {
+		textAlign = when (textAlignment) {
 			TextAlignment.Start -> TextAlign.Start
 			TextAlignment.Center -> TextAlign.Center
 			TextAlignment.End -> TextAlign.End
-		}
+		},
 	).toTextStyle()
 
 	BasicText(
@@ -68,7 +68,9 @@ fun ProvideTextStyle(value: MapisodeTextStyle, content: @Composable () -> Unit) 
 }
 
 enum class TextAlignment {
-	Start, Center, End
+	Start,
+	Center,
+	End,
 }
 
 @Preview(showBackground = true)
