@@ -5,6 +5,10 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.SubcomposeLayout
@@ -20,6 +24,23 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 private enum class ScaffoldLayoutContent { TopBar, MainContent, Snackbar, BottomBar }
 
+val LocalMapisodeShowBotBar = compositionLocalOf<BottomBarController> {
+	error("No BottomBarController provided")
+}
+
+object BottomBarController {
+	private var _isVisible by mutableStateOf(true)
+	val isVisible: Boolean get() = _isVisible
+
+	fun off() {
+		_isVisible = false
+	}
+
+	fun on() {
+		_isVisible = true
+	}
+}
+
 @Composable
 fun MapisodeScaffold(
 	modifier: Modifier = Modifier,
@@ -33,6 +54,8 @@ fun MapisodeScaffold(
 	contentColor: Color = MapisodeTheme.colorScheme.textContent,
 	content: @Composable (PaddingValues) -> Unit,
 ) {
+	val showBottomNavBar = LocalMapisodeShowBotBar.current
+
 	Surface(
 		modifier = modifier,
 		color = backgroundColor,
@@ -40,9 +63,17 @@ fun MapisodeScaffold(
 	) {
 		ScaffoldLayout(
 			isStatusBarPaddingExist = isStatusBarPaddingExist,
-			isNavigationBarPaddingExist = isNavigationBarPaddingExist,
+			isNavigationBarPaddingExist = if (showBottomNavBar.isVisible) {
+				isNavigationBarPaddingExist
+			} else {
+				true
+			},
 			topBar = topBar,
-			bottomBar = bottomBar,
+			bottomBar = if (showBottomNavBar.isVisible) {
+				bottomBar
+			} else {
+				{}
+			},
 			toast = { toastHost(toastHostState) },
 			content = content,
 		)
