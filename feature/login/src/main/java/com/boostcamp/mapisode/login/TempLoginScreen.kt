@@ -30,7 +30,7 @@ import com.boostcamp.mapisode.designsystem.R
 
 
 @Composable
-fun LoginScreen(
+fun TempLoginScreen(
 	viewModel: AuthViewModel = AuthViewModel(),
 ) {
 	val isDarkTheme = isSystemInDarkTheme()
