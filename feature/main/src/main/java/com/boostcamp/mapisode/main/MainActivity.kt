@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.CompositionLocalProvider
+import com.boostcamp.mapisode.designsystem.compose.BottomBarController
+import com.boostcamp.mapisode.designsystem.compose.LocalMapisodeShowBotBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,8 +20,10 @@ class MainActivity : ComponentActivity() {
 		setContent {
 			val navigator: MainNavigator = rememberMainNavigator()
 
-			MapisodeTheme {
-				MainScreen(navigator = navigator)
+			CompositionLocalProvider(LocalMapisodeShowBotBar provides BottomBarController) {
+				MapisodeTheme {
+					MainScreen(navigator = navigator)
+				}
 			}
 		}
 	}
