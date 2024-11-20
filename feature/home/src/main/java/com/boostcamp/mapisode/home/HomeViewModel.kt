@@ -1,12 +1,23 @@
 package com.boostcamp.mapisode.home
 
+import androidx.lifecycle.viewModelScope
+import com.boostcamp.mapisode.episode.EpisodeRepository
 import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
+import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.launch
+import timber.log.Timber
+import javax.inject.Inject
 
-class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+	private val episodeRepository: EpisodeRepository,
+) : BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
 
 	fun onIntent(intent: HomeIntent) {
 		when (intent) {
@@ -42,6 +53,10 @@ class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
 			is HomeIntent.ShowBottomSheet -> {
 				toggleBottomSheet()
 			}
+
+			is HomeIntent.LoadEpisode -> {
+				loadEpisodes(intent.start, intent.end)
+			}
 		}
 	}
 
@@ -76,6 +91,28 @@ class HomeViewModel : BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
 	private fun toggleBottomSheet() {
 		intent {
 			copy(isBottomSheetVisible = !isBottomSheetVisible)
+		}
+	}
+
+	private fun loadEpisodes(start: EpisodeLatLng, end: EpisodeLatLng) {
+		viewModelScope.launch {
+			try {
+				val groupId = "36Ff3VrkVjLolg6FV6sv"
+				val category = currentState.selectedChip?.name
+
+				val episodes = episodeRepository.getEpisodesByGroupAndLocation(
+					groupId = groupId,
+					start = start,
+					end = end,
+					category = category,
+				)
+
+				Timber.e("Episodes: $episodes")
+
+				intent { copy(episodes = episodes.toPersistentList()) }
+			} catch (e: Exception) {
+				postSideEffect(HomeSideEffect.ShowToast(R.string.error_load_episodes))
+			}
 		}
 	}
 }

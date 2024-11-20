@@ -1,6 +1,7 @@
 package com.boostcamp.mapisode.home
 
 import com.boostcamp.mapisode.home.common.ChipType
+import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.naver.maps.geometry.LatLng
 
 sealed class HomeIntent {
@@ -10,4 +11,5 @@ sealed class HomeIntent {
 	data object MarkPermissionRequested : HomeIntent() // 위치 권한 요청 기록
 	data class SelectChip(val chipType: ChipType) : HomeIntent()
 	data object ShowBottomSheet : HomeIntent()
+	data class LoadEpisode(val start: EpisodeLatLng, val end: EpisodeLatLng) : HomeIntent()
 }
