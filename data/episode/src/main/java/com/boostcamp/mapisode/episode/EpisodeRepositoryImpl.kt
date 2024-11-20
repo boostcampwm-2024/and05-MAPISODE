@@ -42,8 +42,9 @@ class EpisodeRepositoryImpl @Inject constructor(private val database: FirebaseFi
 		groupId: String,
 		start: EpisodeLatLng,
 		end: EpisodeLatLng,
+		category: String?,
 	): List<EpisodeModel> {
-		val query = episodeCollection
+		var query = episodeCollection
 			.whereEqualTo(FirestoreConstants.FIELD_GROUP, groupCollection.document(groupId))
 			.whereGreaterThanOrEqualTo(
 				FirestoreConstants.FIELD_LOCATION,
@@ -53,6 +54,11 @@ class EpisodeRepositoryImpl @Inject constructor(private val database: FirebaseFi
 				FirestoreConstants.FIELD_LOCATION,
 				GeoPoint(end.latitude, end.longitude),
 			)
+
+		category?.let {
+			query = query.whereEqualTo(FirestoreConstants.FIELD_CATEGORY, it)
+		}
+
 		val querySnapshot = query.get().await()
 
 		if (querySnapshot.isEmpty) {

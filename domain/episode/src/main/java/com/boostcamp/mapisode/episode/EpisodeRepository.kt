@@ -9,6 +9,7 @@ interface EpisodeRepository {
 		groupId: String,
 		start: EpisodeLatLng,
 		end: EpisodeLatLng,
+		category: String? = null,
 	): List<EpisodeModel>
 
 	suspend fun getEpisodesByGroupAndCategory(
