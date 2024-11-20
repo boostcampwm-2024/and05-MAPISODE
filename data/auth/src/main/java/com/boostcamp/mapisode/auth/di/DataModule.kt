@@ -27,23 +27,17 @@ object DataModule {
 	@Singleton
 	fun provideGoogleAuthDataSource(
 		@ApplicationContext context: Context,
-	): GoogleAuthDataSource {
-		return GoogleAuthDataSourceImpl(context)
-	}
+	): GoogleAuthDataSource = GoogleAuthDataSourceImpl(context)
 
 	@Provides
 	@Singleton
 	fun provideFirebaseAuthDataSource(
 		firebaseAuth: FirebaseAuth,
-	): FirebaseAuthDataSource {
-		return FirebaseAuthDataSourceImpl(firebaseAuth)
-	}
+	): FirebaseAuthDataSource = FirebaseAuthDataSourceImpl(firebaseAuth)
 
 	@Provides
 	@Singleton
-	fun provideUserMapper(): UserMapper {
-		return UserMapper()
-	}
+	fun provideUserMapper(): UserMapper = UserMapper()
 
 	@Provides
 	@Singleton
@@ -51,11 +45,9 @@ object DataModule {
 		googleAuthDataSource: GoogleAuthDataSource,
 		firebaseAuthDataSource: FirebaseAuthDataSource,
 		userMapper: UserMapper,
-	): AuthRepository {
-		return AuthRepositoryImpl(
-			googleAuthDataSource,
-			firebaseAuthDataSource,
-			userMapper,
-		)
-	}
+	): AuthRepository = AuthRepositoryImpl(
+		googleAuthDataSource,
+		firebaseAuthDataSource,
+		userMapper,
+	)
 }

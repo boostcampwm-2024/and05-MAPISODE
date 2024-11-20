@@ -15,7 +15,5 @@ object FeatureAuthModule {
 	@Singleton
 	fun provideSignInWithGoogleUseCase(
 		authRepository: AuthRepository,
-	): SignInWithGoogleUseCase {
-		return SignInWithGoogleUseCase(authRepository)
-	}
+	): SignInWithGoogleUseCase = SignInWithGoogleUseCase(authRepository)
 }
