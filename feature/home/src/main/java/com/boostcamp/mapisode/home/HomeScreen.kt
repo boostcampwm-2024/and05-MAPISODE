@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,11 +32,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.boostcamp.mapisode.designsystem.compose.MapisodeModalBottomSheet
 import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
+import com.boostcamp.mapisode.home.common.HomeConstant.EXTRA_RANGE
 import com.boostcamp.mapisode.home.common.HomeConstant.tempGroupList
 import com.boostcamp.mapisode.home.common.getChipIconTint
 import com.boostcamp.mapisode.home.component.GroupBottomSheetContent
 import com.boostcamp.mapisode.home.component.MapisodeChip
 import com.boostcamp.mapisode.home.component.MapisodeFabOverlayButton
+import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.google.android.gms.location.LocationServices
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
@@ -47,6 +50,7 @@ import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
+import kotlinx.coroutines.flow.distinctUntilChanged
 import timber.log.Timber
 
 @Composable
@@ -77,6 +81,30 @@ internal fun HomeRoute(
 				.show()
 		}
 		backPressedTime = System.currentTimeMillis()
+	}
+
+	LaunchedEffect(cameraPositionState) {
+		snapshotFlow { cameraPositionState.contentBounds }
+			.distinctUntilChanged()
+			.collect { bounds ->
+				bounds?.let {
+					val extendedStart = EpisodeLatLng(
+						it.southWest.latitude - EXTRA_RANGE,
+						it.southWest.longitude - EXTRA_RANGE,
+					)
+					val extendedEnd = EpisodeLatLng(
+						it.northEast.latitude + EXTRA_RANGE,
+						it.northEast.longitude + EXTRA_RANGE,
+					)
+
+					viewModel.onIntent(
+						HomeIntent.LoadEpisode(
+							start = extendedStart,
+							end = extendedEnd,
+						),
+					)
+				}
+			}
 	}
 
 	LaunchedEffect(viewModel) {

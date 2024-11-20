@@ -2,9 +2,12 @@ package com.boostcamp.mapisode.home
 
 import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
+import com.boostcamp.mapisode.model.EpisodeModel
 import com.boostcamp.mapisode.ui.base.UiState
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 
 data class HomeState(
 	// 위치 권한 설정을 허용하지 않은 유저에게 보여줄 초기 위치 (양재 코드스쿼드)
@@ -20,4 +23,5 @@ data class HomeState(
 	val hasRequestedPermission: Boolean = false, // 위치 권한을 요청한 적이 있는지 여부
 	val selectedChip: ChipType? = null,
 	val isBottomSheetVisible: Boolean = false,
+	val episodes: PersistentList<EpisodeModel> = persistentListOf(),
 ) : UiState
