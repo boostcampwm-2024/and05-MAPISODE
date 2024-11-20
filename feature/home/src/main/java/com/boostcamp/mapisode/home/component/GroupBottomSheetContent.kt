@@ -25,6 +25,7 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.home.common.HomeConstant.tempGroupList
 import com.boostcamp.mapisode.model.GroupItem
 import kotlinx.collections.immutable.PersistentList
+import com.boostcamp.mapisode.home.R as Home
 
 @Composable
 fun GroupBottomSheetContent(
@@ -41,7 +42,7 @@ fun GroupBottomSheetContent(
 			contentAlignment = Alignment.Center,
 		) {
 			MapisodeText(
-				text = stringResource(com.boostcamp.mapisode.home.R.string.group_bottomsheet_title),
+				text = stringResource(Home.string.group_bottomsheet_title),
 				color = MapisodeTheme.colorScheme.textContent,
 				style = AppTypography.titleLarge.copy(fontWeight = FontWeight.Normal),
 			)
@@ -66,7 +67,7 @@ fun GroupBottomSheetContent(
 			item {
 				GroupCard(
 					groupImage = myProfileImage,
-					groupName = stringResource(com.boostcamp.mapisode.home.R.string.group_my_episode_name),
+					groupName = stringResource(Home.string.group_my_episode_name),
 				)
 			}
 
