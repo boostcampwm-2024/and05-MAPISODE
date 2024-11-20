@@ -21,6 +21,7 @@ androidx-lifecycle = "2.8.3"
 androidx-lifecycle-runtime-ktx = "2.8.7"
 androidx-hilt-navigation-compose = "1.2.0"
 androidx-datatstore = "1.1.1"
+androidx-credentials = "1.5.0-beta01"
 
 # Compose
 compose-bom = "2024.10.01"
@@ -35,6 +36,8 @@ firebase-bom = "33.5.1"
 
 # Google
 google-services = "4.4.2"
+google-play-services-auth = "21.2.0"
+googleid-identity = "1.1.1"
 
 # Hilt
 hilt = "2.48.1"
@@ -85,6 +88,7 @@ androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifec
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "androidx-datatstore" }
 androidx-datatore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidx-datatstore" }
+androidx-credential = { group = "androidx.credentials", name = "credentials", version.ref = "androidx-credentials"}
 
 # Coil
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
@@ -110,6 +114,10 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
+
+# Google
+google-play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "google-play-services-auth" }
+googleid-identity = { group = "com.google.android.libraries.identity.googleid", name ="googleid", version.ref = "googleid-identity" }
 
 # Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
