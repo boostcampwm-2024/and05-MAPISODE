@@ -25,6 +25,7 @@ android {
 
 dependencies {
 	implementation(projects.core.datastore)
+	implementation(projects.core.model)
 	implementation(projects.domain.auth)
 	implementation(platform(libs.firebase.bom))
 	implementation(libs.firebase.auth)

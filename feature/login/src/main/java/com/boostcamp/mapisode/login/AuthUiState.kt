@@ -1,6 +1,6 @@
 package com.boostcamp.mapisode.login
 
-import com.boostcamp.mapisode.auth.User
+import com.boostcamp.mapisode.model.User
 
 sealed class AuthUiState {
 	data object Initial : AuthUiState()
