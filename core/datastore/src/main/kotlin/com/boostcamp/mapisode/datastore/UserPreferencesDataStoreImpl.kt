@@ -35,6 +35,11 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 				)
 		}
 
+	override fun getUserId(): Flow<String?> = dataStore.data.map { preferences ->
+		preferences[PreferenceKeys.USER_ID]
+	}
+
+
 	override suspend fun updateUserId(userId: String) {
 		dataStore.edit { preferences ->
 			preferences[PreferenceKeys.USER_ID] = userId
