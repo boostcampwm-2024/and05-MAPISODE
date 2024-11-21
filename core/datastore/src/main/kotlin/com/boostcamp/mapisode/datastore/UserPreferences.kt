@@ -6,6 +6,6 @@ data class UserPreferences(
 	val isFirstLaunch: Boolean = true,
 	val isLoggedIn: Boolean = false,
 	val profileUrl: String?,
-	val authToken: String?,
+	val credentialIDToken: String?,
 	val recentSelectedGroup: String?,
 )
