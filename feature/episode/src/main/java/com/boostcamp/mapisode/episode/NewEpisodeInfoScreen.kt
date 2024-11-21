@@ -42,12 +42,12 @@ internal fun NewEpisodeInfoScreen(navController: NavController) {
 				EpisodeTextFieldGroup(
 					labelRes = R.string.new_episode_info_group,
 					placeholderRes = R.string.new_episode_info_placeholder_group,
-					trailingIcon = { MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_arrow_drop_down) }
+					trailingIcon = { MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_arrow_drop_down) },
 				)
 				EpisodeTextFieldGroup(
 					labelRes = R.string.new_episode_info_category,
 					placeholderRes = R.string.new_episode_info_placeholder_category,
-					trailingIcon = { MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_arrow_drop_down) }
+					trailingIcon = { MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_arrow_drop_down) },
 				)
 				EpisodeTextFieldGroup(
 					labelRes = R.string.new_episode_info_tags,
@@ -56,7 +56,7 @@ internal fun NewEpisodeInfoScreen(navController: NavController) {
 				EpisodeTextFieldGroup(
 					labelRes = R.string.new_episode_info_date,
 					placeholderRes = R.string.new_episode_info_placeholder_date,
-					trailingIcon = { MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_calendar) }
+					trailingIcon = { MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_calendar) },
 				)
 			}
 			MapisodeFilledButton(
