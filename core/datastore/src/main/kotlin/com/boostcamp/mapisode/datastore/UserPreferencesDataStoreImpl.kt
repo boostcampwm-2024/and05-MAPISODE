@@ -10,8 +10,9 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class UserPreferencesDataStoreImpl @Inject constructor(private val dataStore: DataStore<Preferences>) :
-	UserPreferenceDataStore {
+class UserPreferencesDataStoreImpl @Inject constructor(
+	private val dataStore: DataStore<Preferences>,
+) : UserPreferenceDataStore {
 
 	override fun getUserPreferencesFlow(): Flow<UserPreferences> = dataStore.data
 		.catch { exception ->
