@@ -54,10 +54,13 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.overlay.OverlayImage
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.sample
 import timber.log.Timber
 import com.boostcamp.mapisode.designsystem.R as Design
 
+@OptIn(FlowPreview::class)
 @Composable
 internal fun HomeRoute(
 	viewModel: HomeViewModel = hiltViewModel(),
@@ -89,9 +92,12 @@ internal fun HomeRoute(
 	}
 
 	LaunchedEffect(cameraPositionState) {
-		snapshotFlow { cameraPositionState.contentBounds }
+		snapshotFlow { cameraPositionState.position }
 			.distinctUntilChanged()
-			.collect { bounds ->
+			.sample(500)
+			.collect { _ ->
+				val bounds = cameraPositionState.contentBounds
+
 				bounds?.let {
 					val extendedStart = EpisodeLatLng(
 						it.southWest.latitude - EXTRA_RANGE,

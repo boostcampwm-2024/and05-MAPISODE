@@ -11,7 +11,6 @@ import com.naver.maps.map.CameraPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -97,7 +96,7 @@ class HomeViewModel @Inject constructor(
 	private fun loadEpisodes(start: EpisodeLatLng, end: EpisodeLatLng) {
 		viewModelScope.launch {
 			try {
-				val groupId = "36Ff3VrkVjLolg6FV6sv"
+				val groupId = "FwQVGHMot4BVS4nMAJHg" // TODO 캐싱된 그룹 가져오기 (현재는 임시로 하드코딩)
 				val category = currentState.selectedChip?.name
 
 				val episodes = episodeRepository.getEpisodesByGroupAndLocation(
@@ -106,8 +105,6 @@ class HomeViewModel @Inject constructor(
 					end = end,
 					category = category,
 				)
-
-				Timber.e("Episodes: $episodes")
 
 				intent { copy(episodes = episodes.toPersistentList()) }
 			} catch (e: Exception) {
