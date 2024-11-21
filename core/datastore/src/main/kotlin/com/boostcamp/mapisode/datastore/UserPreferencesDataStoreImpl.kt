@@ -30,7 +30,7 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 				isLoggedIn = preferences[PreferenceKeys.IS_LOGGED_IN] ?: false,
 				profileUrl = preferences[PreferenceKeys.PROFILE_URL],
 				credentialIDToken = preferences[PreferenceKeys.CREDENTIAL_ID_TOKEN],
-				recentSelectedGroup = preferences[PreferenceKeys.RECENT_SELECTED_CATEGORY],
+				recentSelectedGroup = preferences[PreferenceKeys.RECENT_SELECTED_GROUP],
 			)
 		}
 
@@ -76,7 +76,7 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 
 	override suspend fun updateRecentSelectedGroup(group: String) {
 		dataStore.edit { preferences ->
-			preferences[PreferenceKeys.RECENT_SELECTED_CATEGORY] = group
+			preferences[PreferenceKeys.RECENT_SELECTED_GROUP] = group
 		}
 	}
 
@@ -87,7 +87,8 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 			preferences.remove(PreferenceKeys.IS_LOGGED_IN)
 			preferences.remove(PreferenceKeys.PROFILE_URL)
 			preferences.remove(PreferenceKeys.CREDENTIAL_ID_TOKEN)
-			preferences.remove(PreferenceKeys.RECENT_SELECTED_CATEGORY)
+			preferences.remove(PreferenceKeys.RECENT_SELECTED_GROUP)
+			preferences.clear()
 		}
 	}
 }
