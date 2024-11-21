@@ -122,7 +122,9 @@ internal fun NewEpisodeInfoScreen(
 						placeholderRes = R.string.new_episode_info_placeholder_group,
 						value = state.episodeInfo.group,
 						readOnly = true,
-						trailingIcon = { MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_arrow_drop_down) },
+						trailingIcon = {
+							MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_arrow_drop_down)
+						},
 						onTrailingIconClick = {
 							isGroupDropdownExpanded = !isGroupDropdownExpanded
 						},
@@ -154,7 +156,9 @@ internal fun NewEpisodeInfoScreen(
 						placeholderRes = R.string.new_episode_info_placeholder_category,
 						value = state.episodeInfo.category,
 						readOnly = true,
-						trailingIcon = { MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_arrow_drop_down) },
+						trailingIcon = {
+							MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_arrow_drop_down)
+						},
 						onTrailingIconClick = {
 							isCategoryDropdownExpanded = !isCategoryDropdownExpanded
 						},
