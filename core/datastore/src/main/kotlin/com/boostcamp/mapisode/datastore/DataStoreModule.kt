@@ -29,5 +29,5 @@ object DataStoreModule {
 	@Singleton
 	fun providePreferenceStorage(
 		dataStore: DataStore<Preferences>,
-	): UserPreferenceDataStore = UserPreferenceDataStoreImpl(dataStore)
+	): UserPreferenceDataStore = UserPreferencesDataStoreImpl(dataStore)
 }
