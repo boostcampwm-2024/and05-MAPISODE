@@ -8,6 +8,5 @@ android {
 
 dependencies {
 	implementation(project.libs.bundles.naverMap)
-	implementation(projects.core.ui)
-	implementation(projects.core.designsystem)
+	implementation(projects.domain.episode)
 }

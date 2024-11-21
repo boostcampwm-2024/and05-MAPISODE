@@ -65,7 +65,12 @@ internal fun EpisodeRoute(
 
 		composable("new_episode_content") {
 			NewEpisodeContentScreen(
+				state = uiState,
 				navController = newEpisodeNavController,
+				submitEpisode = { episodeContent ->
+					viewModel.onIntent(NewEpisodeIntent.SetEpisodeContent(episodeContent))
+					viewModel.onIntent(NewEpisodeIntent.CreateNewEpisode)
+				},
 			)
 		}
 	}
