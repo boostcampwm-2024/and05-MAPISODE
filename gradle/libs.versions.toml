@@ -176,6 +176,13 @@ androidx-core = [
 	"androidx-lifecycle-viewmodel-ktx",
 ]
 
+# Auth
+auth = [
+	"androidx-credential",
+	"google-play-services-auth",
+	"googleid-identity"
+]
+
 # Compose Libraries
 compose = [
 	"compose-ui",

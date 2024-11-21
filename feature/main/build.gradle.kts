@@ -11,5 +11,6 @@ dependencies {
 	implementation(projects.feature.episode)
 	implementation(projects.feature.mypage)
 	implementation(projects.feature.mygroup)
+	implementation(projects.feature.login)
 	implementation(libs.kotlinx.immutable)
 }
