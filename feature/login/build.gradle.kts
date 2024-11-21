@@ -8,7 +8,7 @@ android {
 
 dependencies {
 	implementation(projects.core.model)
-	implementation(projects.domain.auth)
+	implementation(projects.core.auth)
 	implementation(platform(libs.firebase.bom))
 	implementation(libs.bundles.firebase)
 	implementation(libs.bundles.auth)
