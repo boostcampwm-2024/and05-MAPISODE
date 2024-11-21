@@ -61,9 +61,8 @@ class HomeViewModel @Inject constructor(
 
 	private fun setSelectedChip(chipType: ChipType) {
 		intent {
-			copy(selectedChip = chipType)
+			copy(selectedChip = if (currentState.selectedChip == chipType) null else chipType)
 		}
-		// TODO: 여기에 선택된 Chip에 따라 데이터를 조회하는 로직을 추가
 	}
 
 	private fun setHasRequestedPermission() {
