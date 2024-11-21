@@ -6,6 +6,7 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialCancellationException
+import com.boostcamp.mapisode.model.User
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.AuthResult
@@ -39,15 +40,14 @@ class GoogleOauth(private val context: Context) {
 				val firebaseUID = authResult.user?.uid ?: throw Exception("Firebase UID가 없습니다.")
 				val googleIdToken = validatedCredential.idToken
 				val googleName = validatedCredential.run { "${familyName ?: ""}${givenName ?: ""}" }
-				val googlePhoneNumber = validatedCredential.phoneNumber ?: ""
 
 				trySend(
 					LoginState.Success(
 						googleIdToken,
-						UserInfo(
-							firebaseUID,
-							googleName,
-							googlePhoneNumber,
+						User(
+							id = firebaseUID,
+							displayName = googleName,
+							idToken = googleIdToken,
 						),
 					),
 				)
