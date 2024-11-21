@@ -1,6 +1,7 @@
 package com.boostcamp.mapisode.auth
 
 import androidx.credentials.exceptions.GetCredentialCancellationException
+import com.boostcamp.mapisode.model.User
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
