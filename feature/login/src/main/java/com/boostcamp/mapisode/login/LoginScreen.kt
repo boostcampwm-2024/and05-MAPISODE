@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -29,6 +31,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import timber.log.Timber
 
 @Composable
 fun LoginRoute(
@@ -36,11 +39,14 @@ fun LoginRoute(
 	navigateToSignUp: () -> Unit,
 ) {
 	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+	val context = LocalContext.current
 
 	LaunchedEffect(uiState) {
 		when (uiState) {
 			is AuthUiState.Success -> {
-				navigateToSignUp()
+				val userInfo = (uiState as AuthUiState.Success).user.displayName
+				Timber.e("userInfo: $userInfo")
+				Toast.makeText(context, "안녕하세요 ${userInfo}님", Toast.LENGTH_SHORT).show()
 			}
 
 			is AuthUiState.Error -> {}
@@ -50,7 +56,7 @@ fun LoginRoute(
 
 	LoginScreen(
 		googleSignInClicked = {
-			viewModel.handleGoogleSignIn()
+			viewModel.handleGoogleSignIn(context)
 		},
 	)
 }
@@ -60,6 +66,7 @@ fun LoginScreen(
 	modifier: Modifier = Modifier,
 	googleSignInClicked: () -> Unit,
 ) {
+
 	Column(
 		modifier = modifier.fillMaxSize(),
 		horizontalAlignment = Alignment.CenterHorizontally,
