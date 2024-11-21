@@ -21,7 +21,7 @@ import java.util.UUID
 
 class GoogleOauth(private val context: Context) {
 
-	suspend fun googleSignIn(): Flow<Result<LoginState>> {
+	suspend fun googleSignIn(): Flow<LoginState> {
 		val firebaseAuth = FirebaseAuth.getInstance()
 		return callbackFlow {
 			try {
@@ -38,21 +38,27 @@ class GoogleOauth(private val context: Context) {
 
 				val firebaseUID = authResult.user?.uid ?: throw Exception("Firebase UID가 없습니다.")
 				val googleIdToken = validatedCredential.idToken
-				val googleName = validatedCredential.run { "$familyName$givenName" }
+				val googleName = validatedCredential.run { "${familyName ?: ""}${givenName ?: ""}" }
 				val googlePhoneNumber = validatedCredential.phoneNumber ?: ""
 
-				LoginState.Success(
-					googleIdToken,
-					UserInfo(
-						firebaseUID,
-						googleName,
-						googlePhoneNumber,
+				trySend(
+					LoginState.Success(
+						googleIdToken,
+						UserInfo(
+							firebaseUID,
+							googleName,
+							googlePhoneNumber,
+						),
 					),
 				)
 			} catch (e: GetCredentialCancellationException) {
-				LoginState.Error(e.message ?: "Google Sign 실패")
+				trySend(
+					LoginState.Error(e.message ?: "Google Sign 실패"),
+				)
 			} catch (e: Exception) {
-				LoginState.Error(e.message ?: "Google Sign 실패")
+				trySend(
+					LoginState.Error(e.message ?: "Google Sign 실패"),
+				)
 			}
 			awaitClose { }
 		}
