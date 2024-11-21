@@ -66,13 +66,12 @@ class GoogleOauth(private val context: Context) {
 
 	private fun initializeCredentialManager(): CredentialManager = CredentialManager.create(context)
 
-	private fun createGoogleSignInOption():
-		GetSignInWithGoogleOption =
-		GetSignInWithGoogleOption.Builder(BuildConfig.GOOGLE_WEB_CLIENT_ID)
-			.setNonce(generateNonce())
-			.build().also {
-				Timber.e(BuildConfig.GOOGLE_WEB_CLIENT_ID)
-			}
+	private fun createGoogleSignInOption(): GetSignInWithGoogleOption = GetSignInWithGoogleOption
+		.Builder(BuildConfig.GOOGLE_WEB_CLIENT_ID)
+		.setNonce(generateNonce())
+		.build().also {
+			Timber.e(BuildConfig.GOOGLE_WEB_CLIENT_ID)
+		}
 
 	private fun createCredentialRequest(googleIdOption: GetSignInWithGoogleOption):
 		GetCredentialRequest = GetCredentialRequest.Builder()
