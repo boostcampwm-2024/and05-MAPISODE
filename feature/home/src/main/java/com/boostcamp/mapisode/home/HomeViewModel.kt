@@ -14,9 +14,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-	private val episodeRepository: EpisodeRepository,
-) : BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
+class HomeViewModel @Inject constructor(private val episodeRepository: EpisodeRepository) :
+	BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
 
 	fun onIntent(intent: HomeIntent) {
 		when (intent) {
@@ -37,7 +36,7 @@ class HomeViewModel @Inject constructor(
 				if (intent.isGranted) {
 					postSideEffect(HomeSideEffect.SetInitialLocation)
 				} else {
-					postSideEffect(HomeSideEffect.ShowToast(R.string.home_location_permission_needed))
+					postSideEffect(HomeSideEffect.ShowToast(R.string.home_location_permission_plz))
 				}
 			}
 
