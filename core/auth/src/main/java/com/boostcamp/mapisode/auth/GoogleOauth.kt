@@ -21,7 +21,7 @@ import java.util.UUID
 
 class GoogleOauth(private val context: Context) {
 
-	suspend fun googleSignIn(): Flow<Result<AuthResult>> {
+	suspend fun googleSignIn(): Flow<Result<LoginState>> {
 		val firebaseAuth = FirebaseAuth.getInstance()
 		return callbackFlow {
 			try {
@@ -33,16 +33,26 @@ class GoogleOauth(private val context: Context) {
 				val resultCredential = credentialManager.getCredential(context, request).credential
 				Timber.e("Credential: %s", resultCredential)
 
-				val validatedCredential = validateCredential(resultCredential)
+				val validatedCredential: GoogleIdTokenCredential = validateCredential(resultCredential)
+				val authResult: AuthResult = authenticateWithFirebase(firebaseAuth, validatedCredential)
 
-				val authResult = authenticateWithFirebase(firebaseAuth, validatedCredential)
-				trySend(Result.success(authResult))
+				val firebaseUID = authResult.user?.uid ?: throw Exception("Firebase UID가 없습니다.")
+				val googleIdToken = validatedCredential.idToken
+				val googleName = validatedCredential.run { "$familyName$givenName" }
+				val googlePhoneNumber = validatedCredential.phoneNumber ?: ""
+
+				LoginState.Success(
+					googleIdToken,
+					UserInfo(
+						firebaseUID,
+						googleName,
+						googlePhoneNumber,
+					),
+				)
 			} catch (e: GetCredentialCancellationException) {
-				Timber.e("Google Sign 취소")
-				trySend(Result.failure(Exception(e)))
+				LoginState.Error(e.message ?: "Google Sign 실패")
 			} catch (e: Exception) {
-				Timber.e("Google Sign 실패: %s", e)
-				trySend(Result.failure(e))
+				LoginState.Error(e.message ?: "Google Sign 실패")
 			}
 			awaitClose { }
 		}
@@ -76,7 +86,7 @@ class GoogleOauth(private val context: Context) {
 
 	private suspend fun authenticateWithFirebase(
 		firebaseAuth: FirebaseAuth,
-		googleIdTokenCredential: GoogleIdTokenCredential
+		googleIdTokenCredential: GoogleIdTokenCredential,
 	): AuthResult {
 		val authCredential =
 			GoogleAuthProvider.getCredential(googleIdTokenCredential.idToken, null)
