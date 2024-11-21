@@ -31,14 +31,12 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 				profileUrl = preferences[PreferenceKeys.PROFILE_URL],
 				credentialIDToken = preferences[PreferenceKeys.CREDENTIAL_ID_TOKEN],
 				recentSelectedGroup = preferences[PreferenceKeys.RECENT_SELECTED_CATEGORY],
-
-				)
+			)
 		}
 
 	override fun getUserId(): Flow<String?> = dataStore.data.map { preferences ->
 		preferences[PreferenceKeys.USER_ID]
 	}
-
 
 	override suspend fun updateUserId(userId: String) {
 		dataStore.edit { preferences ->
