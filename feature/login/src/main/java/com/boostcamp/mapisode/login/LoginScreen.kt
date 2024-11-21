@@ -66,7 +66,6 @@ fun LoginScreen(
 	modifier: Modifier = Modifier,
 	googleSignInClicked: () -> Unit,
 ) {
-
 	Column(
 		modifier = modifier.fillMaxSize(),
 		horizontalAlignment = Alignment.CenterHorizontally,

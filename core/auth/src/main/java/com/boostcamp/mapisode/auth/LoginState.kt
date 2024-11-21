@@ -5,8 +5,4 @@ sealed interface LoginState {
 	data class Error(val message: String) : LoginState
 }
 
-data class UserInfo(
-	val firebaseUID: String,
-	val name: String,
-	val phoneNumber: String,
-)
+data class UserInfo(val firebaseUID: String, val name: String, val phoneNumber: String)
