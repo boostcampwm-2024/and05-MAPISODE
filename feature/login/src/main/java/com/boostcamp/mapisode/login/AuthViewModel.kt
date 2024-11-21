@@ -10,7 +10,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,7 +24,6 @@ class AuthViewModel @Inject constructor() : ViewModel() {
 			GoogleOauth(context).googleSignIn().collect { result ->
 				_uiState.value = when (result) {
 					is LoginState.Success -> {
-						Timber.e("result: ${result.userInfo}")
 						AuthUiState.Success(
 							User(
 								id = result.userInfo.id,

@@ -31,7 +31,6 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
-import timber.log.Timber
 
 @Composable
 fun LoginRoute(
@@ -45,7 +44,6 @@ fun LoginRoute(
 		when (uiState) {
 			is AuthUiState.Success -> {
 				val userInfo = (uiState as AuthUiState.Success).user.displayName
-				Timber.e("userInfo: $userInfo")
 				Toast.makeText(context, "안녕하세요 ${userInfo}님", Toast.LENGTH_SHORT).show()
 			}
 
