@@ -28,8 +28,9 @@ class AuthViewModel @Inject constructor() : ViewModel() {
 						Timber.e("result: ${result.userInfo}")
 						AuthUiState.Success(
 							User(
-								id = result.userInfo.firebaseUID,
-								displayName = result.userInfo.name,
+								id = result.userInfo.id,
+								displayName = result.userInfo.displayName,
+								idToken = result.idToken,
 							),
 						)
 					}
