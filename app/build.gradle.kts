@@ -40,4 +40,6 @@ dependencies {
 	implementation(platform(libs.firebase.bom))
 	implementation(libs.bundles.firebase)
 	implementation(projects.feature.main)
+
+	implementation(projects.data.episode)
 }
