@@ -29,6 +29,7 @@ gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:t
 
 rootProject.name = "Mapisode"
 include(":app")
+include(":core:auth")
 include(":core:network")
 include(":core:datastore")
 include(":core:designsystem")
