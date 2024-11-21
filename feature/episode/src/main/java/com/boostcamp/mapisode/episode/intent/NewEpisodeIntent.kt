@@ -10,4 +10,6 @@ sealed class NewEpisodeIntent {
 	data class SetEpisodeTags(val tags: String) : NewEpisodeIntent()
 	data class SetEpisodeDate(val date: Date) : NewEpisodeIntent()
 	data class SetEpisodeInfo(val episodeInfo: NewEpisodeInfo) : NewEpisodeIntent()
+	data class SetEpisodeContent(val episodeContent: NewEpisodeContent) : NewEpisodeIntent()
+	data object CreateNewEpisode : NewEpisodeIntent()
 }

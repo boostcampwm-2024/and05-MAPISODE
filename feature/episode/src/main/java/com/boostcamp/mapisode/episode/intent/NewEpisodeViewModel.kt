@@ -1,12 +1,18 @@
 package com.boostcamp.mapisode.episode.intent
 
+import androidx.lifecycle.viewModelScope
+import com.boostcamp.mapisode.episode.EpisodeRepository
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.MAP_DEFAULT_ZOOM
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.naver.maps.map.CameraPosition
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
-class NewEpisodeViewModel
-	: BaseViewModel<NewEpisodeState, NewEpisodeSideEffect>(NewEpisodeState()) {
+@HiltViewModel
+class NewEpisodeViewModel @Inject constructor(private val episodeRepository: EpisodeRepository) :
+	BaseViewModel<NewEpisodeState, NewEpisodeSideEffect>(NewEpisodeState()) {
 
 	fun onIntent(intent: NewEpisodeIntent) {
 		when (intent) {
@@ -14,6 +20,7 @@ class NewEpisodeViewModel
 				intent {
 					copy(
 						cameraPosition = CameraPosition(intent.latLng, MAP_DEFAULT_ZOOM),
+						episodeInfo = episodeInfo.copy(location = intent.latLng),
 					)
 				}
 			}
@@ -54,6 +61,27 @@ class NewEpisodeViewModel
 				intent {
 					copy(
 						episodeInfo = episodeInfo.copy(date = intent.date),
+					)
+				}
+			}
+
+			is NewEpisodeIntent.SetEpisodeContent -> {
+				intent {
+					copy(
+						episodeContent = intent.episodeContent,
+					)
+				}
+			}
+
+			is NewEpisodeIntent.CreateNewEpisode -> {
+				intent {
+					val episodeModel = this.toDomainModel()
+					viewModelScope.launch {
+						episodeRepository.createEpisode(episodeModel)
+					}
+					copy(
+						episodeInfo = NewEpisodeInfo(),
+						episodeContent = NewEpisodeContent(),
 					)
 				}
 			}

@@ -9,7 +9,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -25,9 +30,18 @@ import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.textFieldModifier
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.textFieldVerticalArrangement
+import com.boostcamp.mapisode.episode.intent.NewEpisodeContent
+import com.boostcamp.mapisode.episode.intent.NewEpisodeState
 
 @Composable
-internal fun NewEpisodeContentScreen(navController: NavController) {
+internal fun NewEpisodeContentScreen(
+	state: NewEpisodeState,
+	navController: NavController,
+	submitEpisode: (NewEpisodeContent) -> Unit = {},
+) {
+	var titleValue by remember { mutableStateOf(state.episodeContent.title) }
+	var descriptionValue by remember { mutableStateOf(state.episodeContent.description) }
+
 	MapisodeScaffold(
 		topBar = {
 			NewEpisodeTopbar(navController)
@@ -45,11 +59,15 @@ internal fun NewEpisodeContentScreen(navController: NavController) {
 				EpisodeTextFieldGroup(
 					labelRes = R.string.new_episode_content_title,
 					placeholderRes = R.string.new_episode_content_placeholder_title,
+					value = titleValue,
+					onValueChange = { titleValue = it },
 				)
 				EpisodeTextFieldGroup(
 					modifier = Modifier.fillMaxHeight(0.3f),
 					labelRes = R.string.new_episode_content_description,
 					placeholderRes = R.string.new_episode_content_placeholder_description,
+					value = descriptionValue,
+					onValueChange = { descriptionValue = it },
 				)
 				Column(textFieldModifier, verticalArrangement = textFieldVerticalArrangement) {
 					MapisodeText(
@@ -60,7 +78,8 @@ internal fun NewEpisodeContentScreen(navController: NavController) {
 						contentPadding = PaddingValues(12.dp),
 						horizontalArrangement = Arrangement.spacedBy(10.dp),
 					) {
-						items(3) {
+						items(state.episodeContent.images) { imageUri ->
+							// TODO: 이미지 URI를 바탕으로 컴포넌트 생성하기
 							Surface(Modifier.size(150.dp)) {
 								Image(
 									contentDescription = null,
@@ -76,7 +95,8 @@ internal fun NewEpisodeContentScreen(navController: NavController) {
 			MapisodeFilledButton(
 				modifier = textFieldModifier,
 				onClick = {
-					navController.navigate("new_episode_content")
+					submitEpisode(NewEpisodeContent(titleValue, descriptionValue))
+					navController.popBackStack("new_episode_pics", inclusive = false)
 				},
 				text = stringResource(R.string.new_episode_create_episode),
 			)
@@ -87,5 +107,8 @@ internal fun NewEpisodeContentScreen(navController: NavController) {
 @Preview
 @Composable
 internal fun NewEpisodeContentScreenPreview() {
-	NewEpisodeContentScreen(rememberNavController())
+	NewEpisodeContentScreen(
+		state = NewEpisodeState(),
+		navController = rememberNavController(),
+	)
 }

@@ -210,6 +210,7 @@ internal fun NewEpisodeInfoScreen(
 					}
 					updateEpisodeInfo(
 						state.episodeInfo.copy(
+							location = state.cameraPosition.target,
 							tags = tagValue,
 						),
 					)
