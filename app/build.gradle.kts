@@ -37,10 +37,9 @@ dependencies {
 	implementation(projects.core.ui)
 	implementation(projects.core.designsystem)
 	implementation(projects.core.navigation)
-	implementation(projects.domain.auth)
 	implementation(projects.data.auth)
-	implementation(projects.feature.login)
 	implementation(projects.feature.main)
+
 	implementation(platform(libs.firebase.bom))
 	implementation(libs.bundles.firebase)
 	implementation(libs.bundles.auth)
