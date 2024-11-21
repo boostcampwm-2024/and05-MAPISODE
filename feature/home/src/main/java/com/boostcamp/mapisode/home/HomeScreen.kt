@@ -91,7 +91,10 @@ internal fun HomeRoute(
 		backPressedTime = System.currentTimeMillis()
 	}
 
-	LaunchedEffect(cameraPositionState) {
+	LaunchedEffect(
+		key1 = cameraPositionState,
+		key2 = uiState.selectedChip,
+	) {
 		snapshotFlow { cameraPositionState.position }
 			.distinctUntilChanged()
 			.sample(500)
