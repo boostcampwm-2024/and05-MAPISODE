@@ -28,7 +28,5 @@ dependencies {
 	implementation(projects.domain.auth)
 	implementation(platform(libs.firebase.bom))
 	implementation(libs.firebase.auth)
-	implementation(libs.google.play.services.auth)
-	implementation(libs.androidx.credential)
-	implementation(libs.googleid.identity)
+	implementation(libs.bundles.auth)
 }
