@@ -193,6 +193,10 @@ private fun HomeScreen(
 	onGroupFabClick: () -> Unit = {},
 ) {
 	val context = LocalContext.current
+	val eatIcon = remember { OverlayImage.fromResource(Design.drawable.ic_eat_marker_light) }
+	val seeIcon = remember { OverlayImage.fromResource(Design.drawable.ic_see_marker_light) }
+	val otherIcon = remember { OverlayImage.fromResource(Design.drawable.ic_other_marker_light) }
+	val defaultIcon = remember { OverlayImage.fromResource(Design.drawable.ic_other_marker_light) }
 
 	Box(
 		modifier = Modifier.fillMaxSize(),
@@ -220,10 +224,10 @@ private fun HomeScreen(
 			state.episodes.forEach { episode ->
 				val chipType = mapCategoryToChipType(episode.category)
 				val icon = when (chipType) {
-					ChipType.EAT -> OverlayImage.fromResource(Design.drawable.ic_eat_marker_light)
-					ChipType.SEE -> OverlayImage.fromResource(Design.drawable.ic_see_marker_light)
-					ChipType.OTHER -> OverlayImage.fromResource(Design.drawable.ic_other_marker_light)
-					else -> OverlayImage.fromResource(Design.drawable.ic_other_marker_light)
+					ChipType.EAT -> eatIcon
+					ChipType.SEE -> seeIcon
+					ChipType.OTHER -> otherIcon
+					else -> defaultIcon
 				}
 
 				Marker(
