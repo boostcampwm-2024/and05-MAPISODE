@@ -9,6 +9,6 @@ internal object PreferenceKeys {
 	val IS_FIRST_LAUNCH = booleanPreferencesKey("is_first_launch")
 	val IS_LOGGED_IN = booleanPreferencesKey("is_logged_in")
 	val PROFILE_URL = stringPreferencesKey("profile_url")
-	val AUTH_TOKEN = stringPreferencesKey("auth_token")
+	val CREDENTIAL_ID_TOKEN = stringPreferencesKey("credential_id_token")
 	val RECENT_SELECTED_CATEGORY = stringPreferencesKey("recent_selected_category")
 }

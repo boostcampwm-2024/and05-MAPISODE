@@ -29,9 +29,10 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 				isFirstLaunch = preferences[PreferenceKeys.IS_FIRST_LAUNCH] ?: true,
 				isLoggedIn = preferences[PreferenceKeys.IS_LOGGED_IN] ?: false,
 				profileUrl = preferences[PreferenceKeys.PROFILE_URL],
-				authToken = preferences[PreferenceKeys.AUTH_TOKEN],
+				credentialIDToken = preferences[PreferenceKeys.CREDENTIAL_ID_TOKEN],
 				recentSelectedGroup = preferences[PreferenceKeys.RECENT_SELECTED_CATEGORY],
-			)
+
+				)
 		}
 
 	override suspend fun updateUserId(userId: String) {
@@ -64,9 +65,9 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 		}
 	}
 
-	override suspend fun updateAuthToken(authToken: String) {
+	override suspend fun updateCredentialIdToken(credentialIdToken: String) {
 		dataStore.edit { preferences ->
-			preferences[PreferenceKeys.AUTH_TOKEN] = authToken
+			preferences[PreferenceKeys.CREDENTIAL_ID_TOKEN] = credentialIdToken
 		}
 	}
 
@@ -82,7 +83,7 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 			preferences.remove(PreferenceKeys.USERNAME)
 			preferences.remove(PreferenceKeys.IS_LOGGED_IN)
 			preferences.remove(PreferenceKeys.PROFILE_URL)
-			preferences.remove(PreferenceKeys.AUTH_TOKEN)
+			preferences.remove(PreferenceKeys.CREDENTIAL_ID_TOKEN)
 			preferences.remove(PreferenceKeys.RECENT_SELECTED_CATEGORY)
 		}
 	}
