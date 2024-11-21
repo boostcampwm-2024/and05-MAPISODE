@@ -50,7 +50,7 @@ internal fun PickLocationScreen(
 				uiSettings = MapUiSettings(
 					isZoomControlEnabled = false,
 					isLocationButtonEnabled = true,
-					isLogoClickEnabled = false
+					isLogoClickEnabled = false,
 				),
 			) {
 				Marker(state = markerState)
