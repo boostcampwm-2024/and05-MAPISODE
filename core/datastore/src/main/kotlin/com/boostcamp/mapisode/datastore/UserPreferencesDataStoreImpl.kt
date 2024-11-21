@@ -82,12 +82,6 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 
 	override suspend fun clearUserData() {
 		dataStore.edit { preferences ->
-			preferences.remove(PreferenceKeys.USER_ID)
-			preferences.remove(PreferenceKeys.USERNAME)
-			preferences.remove(PreferenceKeys.IS_LOGGED_IN)
-			preferences.remove(PreferenceKeys.PROFILE_URL)
-			preferences.remove(PreferenceKeys.CREDENTIAL_ID_TOKEN)
-			preferences.remove(PreferenceKeys.RECENT_SELECTED_GROUP)
 			preferences.clear()
 		}
 	}
