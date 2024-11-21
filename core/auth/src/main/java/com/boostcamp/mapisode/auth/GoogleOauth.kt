@@ -16,7 +16,6 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 import java.security.MessageDigest
 import java.util.UUID
 
@@ -29,10 +28,8 @@ class GoogleOauth(private val context: Context) {
 				val credentialManager = initializeCredentialManager()
 				val googleIdOption = createGoogleSignInOption()
 				val request = createCredentialRequest(googleIdOption)
-				Timber.e("Request: %s", request)
 
 				val resultCredential = credentialManager.getCredential(context, request).credential
-				Timber.e("Credential: %s", resultCredential)
 
 				val validatedCredential: GoogleIdTokenCredential = validateCredential(resultCredential)
 				val authResult: AuthResult = authenticateWithFirebase(firebaseAuth, validatedCredential)
@@ -69,9 +66,7 @@ class GoogleOauth(private val context: Context) {
 	private fun createGoogleSignInOption(): GetSignInWithGoogleOption = GetSignInWithGoogleOption
 		.Builder(BuildConfig.GOOGLE_WEB_CLIENT_ID)
 		.setNonce(generateNonce())
-		.build().also {
-			Timber.e(BuildConfig.GOOGLE_WEB_CLIENT_ID)
-		}
+		.build()
 
 	private fun createCredentialRequest(googleIdOption: GetSignInWithGoogleOption):
 		GetCredentialRequest = GetCredentialRequest.Builder()
@@ -103,7 +98,6 @@ class GoogleOauth(private val context: Context) {
 		val md = MessageDigest.getInstance("SHA-256")
 		val digest = md.digest(bytes)
 		val hashedNonce = digest.fold("") { str, it -> str + "%02x".format(it) }
-		Timber.e("Hashed Nonce: %s", hashedNonce)
 		return hashedNonce
 	}
 }
