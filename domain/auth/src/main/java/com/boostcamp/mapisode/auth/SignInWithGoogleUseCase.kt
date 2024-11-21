@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.auth
 
+import com.boostcamp.mapisode.model.User
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

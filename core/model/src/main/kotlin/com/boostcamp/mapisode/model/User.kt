@@ -1,3 +1,3 @@
-package com.boostcamp.mapisode.auth
+package com.boostcamp.mapisode.model
 
 data class User(val id: String, val displayName: String?)
