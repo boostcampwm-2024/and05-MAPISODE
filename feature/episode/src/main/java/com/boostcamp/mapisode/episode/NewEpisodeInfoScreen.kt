@@ -6,6 +6,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerColors
+import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,14 +25,17 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
+import com.boostcamp.mapisode.designsystem.compose.button.MapisodeOutlinedButton
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenu
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
+import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.categoryMap
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.groupMap
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.textFieldModifier
 import com.boostcamp.mapisode.episode.intent.NewEpisodeInfo
 import com.boostcamp.mapisode.episode.intent.NewEpisodeState
 import com.naver.maps.geometry.LatLng
+import timber.log.Timber
 import java.util.Date
 import java.util.Locale
 
@@ -46,7 +54,8 @@ internal fun NewEpisodeInfoScreen(
 	var isGroupBlank by remember { mutableStateOf(false) }
 	var isCategoryBlank by remember { mutableStateOf(false) }
 	var tagValue by remember { mutableStateOf(state.episodeInfo.tags) }
-	val dateValue by remember { mutableStateOf(Date()) }
+	var showDatePickerDialog by remember { mutableStateOf(false) }
+	val datePickerState = rememberDatePickerState()
 
 	MapisodeScaffold(
 		topBar = {
@@ -61,6 +70,41 @@ internal fun NewEpisodeInfoScreen(
 				.padding(20.dp),
 			verticalArrangement = Arrangement.SpaceBetween,
 		) {
+			if (showDatePickerDialog) {
+				DatePickerDialog(
+					onDismissRequest = {
+						showDatePickerDialog = false
+					},
+					confirmButton = {
+						MapisodeOutlinedButton(
+							modifier = Modifier.padding(top = 8.dp),
+							onClick = {
+								showDatePickerDialog = false
+								datePickerState.selectedDateMillis?.let {
+									Timber.d(it.toString())
+									updateDate(Date(it))
+								}
+							},
+							text = "확인",
+						)
+					},
+					dismissButton = {
+						MapisodeOutlinedButton(
+							onClick = {
+								showDatePickerDialog = false
+							},
+							text = "취소",
+						)
+					},
+					colors = DatePickerDialogColors(),
+				) {
+					DatePicker(
+						state = datePickerState,
+						colors = DatePickerDialogColors(),
+						showModeToggle = false,
+					)
+				}
+			}
 			Column {
 				EpisodeTextFieldGroup(
 					labelRes = R.string.new_episode_info_location,
@@ -151,6 +195,9 @@ internal fun NewEpisodeInfoScreen(
 					trailingIcon = {
 						MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_calendar)
 					},
+					onTrailingIconClick = {
+						showDatePickerDialog = true
+					},
 				)
 			}
 			MapisodeFilledButton(
@@ -164,7 +211,6 @@ internal fun NewEpisodeInfoScreen(
 					updateEpisodeInfo(
 						state.episodeInfo.copy(
 							tags = tagValue,
-							date = dateValue,
 						),
 					)
 					navController.navigate("new_episode_content")
@@ -174,6 +220,15 @@ internal fun NewEpisodeInfoScreen(
 		}
 	}
 }
+
+@Composable
+private fun DatePickerDialogColors(): DatePickerColors =
+	DatePickerDefaults.colors().copy(
+		containerColor = MapisodeTheme.colorScheme.dialogBackground,
+		selectedYearContainerColor = MapisodeTheme.colorScheme.dialogConfirm,
+		selectedDayContainerColor = MapisodeTheme.colorScheme.dialogConfirm,
+		todayDateBorderColor = MapisodeTheme.colorScheme.dialogConfirm,
+	)
 
 private fun latLngString(latLng: LatLng): String =
 	String.format(Locale.getDefault(), "%.6f, %.6f", latLng.latitude, latLng.longitude)

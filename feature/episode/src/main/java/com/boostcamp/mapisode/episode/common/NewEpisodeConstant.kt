@@ -14,5 +14,16 @@ object NewEpisodeConstant {
 		.padding(vertical = 15.dp)
 	val textFieldVerticalArrangement = Arrangement.spacedBy(12.dp)
 	val groupMap = mapOf("나의 에피소드" to "my_episode")
-	val categoryMap = mapOf("먹을 것" to "EAT", "볼 것" to "SEE", "나머지" to "OTHER")
+
+	private const val CATEGORY_NAME_EAT = "먹을 것"
+	private const val CATEGORY_NAME_SEE = "볼 것"
+	private const val CATEGORY_NAME_OTHER = "나머지"
+	private const val CATEGORY_VALUE_EAT = "EAT"
+	private const val CATEGORY_VALUE_SEE = "SEE"
+	private const val CATEGORY_VALUE_OTHER = "OTHER"
+	val categoryMap = mapOf(
+		CATEGORY_NAME_EAT to CATEGORY_VALUE_EAT,
+		CATEGORY_NAME_SEE to CATEGORY_VALUE_SEE,
+		CATEGORY_NAME_OTHER to CATEGORY_VALUE_OTHER,
+	)
 }
