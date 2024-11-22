@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,19 +30,24 @@ import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
-internal fun GroupRoute() {
-	var isGroupCreationScreenVisible by remember { mutableIntStateOf(0) }
-
-	when (isGroupCreationScreenVisible) {
-		0 -> GroupScreen(onMove = { isGroupCreationScreenVisible = it })
-		1 -> GroupDetailScreen(onBack = { isGroupCreationScreenVisible = 0 })
-		2 -> GroupEditScreen(onBack = { isGroupCreationScreenVisible = 0 })
-		3 -> GroupCreationScreen(onBack = { isGroupCreationScreenVisible = 0 })
-	}
+internal fun MainGroupRoute(
+	onGroupJoinClick: () -> Unit,
+	onGroupDetailClick: () -> Unit,
+	onGroupCreationClick: () -> Unit,
+) {
+	GroupScreen(
+		onGroupJoinClick = onGroupJoinClick,
+		onGroupDetailClick = onGroupDetailClick,
+		onGroupCreationClick = onGroupCreationClick,
+	)
 }
 
 @Composable
-private fun GroupScreen(onMove: (Int) -> Unit) {
+private fun GroupScreen(
+	onGroupJoinClick: () -> Unit,
+	onGroupDetailClick: () -> Unit,
+	onGroupCreationClick: () -> Unit,
+) {
 	val focusManager = LocalFocusManager.current
 	var isMenuPoppedUp by remember { mutableStateOf(false) }
 
@@ -76,21 +80,14 @@ private fun GroupScreen(onMove: (Int) -> Unit) {
 							offset = DpOffset(0.dp, 0.dp).minus(DpOffset(41.dp, 0.dp)),
 						) {
 							MapisodeDropdownMenuItem(
-								onClick = { onMove(1) },
+								onClick = { onGroupJoinClick() },
 							) {
 								MapisodeText(
-									text = "그룹 상세",
+									text = "그룹 참여",
 								)
 							}
 							MapisodeDropdownMenuItem(
-								onClick = { onMove(2) },
-							) {
-								MapisodeText(
-									text = "나의 그룹",
-								)
-							}
-							MapisodeDropdownMenuItem(
-								onClick = { onMove(3) },
+								onClick = { onGroupCreationClick() },
 							) {
 								MapisodeText(
 									text = "그룹 생성",

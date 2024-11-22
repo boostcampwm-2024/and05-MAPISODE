@@ -26,7 +26,10 @@ import com.boostcamp.mapisode.designsystem.compose.button.MapisodeImageButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 
 @Composable
-fun GroupEditScreen(onBack: () -> Unit) {
+fun GroupEditScreen(
+	onBackClick: () -> Unit,
+	// onEpisodeClick: () -> Unit,
+) {
 	val focusManager = LocalFocusManager.current
 	val bottomBarController = LocalMapisodeShowBotBar.current
 	bottomBarController.off()
@@ -49,7 +52,7 @@ fun GroupEditScreen(onBack: () -> Unit) {
 					MapisodeIconButton(
 						onClick = {
 							bottomBarController.on()
-							onBack()
+							onBackClick()
 						},
 					) {
 						MapisodeIcon(
