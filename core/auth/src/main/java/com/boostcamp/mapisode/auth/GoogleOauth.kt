@@ -31,12 +31,15 @@ class GoogleOauth(private val context: Context) {
 
 				val resultCredential = credentialManager.getCredential(context, request).credential
 
-				val validatedCredential: GoogleIdTokenCredential = validateCredential(resultCredential)
-				val authResult: AuthResult = authenticateWithFirebase(firebaseAuth, validatedCredential)
+				val validatedCredential: GoogleIdTokenCredential =
+					validateCredential(resultCredential)
+				val authResult: AuthResult =
+					authenticateWithFirebase(firebaseAuth, validatedCredential)
 
 				val firebaseUID = authResult.user?.uid ?: throw Exception("Firebase UID가 없습니다.")
 				val googleIdToken = validatedCredential.idToken
 				val googleName = validatedCredential.run { "${familyName ?: ""}${givenName ?: ""}" }
+				val googleEmail = validatedCredential.id
 
 				trySend(
 					LoginState.Success(
@@ -45,6 +48,7 @@ class GoogleOauth(private val context: Context) {
 							id = firebaseUID,
 							displayName = googleName,
 							idToken = googleIdToken,
+							email = googleEmail,
 						),
 					),
 				)
