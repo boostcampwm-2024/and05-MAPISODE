@@ -1,4 +1,4 @@
-package com.boostcamp.mapisode.mygroup
+package com.boostcamp.mapisode.mygroup.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

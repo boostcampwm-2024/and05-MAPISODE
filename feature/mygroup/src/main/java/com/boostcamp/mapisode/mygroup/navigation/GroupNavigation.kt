@@ -4,11 +4,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.boostcamp.mapisode.mygroup.GroupCreationScreen
-import com.boostcamp.mapisode.mygroup.GroupDetailScreen
-import com.boostcamp.mapisode.mygroup.GroupEditScreen
-import com.boostcamp.mapisode.mygroup.GroupJoinScreen
-import com.boostcamp.mapisode.mygroup.MainGroupRoute
+import com.boostcamp.mapisode.mygroup.screen.GroupCreationScreen
+import com.boostcamp.mapisode.mygroup.screen.GroupDetailScreen
+import com.boostcamp.mapisode.mygroup.screen.GroupEditScreen
+import com.boostcamp.mapisode.mygroup.screen.GroupJoinScreen
+import com.boostcamp.mapisode.mygroup.screen.MainGroupRoute
 import com.boostcamp.mapisode.navigation.GroupRoute
 import com.boostcamp.mapisode.navigation.MainRoute
 
