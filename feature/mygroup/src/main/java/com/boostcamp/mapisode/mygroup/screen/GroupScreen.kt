@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,9 +57,17 @@ private fun GroupScreen(
 	val focusManager = LocalFocusManager.current
 	var isMenuPoppedUp by remember { mutableStateOf(false) }
 
-	viewModel.onIntent(GroupIntent.LoadGroups)
-
-	val groups = uiState.value.groups
+	LaunchedEffect(uiState) {
+		if (uiState.value.areGroupsLoading) {
+			if (uiState.value.groups.isEmpty()) {
+				viewModel.onIntent(GroupIntent.LoadGroups)
+			} else {
+				viewModel.confirmGroupsLoaded()
+			}
+		} else {
+			viewModel.onIntent(GroupIntent.LoadGroups)
+		}
+	}
 
 	MapisodeScaffold(
 		modifier = Modifier
@@ -117,7 +126,7 @@ private fun GroupScreen(
 				end = 30.dp,
 			),
 		) {
-			groups.forEach { group ->
+			uiState.value.groups.forEach { group ->
 				item {
 					GroupCard(
 						onGroupDetailClick = onGroupDetailClick,
