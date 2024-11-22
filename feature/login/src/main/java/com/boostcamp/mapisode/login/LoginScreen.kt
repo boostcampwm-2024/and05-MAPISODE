@@ -43,7 +43,7 @@ fun LoginRoute(
 	LaunchedEffect(uiState) {
 		when (uiState) {
 			is AuthUiState.Success -> {
-				val userInfo = (uiState as AuthUiState.Success).user.displayName
+				val userInfo = (uiState as AuthUiState.Success).authData.displayName
 				Toast.makeText(context, "안녕하세요 ${userInfo}님", Toast.LENGTH_SHORT).show()
 			}
 
