@@ -1,11 +1,11 @@
 package com.boostcamp.mapisode.mygroup
 
 import androidx.compose.runtime.Composable
+import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
-import com.boostcamp.mapisode.designsystem.R
 
 @Composable
 fun GroupJoinScreen(
