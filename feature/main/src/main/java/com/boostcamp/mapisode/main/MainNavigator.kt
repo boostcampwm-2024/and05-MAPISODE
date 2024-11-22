@@ -9,6 +9,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.boostcamp.mapisode.mygroup.navigation.navigateGroupCreation
+import com.boostcamp.mapisode.mygroup.navigation.navigateGroupDetail
+import com.boostcamp.mapisode.mygroup.navigation.navigateGroupEdit
+import com.boostcamp.mapisode.mygroup.navigation.navigateGroupJoin
 import com.boostcamp.mapisode.navigation.MainRoute
 
 internal class MainNavigator(
@@ -40,6 +44,22 @@ internal class MainNavigator(
 			MainNavTab.GROUP -> navController.navigate(MainNavTab.GROUP.route, navOptions)
 			MainNavTab.MYPAGE -> navController.navigate(MainNavTab.MYPAGE.route, navOptions)
 		}
+	}
+
+	fun navigateGroupJoin() {
+		navController.navigateGroupJoin()
+	}
+
+	fun navigateGroupDetail() {
+		navController.navigateGroupDetail()
+	}
+
+	fun navigateGroupCreation() {
+		navController.navigateGroupCreation()
+	}
+
+	fun navigateGroupEdit() {
+		navController.navigateGroupEdit()
 	}
 
 	private fun popBackStack() {

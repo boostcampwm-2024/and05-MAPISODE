@@ -25,7 +25,13 @@ internal fun MainNavHost(
 		) {
 			addHomeNavGraph()
 			addEpisodeNavGraph()
-			addGroupNavGraph()
+			addGroupNavGraph(
+				onBackClick = navigator::popBackStackIfNotHome,
+				onGroupJoinClick = navigator::navigateGroupJoin,
+				onGroupDetailClick = navigator::navigateGroupDetail,
+				onGroupCreationClick = navigator::navigateGroupCreation,
+				onGroupEditClick = navigator::navigateGroupEdit,
+			)
 			addMyPageNavGraph()
 		}
 	}
