@@ -1,4 +1,4 @@
-package com.boostcamp.mapisode.mygroup
+package com.boostcamp.mapisode.mygroup.screen
 
 import androidx.compose.runtime.Composable
 import com.boostcamp.mapisode.designsystem.R
