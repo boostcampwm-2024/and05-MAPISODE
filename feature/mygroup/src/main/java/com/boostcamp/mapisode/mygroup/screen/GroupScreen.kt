@@ -64,8 +64,6 @@ private fun GroupScreen(
 			} else {
 				viewModel.confirmGroupsLoaded()
 			}
-		} else {
-			viewModel.onIntent(GroupIntent.LoadGroups)
 		}
 	}
 
