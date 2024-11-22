@@ -115,6 +115,7 @@ private fun GroupScreen(
 			repeat(20) {
 				item {
 					GroupCard(
+						onGroupDetailClick = onGroupDetailClick,
 						imageUrl = mockItem.imageUrl,
 						title = mockItem.title,
 						content = mockItem.content,
