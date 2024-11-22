@@ -25,20 +25,20 @@ fun BottomBar(
 	contentColor: Color = MapisodeTheme.colorScheme.navUnselectedItem,
 	content: @Composable RowScope.() -> Unit,
 ) {
-	Surface(
-		color = backgroundColor,
-		contentColor = contentColor,
-		modifier = modifier
-			.fillMaxWidth()
-			.height(68.dp),
+	AnimatedVisibility(
+		visible = visible,
+		enter = fadeIn(),
+		exit = fadeOut(),
 	) {
-		Column {
-			MapisodeDivider(thickness = Thickness.Thin)
-			AnimatedVisibility(
-				visible = visible,
-				enter = fadeIn(),
-				exit = fadeOut(),
-			) {
+		Surface(
+			color = backgroundColor,
+			contentColor = contentColor,
+			modifier = modifier
+				.fillMaxWidth()
+				.height(68.dp),
+		) {
+			Column {
+				MapisodeDivider(thickness = Thickness.Thin)
 				Row(
 					Modifier
 						.selectableGroup(),
