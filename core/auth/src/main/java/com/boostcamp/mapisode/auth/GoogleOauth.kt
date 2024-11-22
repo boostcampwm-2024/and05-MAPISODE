@@ -6,7 +6,7 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialCancellationException
-import com.boostcamp.mapisode.model.User
+import com.boostcamp.mapisode.model.AuthData
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.AuthResult
@@ -44,8 +44,8 @@ class GoogleOauth(private val context: Context) {
 				trySend(
 					LoginState.Success(
 						googleIdToken,
-						User(
-							id = firebaseUID,
+						AuthData(
+							uid = firebaseUID,
 							displayName = googleName,
 							idToken = googleIdToken,
 							email = googleEmail,
