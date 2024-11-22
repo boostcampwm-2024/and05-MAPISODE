@@ -16,6 +16,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
@@ -25,18 +27,21 @@ import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenu
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.mygroup.component.GroupCard
-import com.boostcamp.mapisode.mygroup.component.ItemData
+import com.boostcamp.mapisode.mygroup.intent.GroupIntent
+import com.boostcamp.mapisode.mygroup.viewmodel.GroupViewModel
 
 @Composable
 internal fun MainGroupRoute(
 	onGroupJoinClick: () -> Unit,
 	onGroupDetailClick: () -> Unit,
 	onGroupCreationClick: () -> Unit,
+	viewModel: GroupViewModel = hiltViewModel(),
 ) {
 	GroupScreen(
 		onGroupJoinClick = onGroupJoinClick,
 		onGroupDetailClick = onGroupDetailClick,
 		onGroupCreationClick = onGroupCreationClick,
+		viewModel = viewModel,
 	)
 }
 
@@ -45,9 +50,15 @@ private fun GroupScreen(
 	onGroupJoinClick: () -> Unit,
 	onGroupDetailClick: () -> Unit,
 	onGroupCreationClick: () -> Unit,
+	viewModel: GroupViewModel,
 ) {
+	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 	val focusManager = LocalFocusManager.current
 	var isMenuPoppedUp by remember { mutableStateOf(false) }
+
+	viewModel.onIntent(GroupIntent.LoadGroups)
+
+	val groups = uiState.value.groups
 
 	MapisodeScaffold(
 		modifier = Modifier
@@ -97,12 +108,6 @@ private fun GroupScreen(
 			)
 		},
 	) {
-		val mockItem = ItemData(
-			imageUrl = "https://avatars.githubusercontent.com/u/127717111?v=4",
-			title = "나의 에피소드",
-			content = "개인용",
-		)
-
 		LazyVerticalGrid(
 			modifier = Modifier
 				.padding(it),
@@ -112,13 +117,13 @@ private fun GroupScreen(
 				end = 30.dp,
 			),
 		) {
-			repeat(20) {
+			groups.forEach { group ->
 				item {
 					GroupCard(
 						onGroupDetailClick = onGroupDetailClick,
-						imageUrl = mockItem.imageUrl,
-						title = mockItem.title,
-						content = mockItem.content,
+						imageUrl = group.imageUrl,
+						title = group.name,
+						content = group.users.size.toString(),
 					)
 				}
 			}
