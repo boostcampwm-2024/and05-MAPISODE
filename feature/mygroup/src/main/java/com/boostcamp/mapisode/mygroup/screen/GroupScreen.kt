@@ -1,16 +1,16 @@
 package com.boostcamp.mapisode.mygroup.screen
 
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
@@ -21,13 +21,11 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
-import com.boostcamp.mapisode.designsystem.compose.MapisodeTextField
-import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
-import com.boostcamp.mapisode.designsystem.compose.button.MapisodeOutlinedButton
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenu
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
-import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.boostcamp.mapisode.mygroup.component.GroupCard
+import com.boostcamp.mapisode.mygroup.component.ItemData
 
 @Composable
 internal fun MainGroupRoute(
@@ -99,65 +97,30 @@ private fun GroupScreen(
 			)
 		},
 	) {
-		Column(
+		val mockItem = ItemData(
+			imageUrl = "https://avatars.githubusercontent.com/u/127717111?v=4",
+			title = "나의 에피소드",
+			content = "개인용",
+		)
+
+		LazyVerticalGrid(
 			modifier = Modifier
-				.fillMaxSize()
-				.padding(it)
-				.padding(horizontal = 46.dp),
-			verticalArrangement = Arrangement.spacedBy(16.dp),
-			horizontalAlignment = Alignment.CenterHorizontally,
+				.padding(it),
+			columns = GridCells.Fixed(2),
+			contentPadding = PaddingValues(
+				start = 30.dp,
+				end = 30.dp,
+			),
 		) {
-			var inputText by remember { mutableStateOf("") }
-			var submittedText by remember { mutableStateOf("") }
-
-			MapisodeFilledButton(
-				onClick = {
-					submittedText = "활성화 버튼"
-					focusManager.clearFocus()
-				},
-				text = "활성화 버튼",
-				showRipple = true,
-			)
-
-			MapisodeFilledButton(
-				onClick = { },
-				text = "비활성화 버튼",
-				enabled = false,
-			)
-
-			MapisodeOutlinedButton(
-				onClick = { submittedText = "아웃라인 버튼 클릭" },
-				text = "아웃라인 버튼",
-				showRipple = true,
-			)
-
-			MapisodeTextField(
-				value = inputText,
-				onValueChange = { text -> inputText = text },
-				placeholder = "텍스트 필드",
-				onSubmitInput = { text ->
-					submittedText = text
-				},
-			)
-
-			MapisodeText(
-				text = submittedText,
-				style = MapisodeTheme.typography.bodyLarge,
-			)
-
-			MapisodeTextField(
-				value = inputText,
-				onValueChange = { text -> inputText = text },
-				placeholder = "위치를 입력하세요",
-				onSubmitInput = { text ->
-					submittedText = text
-				},
-				trailingIcon = {
-					MapisodeIcon(
-						id = R.drawable.ic_location,
+			repeat(20) {
+				item {
+					GroupCard(
+						imageUrl = mockItem.imageUrl,
+						title = mockItem.title,
+						content = mockItem.content,
 					)
-				},
-			)
+				}
+			}
 		}
 	}
 }
