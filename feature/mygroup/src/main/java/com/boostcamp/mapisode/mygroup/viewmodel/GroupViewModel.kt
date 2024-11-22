@@ -29,6 +29,15 @@ class GroupViewModel @Inject constructor() :
 			)
 		}
 	}
+
+	fun confirmGroupsLoaded() {
+		intent {
+			copy(
+				areGroupsLoading = false,
+				areGroupsVisible = true,
+			)
+		}
+	}
 }
 
 val mockItem = GroupItem(
