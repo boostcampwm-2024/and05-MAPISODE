@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.auth.GoogleOauth
 import com.boostcamp.mapisode.auth.LoginState
-import com.boostcamp.mapisode.model.User
+import com.boostcamp.mapisode.model.AuthData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,10 +25,11 @@ class AuthViewModel @Inject constructor() : ViewModel() {
 				_uiState.value = when (result) {
 					is LoginState.Success -> {
 						AuthUiState.Success(
-							User(
-								id = result.userInfo.id,
-								displayName = result.userInfo.displayName,
+							AuthData(
+								uid = result.authDataInfo.uid,
+								displayName = result.authDataInfo.displayName,
 								idToken = result.idToken,
+								email = result.authDataInfo.email,
 							),
 						)
 					}
