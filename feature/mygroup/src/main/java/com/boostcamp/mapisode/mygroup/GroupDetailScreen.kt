@@ -23,7 +23,10 @@ import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import kotlinx.coroutines.launch
 
 @Composable
-fun GroupDetailScreen(onBack: () -> Unit) {
+fun GroupDetailScreen(
+	onBackClick: () -> Unit,
+	onEditClick: () -> Unit,
+) {
 	val pagerState = rememberPagerState(pageCount = { 2 })
 	val list = listOf("그룹 상세", "에피소드")
 	val scope = rememberCoroutineScope()
@@ -35,7 +38,7 @@ fun GroupDetailScreen(onBack: () -> Unit) {
 				title = "그룹 상세",
 				navigationIcon = {
 					MapisodeIconButton(
-						onClick = { onBack() },
+						onClick = { onBackClick() },
 					) {
 						MapisodeIcon(
 							id = R.drawable.ic_arrow_back_ios,
