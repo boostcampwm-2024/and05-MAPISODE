@@ -19,12 +19,6 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.ripple.MapisodeRippleAIndication
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
-data class ItemData(
-	val imageUrl: String,
-	val title: String,
-	val content: String,
-)
-
 @Composable
 fun GroupCard(
 	onGroupDetailClick: () -> Unit,
