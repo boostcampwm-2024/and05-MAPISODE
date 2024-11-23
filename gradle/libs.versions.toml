@@ -93,6 +93,7 @@ androidx-credential = { group = "androidx.credentials", name = "credentials", ve
 # Coil
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
+coil-test = { group = "io.coil-kt.coil3", name = "coil-test", version.ref = "coil" }
 
 # Compose
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
@@ -210,7 +211,8 @@ coroutines = [
 # Coil Libraries
 coil = [
 	"coil-compose",
-	"coil-network-okhttp"
+	"coil-network-okhttp",
+	"coil-test"
 ]
 
 # Datastore
