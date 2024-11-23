@@ -26,6 +26,7 @@ fun MapisodeFilledButton(
 	onClick: () -> Unit,
 	modifier: Modifier = Modifier,
 	text: String,
+	disabledText: String = text,
 	textStyle: MapisodeTextStyle = MapisodeTheme.typography.titleLarge,
 	enabled: Boolean = true,
 	@DrawableRes leftIcon: Int? = null,
@@ -61,7 +62,7 @@ fun MapisodeFilledButton(
 		}
 
 		MapisodeText(
-			text = text,
+			text = if (enabled) text else disabledText,
 			color = MapisodeTheme.colorScheme.filledButtonContent,
 			style = textStyle,
 		)
