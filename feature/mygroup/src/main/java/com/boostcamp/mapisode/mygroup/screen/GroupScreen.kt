@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +30,7 @@ import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.mygroup.component.GroupCard
 import com.boostcamp.mapisode.mygroup.intent.GroupIntent
+import com.boostcamp.mapisode.mygroup.intent.GroupState
 import com.boostcamp.mapisode.mygroup.viewmodel.GroupViewModel
 
 @Composable
@@ -38,31 +40,36 @@ internal fun MainGroupRoute(
 	onGroupCreationClick: () -> Unit,
 	viewModel: GroupViewModel = hiltViewModel(),
 ) {
+	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 	GroupScreen(
 		onGroupJoinClick = onGroupJoinClick,
 		onGroupDetailClick = onGroupDetailClick,
 		onGroupCreationClick = onGroupCreationClick,
-		viewModel = viewModel,
+		uiState = uiState,
+		onIntent = { viewModel.onIntent(it) },
 	)
 }
 
 @Composable
-private fun GroupScreen(
+private fun <T> GroupScreen(
 	onGroupJoinClick: () -> Unit,
 	onGroupDetailClick: () -> Unit,
 	onGroupCreationClick: () -> Unit,
-	viewModel: GroupViewModel,
+	uiState: State<T>,
+	onIntent: (GroupIntent) -> Unit,
 ) {
-	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 	val focusManager = LocalFocusManager.current
 	var isMenuPoppedUp by remember { mutableStateOf(false) }
 
 	LaunchedEffect(uiState.value) {
-		if (uiState.value.groups.isEmpty()) {
-			viewModel.onIntent(GroupIntent.LoadGroups)
-		}
-		if (uiState.value.areGroupsLoading && uiState.value.groups.isNotEmpty()) {
-			viewModel.onIntent(GroupIntent.EndLoadingGroups)
+		if (uiState.value is GroupState) {
+			val groupState = uiState.value as GroupState
+			if (groupState.groups.isEmpty()) {
+				onIntent(GroupIntent.LoadGroups)
+			}
+			if (groupState.areGroupsLoading && groupState.groups.isNotEmpty()) {
+				onIntent(GroupIntent.EndLoadingGroups)
+			}
 		}
 	}
 
@@ -118,19 +125,19 @@ private fun GroupScreen(
 			modifier = Modifier
 				.padding(it),
 			columns = GridCells.Fixed(2),
-			contentPadding = PaddingValues(
-				start = 30.dp,
-				end = 30.dp,
-			),
+			contentPadding = PaddingValues(horizontal = 30.dp),
 		) {
-			uiState.value.groups.forEach { group ->
-				item {
-					GroupCard(
-						onGroupDetailClick = onGroupDetailClick,
-						imageUrl = group.imageUrl,
-						title = group.name,
-						content = group.users.size.toString(),
-					)
+			if (uiState.value is GroupState) {
+				val groupState = uiState.value as GroupState
+				groupState.groups.forEach { group ->
+					item {
+						GroupCard(
+							onGroupDetailClick = onGroupDetailClick,
+							imageUrl = group.imageUrl,
+							title = group.name,
+							content = group.users.size.toString(),
+						)
+					}
 				}
 			}
 		}

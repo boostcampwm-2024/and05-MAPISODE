@@ -7,6 +7,7 @@ import com.boostcamp.mapisode.mygroup.intent.GroupSideEffect
 import com.boostcamp.mapisode.mygroup.intent.GroupState
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,7 +30,7 @@ class GroupViewModel @Inject constructor() :
 		intent {
 			copy(
 				areGroupsLoading = true,
-				groups = mockItems,
+				groups = mockItems.toPersistentList(),
 			)
 		}
 	}
