@@ -57,13 +57,12 @@ private fun GroupScreen(
 	val focusManager = LocalFocusManager.current
 	var isMenuPoppedUp by remember { mutableStateOf(false) }
 
-	LaunchedEffect(uiState) {
-		if (uiState.value.areGroupsLoading && !uiState.value.areGroupsVisible) {
-			if (uiState.value.groups.isEmpty()) {
-				viewModel.onIntent(GroupIntent.LoadGroups)
-			} else {
-				viewModel.confirmGroupsLoaded()
-			}
+	LaunchedEffect(uiState.value) {
+		if (uiState.value.groups.isEmpty()) {
+			viewModel.onIntent(GroupIntent.LoadGroups)
+		}
+		if (uiState.value.areGroupsLoading && uiState.value.groups.isNotEmpty()) {
+			viewModel.onIntent(GroupIntent.EndLoadingGroups)
 		}
 	}
 
