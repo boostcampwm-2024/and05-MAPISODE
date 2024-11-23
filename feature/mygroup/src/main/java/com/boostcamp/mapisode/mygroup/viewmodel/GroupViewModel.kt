@@ -1,13 +1,14 @@
 package com.boostcamp.mapisode.mygroup.viewmodel
 
-import com.boostcamp.mapisode.model.GroupItem
 import com.boostcamp.mapisode.model.User
 import com.boostcamp.mapisode.mygroup.intent.GroupIntent
+import com.boostcamp.mapisode.mygroup.intent.GroupItemUiModel
 import com.boostcamp.mapisode.mygroup.intent.GroupSideEffect
 import com.boostcamp.mapisode.mygroup.intent.GroupState
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,7 +31,7 @@ class GroupViewModel @Inject constructor() :
 		intent {
 			copy(
 				areGroupsLoading = true,
-				groups = mockItems.toPersistentList(),
+				groups = mockItems.toImmutableList(),
 			)
 		}
 	}
@@ -44,13 +45,13 @@ class GroupViewModel @Inject constructor() :
 	}
 }
 
-val mockItem = GroupItem(
+val mockItem = GroupItemUiModel(
 	name = "Group 1",
 	imageUrl = "https://avatars.githubusercontent.com/u/127717111?v=4",
 	description = "Description for Group 1",
 	createdAt = "2021-08-01",
 	adminUser = "Admin 1",
-	users = listOf(
+	users = persistentListOf(
 		User(
 			id = "User1",
 			displayName = "DisplayName1",
@@ -59,4 +60,4 @@ val mockItem = GroupItem(
 	),
 )
 
-private val mockItems: List<GroupItem> = List(20) { mockItem }
+private val mockItems: List<GroupItemUiModel> = List(20) { mockItem }
