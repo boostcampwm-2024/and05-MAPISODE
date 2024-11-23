@@ -18,6 +18,10 @@ class GroupViewModel @Inject constructor() :
 			is GroupIntent.LoadGroups -> {
 				loadGroups()
 			}
+
+			is GroupIntent.EndLoadingGroups -> {
+				confirmGroupsLoaded()
+			}
 		}
 	}
 
@@ -30,11 +34,10 @@ class GroupViewModel @Inject constructor() :
 		}
 	}
 
-	fun confirmGroupsLoaded() {
+	private fun confirmGroupsLoaded() {
 		intent {
 			copy(
 				areGroupsLoading = false,
-				areGroupsVisible = true,
 			)
 		}
 	}
