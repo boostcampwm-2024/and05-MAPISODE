@@ -1,36 +1,37 @@
 package com.boostcamp.mapisode.mygroup.intent
 
 import androidx.compose.runtime.Immutable
-import com.boostcamp.mapisode.model.GroupItem
-import com.boostcamp.mapisode.model.User
+import com.boostcamp.mapisode.model.GroupModel
 import com.boostcamp.mapisode.ui.base.UiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 
 @Immutable
 data class GroupState(
 	val areGroupsLoading: Boolean = false,
-	val groups: ImmutableList<GroupItemUiModel> = persistentListOf(),
+	val groups: ImmutableList<GroupUiModel> = persistentListOf(),
 ) : UiState
 
 @Immutable
-data class GroupItemUiModel(
-	val name: String,
-	val imageUrl: String,
-	val description: String,
-	val createdAt: String,
+data class GroupUiModel(
+	val id: String,
 	val adminUser: String,
-	val users: ImmutableList<User> = persistentListOf(),
+	val createdAt: String,
+	val description: String,
+	val imageUrl: String,
+	val name: String,
+	val members: List<String>,
 )
 
-fun GroupItem.toUiModel(): GroupItemUiModel = GroupItemUiModel(
-	name = name,
-	imageUrl = imageUrl,
-	description = description,
-	createdAt = createdAt,
+fun GroupModel.toUiModel(): GroupUiModel = GroupUiModel(
+	id = id,
 	adminUser = adminUser,
-	users = users.toPersistentList(),
+	createdAt = createdAt.time.toString(),
+	description = description,
+	imageUrl = imageUrl,
+	name = name,
+	members = members.toImmutableList(),
 )
 
-fun List<GroupItem>.toUiModels(): List<GroupItemUiModel> = this.map { it.toUiModel() }
+fun List<GroupModel>.toUiModels(): List<GroupUiModel> = this.map { it.toUiModel() }

@@ -10,4 +10,5 @@ android {
 
 dependencies {
 	implementation(libs.bundles.coil)
+	implementation(project(":domain:mygroup"))
 }

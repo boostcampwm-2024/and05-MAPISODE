@@ -191,8 +191,7 @@ fun GroupJoinScreen(
 }
 
 @Composable
-fun ConfirmJoinGroup(
-) {
+fun ConfirmJoinGroup() {
 	Column(
 		modifier = Modifier
 			.padding(horizontal = 30.dp)
