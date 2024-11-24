@@ -16,6 +16,9 @@ data class CustomColorScheme(
 	// Scaffold
 	val scaffoldBackground: Color,
 
+	// TextColoredContainer
+	val textColoredContainer: Color,
+
 	// Scrim
 	val scrim: Color,
 
@@ -108,6 +111,9 @@ val lightColorScheme = CustomColorScheme(
 	// Scaffold
 	scaffoldBackground = Neutral10,
 
+	// TextColoredContainer
+	textColoredContainer = Neutral90,
+
 	// Scrim
 	scrim = Neutral110.copy(alpha = 0.32f),
 
@@ -171,7 +177,7 @@ val lightColorScheme = CustomColorScheme(
 
 	// Divider
 	dividerThinColor = Neutral30,
-	dividerThickColor = Neutral80,
+	dividerThickColor = Color.Transparent,
 
 	// Text
 	textBackground = Color.Unspecified,
@@ -199,6 +205,9 @@ val darkColorScheme = CustomColorScheme(
 
 	// Scaffold
 	scaffoldBackground = Neutral110,
+
+	// TextColoredContainer
+	textColoredContainer = Neutral10,
 
 	// Scrim
 	scrim = Neutral10.copy(alpha = 0.32f),
@@ -263,7 +272,7 @@ val darkColorScheme = CustomColorScheme(
 
 	// Divider
 	dividerThinColor = Neutral40,
-	dividerThickColor = Neutral50,
+	dividerThickColor = Color.Transparent,
 
 	// Text
 	textBackground = Color.Unspecified,
