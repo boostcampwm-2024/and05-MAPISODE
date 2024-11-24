@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.mygroup.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -155,7 +156,7 @@ fun GroupJoinScreen(
 				if (isValid && isInput) {
 					item {
 						ConfirmJoinGroup()
-						Spacer(modifier = Modifier.padding(bottom = 60.dp))
+						Spacer(modifier = Modifier.padding(bottom = 70.dp))
 					}
 				}
 				if (!isValid && isInput) {
@@ -168,15 +169,22 @@ fun GroupJoinScreen(
 				}
 			}
 			if (isValid && isInput) {
-				MapisodeFilledButton(
-					onClick = {},
+				Column(
 					modifier = Modifier
 						.fillMaxWidth()
 						.padding(horizontal = 30.dp)
-						.align(Alignment.BottomCenter),
-					text = "참여하기",
-					showRipple = true,
-				)
+						.align(Alignment.BottomCenter)
+						.background(MapisodeTheme.colorScheme.surfaceBackground),
+				) {
+					Spacer(modifier = Modifier.padding(top = 4.dp))
+					MapisodeDivider(direction = Direction.Horizontal, thickness = Thickness.Thin)
+					Spacer(modifier = Modifier.padding(5.dp))
+					MapisodeFilledButton(
+						onClick = {},
+						text = "참여하기",
+						showRipple = true,
+					)
+				}
 			}
 		}
 	}
@@ -266,7 +274,7 @@ fun ConfirmJoinGroup(
 		) {
 			MapisodeText(
 				modifier = Modifier.fillMaxWidth(),
-				text = "ddddddd",
+				text = "테\n스\n트\n테\n스\n트\n테\n\n\n\n\n\n\n\n스트",
 				style = MapisodeTheme.typography.labelLarge,
 			)
 		}
