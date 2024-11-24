@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="group_join_direction">기존에 존재하는 그룹에서 발급된 초대 코드를 입력해주세요.</string>
+	<string name="group_join_sub_title">그룹 참여하기</string>
+	<string name="group_join_textinput_label">초대 코드</string>
+	<string name="group_join_textfield_hint">초대 코드를 입력해주세요</string>
+	<string name="group_join_btn_direction">확인</string>
+</resources>
