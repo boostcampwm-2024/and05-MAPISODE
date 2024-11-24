@@ -28,7 +28,7 @@ enum class Direction {
 
 enum class Thickness(val value: Dp) {
 	Thin(1.dp),
-	Thick(8.dp),
+	Thick(20.dp),
 }
 
 @Composable

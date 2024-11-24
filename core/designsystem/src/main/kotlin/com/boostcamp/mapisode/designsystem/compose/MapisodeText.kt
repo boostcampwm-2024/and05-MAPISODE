@@ -25,7 +25,7 @@ fun MapisodeText(
 	color: Color = Color.Unspecified,
 	onTextLayout: (TextLayoutResult) -> Unit = {},
 	style: MapisodeTextStyle = LocalTextStyle.current,
-	overflow: TextOverflow = TextOverflow.Clip,
+	overflow: TextOverflow = TextOverflow.Ellipsis,
 	maxLines: Int = Int.MAX_VALUE,
 	minLines: Int = 1,
 ) {
