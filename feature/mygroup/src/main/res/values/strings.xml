@@ -10,4 +10,5 @@
 	<string name="group_recent_upload">"최근 업로드 : "</string>
 	<string name="group_overview">그룹 개요</string>
 	<string name="group_descript">그룹 설명</string>
+    <string name="group_members_number">"멤버수 : "</string>
 </resources>

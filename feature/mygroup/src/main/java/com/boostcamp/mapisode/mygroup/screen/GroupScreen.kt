@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,6 +33,7 @@ import com.boostcamp.mapisode.mygroup.component.GroupCard
 import com.boostcamp.mapisode.mygroup.intent.GroupIntent
 import com.boostcamp.mapisode.mygroup.intent.GroupState
 import com.boostcamp.mapisode.mygroup.viewmodel.GroupViewModel
+import com.boostcamp.mapisode.mygroup.R as S
 
 @Composable
 internal fun MainGroupRoute(
@@ -135,7 +137,7 @@ private fun <T> GroupScreen(
 							onGroupDetailClick = onGroupDetailClick,
 							imageUrl = group.imageUrl,
 							title = group.name,
-							content = group.users.size.toString(),
+							content = stringResource(S.string.group_members_number) + group.members.size.toString(),
 						)
 					}
 				}
