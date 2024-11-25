@@ -22,7 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,9 +53,9 @@ fun GroupJoinScreen(
 	onBackClick: () -> Unit,
 ) {
 	val focusManager = LocalFocusManager.current
-	var codeText by remember { mutableStateOf("") }
-	var isInput by remember { mutableStateOf(false) }
-	var isValid by remember { mutableStateOf(false) }
+	var joinCodeText by rememberSaveable { mutableStateOf("") }
+	var isJoinCodeInput by rememberSaveable { mutableStateOf(false) }
+	var isJoinCodeValid by rememberSaveable { mutableStateOf(false) }
 
 	MapisodeScaffold(
 		modifier = Modifier.pointerInput(Unit) {
@@ -125,8 +125,8 @@ fun GroupJoinScreen(
 						Spacer(modifier = Modifier.padding(4.dp))
 						MapisodeTextField(
 							modifier = Modifier.fillParentMaxWidth(),
-							value = codeText,
-							onValueChange = { text -> codeText = text },
+							value = joinCodeText,
+							onValueChange = { text -> joinCodeText = text },
 							placeholder = stringResource(S.string.group_join_textfield_hint),
 						)
 					}
@@ -137,29 +137,29 @@ fun GroupJoinScreen(
 							.fillParentMaxWidth()
 							.height(40.dp),
 						onClick = {
-							isInput = true
-							if (codeText.length < 2) {
-								isValid = false
+							isJoinCodeInput = true
+							if (joinCodeText.length < 2) {
+								isJoinCodeValid = false
 							} else {
-								isValid = true
+								isJoinCodeValid = true
 							}
 							// TODO : 서버에 코드 요청
 						},
 						text = stringResource(S.string.group_join_btn_direction),
-						enabled = codeText.isNotBlank(),
+						enabled = joinCodeText.isNotBlank(),
 						showRipple = true,
 					)
 					Spacer(modifier = Modifier.padding(10.dp))
 					MapisodeDivider(direction = Direction.Horizontal, thickness = Thickness.Thin)
 					Spacer(modifier = Modifier.padding(10.dp))
 				}
-				if (isValid && isInput) {
+				if (isJoinCodeValid && isJoinCodeInput) {
 					item {
 						ConfirmJoinGroup()
 						Spacer(modifier = Modifier.padding(bottom = 70.dp))
 					}
 				}
-				if (!isValid && isInput) {
+				if (!isJoinCodeValid && isJoinCodeInput) {
 					item {
 						MapisodeText(
 							text = "존재하지 않는 그룹입니다.",
@@ -168,7 +168,7 @@ fun GroupJoinScreen(
 					}
 				}
 			}
-			if (isValid && isInput) {
+			if (isJoinCodeValid && isJoinCodeInput) {
 				Column(
 					modifier = Modifier
 						.fillMaxWidth()
