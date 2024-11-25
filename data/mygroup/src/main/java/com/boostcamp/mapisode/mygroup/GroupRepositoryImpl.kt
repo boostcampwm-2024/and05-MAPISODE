@@ -6,6 +6,7 @@ import com.boostcamp.mapisode.mygroup.model.GroupFirestoreModel
 import com.boostcamp.mapisode.mygroup.model.toDomainModel
 import com.boostcamp.mapisode.mygroup.model.toFirestoreModel
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
@@ -30,6 +31,19 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 		}
 	} catch (e: Exception) {
 		throw e
+	}
+
+	override suspend fun joinGroup(userId: String, groupId: String) {
+		groupCollection.document(groupId).update(
+			FirestoreConstants.FIELD_MEMBERS,
+			// 기존 유저 리스트에 덮어씌우지 않고 추가
+			FieldValue.arrayUnion(userCollection.document(userId))
+		).await()
+
+		userCollection.document(userId).update(
+			FirestoreConstants.FIELD_GROUPS,
+			FieldValue.arrayUnion(groupCollection.document(groupId))
+		).await()
 	}
 
 	override suspend fun createGroup(groupModel: GroupModel): String {
