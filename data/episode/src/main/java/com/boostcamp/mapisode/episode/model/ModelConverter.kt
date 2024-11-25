@@ -1,7 +1,6 @@
 package com.boostcamp.mapisode.episode.model
 
 import com.boostcamp.mapisode.model.EpisodeModel
-import com.boostcamp.mapisode.model.UserModel
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
@@ -18,12 +17,4 @@ internal fun EpisodeModel.toFirestoreModel(database: FirebaseFirestore): Episode
 		tags = tags,
 		title = title,
 		createdAt = Timestamp(createdAt),
-	)
-
-internal fun UserModel.toUserFirestoreModel(database: FirebaseFirestore): UserFirestoreModel =
-	UserFirestoreModel(
-		uid = uid,
-		nickname = nickname,
-		email = email,
-		profileUri = profileUri,
 	)
