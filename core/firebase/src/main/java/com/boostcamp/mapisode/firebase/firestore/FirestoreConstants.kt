@@ -9,4 +9,7 @@ object FirestoreConstants {
 	const val FIELD_GROUP = "group"
 	const val FIELD_LOCATION = "location"
 	const val FIELD_GROUPS = "groups"
+
+	const val FIELD_ADMIN_USER = "adminUser"
+	const val FIELD_MEMBERS = "members"
 }

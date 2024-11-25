@@ -5,10 +5,9 @@ import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.mygroup.intent.GroupIntent
 import com.boostcamp.mapisode.mygroup.intent.GroupSideEffect
 import com.boostcamp.mapisode.mygroup.intent.GroupState
-import com.boostcamp.mapisode.mygroup.intent.toUiModel
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,8 +32,7 @@ class GroupViewModel @Inject constructor(private val groupRepository: GroupRepos
 			try {
 				val group = groupRepository
 					.getGroupsByUserId("o6UT6Ze1LFgsvekEvj9J")
-					.map { it.toUiModel() }
-					.toImmutableList()
+					.toPersistentList()
 				intent {
 					copy(
 						areGroupsLoading = true,
