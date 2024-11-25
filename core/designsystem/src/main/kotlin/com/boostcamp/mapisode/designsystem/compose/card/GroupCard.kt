@@ -1,4 +1,4 @@
-package com.boostcamp.mapisode.mygroup.component
+package com.boostcamp.mapisode.designsystem.compose.card
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
