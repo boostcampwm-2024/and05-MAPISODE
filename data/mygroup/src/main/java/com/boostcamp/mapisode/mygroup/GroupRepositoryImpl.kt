@@ -16,22 +16,20 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 	private val groupCollection = database.collection(FirestoreConstants.COLLECTION_GROUP)
 	private val userCollection = database.collection(FirestoreConstants.COLLECTION_USER)
 
-	override suspend fun getGroupsByUserId(userId: String): List<GroupModel> {
-		return try {
-			val userSnapshot = userCollection.document(userId).get().await()
+	override suspend fun getGroupsByUserId(userId: String): List<GroupModel> = try {
+		val userSnapshot = userCollection.document(userId).get().await()
 
-			@Suppress("UNCHECKED_CAST")
-			val groupReferences = (userSnapshot[FirestoreConstants.FIELD_GROUPS] as List<DocumentReference>)
+		@Suppress("UNCHECKED_CAST")
+		val groupReferences = (userSnapshot[FirestoreConstants.FIELD_GROUPS] as List<DocumentReference>)
 
-			groupReferences.mapNotNull { documentRef ->
-				groupCollection.document(documentRef.id)
-					.get()
-					.await()
-					.toObject(GroupFirestoreModel::class.java)?.toDomainModel(documentRef.id)
-			}
-		} catch (e: Exception) {
-			throw e
+		groupReferences.mapNotNull { documentRef ->
+			groupCollection.document(documentRef.id)
+				.get()
+				.await()
+				.toObject(GroupFirestoreModel::class.java)?.toDomainModel(documentRef.id)
 		}
+	} catch (e: Exception) {
+		throw e
 	}
 
 	override suspend fun createGroup(groupModel: GroupModel): String {
