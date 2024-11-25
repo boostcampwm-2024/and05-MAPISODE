@@ -15,8 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -51,9 +54,11 @@ internal fun NewEpisodeInfoScreen(
 ) {
 	var isGroupDropdownExpanded by remember { mutableStateOf(false) }
 	var isCategoryDropdownExpanded by remember { mutableStateOf(false) }
-	var isGroupBlank by remember { mutableStateOf(false) }
-	var isCategoryBlank by remember { mutableStateOf(false) }
-	var tagValue by remember { mutableStateOf(state.episodeInfo.tags) }
+	var isGroupBlank by rememberSaveable { mutableStateOf(false) }
+	var isCategoryBlank by rememberSaveable { mutableStateOf(false) }
+	var tagValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+		mutableStateOf(TextFieldValue(state.episodeInfo.tags))
+	}
 	var showDatePickerDialog by remember { mutableStateOf(false) }
 	val datePickerState = rememberDatePickerState()
 
@@ -187,9 +192,9 @@ internal fun NewEpisodeInfoScreen(
 				EpisodeTextFieldGroup(
 					labelRes = R.string.new_episode_info_tags,
 					placeholderRes = R.string.new_episode_info_placeholder_tags,
-					value = tagValue,
-					onValueChange = { tagValue = it },
-					onSubmitInput = { tagValue = it },
+					value = tagValue.text,
+					onValueChange = { tagValue = TextFieldValue(it, TextRange(it.length)) },
+					onSubmitInput = { tagValue = TextFieldValue(it, TextRange(it.length)) },
 				)
 				EpisodeTextFieldGroup(
 					labelRes = R.string.new_episode_info_date,
@@ -215,7 +220,7 @@ internal fun NewEpisodeInfoScreen(
 					updateEpisodeInfo(
 						state.episodeInfo.copy(
 							location = state.cameraPosition.target,
-							tags = tagValue,
+							tags = tagValue.text,
 						),
 					)
 					navController.navigate("new_episode_content")
