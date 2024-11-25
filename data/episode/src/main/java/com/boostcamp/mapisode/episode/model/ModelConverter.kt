@@ -5,7 +5,10 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 
-internal fun EpisodeModel.toFirestoreModel(database: FirebaseFirestore): EpisodeFirestoreModel =
+internal fun EpisodeModel.toFirestoreModel(
+	database: FirebaseFirestore,
+	imageUrls: List<String>,
+): EpisodeFirestoreModel =
 	EpisodeFirestoreModel(
 		category = category,
 		content = content,

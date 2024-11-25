@@ -90,7 +90,13 @@ internal fun NewEpisodeContentScreen(
 			MapisodeFilledButton(
 				modifier = textFieldModifier,
 				onClick = {
-					submitEpisode(NewEpisodeContent(titleValue, descriptionValue))
+					submitEpisode(
+						NewEpisodeContent(
+							titleValue,
+							descriptionValue,
+							state.episodeContent.images,
+						),
+					)
 					navController.popBackStack("new_episode_pics", inclusive = false)
 				},
 				text = stringResource(R.string.new_episode_create_episode),

@@ -1,20 +1,28 @@
 package com.boostcamp.mapisode.episode
 
+import androidx.core.net.toUri
 import com.boostcamp.mapisode.episode.model.EpisodeFirestoreModel
 import com.boostcamp.mapisode.episode.model.toFirestoreModel
 import com.boostcamp.mapisode.firebase.firestore.FirestoreConstants
+import com.boostcamp.mapisode.firebase.firestore.StorageConstants.PATH_IMAGES
 import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.boostcamp.mapisode.model.EpisodeModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
-class EpisodeRepositoryImpl @Inject constructor(private val database: FirebaseFirestore) :
-	EpisodeRepository {
+class EpisodeRepositoryImpl @Inject constructor(
+	private val database: FirebaseFirestore,
+	private val storage: FirebaseStorage,
+) : EpisodeRepository {
 	private val episodeCollection = database.collection(FirestoreConstants.COLLECTION_EPISODE)
 	private val groupCollection = database.collection(FirestoreConstants.COLLECTION_GROUP)
 
@@ -105,8 +113,13 @@ class EpisodeRepositoryImpl @Inject constructor(private val database: FirebaseFi
 
 	override suspend fun createEpisode(episodeModel: EpisodeModel): String {
 		val newEpisodeId = UUID.randomUUID().toString().replace("-", "")
+		Timber.d(episodeModel.imageUrls.toString())
+		val uploadedImageUrls = uploadImagesToStorage(newEpisodeId, episodeModel.imageUrls)
+		Timber.d(uploadedImageUrls.toString())
 		return try {
-			episodeCollection.document(newEpisodeId).set(episodeModel.toFirestoreModel(database))
+			episodeCollection
+				.document(newEpisodeId)
+				.set(episodeModel.toFirestoreModel(database, uploadedImageUrls))
 				.await()
 			newEpisodeId
 		} catch (e: Exception) {
@@ -114,6 +127,32 @@ class EpisodeRepositoryImpl @Inject constructor(private val database: FirebaseFi
 				.e(e)
 			throw e
 		}
+	}
+
+	private suspend fun uploadImagesToStorage(
+		newEpisodeId: String,
+		imageUris: List<String>,
+	): List<String> {
+		val imageStorageUrls = mutableListOf<String>()
+		imageUris.forEachIndexed { index, imageUri ->
+			val imageRef =
+				storage.reference.child("$PATH_IMAGES/$newEpisodeId/${index + 1}")
+			imageRef.putFile(imageUri.toUri())
+				.addOnCompleteListener { task ->
+					if (task.isSuccessful) {
+						CoroutineScope(Dispatchers.IO).launch {
+							val downloadUrl = imageRef.downloadUrl.await()
+							Timber.d("Image URL: $downloadUrl")
+						}
+					} else {
+						Timber.e(task.exception)
+						throw task.exception ?: RuntimeException("Image upload failed")
+					}
+				}.await()
+			imageStorageUrls.add(imageRef.downloadUrl.await().toString())
+		}
+
+		return imageStorageUrls
 	}
 
 	private fun QuerySnapshot.toDomainModelList(): List<EpisodeModel> =

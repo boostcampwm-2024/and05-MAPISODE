@@ -235,11 +235,13 @@ private fun DatePickerDialogColors(): DatePickerColors =
 		todayDateBorderColor = MapisodeTheme.colorScheme.dialogConfirm,
 	)
 
+private const val DATE_STRING_FORMAT = "yyyy. MM. dd"
+
 private fun latLngString(latLng: LatLng): String =
 	String.format(Locale.getDefault(), "%.6f, %.6f", latLng.latitude, latLng.longitude)
 
 private fun dateString(date: Date): String =
-	DateFormat.format("yyyy. MM. dd", date).toString()
+	DateFormat.format(DATE_STRING_FORMAT, date).toString()
 
 @Preview
 @Composable
