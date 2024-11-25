@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.boostcamp.mapisode.home.HomeRoute
+import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.boostcamp.mapisode.navigation.MainRoute
 
 fun NavController.navigateHome(
@@ -13,8 +14,8 @@ fun NavController.navigateHome(
 	navigate(MainRoute.Home, navOptions)
 }
 
-fun NavGraphBuilder.addHomeNavGraph() {
+fun NavGraphBuilder.addHomeNavGraph(onTextMarkerClick: (EpisodeLatLng) -> Unit) {
 	composable<MainRoute.Home> {
-		HomeRoute()
+		HomeRoute(onTextMarkerClick = onTextMarkerClick)
 	}
 }

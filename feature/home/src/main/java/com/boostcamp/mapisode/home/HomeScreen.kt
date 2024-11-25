@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.boostcamp.mapisode.common.util.toEpisodeLatLng
 import com.boostcamp.mapisode.designsystem.compose.MapisodeModalBottomSheet
 import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
@@ -67,6 +68,7 @@ import com.boostcamp.mapisode.designsystem.R as Design
 @Composable
 internal fun HomeRoute(
 	viewModel: HomeViewModel = hiltViewModel(),
+	onTextMarkerClick: (EpisodeLatLng) -> Unit = {},
 ) {
 	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 	val context = LocalContext.current
@@ -162,6 +164,10 @@ internal fun HomeRoute(
 						}
 					}
 				}
+
+				is HomeSideEffect.NavigateToEpisode -> {
+					onTextMarkerClick(sideEffect.latLng)
+				}
 			}
 		}
 	}
@@ -184,8 +190,8 @@ internal fun HomeRoute(
 		onGroupFabClick = {
 			viewModel.onIntent(HomeIntent.ShowBottomSheet)
 		},
-		onCreateNewEpisode = {
-			Timber.e("Create new episode at $it")
+		onCreateNewEpisode = { latLng ->
+			viewModel.onIntent(HomeIntent.ClickTextMarker(latLng.toEpisodeLatLng()))
 		},
 	)
 }
