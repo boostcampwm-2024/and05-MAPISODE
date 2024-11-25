@@ -11,6 +11,7 @@ import com.boostcamp.mapisode.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,11 +45,13 @@ class GroupJoinViewModel @Inject constructor(
 			is GroupJoinIntent.TryGetGroup -> {
 				tryGetGroupByGroupId(intent.inviteCode)
 			}
+
 			is GroupJoinIntent.JoinTheGroup -> {
 				joinGroup()
 			}
+
 			is GroupJoinIntent.BackToGroupScreen -> {
-				intent { copy(isGroupExist = false) }
+
 			}
 		}
 	}
@@ -59,7 +62,7 @@ class GroupJoinViewModel @Inject constructor(
 			try {
 				val group = groupRepository.getGroupById(inviteCodes)
 				intent { copy(isGroupExist = true, group = group) }
-
+				Timber.d("group: $currentState")
 			} catch (e: Exception) {
 				intent { copy(isGroupExist = false) }
 				postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_not_exist))
@@ -71,11 +74,16 @@ class GroupJoinViewModel @Inject constructor(
 		viewModelScope.launch {
 			val userId = myId.value
 			val group = currentState.group ?: return@launch
+			Timber.d("userId: $userId, group: $group")
+			intent { copy(isGroupLoading = true) }
 			try {
 				groupRepository.joinGroup(userId, group.id)
 				intent { copy(isJoinedSuccess = true) }
 				postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_success))
+				Timber.d(currentState.toString())
 			} catch (e: Exception) {
+				Timber.e(e)
+				intent { copy(isGroupLoading = false, isJoinedSuccess = false, group = null) }
 				postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_failure))
 			}
 		}

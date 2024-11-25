@@ -5,6 +5,6 @@ import androidx.compose.runtime.Immutable
 @Immutable
 sealed class GroupJoinIntent {
 	data class TryGetGroup(val inviteCode: String) : GroupJoinIntent()
-	data class JoinTheGroup(val userId: String, val groupId: String) : GroupJoinIntent()
+	data object JoinTheGroup : GroupJoinIntent()
 	data object BackToGroupScreen : GroupJoinIntent()
 }

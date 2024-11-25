@@ -63,10 +63,23 @@ fun GroupJoinScreen(
 	val focusManager = LocalFocusManager.current
 	var joinCodeText by rememberSaveable { mutableStateOf("") }
 	var onGetGroup by remember { mutableStateOf(false) }
+	var onJoinGroup by remember { mutableStateOf(false) }
+
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
 	LaunchedEffect(onGetGroup) {
 		viewModel.onIntent(GroupJoinIntent.TryGetGroup(joinCodeText))
+	}
+
+	LaunchedEffect(onJoinGroup) {
+		viewModel.onIntent(GroupJoinIntent.JoinTheGroup)
+	}
+
+	LaunchedEffect(uiState.value.isJoinedSuccess) {
+		if (uiState.value.isJoinedSuccess) {
+			viewModel.onIntent(GroupJoinIntent.BackToGroupScreen)
+			onBackClick()
+		}
 	}
 
 	MapisodeScaffold(
@@ -187,7 +200,7 @@ fun GroupJoinScreen(
 					Spacer(modifier = Modifier.padding(5.dp))
 					MapisodeFilledButton(
 						modifier = Modifier.fillMaxWidth(),
-						onClick = {},
+						onClick = { onJoinGroup = !onJoinGroup },
 						text = "참여하기",
 						showRipple = true,
 					)
