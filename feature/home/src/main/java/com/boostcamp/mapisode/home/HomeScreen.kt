@@ -18,7 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -39,6 +41,7 @@ import com.boostcamp.mapisode.home.common.mapCategoryToChipType
 import com.boostcamp.mapisode.home.component.GroupBottomSheetContent
 import com.boostcamp.mapisode.home.component.MapisodeChip
 import com.boostcamp.mapisode.home.component.MapisodeFabOverlayButton
+import com.boostcamp.mapisode.home.component.rememberMarkerImage
 import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.google.android.gms.location.LocationServices
 import com.naver.maps.geometry.LatLng
@@ -181,6 +184,9 @@ internal fun HomeRoute(
 		onGroupFabClick = {
 			viewModel.onIntent(HomeIntent.ShowBottomSheet)
 		},
+		onCreateNewEpisode = {
+			Timber.e("Create new episode at $it")
+		},
 	)
 }
 
@@ -191,12 +197,14 @@ private fun HomeScreen(
 	cameraPositionState: CameraPositionState,
 	onChipSelected: (ChipType) -> Unit = {},
 	onGroupFabClick: () -> Unit = {},
+	onCreateNewEpisode: (LatLng) -> Unit = {},
 ) {
 	val context = LocalContext.current
 	val eatIcon = remember { OverlayImage.fromResource(Design.drawable.ic_eat_marker_light) }
 	val seeIcon = remember { OverlayImage.fromResource(Design.drawable.ic_see_marker_light) }
 	val otherIcon = remember { OverlayImage.fromResource(Design.drawable.ic_other_marker_light) }
 	val defaultIcon = remember { OverlayImage.fromResource(Design.drawable.ic_other_marker_light) }
+	var longClickPosition by rememberSaveable { mutableStateOf<LatLng?>(null) }
 
 	Box(
 		modifier = Modifier.fillMaxSize(),
@@ -217,8 +225,11 @@ private fun HomeScreen(
 				isCompassEnabled = false,
 			),
 			locationSource = rememberFusedLocationSource(),
+			onMapLongClick = { _, latLng ->
+				longClickPosition = latLng
+			},
 			onMapClick = { _, _ ->
-				// TODO : 마커 찍기 구현
+				longClickPosition = null
 			},
 		) {
 			state.episodes.forEach { episode ->
@@ -236,7 +247,25 @@ private fun HomeScreen(
 					),
 					icon = icon,
 					onClick = {
-						// TODO : 마커 클릭 시 이벤트 구현
+						longClickPosition = null
+						true
+					},
+				)
+			}
+
+			longClickPosition?.let { position ->
+				val textMarker = rememberMarkerImage(
+					text = "에피소드 생성",
+				)
+
+				Marker(
+					state = MarkerState(
+						position = position,
+					),
+					icon = textMarker,
+					onClick = {
+						onCreateNewEpisode(position)
+						longClickPosition = null
 						true
 					},
 				)
