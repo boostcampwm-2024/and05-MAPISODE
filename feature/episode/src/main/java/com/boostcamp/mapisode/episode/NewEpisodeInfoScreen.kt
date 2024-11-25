@@ -243,7 +243,7 @@ private fun DatePickerDialogColors(): DatePickerColors =
 
 private const val DATE_STRING_FORMAT = "yyyy. MM. dd"
 
-private fun latLngString(latLng: LatLng): String =
+internal fun latLngString(latLng: LatLng): String =
 	String.format(Locale.getDefault(), "%.6f, %.6f", latLng.latitude, latLng.longitude)
 
 private fun dateString(date: Date): String =
