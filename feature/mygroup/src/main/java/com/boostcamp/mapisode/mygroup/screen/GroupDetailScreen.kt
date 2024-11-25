@@ -12,6 +12,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
@@ -20,6 +22,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTab
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTabRow
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
+import com.boostcamp.mapisode.mygroup.viewmodel.GroupDetailViewModel
 import com.boostcamp.mapisode.navigation.GroupRoute
 import kotlinx.coroutines.launch
 
@@ -28,10 +31,13 @@ fun GroupDetailScreen(
 	detail: GroupRoute.Detail,
 	onBackClick: () -> Unit,
 	onEditClick: (String) -> Unit,
+	viewModel: GroupDetailViewModel = hiltViewModel(),
 ) {
 	val pagerState = rememberPagerState(pageCount = { 2 })
 	val list = listOf("그룹 상세", "에피소드")
+	viewModel.getGroupDetail(detail.groupId)
 	val scope = rememberCoroutineScope()
+	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 	val groupId = detail.groupId
 
 	MapisodeScaffold(
@@ -50,7 +56,9 @@ fun GroupDetailScreen(
 				},
 				actions = {
 					MapisodeIconButton(
-						onClick = { },
+						onClick = {
+							onEditClick(groupId)
+						},
 					) {
 						MapisodeIcon(
 							id = R.drawable.ic_edit,
@@ -94,14 +102,25 @@ fun GroupDetailScreen(
 fun TabsContent(pagerState: PagerState) {
 	HorizontalPager(state = pagerState) { page ->
 		when (page) {
-			0 -> TabContentScreen(data = "그룹 상세")
-			1 -> TabContentScreen(data = "에피소드")
+			0 -> GroupDetailContent(data = "그룹 상세")
+			1 -> GroupEpisodesContent(data = "에피소드")
 		}
 	}
 }
 
 @Composable
-fun TabContentScreen(data: String) {
+fun GroupDetailContent(data: String) {
+	Column(
+		modifier = Modifier.fillMaxSize(),
+		horizontalAlignment = Alignment.CenterHorizontally,
+		verticalArrangement = Arrangement.Center,
+	) {
+		MapisodeText(text = data)
+	}
+}
+
+@Composable
+fun GroupEpisodesContent(data: String) {
 	Column(
 		modifier = Modifier.fillMaxSize(),
 		horizontalAlignment = Alignment.CenterHorizontally,
