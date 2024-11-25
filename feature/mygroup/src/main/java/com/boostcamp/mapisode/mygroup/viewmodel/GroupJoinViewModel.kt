@@ -53,11 +53,11 @@ class GroupJoinViewModel @Inject constructor(
 		}
 	}
 
-	private fun tryGetGroupByGroupId(inviteCode: String) {
+	private fun tryGetGroupByGroupId(inviteCodes: String) {
 		viewModelScope.launch {
 			intent { copy(isGroupLoading = true) }
 			try {
-				val group = groupRepository.getGroupById(inviteCode)
+				val group = groupRepository.getGroupById(inviteCodes)
 				intent { copy(isGroupExist = true, group = group) }
 
 			} catch (e: Exception) {
