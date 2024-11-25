@@ -12,4 +12,5 @@ sealed class HomeIntent {
 	data class SelectChip(val chipType: ChipType) : HomeIntent()
 	data object ShowBottomSheet : HomeIntent()
 	data class LoadEpisode(val start: EpisodeLatLng, val end: EpisodeLatLng) : HomeIntent()
+	data class ClickTextMarker(val latLng: EpisodeLatLng) : HomeIntent()
 }

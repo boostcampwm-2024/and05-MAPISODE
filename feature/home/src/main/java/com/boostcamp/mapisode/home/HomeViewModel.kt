@@ -55,6 +55,10 @@ class HomeViewModel @Inject constructor(private val episodeRepository: EpisodeRe
 			is HomeIntent.LoadEpisode -> {
 				loadEpisodes(intent.start, intent.end)
 			}
+
+			is HomeIntent.ClickTextMarker -> {
+				postSideEffect(HomeSideEffect.NavigateToEpisode(intent.latLng))
+			}
 		}
 	}
 

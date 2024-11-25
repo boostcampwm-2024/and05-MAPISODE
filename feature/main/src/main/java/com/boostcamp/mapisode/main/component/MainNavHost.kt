@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.boostcamp.mapisode.episode.navigation.addEpisodeNavGraph
 import com.boostcamp.mapisode.home.navigation.addHomeNavGraph
+import com.boostcamp.mapisode.main.MainNavTab
 import com.boostcamp.mapisode.main.MainNavigator
 import com.boostcamp.mapisode.mygroup.navigation.addGroupNavGraph
 import com.boostcamp.mapisode.mypage.navigation.addMyPageNavGraph
@@ -23,7 +24,9 @@ internal fun MainNavHost(
 			navController = navigator.navController,
 			startDestination = navigator.startDestination,
 		) {
-			addHomeNavGraph()
+			addHomeNavGraph(
+				onTextMarkerClick = { navigator.navigate(MainNavTab.EPISODE) },
+			)
 			addEpisodeNavGraph()
 			addGroupNavGraph(
 				onBackClick = navigator::popBackStackIfNotHome,
