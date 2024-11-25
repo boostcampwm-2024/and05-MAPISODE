@@ -76,6 +76,6 @@ fun PickEpisodePhotoButton(
 				PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
 			)
 		},
-		text = "사진 추가",
+		text = stringResource(R.string.new_episode_menu_add_pictures),
 	)
 }
