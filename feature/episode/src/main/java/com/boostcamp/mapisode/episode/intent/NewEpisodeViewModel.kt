@@ -12,9 +12,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewEpisodeViewModel @Inject constructor(private val episodeRepository: EpisodeRepository) :
-	BaseViewModel<NewEpisodeState, NewEpisodeSideEffect>(NewEpisodeState()) {
+	BaseViewModel<NewEpisodeIntent, NewEpisodeState, NewEpisodeSideEffect>(NewEpisodeState()) {
 
-	fun onIntent(intent: NewEpisodeIntent) {
+	override fun onIntent(intent: NewEpisodeIntent) {
 		when (intent) {
 			is NewEpisodeIntent.SetEpisodeLocation -> {
 				intent {

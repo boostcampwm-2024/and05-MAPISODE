@@ -13,9 +13,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GroupViewModel @Inject constructor(private val groupRepository: GroupRepository) :
-	BaseViewModel<GroupState, GroupSideEffect>(GroupState()) {
+	BaseViewModel<GroupIntent, GroupState, GroupSideEffect>(GroupState()) {
 
-	fun onIntent(intent: GroupIntent) {
+	override fun onIntent(intent: GroupIntent) {
 		when (intent) {
 			is GroupIntent.LoadGroups -> {
 				loadGroups()

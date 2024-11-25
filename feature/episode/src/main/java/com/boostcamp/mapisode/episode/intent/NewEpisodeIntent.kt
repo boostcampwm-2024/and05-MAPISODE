@@ -1,9 +1,10 @@
 package com.boostcamp.mapisode.episode.intent
 
+import com.boostcamp.mapisode.ui.base.UiIntent
 import com.naver.maps.geometry.LatLng
 import java.util.Date
 
-sealed class NewEpisodeIntent {
+sealed class NewEpisodeIntent : UiIntent {
 	data class SetEpisodeLocation(val latLng: LatLng) : NewEpisodeIntent()
 	data class SetEpisodeGroup(val group: String) : NewEpisodeIntent()
 	data class SetEpisodeCategory(val category: String) : NewEpisodeIntent()

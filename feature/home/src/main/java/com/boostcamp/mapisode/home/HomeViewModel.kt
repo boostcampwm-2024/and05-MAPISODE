@@ -15,9 +15,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val episodeRepository: EpisodeRepository) :
-	BaseViewModel<HomeState, HomeSideEffect>(HomeState()) {
+	BaseViewModel<HomeIntent, HomeState, HomeSideEffect>(HomeState()) {
 
-	fun onIntent(intent: HomeIntent) {
+	override fun onIntent(intent: HomeIntent) {
 		when (intent) {
 			is HomeIntent.RequestLocationPermission -> {
 				// 위치 권한 요청이 아직 이루어지지 않은 경우에만 요청
