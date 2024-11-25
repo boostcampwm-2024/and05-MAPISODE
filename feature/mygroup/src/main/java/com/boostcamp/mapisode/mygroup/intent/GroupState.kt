@@ -2,7 +2,7 @@ package com.boostcamp.mapisode.mygroup.intent
 
 import androidx.compose.runtime.Immutable
 import com.boostcamp.mapisode.model.GroupItem
-import com.boostcamp.mapisode.model.User
+import com.boostcamp.mapisode.model.UserModel
 import com.boostcamp.mapisode.ui.base.UiState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -21,7 +21,7 @@ data class GroupItemUiModel(
 	val description: String,
 	val createdAt: String,
 	val adminUser: String,
-	val users: ImmutableList<User> = persistentListOf(),
+	val users: ImmutableList<UserModel> = persistentListOf(),
 )
 
 fun GroupItem.toUiModel(): GroupItemUiModel = GroupItemUiModel(

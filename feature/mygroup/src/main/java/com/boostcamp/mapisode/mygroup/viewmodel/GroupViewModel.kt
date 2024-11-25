@@ -1,6 +1,6 @@
 package com.boostcamp.mapisode.mygroup.viewmodel
 
-import com.boostcamp.mapisode.model.User
+import com.boostcamp.mapisode.model.UserModel
 import com.boostcamp.mapisode.mygroup.intent.GroupIntent
 import com.boostcamp.mapisode.mygroup.intent.GroupItemUiModel
 import com.boostcamp.mapisode.mygroup.intent.GroupSideEffect
@@ -52,10 +52,11 @@ val mockItem = GroupItemUiModel(
 	createdAt = "2021-08-01",
 	adminUser = "Admin 1",
 	users = persistentListOf(
-		User(
-			id = "User1",
-			displayName = "DisplayName1",
-			idToken = "Token1",
+		UserModel(
+			uid = "User1",
+			nickname = "DisplayName1",
+			email = "Token1",
+			profileUri = "https://avatars.githubusercontent.com/u/127717111?v=4",
 		),
 	),
 )
