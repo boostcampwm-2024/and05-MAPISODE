@@ -7,7 +7,6 @@ android {
 }
 
 dependencies {
-	implementation(projects.core.model)
 	implementation(projects.domain.user)
 	implementation(projects.core.firebase)
 	implementation(platform(libs.firebase.bom))
