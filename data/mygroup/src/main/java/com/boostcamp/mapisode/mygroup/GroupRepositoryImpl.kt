@@ -33,6 +33,16 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 		throw e
 	}
 
+	override suspend fun getGroupById(groupId: String): GroupModel = try {
+		groupCollection.document(groupId)
+			.get()
+			.await()
+			.toObject(GroupFirestoreModel::class.java)?.toDomainModel(groupId)
+			?: throw Exception("Group not found")
+	} catch (e: Exception) {
+		throw e
+	}
+
 	override suspend fun joinGroup(userId: String, groupId: String) {
 		groupCollection.document(groupId).update(
 			FirestoreConstants.FIELD_MEMBERS,
