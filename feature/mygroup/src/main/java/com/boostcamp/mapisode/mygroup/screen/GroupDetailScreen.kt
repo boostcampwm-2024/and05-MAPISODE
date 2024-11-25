@@ -20,22 +20,25 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTab
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTabRow
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
+import com.boostcamp.mapisode.navigation.GroupRoute
 import kotlinx.coroutines.launch
 
 @Composable
 fun GroupDetailScreen(
+	detail: GroupRoute.Detail,
 	onBackClick: () -> Unit,
-	onEditClick: () -> Unit,
+	onEditClick: (String) -> Unit,
 ) {
 	val pagerState = rememberPagerState(pageCount = { 2 })
 	val list = listOf("그룹 상세", "에피소드")
 	val scope = rememberCoroutineScope()
+	val groupId = detail.groupId
 
 	MapisodeScaffold(
 		isStatusBarPaddingExist = true,
 		topBar = {
 			TopAppBar(
-				title = "그룹 상세",
+				title = groupId,
 				navigationIcon = {
 					MapisodeIconButton(
 						onClick = { onBackClick() },

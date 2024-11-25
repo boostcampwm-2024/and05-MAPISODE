@@ -27,7 +27,8 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
 fun GroupCard(
-	onGroupDetailClick: () -> Unit,
+	onGroupDetailClick: (String) -> Unit,
+	groupId: String,
 	imageUrl: String,
 	title: String,
 	content: String,
@@ -40,7 +41,9 @@ fun GroupCard(
 			.clickable(
 				interactionSource = null,
 				indication = MapisodeRippleAIndication,
-				onClick = onGroupDetailClick,
+				onClick = {
+					onGroupDetailClick(groupId)
+				},
 			),
 	) {
 		AsyncImage(
@@ -80,6 +83,7 @@ fun GroupCardPreview() {
 	CompositionLocalProvider(LocalAsyncImagePreviewHandler provides previewHandler) {
 		GroupCard(
 			onGroupDetailClick = {},
+			groupId = "",
 			imageUrl = "https://avatars.githubusercontent.com/u/127717111?v=4",
 			title = "그룹 이름",
 			content = "멤버 수",
