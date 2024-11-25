@@ -6,6 +6,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -163,6 +164,12 @@ fun rememberMarkerImage(
 			textSize = textSizePx,
 			textColor = textColorInt,
 		)
+	}
+
+	DisposableEffect(bitmap) {
+		onDispose {
+			bitmap.recycle()
+		}
 	}
 
 	return OverlayImage.fromBitmap(bitmap)
