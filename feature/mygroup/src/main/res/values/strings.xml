@@ -11,4 +11,9 @@
 	<string name="group_overview">그룹 개요</string>
 	<string name="group_descript">그룹 설명</string>
     <string name="group_members_number">"멤버수 : "</string>
+    <string name="group_join_not_exist">그룹이 존재하지 않습니다.</string>
+	<string name="group_join_success">그룹 참여 성공</string>
+	<string name="group_join_failure">그룹 참여 실패</string>
+	<string name="group_member_count">명</string>
+	<string name="group_user_count">%1$s %2$d %3$s</string>
 </resources>

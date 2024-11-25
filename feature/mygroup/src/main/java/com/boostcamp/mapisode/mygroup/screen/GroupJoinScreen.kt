@@ -20,8 +20,10 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,6 +34,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.Direction
@@ -46,16 +50,24 @@ import com.boostcamp.mapisode.designsystem.compose.Thickness
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.boostcamp.mapisode.model.GroupModel
+import com.boostcamp.mapisode.mygroup.intent.GroupJoinIntent
+import com.boostcamp.mapisode.mygroup.viewmodel.GroupJoinViewModel
 import com.boostcamp.mapisode.mygroup.R as S
 
 @Composable
 fun GroupJoinScreen(
 	onBackClick: () -> Unit,
+	viewModel: GroupJoinViewModel = hiltViewModel(),
 ) {
 	val focusManager = LocalFocusManager.current
 	var joinCodeText by rememberSaveable { mutableStateOf("") }
-	var isJoinCodeInput by rememberSaveable { mutableStateOf(false) }
-	var isJoinCodeValid by rememberSaveable { mutableStateOf(false) }
+	var onGetGroup by remember { mutableStateOf(false) }
+	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+
+	LaunchedEffect(onGetGroup) {
+		viewModel.onIntent(GroupJoinIntent.TryGetGroup(joinCodeText))
+	}
 
 	MapisodeScaffold(
 		modifier = Modifier.pointerInput(Unit) {
@@ -137,29 +149,23 @@ fun GroupJoinScreen(
 							.fillParentMaxWidth()
 							.height(40.dp),
 						onClick = {
-							isJoinCodeInput = true
-							if (joinCodeText.length < 2) {
-								isJoinCodeValid = false
-							} else {
-								isJoinCodeValid = true
-							}
-							// TODO : 서버에 코드 요청
+							onGetGroup = !onGetGroup
 						},
 						text = stringResource(S.string.group_join_btn_direction),
-						enabled = joinCodeText.isNotBlank(),
+						enabled = joinCodeText.length > 5,
 						showRipple = true,
 					)
 					Spacer(modifier = Modifier.padding(10.dp))
 					MapisodeDivider(direction = Direction.Horizontal, thickness = Thickness.Thin)
 					Spacer(modifier = Modifier.padding(10.dp))
 				}
-				if (isJoinCodeValid && isJoinCodeInput) {
+				if (uiState.value.isGroupExist && uiState.value.group != null) {
 					item {
-						ConfirmJoinGroup()
+						ConfirmJoinGroup(uiState.value.group!!)
 						Spacer(modifier = Modifier.padding(bottom = 70.dp))
 					}
 				}
-				if (!isJoinCodeValid && isJoinCodeInput) {
+				if (uiState.value.isGroupExist.not() || uiState.value.group == null) {
 					item {
 						MapisodeText(
 							text = "존재하지 않는 그룹입니다.",
@@ -168,7 +174,7 @@ fun GroupJoinScreen(
 					}
 				}
 			}
-			if (isJoinCodeValid && isJoinCodeInput) {
+			if (uiState.value.isGroupExist && uiState.value.group != null) {
 				Column(
 					modifier = Modifier
 						.fillMaxWidth()
@@ -180,6 +186,7 @@ fun GroupJoinScreen(
 					MapisodeDivider(direction = Direction.Horizontal, thickness = Thickness.Thin)
 					Spacer(modifier = Modifier.padding(5.dp))
 					MapisodeFilledButton(
+						modifier = Modifier.fillMaxWidth(),
 						onClick = {},
 						text = "참여하기",
 						showRipple = true,
@@ -191,7 +198,7 @@ fun GroupJoinScreen(
 }
 
 @Composable
-fun ConfirmJoinGroup() {
+fun ConfirmJoinGroup(group: GroupModel) {
 	Column(
 		modifier = Modifier
 			.padding(horizontal = 30.dp)
@@ -209,14 +216,14 @@ fun ConfirmJoinGroup() {
 				.fillMaxWidth()
 				.border(
 					width = 1.dp,
-					color = MapisodeTheme.colorScheme.menuStroke,
+					color = MapisodeTheme.colorScheme.textColoredContainer,
 					shape = RoundedCornerShape(12.dp),
 				)
 				.padding(10.dp)
 				.height(140.dp),
 		) {
 			AsyncImage(
-				model = "https://avatars.githubusercontent.com/u/127717111?v=4",
+				model = group.imageUrl,
 				contentDescription = "",
 				modifier = Modifier
 					.size(140.dp)
@@ -230,7 +237,7 @@ fun ConfirmJoinGroup() {
 				verticalArrangement = Arrangement.Center,
 			) {
 				MapisodeText(
-					text = "McDonald Trumpppp",
+					text = group.name,
 					style = MapisodeTheme.typography.titleMedium
 						.copy(fontWeight = FontWeight.SemiBold),
 					maxLines = 1,
@@ -238,11 +245,16 @@ fun ConfirmJoinGroup() {
 				Spacer(modifier = Modifier.padding(4.dp))
 
 				MapisodeText(
-					text = stringResource(S.string.group_created_date),
+					text = stringResource(S.string.group_created_date) + group.createdAt,
 					style = MapisodeTheme.typography.labelMedium,
 				)
 				MapisodeText(
-					text = stringResource(S.string.group_user_number),
+					text = stringResource(
+						S.string.group_user_count,
+						stringResource(S.string.group_members_number),
+						group.members.size,
+						stringResource(S.string.group_member_count),
+					),
 					style = MapisodeTheme.typography.labelMedium,
 				)
 				MapisodeText(
@@ -264,7 +276,7 @@ fun ConfirmJoinGroup() {
 			modifier = Modifier
 				.border(
 					width = 1.dp,
-					color = MapisodeTheme.colorScheme.menuStroke,
+					color = MapisodeTheme.colorScheme.textColoredContainer,
 					shape = RoundedCornerShape(8.dp),
 				)
 				.padding(10.dp)
@@ -273,8 +285,7 @@ fun ConfirmJoinGroup() {
 		) {
 			MapisodeText(
 				modifier = Modifier.fillMaxWidth(),
-				text = "테\n스\n트\n테\n스\n트\n테\n\n\n\n\n\n\n\n스트",
-				style = MapisodeTheme.typography.labelLarge,
+				text = group.description,
 			)
 		}
 	}
