@@ -112,7 +112,7 @@ val lightColorScheme = CustomColorScheme(
 	scaffoldBackground = Neutral10,
 
 	// TextColoredContainer
-	textColoredContainer = Neutral90,
+	textColoredContainer = Neutral60,
 
 	// Scrim
 	scrim = Neutral110.copy(alpha = 0.32f),
