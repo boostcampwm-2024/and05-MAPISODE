@@ -29,7 +29,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenu
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
-import com.boostcamp.mapisode.mygroup.component.GroupCard
+import com.boostcamp.mapisode.designsystem.compose.card.GroupCard
 import com.boostcamp.mapisode.mygroup.intent.GroupIntent
 import com.boostcamp.mapisode.mygroup.intent.GroupState
 import com.boostcamp.mapisode.mygroup.viewmodel.GroupViewModel

@@ -3,10 +3,8 @@ package com.boostcamp.mapisode.mygroup.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,9 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -28,15 +24,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.compose.AsyncImage
 import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.Direction
 import com.boostcamp.mapisode.designsystem.compose.MapisodeDivider
@@ -48,6 +41,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeTextField
 import com.boostcamp.mapisode.designsystem.compose.TextAlignment
 import com.boostcamp.mapisode.designsystem.compose.Thickness
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
+import com.boostcamp.mapisode.designsystem.compose.card.GroupInfoCard
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.model.GroupModel
@@ -224,58 +218,9 @@ fun ConfirmJoinGroup(group: GroupModel) {
 			style = MapisodeTheme.typography.labelLarge,
 		)
 		Spacer(modifier = Modifier.padding(4.dp))
-		Row(
-			modifier = Modifier
-				.fillMaxWidth()
-				.border(
-					width = 1.dp,
-					color = MapisodeTheme.colorScheme.textColoredContainer,
-					shape = RoundedCornerShape(12.dp),
-				)
-				.padding(10.dp)
-				.height(140.dp),
-		) {
-			AsyncImage(
-				model = group.imageUrl,
-				contentDescription = "",
-				modifier = Modifier
-					.size(140.dp)
-					.clip(shape = RoundedCornerShape(16.dp)),
-			)
-			MapisodeDivider(thickness = Thickness.Thick)
-			Column(
-				modifier = Modifier
-					.fillMaxHeight()
-					.wrapContentWidth(),
-				verticalArrangement = Arrangement.Center,
-			) {
-				MapisodeText(
-					text = group.name,
-					style = MapisodeTheme.typography.titleMedium
-						.copy(fontWeight = FontWeight.SemiBold),
-					maxLines = 1,
-				)
-				Spacer(modifier = Modifier.padding(4.dp))
 
-				MapisodeText(
-					text = stringResource(S.string.group_created_date) + group.createdAt,
-					style = MapisodeTheme.typography.labelMedium,
-				)
-				MapisodeText(
-					text = stringResource(
-						S.string.group_user_count,
-						stringResource(S.string.group_members_number),
-						group.members.size,
-						stringResource(S.string.group_member_count),
-					),
-					style = MapisodeTheme.typography.labelMedium,
-				)
-				MapisodeText(
-					text = stringResource(S.string.group_recent_upload),
-					style = MapisodeTheme.typography.labelMedium,
-				)
-			}
-		}
+		GroupInfoCard(group = group)
+
 		Spacer(modifier = Modifier.padding(10.dp))
 		MapisodeText(
 			modifier = Modifier
