@@ -7,11 +7,11 @@ sealed interface GroupRoute : Route {
 	data object Join : GroupRoute
 
 	@Serializable
-	data object Detail : GroupRoute
+	data class Detail(val groupId: String) : GroupRoute
 
 	@Serializable
 	data object Creation : GroupRoute
 
 	@Serializable
-	data object Edit : GroupRoute
+	data class Edit(val groupId: String) : GroupRoute
 }

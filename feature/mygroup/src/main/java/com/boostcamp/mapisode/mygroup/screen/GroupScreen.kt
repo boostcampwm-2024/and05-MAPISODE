@@ -38,7 +38,7 @@ import com.boostcamp.mapisode.mygroup.R as S
 @Composable
 internal fun MainGroupRoute(
 	onGroupJoinClick: () -> Unit,
-	onGroupDetailClick: () -> Unit,
+	onGroupDetailClick: (String) -> Unit,
 	onGroupCreationClick: () -> Unit,
 	viewModel: GroupViewModel = hiltViewModel(),
 ) {
@@ -55,7 +55,7 @@ internal fun MainGroupRoute(
 @Composable
 private fun <T> GroupScreen(
 	onGroupJoinClick: () -> Unit,
-	onGroupDetailClick: () -> Unit,
+	onGroupDetailClick: (String) -> Unit,
 	onGroupCreationClick: () -> Unit,
 	uiState: State<T>,
 	onIntent: (GroupIntent) -> Unit,
@@ -135,6 +135,7 @@ private fun <T> GroupScreen(
 					item {
 						GroupCard(
 							onGroupDetailClick = onGroupDetailClick,
+							groupId = group.id,
 							imageUrl = group.imageUrl,
 							title = group.name,
 							content = stringResource(S.string.group_members_number) + group.members.size.toString(),

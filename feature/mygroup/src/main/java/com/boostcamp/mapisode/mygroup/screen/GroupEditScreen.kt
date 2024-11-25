@@ -23,13 +23,16 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeImageButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
+import com.boostcamp.mapisode.navigation.GroupRoute
 
 @Composable
 fun GroupEditScreen(
+	edit: GroupRoute.Edit,
 	onBackClick: () -> Unit,
 	// onEpisodeClick: () -> Unit,
 ) {
 	val focusManager = LocalFocusManager.current
+	val groupId = edit.groupId
 
 	MapisodeScaffold(
 		modifier = Modifier

@@ -35,9 +35,13 @@ internal fun MainNavHost(
 			addGroupNavGraph(
 				onBackClick = navigator::popBackStackIfNotHome,
 				onGroupJoinClick = navigator::navigateGroupJoin,
-				onGroupDetailClick = navigator::navigateGroupDetail,
+				onGroupDetailClick = { groupId: String ->
+					navigator.navigateGroupDetail(groupId)
+				},
 				onGroupCreationClick = navigator::navigateGroupCreation,
-				onGroupEditClick = navigator::navigateGroupEdit,
+				onGroupEditClick = { groupId: String ->
+					navigator.navigateGroupEdit(groupId)
+				},
 			)
 			addMyPageNavGraph()
 		}

@@ -55,16 +55,16 @@ internal class MainNavigator(
 		navController.navigateGroupJoin()
 	}
 
-	fun navigateGroupDetail() {
-		navController.navigateGroupDetail()
+	fun navigateGroupDetail(groupId: String) {
+		navController.navigateGroupDetail(groupId)
 	}
 
 	fun navigateGroupCreation() {
 		navController.navigateGroupCreation()
 	}
 
-	fun navigateGroupEdit() {
-		navController.navigateGroupEdit()
+	fun navigateGroupEdit(groupId: String) {
+		navController.navigateGroupEdit(groupId)
 	}
 
 	private fun popBackStack() {

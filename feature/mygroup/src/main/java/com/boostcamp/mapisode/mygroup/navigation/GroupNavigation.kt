@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.boostcamp.mapisode.mygroup.screen.GroupCreationScreen
 import com.boostcamp.mapisode.mygroup.screen.GroupDetailScreen
 import com.boostcamp.mapisode.mygroup.screen.GroupEditScreen
@@ -19,9 +20,10 @@ fun NavController.navigateGroupJoin(
 }
 
 fun NavController.navigateGroupDetail(
+	groupId: String,
 	navOptions: NavOptions? = null,
 ) {
-	navigate(GroupRoute.Detail, navOptions)
+	navigate(GroupRoute.Detail(groupId), navOptions)
 }
 
 fun NavController.navigateGroupCreation(
@@ -31,17 +33,18 @@ fun NavController.navigateGroupCreation(
 }
 
 fun NavController.navigateGroupEdit(
+	groupId: String,
 	navOptions: NavOptions? = null,
 ) {
-	navigate(GroupRoute.Edit, navOptions)
+	navigate(GroupRoute.Edit(groupId), navOptions)
 }
 
 fun NavGraphBuilder.addGroupNavGraph(
 	onBackClick: () -> Unit,
 	onGroupJoinClick: () -> Unit,
-	onGroupDetailClick: () -> Unit,
+	onGroupDetailClick: (String) -> Unit,
 	onGroupCreationClick: () -> Unit,
-	onGroupEditClick: () -> Unit,
+	onGroupEditClick: (String) -> Unit,
 ) {
 	composable<MainRoute.Group> {
 		MainGroupRoute(
@@ -57,8 +60,11 @@ fun NavGraphBuilder.addGroupNavGraph(
 		)
 	}
 
-	composable<GroupRoute.Detail> {
+	composable<GroupRoute.Detail> {backStackEntry ->
+		val detail : GroupRoute.Detail = backStackEntry.toRoute()
+
 		GroupDetailScreen(
+			detail = detail,
 			onBackClick = onBackClick,
 			onEditClick = onGroupEditClick,
 		)
@@ -70,8 +76,11 @@ fun NavGraphBuilder.addGroupNavGraph(
 		)
 	}
 
-	composable<GroupRoute.Edit> {
+	composable<GroupRoute.Edit> {backStackEntry ->
+		val edit : GroupRoute.Edit = backStackEntry.toRoute()
+
 		GroupEditScreen(
+			edit = edit,
 			onBackClick = onBackClick,
 		)
 	}
