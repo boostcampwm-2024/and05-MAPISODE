@@ -2,6 +2,7 @@
 <resources>
 	<string name="new_episode_menu_title">새 에피소드</string>
 	<string name="new_episode_menu_create_episode">에피소드 생성</string>
+	<string name="new_episode_menu_add_pictures">사진 추가</string>
 
 	<string name="new_episode_info_location">장소</string>
 	<string name="new_episode_info_group">그룹</string>
