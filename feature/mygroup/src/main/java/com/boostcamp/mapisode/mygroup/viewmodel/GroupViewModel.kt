@@ -31,7 +31,10 @@ class GroupViewModel @Inject constructor(private val groupRepository: GroupRepos
 	private fun loadGroups() {
 		viewModelScope.launch {
 			try {
-				val group = groupRepository.getAllGroups().map { it.toUiModel() }.toImmutableList()
+				val group = groupRepository
+					.getGroupsByUserId("o6UT6Ze1LFgsvekEvj9J")
+					.map { it.toUiModel() }
+					.toImmutableList()
 				intent {
 					copy(
 						areGroupsLoading = true,
@@ -39,6 +42,7 @@ class GroupViewModel @Inject constructor(private val groupRepository: GroupRepos
 					)
 				}
 			} catch (e: Exception) {
+				// TODO : SideEffect - 에러 메세지 출력
 			}
 		}
 	}

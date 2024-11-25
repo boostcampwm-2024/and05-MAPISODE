@@ -5,8 +5,8 @@ import com.boostcamp.mapisode.model.GroupModel
 import com.boostcamp.mapisode.mygroup.model.GroupFirestoreModel
 import com.boostcamp.mapisode.mygroup.model.toDomainModel
 import com.boostcamp.mapisode.mygroup.model.toFirestoreModel
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
 import javax.inject.Inject
@@ -14,22 +14,21 @@ import javax.inject.Inject
 class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFirestore) :
 	GroupRepository {
 	private val groupCollection = database.collection(FirestoreConstants.COLLECTION_GROUP)
+	private val userCollection = database.collection(FirestoreConstants.COLLECTION_USER)
 
-	override suspend fun getGroupById(groupId: String): GroupModel? =
-		groupCollection.document(groupId)
-			.get()
-			.await()
-			.toObject(GroupFirestoreModel::class.java)
-			?.toDomainModel(groupId)
-
-	override suspend fun getAllGroups(): List<GroupModel> {
-		val querySnapshot = groupCollection.get().await()
-		if (querySnapshot.isEmpty) {
-			return emptyList()
-		}
-
+	override suspend fun getGroupsByUserId(userId: String): List<GroupModel> {
 		return try {
-			querySnapshot.toDomainModelList()
+			val userSnapshot = userCollection.document(userId).get().await()
+
+			@Suppress("UNCHECKED_CAST")
+			val groupReferences = (userSnapshot[FirestoreConstants.FIELD_GROUPS] as List<DocumentReference>)
+
+			groupReferences.mapNotNull { documentRef ->
+				groupCollection.document(documentRef.id)
+					.get()
+					.await()
+					.toObject(GroupFirestoreModel::class.java)?.toDomainModel(documentRef.id)
+			}
 		} catch (e: Exception) {
 			throw e
 		}
@@ -62,10 +61,4 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 			throw e
 		}
 	}
-
-	private fun QuerySnapshot.toDomainModelList(): List<GroupModel> =
-		documents.map { document ->
-			val model = requireNotNull(document.toObject(GroupFirestoreModel::class.java))
-			model.toDomainModel(document.id)
-		}
 }
