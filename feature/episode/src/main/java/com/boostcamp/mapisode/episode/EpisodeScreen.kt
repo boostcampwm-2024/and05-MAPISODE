@@ -28,6 +28,9 @@ internal fun EpisodeRoute(
 		composable("new_episode_pics") {
 			NewEpisodePicsScreen(
 				navController = newEpisodeNavController,
+				updatePics = { uris ->
+					viewModel.onIntent(NewEpisodeIntent.SetEpisodePics(uris))
+				},
 			)
 		}
 

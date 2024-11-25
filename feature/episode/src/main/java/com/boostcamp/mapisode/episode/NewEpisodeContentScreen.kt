@@ -1,6 +1,5 @@
 package com.boostcamp.mapisode.episode
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,13 +15,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil3.compose.AsyncImage
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.Surface
@@ -79,13 +77,10 @@ internal fun NewEpisodeContentScreen(
 						horizontalArrangement = Arrangement.spacedBy(10.dp),
 					) {
 						items(state.episodeContent.images) { imageUri ->
-							// TODO: 이미지 URI를 바탕으로 컴포넌트 생성하기
 							Surface(Modifier.size(150.dp)) {
-								Image(
+								AsyncImage(
+									model = imageUri,
 									contentDescription = null,
-									imageVector = ImageVector.vectorResource(
-										com.boostcamp.mapisode.designsystem.R.drawable.ic_see,
-									),
 								)
 							}
 						}
