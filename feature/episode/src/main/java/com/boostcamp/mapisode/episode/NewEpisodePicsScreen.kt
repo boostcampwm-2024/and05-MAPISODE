@@ -1,5 +1,9 @@
 package com.boostcamp.mapisode.episode
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,12 +15,15 @@ import androidx.navigation.NavController
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
-import com.boostcamp.mapisode.designsystem.compose.MapisodeText
+import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
-import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import timber.log.Timber
 
 @Composable
-internal fun NewEpisodePicsScreen(navController: NavController) {
+internal fun NewEpisodePicsScreen(
+	navController: NavController,
+	updatePics: (List<Uri>) -> Unit,
+) {
 	MapisodeScaffold(
 		topBar = {
 			TopAppBar(
@@ -40,10 +47,32 @@ internal fun NewEpisodePicsScreen(navController: NavController) {
 				.padding(innerPadding),
 			contentAlignment = Alignment.Center,
 		) {
-			MapisodeText(
-				text = "사진 선택 화면",
-				style = MapisodeTheme.typography.displayLarge,
-			)
+			PickEpisodePhotoButton { uris ->
+				updatePics(uris)
+				navController.navigate("new_episode_info")
+			}
 		}
 	}
+}
+
+@Composable
+fun PickEpisodePhotoButton(
+	onPickPhotos: (List<Uri>) -> Unit,
+) {
+	val photoPickLauncher = rememberLauncherForActivityResult(
+		contract = ActivityResultContracts.PickMultipleVisualMedia(4),
+		onResult = { uris ->
+			Timber.d(uris.toString())
+			onPickPhotos(uris)
+		},
+	)
+
+	MapisodeFilledButton(
+		onClick = {
+			photoPickLauncher.launch(
+				PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+			)
+		},
+		text = "사진 추가",
+	)
 }

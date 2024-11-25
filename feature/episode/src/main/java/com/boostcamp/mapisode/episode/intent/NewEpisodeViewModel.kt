@@ -16,6 +16,14 @@ class NewEpisodeViewModel @Inject constructor(private val episodeRepository: Epi
 
 	override fun onIntent(intent: NewEpisodeIntent) {
 		when (intent) {
+			is NewEpisodeIntent.SetEpisodePics -> {
+				intent {
+					copy(
+						episodeContent = episodeContent.copy(images = intent.pics),
+					)
+				}
+			}
+
 			is NewEpisodeIntent.SetEpisodeLocation -> {
 				intent {
 					copy(
