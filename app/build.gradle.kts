@@ -42,5 +42,6 @@ dependencies {
 	implementation(projects.feature.main)
 
 	implementation(projects.data.episode)
+	implementation(projects.data.user)
 	implementation(projects.data.mygroup)
 }
