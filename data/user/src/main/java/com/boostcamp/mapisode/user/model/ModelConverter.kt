@@ -1,12 +1,11 @@
 package com.boostcamp.mapisode.user.model
 
 import com.boostcamp.mapisode.model.UserModel
-import com.google.firebase.firestore.FirebaseFirestore
 
-internal fun UserModel.toUserFirestoreModel(database: FirebaseFirestore): UserFirestoreModel =
+internal fun UserModel.toUserFirestoreModel(): UserFirestoreModel =
 	UserFirestoreModel(
 		uid = uid,
-		nickname = nickname,
+		nickname = name,
 		email = email,
-		profileUri = profileUri,
+		profileUri = profileUrl,
 	)
