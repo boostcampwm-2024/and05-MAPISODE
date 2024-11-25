@@ -21,6 +21,8 @@ class MapisodeFeaturePlugin : Plugin<Project> {
 				implementation(project(":core:designsystem"))
 				implementation(project(":core:model"))
 				implementation(project(":core:navigation"))
+				implementation(project(":core:datastore"))
+				implementation(project(":core:common"))
 				implementation(libs.getBundle("compose"))
 				implementation(libs.getBundle("navigation"))
 			}
