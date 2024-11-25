@@ -7,8 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(database: FirebaseFirestore) :
-	UserRepository {
+class UserRepositoryImpl @Inject constructor(database: FirebaseFirestore) : UserRepository {
 	private val userCollection = database.collection(FirestoreConstants.COLLECTION_USER)
 
 	override suspend fun createUser(userModel: UserModel) {
