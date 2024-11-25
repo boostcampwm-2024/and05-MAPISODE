@@ -33,6 +33,7 @@ internal fun NewEpisodePicsScreen(
 						onClick = {
 							navController.navigate("new_episode_info")
 						},
+						enabled = false,
 					) {
 						MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_arrow_forward_ios)
 					}
@@ -49,7 +50,9 @@ internal fun NewEpisodePicsScreen(
 		) {
 			PickEpisodePhotoButton { uris ->
 				updatePics(uris)
-				navController.navigate("new_episode_info")
+				if (uris.isNotEmpty()) {
+					navController.navigate("new_episode_info")
+				}
 			}
 		}
 	}
