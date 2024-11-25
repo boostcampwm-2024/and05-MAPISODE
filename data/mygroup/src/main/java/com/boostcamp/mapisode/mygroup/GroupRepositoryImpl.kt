@@ -42,7 +42,7 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 		groupCollection.document(group.id)
 			.get()
 			.await()
-			.toObject(GroupFirestoreModel::class.java)?.toDomainModel(inviteCodes)
+			.toObject(GroupFirestoreModel::class.java)?.toDomainModel(group.id)
 			?: throw Exception("Group not found")
 	} catch (e: Exception) {
 		throw e
@@ -52,12 +52,12 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 		groupCollection.document(groupId).update(
 			FirestoreConstants.FIELD_MEMBERS,
 			// 기존 유저 리스트에 덮어씌우지 않고 추가
-			FieldValue.arrayUnion(userCollection.document(userId))
+			FieldValue.arrayUnion(userCollection.document(userId)),
 		).await()
 
 		userCollection.document(userId).update(
 			FirestoreConstants.FIELD_GROUPS,
-			FieldValue.arrayUnion(groupCollection.document(groupId))
+			FieldValue.arrayUnion(groupCollection.document(groupId)),
 		).await()
 	}
 
