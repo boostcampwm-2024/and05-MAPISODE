@@ -33,4 +33,6 @@
 	<string name="overview_location">위치 : </string>
 	<string name="overview_date">작성일 : </string>
 	<string name="overview_content">내용 : </string>
+	<string name="message_error_edit_input">입력 조건을 만족해주세요.</string>
+	<string name="message_error_edit_group">그룹 수정에 실패했습니다.</string>
 </resources>
