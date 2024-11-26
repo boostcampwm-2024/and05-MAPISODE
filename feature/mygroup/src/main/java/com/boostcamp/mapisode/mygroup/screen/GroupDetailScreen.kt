@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
@@ -29,6 +30,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -36,9 +38,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -55,6 +60,8 @@ import com.boostcamp.mapisode.designsystem.compose.Thickness
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeOutlinedButton
 import com.boostcamp.mapisode.designsystem.compose.card.GroupInfoCard
+import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenu
+import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTab
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTabRow
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
@@ -90,9 +97,9 @@ fun GroupDetailScreen(
 	if (showDialog) {
 		MapisodeDialog(
 			onResultRequest = { isPositive ->
-				if(isPositive){
+				if (isPositive) {
 					viewModel.onIntent(GroupDetailIntent.OnGroupOutConfirm)
-				}else{
+				} else {
 					viewModel.onIntent(GroupDetailIntent.OnGroupOutCancel)
 				}
 			},
@@ -116,6 +123,10 @@ fun GroupDetailScreen(
 			}
 			if (!isGroupIdCaching && !isGroupLoading && membersInfo.isEmpty()) {
 				viewModel.onIntent(GroupDetailIntent.TryGetUserInfo)
+			}
+			// 최초 진입 시 보이지 않는 탭, 후순위 로딩
+			if (episodes.isEmpty() && membersInfo.isNotEmpty()) {
+				viewModel.onIntent(GroupDetailIntent.TryGetGroupEpisodes)
 			}
 		}
 	}
@@ -167,7 +178,7 @@ fun GroupDetailScreen(
 		},
 		onGroupOutClick = {
 			viewModel.onIntent(GroupDetailIntent.OnGroupOutClick)
-		}
+		},
 	)
 }
 
@@ -250,6 +261,9 @@ fun GroupDetailContent(
 					}
 
 					1 -> {
+						GroupEpisodesContent(
+							episodes = uiState.episodes,
+						)
 					}
 				}
 			}
@@ -316,7 +330,7 @@ fun GroupDetailContent(
 				modifier = Modifier
 					.fillMaxWidth(),
 				onClick = { onIssueCodeClick() },
-				text = stringResource(S.string.group_btn_issue_code),
+				text = stringResource(S.string.btn_issue_code),
 				showRipple = true,
 			)
 
@@ -349,13 +363,73 @@ fun GroupDetailContent(
 
 @Composable
 fun GroupEpisodesContent(
-	episodes: EpisodeModel,
+	episodes: List<EpisodeModel>,
 ) {
-	Column(
+	var expanded by remember { mutableStateOf(false) }
+	var selectedSortOption by remember { mutableIntStateOf(0) }
+	val menuItemList = listOf("최신순", "과거순", "이름순")
+	var sortedEpisodes by remember { mutableStateOf(episodes) }
+
+	when (selectedSortOption) {
+		0 -> sortedEpisodes = episodes.sortedByDescending { it.createdAt }
+		1 -> sortedEpisodes = episodes.sortedBy { it.createdAt }
+		2 -> sortedEpisodes = episodes.sortedBy { it.title }
+	}
+
+	LazyColumn(
 		modifier = Modifier.fillMaxSize(),
-		horizontalAlignment = Alignment.CenterHorizontally,
-		verticalArrangement = Arrangement.Center,
+		verticalArrangement = Arrangement.spacedBy(10.dp),
+		contentPadding = PaddingValues(vertical = 10.dp, horizontal = 20.dp),
 	) {
+		item {
+			Row(
+				modifier = Modifier.fillParentMaxWidth(),
+				verticalAlignment = Alignment.CenterVertically,
+				horizontalArrangement = Arrangement.SpaceBetween,
+			) {
+				MapisodeText(
+					text = stringResource(S.string.label_episode),
+					style = MapisodeTheme.typography.labelLarge,
+				)
+				MapisodeIconButton(
+					onClick = { expanded = true },
+				) {
+					Row(
+						verticalAlignment = Alignment.CenterVertically,
+					) {
+						MapisodeText(
+							text = menuItemList[selectedSortOption],
+						)
+						MapisodeIcon(
+							id = R.drawable.ic_arrow_drop_down,
+						)
+					}
+					MapisodeDropdownMenu(
+						expanded = expanded,
+						onDismissRequest = { expanded = false },
+						modifier = Modifier.wrapContentWidth(),
+						offset = DpOffset(0.dp, 0.dp).minus(DpOffset(16.dp, 16.dp)),
+					) {
+						menuItemList.forEachIndexed { index, item ->
+							MapisodeDropdownMenuItem(
+								onClick = {
+									selectedSortOption = index
+									expanded = false
+								},
+							) {
+								MapisodeText(
+									text = item,
+								)
+							}
+						}
+					}
+				}
+			}
+		}
+
+		items(sortedEpisodes) { episode ->
+			EpisodeCard(episode)
+		}
 	}
 }
 
@@ -370,7 +444,7 @@ fun GroupMemberContent(
 			.border(
 				width = 1.dp,
 				color = MapisodeTheme.colorScheme.textColoredContainer,
-				shape = RoundedCornerShape(8.dp)
+				shape = RoundedCornerShape(8.dp),
 			)
 			.padding(10.dp),
 		verticalAlignment = Alignment.CenterVertically,
@@ -388,7 +462,7 @@ fun GroupMemberContent(
 
 		Column(
 			modifier = Modifier.weight(1f),
-			verticalArrangement = Arrangement.Center
+			verticalArrangement = Arrangement.Center,
 		) {
 			MapisodeText(
 				text = member.name,
@@ -408,7 +482,7 @@ fun GroupMemberContent(
 		}
 
 		Column(
-			horizontalAlignment = Alignment.End
+			horizontalAlignment = Alignment.End,
 		) {
 			MapisodeText(
 				text = "123",
@@ -420,6 +494,61 @@ fun GroupMemberContent(
 				style = MapisodeTheme.typography.labelSmall,
 				maxLines = 1,
 			)
+		}
+	}
+}
+
+
+@Composable
+fun EpisodeCard(
+	episode: EpisodeModel,
+) {
+	Row(
+		modifier = Modifier
+			.fillMaxWidth()
+			.height(130.dp)
+			.background(Color.White, shape = RoundedCornerShape(8.dp))
+			.border(1.dp, Color.LightGray, shape = RoundedCornerShape(8.dp))
+			.padding(10.dp),
+	) {
+		// Image on the left
+		AsyncImage(
+			model = episode.imageUrls.first(),
+			contentDescription = "Episode Image",
+			modifier = Modifier
+				.size(110.dp)
+				.clip(RoundedCornerShape(8.dp)),
+			contentScale = ContentScale.Crop,
+		)
+
+		Spacer(modifier = Modifier.width(10.dp))
+
+		Column(
+			modifier = Modifier.fillMaxSize(),
+			verticalArrangement = Arrangement.Center,
+		) {
+			MapisodeText(
+				text = episode.title,
+				style = MapisodeTheme.typography.titleMedium
+					.copy(fontWeight = FontWeight.SemiBold),
+				maxLines = 1,
+			)
+			Spacer(modifier = Modifier.padding(4.dp))
+
+			val textList = listOf(
+				stringResource(S.string.overview_created_by) + episode.createdBy,
+				stringResource(S.string.overview_location) + episode.location.toString(),
+				stringResource(S.string.overview_date) + episode.createdAt.time.toString(),
+				stringResource(S.string.overview_content) + episode.content,
+			)
+
+			textList.forEach { text ->
+				MapisodeText(
+					text = text,
+					style = MapisodeTheme.typography.labelMedium,
+					maxLines = 1,
+				)
+			}
 		}
 	}
 }

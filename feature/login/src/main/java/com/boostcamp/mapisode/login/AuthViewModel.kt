@@ -85,7 +85,7 @@ class AuthViewModel @Inject constructor(
 		viewModelScope.launch {
 			try {
 				if (uiState.value.nickname.isBlank()) throw IllegalArgumentException("닉네임을 입력해주세요.")
-				if (uiState.value.profileUrl.isBlank()) throw IllegalArgumentException("프로필 사진을 선택해주세요.")
+				//if (uiState.value.profileUrl.isBlank()) throw IllegalArgumentException("프로필 사진을 선택해주세요.")
 				if (uiState.value.authData == null) throw IllegalArgumentException("로그인 정보가 없습니다.")
 
 				userRepository.createUser(
