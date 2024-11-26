@@ -7,6 +7,6 @@ data class AuthState(
 	val isLoginSuccess: Boolean = false,
 	val authData: AuthData? = null,
 	val nickname: String = "",
-	val profileUri: String = "",
+	val profileUrl: String = "",
 	val isNicknameValid: Boolean = false,
 ) : UiState

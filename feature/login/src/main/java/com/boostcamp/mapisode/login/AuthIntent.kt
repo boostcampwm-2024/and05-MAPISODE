@@ -8,4 +8,5 @@ sealed interface AuthIntent : UiIntent {
 	data class OnNicknameChange(val nickname: String) : AuthIntent
 	data object OnSignUpClick : AuthIntent
 	data object OnAutoLogin : AuthIntent
+	data object OnLoginSuccess : AuthIntent
 }

@@ -21,22 +21,17 @@ class AuthViewModel @Inject constructor(
 	override fun onIntent(intent: AuthIntent) {
 		when (intent) {
 			is AuthIntent.OnGoogleSignInClick -> handleGoogleSignIn(intent.googleOauth)
-
-			is AuthIntent.OnNicknameChange -> {
-				onNicknameChange(intent.nickname)
-			}
-
+			is AuthIntent.OnNicknameChange -> onNicknameChange(intent.nickname)
 			is AuthIntent.OnSignUpClick -> handleSignUp()
-			is AuthIntent.OnAutoLogin -> {
-				handleAutoLogin()
-			}
+			is AuthIntent.OnAutoLogin -> handleAutoLogin()
+			is AuthIntent.OnLoginSuccess -> handleLoginSuccess()
 		}
 	}
 
 	private fun handleAutoLogin() {
 		viewModelScope.launch {
-			if (userDataStore.getIsLoggedIn()) {
-				postSideEffect(AuthSideEffect.NavigateToMain)
+			if (userDataStore.checkLoggedIn()) {
+				onIntent(AuthIntent.OnLoginSuccess)
 			}
 		}
 	}
@@ -44,10 +39,9 @@ class AuthViewModel @Inject constructor(
 	private suspend fun isUserExist(uid: String): Boolean = try {
 		userRepository.isUserExist(uid)
 	} catch (e: Exception) {
-		postSideEffect(AuthSideEffect.ShowError(e.message ?: "알 수 없는 오류가 발생했습니다."))
 		false
 	}
-	
+
 	private fun handleGoogleSignIn(googleOauth: GoogleOauth) {
 		viewModelScope.launch {
 			try {
@@ -56,7 +50,8 @@ class AuthViewModel @Inject constructor(
 						when (loginState) {
 							is LoginState.Success -> {
 								if (isUserExist(loginState.authDataInfo.uid)) {
-									postSideEffect(AuthSideEffect.NavigateToMain)
+									onIntent(AuthIntent.OnLoginSuccess)
+									return@collect
 								}
 
 								intent {
@@ -89,28 +84,48 @@ class AuthViewModel @Inject constructor(
 	private fun handleSignUp() {
 		viewModelScope.launch {
 			try {
+				if (uiState.value.nickname.isBlank()) throw IllegalArgumentException("닉네임을 입력해주세요.")
+				if (uiState.value.profileUrl.isBlank()) throw IllegalArgumentException("프로필 사진을 선택해주세요.")
+				if (uiState.value.authData == null) throw IllegalArgumentException("로그인 정보가 없습니다.")
+
 				userRepository.createUser(
 					UserModel(
-						uid = uiState.value.authData?.uid ?: "",
-						email = uiState.value.authData?.email ?: "",
+						uid = uiState.value.authData?.uid
+							?: throw IllegalArgumentException("UID cannot be empty"),
+						email = uiState.value.authData?.email
+							?: throw IllegalArgumentException("Email cannot be empty"),
 						name = uiState.value.nickname,
-						profileUrl = uiState.value.profileUri,
+						profileUrl = uiState.value.profileUrl,
 						joinedAt = Date.from(java.time.Instant.now()),
 						groups = emptyList(),
 					),
 				)
 
-				userDataStore.updateCredentialIdToken(uiState.value.authData?.idToken ?: "")
-				userDataStore.updateUserId(uiState.value.authData?.uid ?: "")
-				userDataStore.updateUsername(uiState.value.nickname)
-				userDataStore.updateProfileUrl(uiState.value.profileUri)
-				userDataStore.updateIsLoggedIn(true)
-				userDataStore.updateIsFirstLaunch()
+				with(userDataStore) {
+					updateCredentialIdToken(
+						uiState.value.authData?.idToken
+							?: throw IllegalArgumentException("로그인 정보가 없습니다."),
+					)
+					updateUserId(
+						uiState.value.authData?.uid
+							?: throw IllegalArgumentException("로그인 정보가 없습니다."),
+					)
+					updateUsername(uiState.value.nickname)
+					updateProfileUrl(uiState.value.profileUrl)
+					updateIsFirstLaunch()
+				}
 
-				postSideEffect(AuthSideEffect.NavigateToMain)
+				onIntent(AuthIntent.OnLoginSuccess)
 			} catch (e: Exception) {
 				postSideEffect(AuthSideEffect.ShowError(e.message ?: "회원가입에 실패했습니다."))
 			}
 		}
+	}
+
+	private fun handleLoginSuccess() {
+		viewModelScope.launch {
+			userDataStore.updateIsLoggedIn(true)
+		}
+		postSideEffect(AuthSideEffect.NavigateToMain)
 	}
 }
