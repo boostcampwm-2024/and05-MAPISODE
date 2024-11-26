@@ -9,6 +9,7 @@ import com.boostcamp.mapisode.mygroup.sideeffect.GroupDetailSideEffect
 import com.boostcamp.mapisode.mygroup.state.GroupDetailState
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,27 +21,41 @@ class GroupDetailViewModel @Inject constructor(
 	private val userId = mutableStateOf("")
 
 	override fun onIntent(intent: GroupDetailIntent) {
-		when (intent) {
-			is GroupDetailIntent.GetGroupId -> {
-				getGroupDetail(intent.groupId)
-			}
+		viewModelScope.launch {
+			when (intent) {
+				is GroupDetailIntent.InitializeGroupDetail -> {
+					getGroupDetail(intent.groupId)
+				}
 
-			is GroupDetailIntent.TryGetGroup -> {
-				tryGetGroup()
-			}
+				is GroupDetailIntent.TryGetGroup -> {
+					tryGetGroup()
+				}
 
-			is GroupDetailIntent.GoToGroupEditScreen -> {
-				goToGroupEditScreen()
-			}
+				is GroupDetailIntent.OnEditClick -> {
+					postSideEffect(GroupDetailSideEffect.NavigateToGroupEditScreen(intent.groupId))
+					delay(100)
+					intent { copy(isGroupLoading = true) }
+				}
 
-			is GroupDetailIntent.BackToGroupScreen -> {
-				backToGroupScreen()
+				is GroupDetailIntent.OnBackClick -> {
+					postSideEffect(GroupDetailSideEffect.NavigateToGroupScreen)
+				}
+
+				is GroupDetailIntent.OnEpisodeClick -> {
+					postSideEffect(GroupDetailSideEffect.NavigateToEpisode(intent.episodeId))
+				}
 			}
 		}
 	}
 
 	private fun getGroupDetail(groupId: String) {
 		userId.value = groupId
+		intent {
+			copy(
+				isGroupIdCaching = false,
+				isGroupLoading = true,
+			)
+		}
 	}
 
 	private fun tryGetGroup() {
@@ -49,6 +64,7 @@ class GroupDetailViewModel @Inject constructor(
 				val group = groupRepository.getGroupByGroupId(userId.value)
 				intent {
 					copy(
+						isGroupLoading = false,
 						group = group,
 					)
 				}
@@ -57,8 +73,4 @@ class GroupDetailViewModel @Inject constructor(
 			}
 		}
 	}
-
-	private fun goToGroupEditScreen() { }
-
-	private fun backToGroupScreen() { }
 }

@@ -1,17 +1,18 @@
 package com.boostcamp.mapisode.mygroup.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -24,6 +25,9 @@ import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTab
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTabRow
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.mygroup.intent.GroupDetailIntent
+import com.boostcamp.mapisode.mygroup.sideeffect.GroupDetailSideEffect
+import com.boostcamp.mapisode.mygroup.sideeffect.rememberFlowWithLifecycle
+import com.boostcamp.mapisode.mygroup.state.GroupDetailState
 import com.boostcamp.mapisode.mygroup.viewmodel.GroupDetailViewModel
 import com.boostcamp.mapisode.navigation.GroupRoute
 import kotlinx.coroutines.launch
@@ -35,20 +39,70 @@ fun GroupDetailScreen(
 	onEditClick: (String) -> Unit,
 	viewModel: GroupDetailViewModel = hiltViewModel(),
 ) {
-	val pagerState = rememberPagerState(pageCount = { 2 })
-	val list = listOf("그룹 상세", "에피소드")
-	val scope = rememberCoroutineScope()
+	val context = LocalContext.current
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+	val effect = rememberFlowWithLifecycle(
+		flow = viewModel.sideEffect,
+		initialValue = GroupDetailSideEffect.Idle,
+	).value
 
-	LaunchedEffect(uiState) {
-		viewModel.onIntent(GroupDetailIntent.GetGroupId(detail.groupId))
+	LaunchedEffect(uiState.value) {
+		with(uiState.value) {
+			if (isGroupIdCaching) {
+				viewModel.onIntent(GroupDetailIntent.InitializeGroupDetail(detail.groupId))
+			}
+			if (isGroupLoading) {
+				viewModel.onIntent(GroupDetailIntent.TryGetGroup(detail.groupId))
+			}
+		}
 	}
+
+	LaunchedEffect(effect) {
+		when (effect) {
+			is GroupDetailSideEffect.ShowToast -> {
+				Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+			}
+
+			is GroupDetailSideEffect.NavigateToGroupEditScreen -> {
+				onEditClick(effect.groupId)
+			}
+
+			is GroupDetailSideEffect.NavigateToGroupScreen -> {
+				onBackClick()
+			}
+
+			is GroupDetailSideEffect.NavigateToEpisode -> {
+				// TODO: Navigate to Episode
+			}
+		}
+	}
+
+	GroupDetailContent(
+		uiState = uiState.value,
+		onBackClick = {
+			viewModel.onIntent(GroupDetailIntent.OnBackClick)
+		},
+		onEditClick = {
+			viewModel.onIntent(GroupDetailIntent.OnEditClick(detail.groupId))
+		},
+	)
+}
+
+@Composable
+fun GroupDetailContent(
+	uiState: GroupDetailState,
+	onBackClick: () -> Unit,
+	onEditClick: () -> Unit,
+) {
+	val scope = rememberCoroutineScope()
+	val pagerState = rememberPagerState(pageCount = { 2 })
+	val tapList = listOf("그룹 설명", "에피소드")
 
 	MapisodeScaffold(
 		isStatusBarPaddingExist = true,
 		topBar = {
 			TopAppBar(
-				title = "그룹 상세",
+				title = uiState.group?.name ?: "",
 				navigationIcon = {
 					MapisodeIconButton(
 						onClick = { onBackClick() },
@@ -61,7 +115,7 @@ fun GroupDetailScreen(
 				actions = {
 					MapisodeIconButton(
 						onClick = {
-							onEditClick(detail.groupId)
+							onEditClick()
 						},
 					) {
 						MapisodeIcon(
@@ -83,10 +137,10 @@ fun GroupDetailScreen(
 			MapisodeTabRow(
 				selectedTabIndex = pagerState.currentPage,
 			) {
-				list.forEachIndexed { index, _ ->
+				tapList.forEachIndexed { index, _ ->
 					MapisodeTab(
 						text = {
-							MapisodeText(list[index])
+							MapisodeText(tapList[index])
 						},
 						selected = pagerState.currentPage == index,
 						onClick = {
@@ -97,17 +151,12 @@ fun GroupDetailScreen(
 					)
 				}
 			}
-			TabsContent(pagerState)
-		}
-	}
-}
-
-@Composable
-fun TabsContent(pagerState: PagerState) {
-	HorizontalPager(state = pagerState) { page ->
-		when (page) {
-			0 -> GroupDetailContent(data = "그룹 상세")
-			1 -> GroupEpisodesContent(data = "에피소드")
+			HorizontalPager(state = pagerState) { page ->
+				when (page) {
+					0 -> GroupDetailContent(data = tapList[0])
+					1 -> GroupEpisodesContent(data = tapList[1])
+				}
+			}
 		}
 	}
 }

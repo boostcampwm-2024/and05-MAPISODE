@@ -7,7 +7,7 @@ import com.boostcamp.mapisode.ui.base.SideEffect
 sealed class GroupDetailSideEffect : SideEffect {
 	data object Idle : GroupJoinSideEffect()
 	data class ShowToast(val message: String) : GroupDetailSideEffect()
-	data object NavigateToGroupEditScreen : GroupDetailSideEffect()
+	data class NavigateToGroupEditScreen(val groupId: String) : GroupDetailSideEffect()
 	data object NavigateToGroupScreen : GroupDetailSideEffect()
 	data class NavigateToEpisode(val episodeId: String) : GroupDetailSideEffect()
 }

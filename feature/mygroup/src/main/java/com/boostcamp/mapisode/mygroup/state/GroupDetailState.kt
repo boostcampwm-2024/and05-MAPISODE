@@ -6,6 +6,7 @@ import com.boostcamp.mapisode.ui.base.UiState
 
 @Immutable
 data class GroupDetailState(
+	val isGroupIdCaching: Boolean = true,
 	val isGroupLoading: Boolean = false,
 	val group: GroupModel? = null,
 ) : UiState
