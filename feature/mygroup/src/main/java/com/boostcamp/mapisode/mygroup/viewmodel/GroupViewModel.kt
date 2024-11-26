@@ -9,6 +9,7 @@ import com.boostcamp.mapisode.mygroup.state.GroupState
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,10 +21,6 @@ class GroupViewModel @Inject constructor(private val groupRepository: GroupRepos
 		when (intent) {
 			is GroupIntent.LoadGroups -> {
 				loadGroups()
-			}
-
-			is GroupIntent.EndLoadingGroups -> {
-				confirmGroupsLoaded()
 			}
 
 			is GroupIntent.OnJoinClick -> {
@@ -49,7 +46,6 @@ class GroupViewModel @Inject constructor(private val groupRepository: GroupRepos
 				intent {
 					copy(
 						isInitializing = false,
-						areGroupsLoading = true,
 						groups = group,
 					)
 				}
@@ -59,23 +55,27 @@ class GroupViewModel @Inject constructor(private val groupRepository: GroupRepos
 		}
 	}
 
-	private fun confirmGroupsLoaded() {
-		intent {
-			copy(
-				areGroupsLoading = false,
-			)
+	private fun navigateToGroupJoinScreen() {
+		viewModelScope.launch {
+			postSideEffect(GroupSideEffect.NavigateToGroupJoinScreen)
+			delay(100)
+			intent { copy(isInitializing = true) }
 		}
 	}
 
-	private fun navigateToGroupJoinScreen() {
-		postSideEffect(GroupSideEffect.NavigateToGroupJoinScreen)
-	}
-
 	private fun navigateToGroupCreationScreen() {
-		postSideEffect(GroupSideEffect.NavigateToGroupCreateScreen)
+		viewModelScope.launch {
+			postSideEffect(GroupSideEffect.NavigateToGroupCreateScreen)
+			delay(100)
+			intent { copy(isInitializing = true) }
+		}
 	}
 
 	private fun navigateToGroupDetailScreen(groupId: String) {
-		postSideEffect(GroupSideEffect.NavigateToGroupDetailScreen(groupId))
+		viewModelScope.launch {
+			postSideEffect(GroupSideEffect.NavigateToGroupDetailScreen(groupId))
+			delay(100)
+			intent { copy(isInitializing = true) }
+		}
 	}
 }
