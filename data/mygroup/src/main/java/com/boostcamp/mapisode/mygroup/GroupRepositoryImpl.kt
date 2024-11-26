@@ -102,6 +102,18 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 		throw e
 	}
 
+	override suspend fun leaveGroup(userId: String, groupId: String) {
+		groupCollection.document(groupId).update(
+			FirestoreConstants.FIELD_MEMBERS,
+			FieldValue.arrayRemove(userCollection.document(userId)),
+		).await()
+
+		userCollection.document(userId).update(
+			FirestoreConstants.FIELD_GROUPS,
+			FieldValue.arrayRemove(groupCollection.document(groupId)),
+		).await()
+	}
+
 	override suspend fun createGroup(groupModel: GroupModel): String {
 		val newGroupId = UUID.randomUUID().toString().replace("-", "")
 		return try {
