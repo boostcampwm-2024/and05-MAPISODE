@@ -12,7 +12,7 @@ interface UserPreferenceDataStore {
 	suspend fun updateIsFirstLaunch()
 	suspend fun updateIsLoggedIn(isLoggedIn: Boolean)
 	suspend fun updateProfileUrl(profileUrl: String)
-	suspend fun updateCredentialIdToken(authToken: String)
+	suspend fun updateCredentialIdToken(idToken: String)
 	suspend fun updateRecentSelectedGroup(group: String)
 
 	suspend fun clearUserData()
