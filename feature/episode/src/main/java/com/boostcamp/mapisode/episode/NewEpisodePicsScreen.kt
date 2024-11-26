@@ -17,11 +17,13 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 internal fun NewEpisodePicsScreen(
 	navController: NavController,
-	updatePics: (List<Uri>) -> Unit,
+	updatePics: (PersistentList<Uri>) -> Unit,
 ) {
 	MapisodeScaffold(
 		topBar = {
@@ -59,12 +61,12 @@ internal fun NewEpisodePicsScreen(
 
 @Composable
 fun PickEpisodePhotoButton(
-	onPickPhotos: (List<Uri>) -> Unit,
+	onPickPhotos: (PersistentList<Uri>) -> Unit,
 ) {
 	val photoPickLauncher = rememberLauncherForActivityResult(
 		contract = ActivityResultContracts.PickMultipleVisualMedia(4),
 		onResult = { uris ->
-			onPickPhotos(uris)
+			onPickPhotos(uris.toPersistentList())
 		},
 	)
 
