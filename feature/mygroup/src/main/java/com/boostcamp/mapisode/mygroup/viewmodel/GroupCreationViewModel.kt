@@ -44,15 +44,16 @@ class GroupCreationViewModel @Inject constructor(
 				} else {
 					intent { copy(isGroupEditError = false) }
 					val newGroupId = UUID.randomUUID().toString().replace("-", "")
+					val userId = userPreferenceDataStore.getUserId().first()
 					val editedGroup = GroupModel(
 						id = newGroupId,
 						name = title,
 						createdAt = Date(),
 						description = content,
 						imageUrl = imageUrl,
-						adminUser = userPreferenceDataStore.getUserId().first()
+						adminUser = userId
 							?: throw Exception(),
-						members = emptyList(),
+						members = listOf(userId),
 					)
 					groupRepository.createGroup(editedGroup)
 					postSideEffect(GroupCreationSideEffect.ShowToast(R.string.message_error_creation_group_success))

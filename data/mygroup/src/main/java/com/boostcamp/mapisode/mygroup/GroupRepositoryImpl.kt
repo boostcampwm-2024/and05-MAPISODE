@@ -114,12 +114,14 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 		).await()
 	}
 
-	override suspend fun createGroup(groupModel: GroupModel): String {
-		val newGroupId = UUID.randomUUID().toString().replace("-", "")
-		return try {
-			groupCollection.document(newGroupId).set(groupModel.toFirestoreModel(database))
+	override suspend fun createGroup(groupModel: GroupModel) {
+		try {
+			groupCollection.document(groupModel.id).set(groupModel.toFirestoreModel(database))
 				.await()
-			newGroupId
+			userCollection.document(groupModel.adminUser).update(
+				FirestoreConstants.FIELD_GROUPS,
+				FieldValue.arrayUnion(groupCollection.document(groupModel.id)),
+			).await()
 		} catch (e: Exception) {
 			throw e
 		}
