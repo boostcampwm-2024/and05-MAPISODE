@@ -10,6 +10,7 @@ import com.boostcamp.mapisode.ui.base.UiState
 data class GroupDetailState(
 	val isGroupIdCaching: Boolean = true,
 	val isGroupLoading: Boolean = false,
+	val isGroupOwner: Boolean = false,
 	val group: GroupModel? = null,
 	val membersInfo: List<GroupMemberModel> = emptyList(),
 	val episodes: List<EpisodeModel> = emptyList(),
