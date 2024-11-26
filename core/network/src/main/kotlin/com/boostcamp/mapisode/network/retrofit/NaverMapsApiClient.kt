@@ -28,7 +28,11 @@ object NaverMapsApiClient {
 	internal fun create() = Retrofit.Builder()
 		.baseUrl(BASE_URL)
 		.client(okhttpClient)
-		.addConverterFactory(jsonConverter.asConverterFactory("application/json; charset=UTF-8".toMediaType()))
+		.addConverterFactory(
+			jsonConverter.asConverterFactory(
+				"application/json; charset=UTF-8".toMediaType(),
+			),
+		)
 		.build()
 		.create(NaverMapsApi::class.java)
 }
