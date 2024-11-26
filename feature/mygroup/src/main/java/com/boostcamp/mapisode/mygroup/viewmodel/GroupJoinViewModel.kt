@@ -27,9 +27,10 @@ class GroupJoinViewModel @Inject constructor(
 		observeUserId()
 	}
 
+	// TODO : 삭제할 임시 함수
 	private fun setUserIde() {
 		viewModelScope.launch {
-			userPreferenceDataStore.updateUserId("o6UT6Ze1LFgsvekEvj9J")
+			userPreferenceDataStore.updateUserId("J6O9lIukqkSEKANK87XgQjiDpD82")
 		}
 	}
 
