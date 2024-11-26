@@ -139,12 +139,15 @@ internal fun HomeRoute(
 	LaunchedEffect(
 		key1 = cameraPositionState,
 		key2 = uiState.selectedChip,
-		key3 = uiState.isCardVisible,
 	) {
 		snapshotFlow { cameraPositionState.position }
 			.distinctUntilChanged()
 			.sample(500)
 			.collect { _ ->
+				if (uiState.isCameraMovingProgrammatically) {
+					viewModel.onIntent(HomeIntent.EndProgrammaticCameraMove)
+					return@collect
+				}
 				if (!uiState.isCardVisible) {
 					loadEpisodesInBounds(cameraPositionState)
 				} else {
@@ -221,6 +224,7 @@ internal fun HomeRoute(
 			viewModel.onIntent(HomeIntent.ClickTextMarker(latLng.toEpisodeLatLng()))
 		},
 		onEpisodeMarkerClick = { episode ->
+			viewModel.onIntent(HomeIntent.StartProgrammaticCameraMove)
 			viewModel.onIntent(HomeIntent.ShowCard(episode))
 		},
 		onMapClick = {

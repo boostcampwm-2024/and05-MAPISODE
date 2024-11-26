@@ -15,7 +15,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -75,6 +74,14 @@ class HomeViewModel @Inject constructor(private val episodeRepository: EpisodeRe
 
 			is HomeIntent.MapMovedWhileCardVisible -> {
 				mapMovedWhileCardVisible()
+			}
+
+			is HomeIntent.StartProgrammaticCameraMove -> {
+				setProgrammaticCameraMove(true)
+			}
+
+			is HomeIntent.EndProgrammaticCameraMove -> {
+				setProgrammaticCameraMove(false)
 			}
 		}
 	}
@@ -208,4 +215,9 @@ class HomeViewModel @Inject constructor(private val episodeRepository: EpisodeRe
 		episodeModel.location.distanceTo(referenceLocation)
 	}
 
+	private fun setProgrammaticCameraMove(isMoving: Boolean) {
+		intent {
+			copy(isCameraMovingProgrammatically = isMoving)
+		}
+	}
 }
