@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserPreferenceDataStore {
 	fun getUserPreferencesFlow(): Flow<UserPreferences>
 	fun getUserId(): Flow<String?>
+	suspend fun getIsLoggedIn(): Boolean
 
 	suspend fun updateUserId(userId: String)
 	suspend fun updateUsername(username: String)

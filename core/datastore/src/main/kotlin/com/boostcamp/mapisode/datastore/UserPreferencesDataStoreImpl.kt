@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -36,6 +37,12 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 
 	override fun getUserId(): Flow<String?> = dataStore.data.map { preferences ->
 		preferences[PreferenceKeys.USER_ID]
+	}
+
+	override suspend fun getIsLoggedIn(): Boolean {
+		return dataStore.data.map { preferences ->
+			preferences[PreferenceKeys.IS_LOGGED_IN] ?: false
+		}.first()
 	}
 
 	override suspend fun updateUserId(userId: String) {
