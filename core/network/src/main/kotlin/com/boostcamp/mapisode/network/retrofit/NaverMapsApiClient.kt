@@ -23,6 +23,7 @@ object NaverMapsApiClient {
 
 	private val jsonConverter = Json {
 		ignoreUnknownKeys = true
+		explicitNulls = false
 	}
 
 	internal fun create() = Retrofit.Builder()
