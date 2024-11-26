@@ -34,11 +34,6 @@ fun GroupInfoCard(
 	Row(
 		modifier = modifier
 			.fillMaxWidth()
-			.border(
-				width = 1.dp,
-				color = MapisodeTheme.colorScheme.textColoredContainer,
-				shape = RoundedCornerShape(12.dp),
-			)
 			.padding(10.dp)
 			.height(140.dp),
 	) {
