@@ -2,9 +2,10 @@ package com.boostcamp.mapisode.mygroup.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.mygroup.GroupRepository
+import com.boostcamp.mapisode.mygroup.R
 import com.boostcamp.mapisode.mygroup.intent.GroupIntent
-import com.boostcamp.mapisode.mygroup.intent.GroupSideEffect
-import com.boostcamp.mapisode.mygroup.intent.GroupState
+import com.boostcamp.mapisode.mygroup.sideeffect.GroupSideEffect
+import com.boostcamp.mapisode.mygroup.state.GroupState
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
@@ -40,7 +41,7 @@ class GroupViewModel @Inject constructor(private val groupRepository: GroupRepos
 					)
 				}
 			} catch (e: Exception) {
-				// TODO : SideEffect - 에러 메세지 출력
+				postSideEffect(GroupSideEffect.ShowToast(R.string.group_load_failure))
 			}
 		}
 	}
