@@ -29,6 +29,9 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
 fun SignUpScreen(
+	nickname: String,
+	onNicknameChanged: (String) -> Unit,
+	onSignUpClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
 	MapisodeScaffold(
@@ -59,8 +62,8 @@ fun SignUpScreen(
 				Spacer(modifier = Modifier.height(12.dp))
 
 				MapisodeTextField(
-					value = "",
-					onValueChange = { },
+					value = nickname,
+					onValueChange = onNicknameChanged,
 					placeholder = stringResource(R.string.login_nickname_placeholder),
 					modifier = Modifier
 						.fillMaxWidth(),
@@ -91,7 +94,7 @@ fun SignUpScreen(
 
 				MapisodeFilledButton(
 					text = stringResource(R.string.login_next),
-					onClick = { },
+					onClick = onSignUpClick,
 					modifier = Modifier
 						.fillMaxWidth(),
 				)
@@ -122,5 +125,11 @@ fun SignUpTopBar() {
 )
 @Composable
 fun SignUpScreenPreview() {
-	SignUpScreen()
+	MapisodeTheme {
+		SignUpScreen(
+			nickname = "nickname",
+			onNicknameChanged = { },
+			onSignUpClick = { },
+		)
+	}
 }
