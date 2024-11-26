@@ -11,6 +11,6 @@ object NaverMapsApiConstants {
 	internal const val QUERY_ORDERS = "orders"
 	internal const val QUERY_OUTPUT = "output"
 
-	internal const val QUERY_ORDERS_DEFAULT_ROADADDR = "roadaddr"
+	internal const val QUERY_ORDERS_DEFAULT = "roadaddr,addr"
 	internal const val QUERY_OUTPUT_DEFAULT_JSON = "json"
 }
