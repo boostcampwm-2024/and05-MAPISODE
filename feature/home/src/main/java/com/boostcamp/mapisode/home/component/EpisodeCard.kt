@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -44,6 +45,7 @@ fun EpisodeCard(
 
 	Row(
 		modifier = modifier
+			.fillMaxWidth()
 			.clip(RoundedCornerShape(12.dp))
 			.background(
 				color = MapisodeTheme.colorScheme.surfaceBackground,
@@ -94,12 +96,13 @@ fun EpisodeCard(
 				color = MapisodeTheme.colorScheme.textContent,
 			)
 
-			MapisodeText(
-				text = tagString,
-				style = AppTypography.labelMedium.copy(fontSize = 10.dp),
-				color = MapisodeTheme.colorScheme.textContent,
-			)
-
+			if (episode.tags.isNotEmpty()) {
+				MapisodeText(
+					text = tagString,
+					style = AppTypography.labelMedium.copy(fontSize = 10.dp),
+					color = MapisodeTheme.colorScheme.textContent,
+				)
+			}
 			// TODO 버튼 추가
 			// Spacer(modifier = Modifier.weight(1f))
 

@@ -8,12 +8,15 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,6 +42,7 @@ import com.boostcamp.mapisode.home.common.HomeConstant.EXTRA_RANGE
 import com.boostcamp.mapisode.home.common.HomeConstant.tempGroupList
 import com.boostcamp.mapisode.home.common.getChipIconTint
 import com.boostcamp.mapisode.home.common.mapCategoryToChipType
+import com.boostcamp.mapisode.home.component.EpisodeCard
 import com.boostcamp.mapisode.home.component.GroupBottomSheetContent
 import com.boostcamp.mapisode.home.component.MapisodeChip
 import com.boostcamp.mapisode.home.component.MapisodeFabOverlayButton
@@ -310,7 +314,7 @@ private fun HomeScreen(
 
 		Column(
 			modifier = Modifier
-				.fillMaxWidth()
+				.fillMaxSize()
 				.padding(top = 46.dp),
 			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
@@ -339,6 +343,56 @@ private fun HomeScreen(
 					onClick = onGroupFabClick,
 					modifier = Modifier.padding(end = 20.dp),
 				)
+			}
+
+			if (state.isCardVisible) {
+				val pagerState = rememberPagerState(
+					initialPage = state.selectedEpisodeIndex,
+					initialPageOffsetFraction = 0f,
+					pageCount = { state.selectedEpisodes.size },
+				)
+
+				LaunchedEffect(pagerState.currentPage) {
+					val currentEpisode = state.selectedEpisodes.getOrNull(pagerState.currentPage)
+					currentEpisode?.let { episode ->
+						val position = LatLng(episode.location.latitude, episode.location.longitude)
+						cameraPositionState.position = CameraPosition(position, DEFAULT_ZOOM)
+					}
+				}
+
+				LaunchedEffect(state.selectedEpisodes) {
+					if (pagerState.currentPage != state.selectedEpisodeIndex) {
+						pagerState.scrollToPage(state.selectedEpisodeIndex)
+					}
+				}
+
+				Spacer(modifier = Modifier.weight(1f))
+
+				HorizontalPager(
+					state = pagerState,
+					modifier = Modifier
+						.fillMaxWidth()
+						.align(Alignment.CenterHorizontally),
+					verticalAlignment = Alignment.CenterVertically,
+					contentPadding = PaddingValues(horizontal = 20.dp),
+					pageSpacing = 10.dp,
+				) { page ->
+					val episode = state.selectedEpisodes[page]
+
+					Box(
+						modifier = Modifier.fillMaxWidth(),
+						contentAlignment = Alignment.Center,
+					) {
+						EpisodeCard(
+							episode = episode,
+							onClick = {
+								// TODO : 상세보기로 이동
+							},
+						)
+					}
+				}
+
+				Spacer(modifier = Modifier.height(20.dp))
 			}
 		}
 
