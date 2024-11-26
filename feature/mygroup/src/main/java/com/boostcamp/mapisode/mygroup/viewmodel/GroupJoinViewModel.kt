@@ -86,7 +86,7 @@ class GroupJoinViewModel @Inject constructor(
 				postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_failure))
 			}
 			postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_success))
-			delay(10)
+			delay(100)
 			postSideEffect(GroupJoinSideEffect.NavigateToGroupJoinScreen)
 		}
 	}
