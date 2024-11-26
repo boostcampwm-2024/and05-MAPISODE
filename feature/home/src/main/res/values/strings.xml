@@ -9,4 +9,11 @@
 	<string name="group_my_episode_name">👑 나의 에피소드</string>
 	<string name="group_bottomsheet_title">그룹 선택</string>
 	<string name="error_load_episodes">에피소드를 불러오는데 실패했습니다.</string>
+
+	<!-- EpisodeCard -->
+	<string name="episode_card_tag_prefix">태그 : #</string>
+	<string name="episode_card_date_prefix">날짜 : %1$s</string>
+	<string name="episode_creator_tag_prefix">생성자 : %1$s</string>
+	<string name="episode_card_category_prefix">카테고리 : %1$s</string>
+	<string name="episode_card_image_description">애피소드 썸네일</string>
 </resources>
