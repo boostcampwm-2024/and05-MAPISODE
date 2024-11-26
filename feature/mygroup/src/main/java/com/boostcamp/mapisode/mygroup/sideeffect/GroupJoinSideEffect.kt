@@ -7,5 +7,5 @@ import com.boostcamp.mapisode.ui.base.SideEffect
 sealed class GroupJoinSideEffect : SideEffect {
 	data object Idle : GroupJoinSideEffect()
 	data class ShowToast(val messageResId: Int) : GroupJoinSideEffect()
-	data object NavigateToGroupJoinScreen : GroupJoinSideEffect()
+	data object NavigateToGroupScreen : GroupJoinSideEffect()
 }

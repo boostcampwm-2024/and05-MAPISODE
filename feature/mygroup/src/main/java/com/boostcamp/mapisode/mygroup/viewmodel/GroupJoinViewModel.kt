@@ -52,7 +52,7 @@ class GroupJoinViewModel @Inject constructor(
 			}
 
 			is GroupJoinIntent.OnBackClick -> {
-				postSideEffect(GroupJoinSideEffect.NavigateToGroupJoinScreen)
+				postSideEffect(GroupJoinSideEffect.NavigateToGroupScreen)
 			}
 		}
 	}
@@ -87,7 +87,7 @@ class GroupJoinViewModel @Inject constructor(
 			}
 			postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_success))
 			delay(100)
-			postSideEffect(GroupJoinSideEffect.NavigateToGroupJoinScreen)
+			postSideEffect(GroupJoinSideEffect.NavigateToGroupScreen)
 		}
 	}
 }

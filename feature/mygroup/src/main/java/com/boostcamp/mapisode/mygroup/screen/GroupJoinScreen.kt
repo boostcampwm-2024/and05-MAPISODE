@@ -68,7 +68,7 @@ fun GroupJoinScreen(
 
 	LaunchedEffect(effect) {
 		when (effect) {
-			is GroupJoinSideEffect.NavigateToGroupJoinScreen -> {
+			is GroupJoinSideEffect.NavigateToGroupScreen -> {
 				onBackClick()
 			}
 
