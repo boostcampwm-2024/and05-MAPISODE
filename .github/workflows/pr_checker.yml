@@ -36,9 +36,11 @@ jobs:
             -   name: Add Local Properties
                 env:
                     NAVER_MAP_CLIENT_ID: ${{ secrets.NAVER_MAP_CLIENT_ID }}
+                    NAVER_MAP_CLIENT_SECRET: ${{ secrets.NAVER_MAP_CLIENT_SECRET }}
                     GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
                 run: |
                     echo NAVER_MAP_CLIENT_ID=$NAVER_MAP_CLIENT_ID > ./local.properties
+                    echo NAVER_MAP_CLIENT_SECRET=$NAVER_MAP_CLIENT_SECRET > ./local.properties
                     echo GOOGLE_WEB_CLIENT_ID=$GOOGLE_WEB_CLIENT_ID >> ./local.properties
 
             -   name: Create google-services.json
