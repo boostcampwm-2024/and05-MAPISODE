@@ -12,7 +12,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -37,8 +37,8 @@ internal fun NewEpisodeContentScreen(
 	navController: NavController,
 	submitEpisode: (NewEpisodeContent) -> Unit = {},
 ) {
-	var titleValue by remember { mutableStateOf(state.episodeContent.title) }
-	var descriptionValue by remember { mutableStateOf(state.episodeContent.description) }
+	var titleValue by rememberSaveable { mutableStateOf(state.episodeContent.title) }
+	var descriptionValue by rememberSaveable { mutableStateOf(state.episodeContent.description) }
 
 	MapisodeScaffold(
 		topBar = {
@@ -97,6 +97,8 @@ internal fun NewEpisodeContentScreen(
 							state.episodeContent.images,
 						),
 					)
+					titleValue = ""
+					descriptionValue = ""
 					navController.popBackStack("new_episode_pics", inclusive = false)
 				},
 				text = stringResource(R.string.new_episode_create_episode),
