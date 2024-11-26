@@ -35,4 +35,6 @@
 	<string name="overview_content">내용 : </string>
 	<string name="message_error_edit_input">입력 조건을 만족해주세요.</string>
 	<string name="message_error_edit_group">그룹 수정에 실패했습니다.</string>
+	<string name="message_error_creation_group_success">그룹 생성에 성공했습니다.</string>
+	<string name="message_error_creation_group_fail">그룹 생성에 실패했습니다.</string>
 </resources>
