@@ -3,6 +3,7 @@ package com.boostcamp.mapisode.mygroup.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
+import com.boostcamp.mapisode.model.GroupMemberModel
 import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.mygroup.R
 import com.boostcamp.mapisode.mygroup.intent.GroupDetailIntent
@@ -30,6 +31,10 @@ class GroupDetailViewModel @Inject constructor(
 
 				is GroupDetailIntent.TryGetGroup -> {
 					tryGetGroup()
+				}
+
+				is GroupDetailIntent.TryGetUserInfo -> {
+					setGroupMembersInfo()
 				}
 
 				is GroupDetailIntent.OnEditClick -> {
@@ -88,6 +93,23 @@ class GroupDetailViewModel @Inject constructor(
 				postSideEffect(GroupDetailSideEffect.ShowToast(R.string.message_issue_code_success))
 			} catch (e: Exception) {
 				postSideEffect(GroupDetailSideEffect.ShowToast(R.string.message_issue_code_fail))
+			}
+		}
+	}
+
+	private fun setGroupMembersInfo(){
+		viewModelScope.launch {
+			val group = currentState.group ?: throw Exception()
+			val members = group.members
+			val memberInfo = mutableListOf<GroupMemberModel>()
+			members.forEach { member ->
+				val user = groupRepository.getUserInfoByUserId(member)
+				memberInfo.add(user)
+			}
+			intent {
+				copy(
+					membersInfo = memberInfo
+				)
 			}
 		}
 	}
