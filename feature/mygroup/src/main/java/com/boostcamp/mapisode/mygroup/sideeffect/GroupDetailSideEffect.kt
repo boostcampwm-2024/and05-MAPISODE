@@ -5,5 +5,5 @@ import com.boostcamp.mapisode.ui.base.SideEffect
 
 @Immutable
 sealed class GroupDetailSideEffect : SideEffect {
-	data class ShowToast(val messageResId: Int) : GroupSideEffect()
+	data class ShowToast(val message: String) : GroupDetailSideEffect()
 }

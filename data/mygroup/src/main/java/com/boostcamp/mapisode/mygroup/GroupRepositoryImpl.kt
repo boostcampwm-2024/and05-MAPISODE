@@ -18,6 +18,16 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 	private val userCollection = database.collection(FirestoreConstants.COLLECTION_USER)
 	private val inviteCodesCollection = database.collection(FirestoreConstants.COLLECTION_INVITE_CODES)
 
+	override suspend fun getGroupByGroupId(groupId: String): GroupModel = try {
+		groupCollection.document(groupId)
+			.get()
+			.await()
+			.toObject(GroupFirestoreModel::class.java)?.toDomainModel(groupId)
+			?: throw Exception("그룹을 찾을 수 없습니다.")
+	} catch (e: Exception) {
+		throw e
+	}
+
 	override suspend fun getGroupsByUserId(userId: String): List<GroupModel> = try {
 		val userSnapshot = userCollection.document(userId).get().await()
 
@@ -34,7 +44,7 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 		throw e
 	}
 
-	override suspend fun getGroupById(inviteCodes: String): GroupModel = try {
+	override suspend fun getGroupByInviteCodes(inviteCodes: String): GroupModel = try {
 		val groupSnapshot = inviteCodesCollection.document(inviteCodes)
 			.get().await()
 		val group = groupSnapshot[FirestoreConstants.FIELD_GROUP] as DocumentReference
