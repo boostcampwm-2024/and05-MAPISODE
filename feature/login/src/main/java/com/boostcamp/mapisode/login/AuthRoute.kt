@@ -26,7 +26,6 @@ fun AuthRoute(
 		viewModel.sideEffect.collect { effect ->
 			when (effect) {
 				is AuthSideEffect.NavigateToMain -> navigateToMain()
-
 				is AuthSideEffect.ShowError -> {
 					Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
 				}
