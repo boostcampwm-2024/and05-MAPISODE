@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.mygroup.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.DpOffset
@@ -26,11 +28,13 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
+import com.boostcamp.mapisode.designsystem.compose.card.GroupCard
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenu
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
-import com.boostcamp.mapisode.designsystem.compose.card.GroupCard
 import com.boostcamp.mapisode.mygroup.intent.GroupIntent
+import com.boostcamp.mapisode.mygroup.sideeffect.GroupSideEffect
+import com.boostcamp.mapisode.mygroup.sideeffect.rememberFlowWithLifecycle
 import com.boostcamp.mapisode.mygroup.state.GroupState
 import com.boostcamp.mapisode.mygroup.viewmodel.GroupViewModel
 import com.boostcamp.mapisode.mygroup.R as S
@@ -42,13 +46,52 @@ internal fun MainGroupRoute(
 	onGroupCreationClick: () -> Unit,
 	viewModel: GroupViewModel = hiltViewModel(),
 ) {
+	val context = LocalContext.current
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+	val effect = rememberFlowWithLifecycle(
+		flow = viewModel.sideEffect,
+		initialValue = GroupSideEffect.Idle,
+	).value
+
+	LaunchedEffect(effect) {
+		when (effect) {
+			is GroupSideEffect.ShowToast -> {
+				Toast.makeText(context, effect.messageResId, Toast.LENGTH_SHORT).show()
+			}
+
+			is GroupSideEffect.NavigateToGroupJoinScreen -> {
+				onGroupJoinClick()
+			}
+
+			is GroupSideEffect.NavigateToGroupCreateScreen -> {
+				onGroupCreationClick()
+			}
+
+			is GroupSideEffect.NavigateToGroupDetailScreen -> {
+				onGroupDetailClick(effect.groupId)
+			}
+
+			else -> {}
+		}
+	}
+
+	LaunchedEffect(uiState.value) {
+		if (uiState.value.isInitializing) {
+			viewModel.onIntent(GroupIntent.LoadGroups)
+		}
+	}
+
 	GroupScreen(
-		onGroupJoinClick = onGroupJoinClick,
-		onGroupDetailClick = onGroupDetailClick,
-		onGroupCreationClick = onGroupCreationClick,
+		onGroupJoinClick = {
+			viewModel.onIntent(GroupIntent.OnJoinClick)
+		},
+		onGroupDetailClick = { groupId ->
+			viewModel.onIntent(GroupIntent.OnGroupDetailClick(groupId))
+		},
+		onGroupCreationClick = {
+			viewModel.onIntent(GroupIntent.OnGroupCreateClick)
+		},
 		uiState = uiState,
-		onIntent = { viewModel.onIntent(it) },
 	)
 }
 
@@ -58,22 +101,9 @@ private fun <T> GroupScreen(
 	onGroupDetailClick: (String) -> Unit,
 	onGroupCreationClick: () -> Unit,
 	uiState: State<T>,
-	onIntent: (GroupIntent) -> Unit,
 ) {
 	val focusManager = LocalFocusManager.current
 	var isMenuPoppedUp by remember { mutableStateOf(false) }
-
-	LaunchedEffect(uiState.value) {
-		if (uiState.value is GroupState) {
-			val groupState = uiState.value as GroupState
-			if (groupState.groups.isEmpty()) {
-				onIntent(GroupIntent.LoadGroups)
-			}
-			if (groupState.areGroupsLoading && groupState.groups.isNotEmpty()) {
-				onIntent(GroupIntent.EndLoadingGroups)
-			}
-		}
-	}
 
 	MapisodeScaffold(
 		modifier = Modifier

@@ -9,6 +9,7 @@ import com.boostcamp.mapisode.mygroup.sideeffect.GroupJoinSideEffect
 import com.boostcamp.mapisode.mygroup.state.GroupJoinState
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -46,12 +47,12 @@ class GroupJoinViewModel @Inject constructor(
 				tryGetGroupByGroupId(intent.inviteCode)
 			}
 
-			is GroupJoinIntent.JoinTheGroup -> {
+			is GroupJoinIntent.OnJoinClick -> {
 				joinGroup()
 			}
 
-			is GroupJoinIntent.BackToGroupScreen -> {
-
+			is GroupJoinIntent.OnBackClick -> {
+				postSideEffect(GroupJoinSideEffect.NavigateToGroupJoinScreen)
 			}
 		}
 	}
@@ -79,13 +80,14 @@ class GroupJoinViewModel @Inject constructor(
 			try {
 				groupRepository.joinGroup(userId, group.id)
 				intent { copy(isJoinedSuccess = true) }
-				postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_success))
-				Timber.d(currentState.toString())
 			} catch (e: Exception) {
 				Timber.e(e)
 				intent { copy(isGroupLoading = false, isJoinedSuccess = false, group = null) }
 				postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_failure))
 			}
+			postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_success))
+			delay(10)
+			postSideEffect(GroupJoinSideEffect.NavigateToGroupJoinScreen)
 		}
 	}
 }

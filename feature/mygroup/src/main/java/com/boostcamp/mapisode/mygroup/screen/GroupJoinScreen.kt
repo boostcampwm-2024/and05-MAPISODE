@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.mygroup.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -17,14 +18,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -46,6 +48,9 @@ import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.model.GroupModel
 import com.boostcamp.mapisode.mygroup.intent.GroupJoinIntent
+import com.boostcamp.mapisode.mygroup.sideeffect.GroupJoinSideEffect
+import com.boostcamp.mapisode.mygroup.sideeffect.rememberFlowWithLifecycle
+import com.boostcamp.mapisode.mygroup.state.GroupJoinState
 import com.boostcamp.mapisode.mygroup.viewmodel.GroupJoinViewModel
 import com.boostcamp.mapisode.mygroup.R as S
 
@@ -54,27 +59,50 @@ fun GroupJoinScreen(
 	onBackClick: () -> Unit,
 	viewModel: GroupJoinViewModel = hiltViewModel(),
 ) {
-	val focusManager = LocalFocusManager.current
-	var joinCodeText by rememberSaveable { mutableStateOf("") }
-	var onGetGroup by remember { mutableStateOf(false) }
-	var onJoinGroup by remember { mutableStateOf(false) }
-
+	val context = LocalContext.current
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+	val effect = rememberFlowWithLifecycle(
+		flow = viewModel.sideEffect,
+		initialValue = GroupJoinSideEffect.Idle,
+	).value
 
-	LaunchedEffect(onGetGroup) {
-		viewModel.onIntent(GroupJoinIntent.TryGetGroup(joinCodeText))
-	}
+	LaunchedEffect(effect) {
+		when (effect) {
+			is GroupJoinSideEffect.NavigateToGroupJoinScreen -> {
+				onBackClick()
+			}
 
-	LaunchedEffect(onJoinGroup) {
-		viewModel.onIntent(GroupJoinIntent.JoinTheGroup)
-	}
+			is GroupJoinSideEffect.ShowToast -> {
+				Toast.makeText(context, effect.messageResId, Toast.LENGTH_SHORT).show()
+			}
 
-	LaunchedEffect(uiState.value.isJoinedSuccess) {
-		if (uiState.value.isJoinedSuccess) {
-			viewModel.onIntent(GroupJoinIntent.BackToGroupScreen)
-			onBackClick()
+			else -> { }
 		}
 	}
+
+	GroupJoinContent(
+		uiState = uiState,
+		onBackClick = {
+			viewModel.onIntent(intent = GroupJoinIntent.OnBackClick)
+		},
+		onGetGroup = { joinCodeText ->
+			viewModel.onIntent(intent = GroupJoinIntent.TryGetGroup(joinCodeText))
+		},
+		onJoinGroup = {
+			viewModel.onIntent(intent = GroupJoinIntent.OnJoinClick)
+		},
+	)
+}
+
+@Composable
+fun GroupJoinContent(
+	uiState: State<GroupJoinState>,
+	onBackClick: () -> Unit,
+	onGetGroup: (String) -> Unit,
+	onJoinGroup: () -> Unit,
+) {
+	val focusManager = LocalFocusManager.current
+	var joinCodeText by rememberSaveable { mutableStateOf("") }
 
 	MapisodeScaffold(
 		modifier = Modifier.pointerInput(Unit) {
@@ -156,7 +184,7 @@ fun GroupJoinScreen(
 							.fillParentMaxWidth()
 							.height(40.dp),
 						onClick = {
-							onGetGroup = !onGetGroup
+							onGetGroup(joinCodeText)
 						},
 						text = stringResource(S.string.group_join_btn_direction),
 						enabled = joinCodeText.length > 5,
@@ -194,7 +222,7 @@ fun GroupJoinScreen(
 					Spacer(modifier = Modifier.padding(5.dp))
 					MapisodeFilledButton(
 						modifier = Modifier.fillMaxWidth(),
-						onClick = { onJoinGroup = !onJoinGroup },
+						onClick = { onJoinGroup() },
 						text = "참여하기",
 						showRipple = true,
 					)

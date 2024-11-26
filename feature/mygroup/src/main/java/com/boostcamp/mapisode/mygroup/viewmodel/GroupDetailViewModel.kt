@@ -1,6 +1,5 @@
 package com.boostcamp.mapisode.mygroup.viewmodel
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
@@ -59,13 +58,7 @@ class GroupDetailViewModel @Inject constructor(
 		}
 	}
 
-	private fun goToGroupEditScreen() {
+	private fun goToGroupEditScreen() { }
 
-	}
-
-	private fun backToGroupScreen() {
-
-	}
-
-
+	private fun backToGroupScreen() { }
 }

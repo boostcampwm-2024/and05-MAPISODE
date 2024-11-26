@@ -25,6 +25,18 @@ class GroupViewModel @Inject constructor(private val groupRepository: GroupRepos
 			is GroupIntent.EndLoadingGroups -> {
 				confirmGroupsLoaded()
 			}
+
+			is GroupIntent.OnJoinClick -> {
+				navigateToGroupJoinScreen()
+			}
+
+			is GroupIntent.OnGroupCreateClick -> {
+				navigateToGroupCreationScreen()
+			}
+
+			is GroupIntent.OnGroupDetailClick -> {
+				navigateToGroupDetailScreen(intent.groupId)
+			}
 		}
 	}
 
@@ -36,6 +48,7 @@ class GroupViewModel @Inject constructor(private val groupRepository: GroupRepos
 					.toPersistentList()
 				intent {
 					copy(
+						isInitializing = false,
 						areGroupsLoading = true,
 						groups = group,
 					)
@@ -52,5 +65,17 @@ class GroupViewModel @Inject constructor(private val groupRepository: GroupRepos
 				areGroupsLoading = false,
 			)
 		}
+	}
+
+	private fun navigateToGroupJoinScreen() {
+		postSideEffect(GroupSideEffect.NavigateToGroupJoinScreen)
+	}
+
+	private fun navigateToGroupCreationScreen() {
+		postSideEffect(GroupSideEffect.NavigateToGroupCreateScreen)
+	}
+
+	private fun navigateToGroupDetailScreen(groupId: String) {
+		postSideEffect(GroupSideEffect.NavigateToGroupDetailScreen(groupId))
 	}
 }
