@@ -344,24 +344,15 @@ private fun HomeScreen(
 
 			Spacer(modifier = Modifier.height(22.dp))
 
-			Row(
+			Box(
 				modifier = Modifier.fillMaxWidth(),
 			) {
-				Box(
-					modifier = Modifier.fillMaxWidth(),
-					contentAlignment = Alignment.CenterEnd,
-				) {
-					MapisodeFabOverlayButton(
-						onClick = onGroupFabClick,
-						modifier = Modifier.padding(end = 20.dp),
-					)
-				}
-
 				if (state.showRefreshButton) {
 					MapisodeText(
 						text = stringResource(R.string.refresh),
 						style = AppTypography.bodyLarge,
 						modifier = Modifier
+							.align(Alignment.Center)
 							.clip(RoundedCornerShape(10.dp))
 							.clickable { onRefreshClick() }
 							.background(
@@ -372,6 +363,13 @@ private fun HomeScreen(
 						color = Color.White,
 					)
 				}
+
+				MapisodeFabOverlayButton(
+					onClick = onGroupFabClick,
+					modifier = Modifier
+						.align(Alignment.CenterEnd)
+						.padding(end = 20.dp),
+				)
 			}
 
 			if (state.isCardVisible) {
