@@ -103,7 +103,7 @@ class GroupDetailViewModel @Inject constructor(
 				if (group.adminUser == userPreferenceDataStore.getUserId().first()) {
 					intent {
 						copy(
-							isGroupOwner = true
+							isGroupOwner = true,
 						)
 					}
 				}
@@ -126,7 +126,7 @@ class GroupDetailViewModel @Inject constructor(
 		}
 	}
 
-	private fun setGroupMembersInfo(){
+	private fun setGroupMembersInfo() {
 		viewModelScope.launch {
 			val group = currentState.group ?: throw Exception()
 			val members = group.members
@@ -137,7 +137,7 @@ class GroupDetailViewModel @Inject constructor(
 			}
 			intent {
 				copy(
-					membersInfo = memberInfo
+					membersInfo = memberInfo,
 				)
 			}
 		}
@@ -164,7 +164,7 @@ class GroupDetailViewModel @Inject constructor(
 				val episodes = episodeRepository.getEpisodesByGroup(groupId.value)
 				intent {
 					copy(
-						episodes = episodes
+						episodes = episodes,
 					)
 				}
 				Timber.e("episodes: $episodes")
