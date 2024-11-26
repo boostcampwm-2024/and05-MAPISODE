@@ -44,6 +44,7 @@ import com.boostcamp.mapisode.home.component.MapisodeChip
 import com.boostcamp.mapisode.home.component.MapisodeFabOverlayButton
 import com.boostcamp.mapisode.home.component.rememberMarkerImage
 import com.boostcamp.mapisode.model.EpisodeLatLng
+import com.boostcamp.mapisode.model.EpisodeModel
 import com.google.android.gms.location.LocationServices
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
@@ -96,37 +97,50 @@ internal fun HomeRoute(
 		backPressedTime = System.currentTimeMillis()
 	}
 
+	fun loadEpisodesInBounds(
+		cameraPositionState: CameraPositionState,
+		shouldSort: Boolean = false,
+	) {
+		val bounds = cameraPositionState.contentBounds
+
+		bounds?.let {
+			val extendedStart = EpisodeLatLng(
+				it.southWest.latitude - EXTRA_RANGE,
+				it.southWest.longitude - EXTRA_RANGE,
+			)
+			val extendedEnd = EpisodeLatLng(
+				it.northEast.latitude + EXTRA_RANGE,
+				it.northEast.longitude + EXTRA_RANGE,
+			)
+
+			viewModel.onIntent(
+				HomeIntent.LoadEpisode(
+					start = extendedStart,
+					end = extendedEnd,
+					shouldSort = shouldSort,
+				),
+			)
+		}
+	}
+
 	LaunchedEffect(
 		key1 = cameraPositionState,
 		key2 = uiState.selectedChip,
+		key3 = uiState.isCardVisible,
 	) {
 		snapshotFlow { cameraPositionState.position }
 			.distinctUntilChanged()
 			.sample(500)
 			.collect { _ ->
-				val bounds = cameraPositionState.contentBounds
-
-				bounds?.let {
-					val extendedStart = EpisodeLatLng(
-						it.southWest.latitude - EXTRA_RANGE,
-						it.southWest.longitude - EXTRA_RANGE,
-					)
-					val extendedEnd = EpisodeLatLng(
-						it.northEast.latitude + EXTRA_RANGE,
-						it.northEast.longitude + EXTRA_RANGE,
-					)
-
-					viewModel.onIntent(
-						HomeIntent.LoadEpisode(
-							start = extendedStart,
-							end = extendedEnd,
-						),
-					)
+				if (!uiState.isCardVisible) {
+					loadEpisodesInBounds(cameraPositionState)
+				} else {
+					viewModel.onIntent(HomeIntent.MapMovedWhileCardVisible)
 				}
 			}
 	}
 
-	LaunchedEffect(viewModel) {
+	LaunchedEffect(Unit) {
 		viewModel.sideEffect.collect { sideEffect ->
 			when (sideEffect) {
 				is HomeSideEffect.ShowToast -> {
@@ -193,6 +207,17 @@ internal fun HomeRoute(
 		onCreateNewEpisode = { latLng ->
 			viewModel.onIntent(HomeIntent.ClickTextMarker(latLng.toEpisodeLatLng()))
 		},
+		onEpisodeMarkerClick = { episode ->
+			viewModel.onIntent(HomeIntent.ShowCard(episode))
+		},
+		onMapClick = {
+			if (uiState.isCardVisible) {
+				viewModel.onIntent(HomeIntent.CloseCard)
+			}
+		},
+		onRefreshClick = {
+			loadEpisodesInBounds(cameraPositionState, shouldSort = true)
+		},
 	)
 }
 
@@ -204,6 +229,9 @@ private fun HomeScreen(
 	onChipSelected: (ChipType) -> Unit = {},
 	onGroupFabClick: () -> Unit = {},
 	onCreateNewEpisode: (LatLng) -> Unit = {},
+	onEpisodeMarkerClick: (EpisodeModel) -> Unit = {},
+	onMapClick: () -> Unit = {},
+	onRefreshClick: () -> Unit = {},
 ) {
 	val context = LocalContext.current
 	val eatIcon = remember { OverlayImage.fromResource(Design.drawable.ic_eat_marker_light) }
@@ -236,6 +264,7 @@ private fun HomeScreen(
 			},
 			onMapClick = { _, _ ->
 				longClickPosition = null
+				onMapClick()
 			},
 		) {
 			state.episodes.forEach { episode ->
@@ -254,6 +283,7 @@ private fun HomeScreen(
 					icon = icon,
 					onClick = {
 						longClickPosition = null
+						onEpisodeMarkerClick(episode)
 						true
 					},
 				)

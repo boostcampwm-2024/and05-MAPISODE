@@ -1,14 +1,18 @@
 package com.boostcamp.mapisode.home
 
 import androidx.lifecycle.viewModelScope
+import com.boostcamp.mapisode.common.util.distanceTo
+import com.boostcamp.mapisode.common.util.toEpisodeLatLng
 import com.boostcamp.mapisode.episode.EpisodeRepository
 import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
 import com.boostcamp.mapisode.model.EpisodeLatLng
+import com.boostcamp.mapisode.model.EpisodeModel
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -53,11 +57,23 @@ class HomeViewModel @Inject constructor(private val episodeRepository: EpisodeRe
 			}
 
 			is HomeIntent.LoadEpisode -> {
-				loadEpisodes(intent.start, intent.end)
+				loadEpisodes(intent.start, intent.end, intent.shouldSort)
 			}
 
 			is HomeIntent.ClickTextMarker -> {
 				postSideEffect(HomeSideEffect.NavigateToEpisode(intent.latLng))
+			}
+
+			is HomeIntent.ShowCard -> {
+				showCard(intent.selectedEpisode)
+			}
+
+			is HomeIntent.CloseCard -> {
+				closeCard()
+			}
+
+			is HomeIntent.MapMovedWhileCardVisible -> {
+				mapMovedWhileCardVisible()
 			}
 		}
 	}
@@ -95,10 +111,14 @@ class HomeViewModel @Inject constructor(private val episodeRepository: EpisodeRe
 		}
 	}
 
-	private fun loadEpisodes(start: EpisodeLatLng, end: EpisodeLatLng) {
+	private fun loadEpisodes(
+		start: EpisodeLatLng,
+		end: EpisodeLatLng,
+		shouldSort: Boolean = false,
+	) {
 		viewModelScope.launch {
 			try {
-				val groupId = "FwQVGHMot4BVS4nMAJHg" // TODO 캐싱된 그룹 가져오기 (현재는 임시로 하드코딩)
+				val groupId = "FwQVGHMot4BVS4nMAJHg" // TODO: 캐싱된 그룹 가져오기
 				val category = currentState.selectedChip?.name
 
 				val episodes = episodeRepository.getEpisodesByGroupAndLocation(
@@ -106,12 +126,85 @@ class HomeViewModel @Inject constructor(private val episodeRepository: EpisodeRe
 					start = start,
 					end = end,
 					category = category,
-				)
+				).toPersistentList()
 
-				intent { copy(episodes = episodes.toPersistentList()) }
+				if (shouldSort) {
+					val referenceLocation = currentState.selectedMarkerPosition?.toEpisodeLatLng()
+						?: EpisodeLatLng(0.0, 0.0)
+					val sortedEpisodes = sortEpisodesByDistance(episodes, referenceLocation)
+
+					intent {
+						copy(
+							episodes = episodes,
+							selectedEpisodes = sortedEpisodes.toPersistentList(),
+							selectedEpisodeIndex = 0,
+							isMapMovedWhileCardVisible = false,
+							showRefreshButton = false,
+						)
+					}
+				} else {
+					intent {
+						copy(
+							episodes = episodes,
+						)
+					}
+				}
 			} catch (e: Exception) {
 				postSideEffect(HomeSideEffect.ShowToast(R.string.error_load_episodes))
 			}
 		}
 	}
+
+	private fun showCard(selectedEpisode: EpisodeModel) {
+		val sortedEpisodes = sortEpisodesByDistance(
+			currentState.episodes,
+			selectedEpisode.location,
+		)
+
+		val selectedIndex = sortedEpisodes.indexOfFirst { it.id == selectedEpisode.id }
+
+		intent {
+			copy(
+				isCardVisible = true,
+				selectedEpisodes = sortedEpisodes.toPersistentList(),
+				selectedEpisodeIndex = if (selectedIndex >= 0) selectedIndex else 0,
+				selectedMarkerPosition = LatLng(
+					selectedEpisode.location.latitude,
+					selectedEpisode.location.longitude,
+				),
+				isMapMovedWhileCardVisible = false,
+				showRefreshButton = false,
+			)
+		}
+	}
+
+	private fun closeCard() {
+		intent {
+			copy(
+				isCardVisible = false,
+				selectedEpisodes = persistentListOf(),
+				selectedEpisodeIndex = 0,
+				selectedMarkerPosition = null,
+				isMapMovedWhileCardVisible = false,
+				showRefreshButton = false,
+			)
+		}
+	}
+
+	private fun mapMovedWhileCardVisible() {
+		intent {
+			copy(
+				isMapMovedWhileCardVisible = true,
+				showRefreshButton = true,
+			)
+		}
+	}
+
+	private fun sortEpisodesByDistance(
+		episodes: List<EpisodeModel>,
+		referenceLocation: EpisodeLatLng,
+	): List<EpisodeModel> = episodes.sortedBy { episodeModel ->
+		episodeModel.location.distanceTo(referenceLocation)
+	}
+
 }
