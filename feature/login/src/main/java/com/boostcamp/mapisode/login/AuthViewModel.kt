@@ -4,10 +4,12 @@ import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.auth.GoogleOauth
 import com.boostcamp.mapisode.auth.LoginState
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
+import com.boostcamp.mapisode.model.UserModel
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.boostcamp.mapisode.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -63,4 +65,31 @@ class AuthViewModel @Inject constructor(
 		}
 	}
 
+	private fun handleSignUp() {
+		viewModelScope.launch {
+			try {
+				userRepository.createUser(
+					UserModel(
+						uid = uiState.value.authData?.uid ?: "",
+						email = uiState.value.authData?.email ?: "",
+						name = uiState.value.nickname,
+						profileUrl = uiState.value.profileUri,
+						joinedAt = Date.from(java.time.Instant.now()),
+						groups = emptyList(),
+					),
+				)
+
+				userDataStore.updateCredentialIdToken(uiState.value.authData?.idToken ?: "")
+				userDataStore.updateUserId(uiState.value.authData?.uid ?: "")
+				userDataStore.updateUsername(uiState.value.nickname)
+				userDataStore.updateProfileUrl(uiState.value.profileUri)
+				userDataStore.updateIsLoggedIn(true)
+				userDataStore.updateIsFirstLaunch()
+
+				postSideEffect(AuthSideEffect.NavigateToMain)
+			} catch (e: Exception) {
+				postSideEffect(AuthSideEffect.ShowError(e.message ?: "회원가입에 실패했습니다."))
+			}
+		}
+	}
 }
