@@ -11,4 +11,6 @@ sealed class GroupDetailSideEffect : SideEffect {
 	data object NavigateToGroupScreen : GroupDetailSideEffect()
 	data class NavigateToEpisode(val episodeId: String) : GroupDetailSideEffect()
 	data class IssueInvitationCode(val invitationCode: String) : GroupDetailSideEffect()
+	data object WarnGroupOut : GroupDetailSideEffect()
+	data object RemoveDialog : GroupDetailSideEffect()
 }

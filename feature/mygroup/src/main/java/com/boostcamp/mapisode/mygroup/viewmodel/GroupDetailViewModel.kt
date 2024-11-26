@@ -12,6 +12,7 @@ import com.boostcamp.mapisode.mygroup.state.GroupDetailState
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -53,6 +54,20 @@ class GroupDetailViewModel @Inject constructor(
 
 				is GroupDetailIntent.OnIssueCodeClick -> {
 					issueInvitationCode()
+				}
+
+				is GroupDetailIntent.OnGroupOutClick -> {
+					postSideEffect(GroupDetailSideEffect.WarnGroupOut)
+				}
+
+				is GroupDetailIntent.OnGroupOutConfirm -> {
+					postSideEffect(GroupDetailSideEffect.RemoveDialog)
+					delay(100)
+					leaveGroup()
+				}
+
+				is GroupDetailIntent.OnGroupOutCancel -> {
+					postSideEffect(GroupDetailSideEffect.RemoveDialog)
 				}
 			}
 		}
@@ -110,6 +125,21 @@ class GroupDetailViewModel @Inject constructor(
 				copy(
 					membersInfo = memberInfo
 				)
+			}
+		}
+	}
+
+	private fun leaveGroup() {
+		viewModelScope.launch {
+			val userId = userPreferenceDataStore.getUserId().first() ?: "xtRVRTS7XnBDOYlOezFE"
+			val groupId = groupId.value
+			try {
+				groupRepository.leaveGroup(userId, groupId)
+				postSideEffect(GroupDetailSideEffect.ShowToast(R.string.message_group_out_success))
+				delay(100)
+				postSideEffect(GroupDetailSideEffect.NavigateToGroupScreen)
+			} catch (e: Exception) {
+				postSideEffect(GroupDetailSideEffect.ShowToast(R.string.message_group_out_fail))
 			}
 		}
 	}

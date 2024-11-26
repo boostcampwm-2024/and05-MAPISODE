@@ -28,7 +28,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,6 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.Direction
+import com.boostcamp.mapisode.designsystem.compose.MapisodeDialog
 import com.boostcamp.mapisode.designsystem.compose.MapisodeDivider
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
@@ -48,6 +53,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.Thickness
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
+import com.boostcamp.mapisode.designsystem.compose.button.MapisodeOutlinedButton
 import com.boostcamp.mapisode.designsystem.compose.card.GroupInfoCard
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTab
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTabRow
@@ -78,6 +84,27 @@ fun GroupDetailScreen(
 		flow = viewModel.sideEffect,
 		initialValue = GroupDetailSideEffect.Idle,
 	).value
+
+	var showDialog by remember { mutableStateOf(false) }
+
+	if (showDialog) {
+		MapisodeDialog(
+			onResultRequest = { isPositive ->
+				if(isPositive){
+					viewModel.onIntent(GroupDetailIntent.OnGroupOutConfirm)
+				}else{
+					viewModel.onIntent(GroupDetailIntent.OnGroupOutCancel)
+				}
+			},
+			onDismissRequest = {
+				viewModel.onIntent(GroupDetailIntent.OnGroupOutCancel)
+			},
+			titleText = stringResource(S.string.dialog_group_out_title),
+			contentText = stringResource(S.string.dialog_group_out_message),
+			confirmText = stringResource(S.string.dialog_group_out_positive),
+			cancelText = stringResource(S.string.dialog_group_out_negative),
+		)
+	}
 
 	LaunchedEffect(uiState.value) {
 		with(uiState.value) {
@@ -116,6 +143,14 @@ fun GroupDetailScreen(
 				val clip = ClipData.newPlainText("label", effect.invitationCode)
 				clipboard.setPrimaryClip(clip)
 			}
+
+			is GroupDetailSideEffect.WarnGroupOut -> {
+				showDialog = true
+			}
+
+			is GroupDetailSideEffect.RemoveDialog -> {
+				showDialog = false
+			}
 		}
 	}
 
@@ -130,6 +165,9 @@ fun GroupDetailScreen(
 		onIssueCodeClick = {
 			viewModel.onIntent(GroupDetailIntent.OnIssueCodeClick)
 		},
+		onGroupOutClick = {
+			viewModel.onIntent(GroupDetailIntent.OnGroupOutClick)
+		}
 	)
 }
 
@@ -139,6 +177,7 @@ fun GroupDetailContent(
 	onBackClick: () -> Unit,
 	onEditClick: () -> Unit,
 	onIssueCodeClick: () -> Unit,
+	onGroupOutClick: () -> Unit,
 ) {
 	val scope = rememberCoroutineScope()
 	val pagerState = rememberPagerState(pageCount = { 2 })
@@ -205,6 +244,7 @@ fun GroupDetailContent(
 								group = uiState.group,
 								members = uiState.membersInfo,
 								onIssueCodeClick = onIssueCodeClick,
+								onGroupOutClick = onGroupOutClick,
 							)
 						}
 					}
@@ -222,6 +262,7 @@ fun GroupDetailContent(
 	group: GroupModel,
 	members: List<GroupMemberModel>,
 	onIssueCodeClick: () -> Unit,
+	onGroupOutClick: () -> Unit,
 ) {
 	LazyColumn(
 		modifier = Modifier
@@ -292,6 +333,16 @@ fun GroupDetailContent(
 
 		items(members) { member ->
 			GroupMemberContent(member)
+		}
+
+		item {
+			MapisodeOutlinedButton(
+				modifier = Modifier
+					.fillMaxWidth(),
+				onClick = { onGroupOutClick() },
+				text = stringResource(S.string.btn_group_out),
+				showRipple = true,
+			)
 		}
 	}
 }
