@@ -71,6 +71,34 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 		).await()
 	}
 
+	override suspend fun issueInvitationCode(groupId: String): String = try {
+		// 이미 해당 그룹에 대한 초대 코드가 존재하는지 확인
+		val groupReference = groupCollection.document(groupId)
+		val existingInviteCodeDocument = inviteCodesCollection
+			.whereEqualTo(FirestoreConstants.FIELD_GROUP, groupReference)
+			.get()
+			.await()
+			.documents
+			.firstOrNull()
+
+		// 이미 해당 그룹에 대한 초대 코드가 존재하면 해당 초대 코드 반환
+		if (existingInviteCodeDocument != null) {
+			existingInviteCodeDocument.id
+		} else {
+			val inviteCode = UUID.randomUUID().toString().replace("-", "")
+			val timestamp = com.google.firebase.Timestamp.now()
+			inviteCodesCollection.document(inviteCode).set(
+				mapOf(
+					FirestoreConstants.FIELD_GROUP to groupReference,
+					FirestoreConstants.FIELD_CREATED_AT to timestamp,
+				),
+			).await()
+			inviteCode
+		}
+	} catch (e: Exception) {
+		throw e
+	}
+
 	override suspend fun createGroup(groupModel: GroupModel): String {
 		val newGroupId = UUID.randomUUID().toString().replace("-", "")
 		return try {

@@ -10,4 +10,5 @@ sealed class GroupDetailIntent : UiIntent {
 	data class OnEditClick(val groupId: String) : GroupDetailIntent()
 	data object OnBackClick : GroupDetailIntent()
 	data class OnEpisodeClick(val episodeId: String) : GroupDetailIntent()
+	data object OnIssueCodeClick : GroupDetailIntent()
 }
