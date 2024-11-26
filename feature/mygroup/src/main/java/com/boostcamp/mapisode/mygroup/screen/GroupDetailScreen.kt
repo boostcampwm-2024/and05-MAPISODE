@@ -1,29 +1,49 @@
 package com.boostcamp.mapisode.mygroup.screen
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.boostcamp.mapisode.designsystem.R
+import com.boostcamp.mapisode.designsystem.compose.MapisodeDivider
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
+import com.boostcamp.mapisode.designsystem.compose.Thickness
+import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
+import com.boostcamp.mapisode.designsystem.compose.card.GroupInfoCard
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTab
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTabRow
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
+import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.boostcamp.mapisode.model.EpisodeModel
+import com.boostcamp.mapisode.model.GroupModel
+import com.boostcamp.mapisode.mygroup.R as S
 import com.boostcamp.mapisode.mygroup.intent.GroupDetailIntent
 import com.boostcamp.mapisode.mygroup.sideeffect.GroupDetailSideEffect
 import com.boostcamp.mapisode.mygroup.sideeffect.rememberFlowWithLifecycle
@@ -60,7 +80,7 @@ fun GroupDetailScreen(
 	LaunchedEffect(effect) {
 		when (effect) {
 			is GroupDetailSideEffect.ShowToast -> {
-				Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+				Toast.makeText(context, effect.messageResId, Toast.LENGTH_SHORT).show()
 			}
 
 			is GroupDetailSideEffect.NavigateToGroupEditScreen -> {
@@ -74,6 +94,12 @@ fun GroupDetailScreen(
 			is GroupDetailSideEffect.NavigateToEpisode -> {
 				// TODO: Navigate to Episode
 			}
+
+			is GroupDetailSideEffect.IssueInvitationCode -> {
+				val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+				val clip = ClipData.newPlainText("label", effect.invitationCode)
+				clipboard.setPrimaryClip(clip)
+			}
 		}
 	}
 
@@ -85,6 +111,9 @@ fun GroupDetailScreen(
 		onEditClick = {
 			viewModel.onIntent(GroupDetailIntent.OnEditClick(detail.groupId))
 		},
+		onIssueCodeClick = {
+			viewModel.onIntent(GroupDetailIntent.OnIssueCodeClick)
+		},
 	)
 }
 
@@ -93,6 +122,7 @@ fun GroupDetailContent(
 	uiState: GroupDetailState,
 	onBackClick: () -> Unit,
 	onEditClick: () -> Unit,
+	onIssueCodeClick: () -> Unit,
 ) {
 	val scope = rememberCoroutineScope()
 	val pagerState = rememberPagerState(pageCount = { 2 })
@@ -129,8 +159,7 @@ fun GroupDetailContent(
 		Column(
 			modifier = Modifier
 				.fillMaxSize()
-				.padding(it)
-				.padding(horizontal = 20.dp),
+				.padding(it),
 			verticalArrangement = Arrangement.Top,
 			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
@@ -153,8 +182,17 @@ fun GroupDetailContent(
 			}
 			HorizontalPager(state = pagerState) { page ->
 				when (page) {
-					0 -> GroupDetailContent(data = tapList[0])
-					1 -> GroupEpisodesContent(data = tapList[1])
+					0 -> {
+						if (uiState.group != null) {
+							GroupDetailContent(
+								group = uiState.group,
+								onIssueCodeClick = onIssueCodeClick,
+							)
+						}
+					}
+
+					1 -> {
+					}
 				}
 			}
 		}
@@ -162,23 +200,73 @@ fun GroupDetailContent(
 }
 
 @Composable
-fun GroupDetailContent(data: String) {
+fun GroupDetailContent(
+	group: GroupModel,
+	onIssueCodeClick: () -> Unit,
+) {
 	Column(
-		modifier = Modifier.fillMaxSize(),
+		modifier = Modifier
+			.fillMaxSize()
+			.padding(horizontal = 20.dp, vertical = 10.dp),
 		horizontalAlignment = Alignment.CenterHorizontally,
-		verticalArrangement = Arrangement.Center,
 	) {
-		MapisodeText(text = data)
+		GroupInfoCard(
+			group = group,
+		)
+
+		Spacer(modifier = Modifier.padding(5.dp))
+
+		MapisodeDivider(thickness = Thickness.Thin)
+
+		Spacer(modifier = Modifier.padding(5.dp))
+
+		MapisodeText(
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(start = 4.dp),
+			text = stringResource(S.string.group_description_label),
+			style = MapisodeTheme.typography.labelLarge,
+		)
+
+		Spacer(modifier = Modifier.padding(5.dp))
+
+		Box(
+			modifier = Modifier
+				.clip(RoundedCornerShape(8.dp))
+				.background(MapisodeTheme.colorScheme.textColoredContainer)
+				.padding(10.dp),
+		) {
+			MapisodeText(
+				modifier = Modifier
+					.fillMaxWidth()
+					.wrapContentHeight()
+					.heightIn(min = 50.dp)
+					.padding(start = 4.dp),
+				text = group.description,
+				style = MapisodeTheme.typography.labelMedium,
+			)
+		}
+
+		Spacer(modifier = Modifier.padding(10.dp))
+
+		MapisodeFilledButton(
+			modifier = Modifier
+				.fillMaxWidth(),
+			onClick = { onIssueCodeClick() },
+			text = stringResource(S.string.group_btn_issue_code),
+			showRipple = true,
+		)
 	}
 }
 
 @Composable
-fun GroupEpisodesContent(data: String) {
+fun GroupEpisodesContent(
+	episodes: EpisodeModel,
+) {
 	Column(
 		modifier = Modifier.fillMaxSize(),
 		horizontalAlignment = Alignment.CenterHorizontally,
 		verticalArrangement = Arrangement.Center,
 	) {
-		MapisodeText(text = data)
 	}
 }

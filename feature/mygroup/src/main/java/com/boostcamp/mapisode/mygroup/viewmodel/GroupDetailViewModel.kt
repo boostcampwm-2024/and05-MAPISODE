@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
 import com.boostcamp.mapisode.mygroup.GroupRepository
+import com.boostcamp.mapisode.mygroup.R
 import com.boostcamp.mapisode.mygroup.intent.GroupDetailIntent
 import com.boostcamp.mapisode.mygroup.sideeffect.GroupDetailSideEffect
 import com.boostcamp.mapisode.mygroup.state.GroupDetailState
@@ -18,7 +19,7 @@ class GroupDetailViewModel @Inject constructor(
 	private val groupRepository: GroupRepository,
 	private val userPreferenceDataStore: UserPreferenceDataStore,
 ) : BaseViewModel<GroupDetailIntent, GroupDetailState, GroupDetailSideEffect>(GroupDetailState()) {
-	private val userId = mutableStateOf("")
+	private val groupId = mutableStateOf("")
 
 	override fun onIntent(intent: GroupDetailIntent) {
 		viewModelScope.launch {
@@ -44,12 +45,16 @@ class GroupDetailViewModel @Inject constructor(
 				is GroupDetailIntent.OnEpisodeClick -> {
 					postSideEffect(GroupDetailSideEffect.NavigateToEpisode(intent.episodeId))
 				}
+
+				is GroupDetailIntent.OnIssueCodeClick -> {
+					issueInvitationCode()
+				}
 			}
 		}
 	}
 
 	private fun getGroupDetail(groupId: String) {
-		userId.value = groupId
+		this.groupId.value = groupId
 		intent {
 			copy(
 				isGroupIdCaching = false,
@@ -61,7 +66,7 @@ class GroupDetailViewModel @Inject constructor(
 	private fun tryGetGroup() {
 		viewModelScope.launch {
 			try {
-				val group = groupRepository.getGroupByGroupId(userId.value)
+				val group = groupRepository.getGroupByGroupId(groupId.value)
 				intent {
 					copy(
 						isGroupLoading = false,
@@ -69,7 +74,20 @@ class GroupDetailViewModel @Inject constructor(
 					)
 				}
 			} catch (e: Exception) {
-				postSideEffect(GroupDetailSideEffect.ShowToast(e.message ?: "그룹을 찾을 수 없습니다."))
+				postSideEffect(GroupDetailSideEffect.ShowToast(R.string.message_group_not_found))
+			}
+		}
+	}
+
+	private fun issueInvitationCode() {
+		viewModelScope.launch {
+			try {
+				val code = groupRepository.issueInvitationCode(groupId.value)
+				postSideEffect(GroupDetailSideEffect.IssueInvitationCode(code))
+				delay(100)
+				postSideEffect(GroupDetailSideEffect.ShowToast(R.string.message_issue_code_success))
+			} catch (e: Exception) {
+				postSideEffect(GroupDetailSideEffect.ShowToast(R.string.message_issue_code_fail))
 			}
 		}
 	}
