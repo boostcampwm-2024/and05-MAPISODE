@@ -69,7 +69,6 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.model.EpisodeModel
 import com.boostcamp.mapisode.model.GroupMemberModel
 import com.boostcamp.mapisode.model.GroupModel
-import com.boostcamp.mapisode.mygroup.R as S
 import com.boostcamp.mapisode.mygroup.intent.GroupDetailIntent
 import com.boostcamp.mapisode.mygroup.sideeffect.GroupDetailSideEffect
 import com.boostcamp.mapisode.mygroup.sideeffect.rememberFlowWithLifecycle
@@ -77,6 +76,7 @@ import com.boostcamp.mapisode.mygroup.state.GroupDetailState
 import com.boostcamp.mapisode.mygroup.viewmodel.GroupDetailViewModel
 import com.boostcamp.mapisode.navigation.GroupRoute
 import kotlinx.coroutines.launch
+import com.boostcamp.mapisode.mygroup.R as S
 
 @Composable
 fun GroupDetailScreen(
@@ -500,7 +500,6 @@ fun GroupMemberContent(
 		}
 	}
 }
-
 
 @Composable
 fun EpisodeCard(
