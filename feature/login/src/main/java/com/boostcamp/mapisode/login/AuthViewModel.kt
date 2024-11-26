@@ -55,4 +55,12 @@ class AuthViewModel @Inject constructor(
 		}
 	}
 
+	private fun onNicknameChange(nickname: String) {
+		intent {
+			copy(
+				nickname = nickname,
+			)
+		}
+	}
+
 }
