@@ -247,7 +247,15 @@ fun ConfirmJoinGroup(group: GroupModel) {
 		)
 		Spacer(modifier = Modifier.padding(4.dp))
 
-		GroupInfoCard(group = group)
+		GroupInfoCard(
+			group = group,
+			modifier = Modifier
+				.border(
+					width = 1.dp,
+					color = MapisodeTheme.colorScheme.textColoredContainer,
+					shape = RoundedCornerShape(12.dp),
+				),
+		)
 
 		Spacer(modifier = Modifier.padding(10.dp))
 		MapisodeText(
