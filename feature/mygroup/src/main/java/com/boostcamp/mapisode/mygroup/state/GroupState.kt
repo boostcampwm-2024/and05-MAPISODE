@@ -1,4 +1,4 @@
-package com.boostcamp.mapisode.mygroup.intent
+package com.boostcamp.mapisode.mygroup.state
 
 import androidx.compose.runtime.Immutable
 import com.boostcamp.mapisode.model.GroupModel

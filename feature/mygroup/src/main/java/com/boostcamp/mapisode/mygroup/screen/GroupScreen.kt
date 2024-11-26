@@ -31,7 +31,7 @@ import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.compose.card.GroupCard
 import com.boostcamp.mapisode.mygroup.intent.GroupIntent
-import com.boostcamp.mapisode.mygroup.intent.GroupState
+import com.boostcamp.mapisode.mygroup.state.GroupState
 import com.boostcamp.mapisode.mygroup.viewmodel.GroupViewModel
 import com.boostcamp.mapisode.mygroup.R as S
 
