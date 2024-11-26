@@ -18,7 +18,7 @@ import javax.inject.Inject
 class GroupJoinViewModel @Inject constructor(
 	private val groupRepository: GroupRepository,
 	private val userPreferenceDataStore: UserPreferenceDataStore,
-) : BaseViewModel<GroupJoinState, GroupJoinSideEffect>(GroupJoinState()) {
+) : BaseViewModel<GroupJoinIntent, GroupJoinState, GroupJoinSideEffect>(GroupJoinState()) {
 	private val myId: MutableStateFlow<String> = MutableStateFlow("")
 
 	init {
@@ -40,7 +40,7 @@ class GroupJoinViewModel @Inject constructor(
 		}
 	}
 
-	fun onIntent(intent: GroupJoinIntent) {
+	override fun onIntent(intent: GroupJoinIntent) {
 		when (intent) {
 			is GroupJoinIntent.TryGetGroup -> {
 				tryGetGroupByGroupId(intent.inviteCode)
