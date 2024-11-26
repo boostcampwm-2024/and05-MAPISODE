@@ -2,6 +2,7 @@ package com.boostcamp.mapisode.home
 
 import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.model.EpisodeLatLng
+import com.boostcamp.mapisode.model.EpisodeModel
 import com.boostcamp.mapisode.ui.base.UiIntent
 import com.naver.maps.geometry.LatLng
 
@@ -12,6 +13,13 @@ sealed class HomeIntent : UiIntent {
 	data object MarkPermissionRequested : HomeIntent() // 위치 권한 요청 기록
 	data class SelectChip(val chipType: ChipType) : HomeIntent()
 	data object ShowBottomSheet : HomeIntent()
-	data class LoadEpisode(val start: EpisodeLatLng, val end: EpisodeLatLng) : HomeIntent()
 	data class ClickTextMarker(val latLng: EpisodeLatLng) : HomeIntent()
+	data class ShowCard(val selectedEpisode: EpisodeModel) : HomeIntent()
+	data object CloseCard : HomeIntent()
+	data object MapMovedWhileCardVisible : HomeIntent()
+	data class LoadEpisode(
+		val start: EpisodeLatLng,
+		val end: EpisodeLatLng,
+		val shouldSort: Boolean = false,
+	) : HomeIntent()
 }

@@ -24,4 +24,10 @@ data class HomeState(
 	val selectedChip: ChipType? = null,
 	val isBottomSheetVisible: Boolean = false,
 	val episodes: PersistentList<EpisodeModel> = persistentListOf(),
+	val isCardVisible: Boolean = false,
+	val selectedEpisodes: PersistentList<EpisodeModel> = persistentListOf(),
+	val selectedEpisodeIndex: Int = 0,
+	val selectedMarkerPosition: LatLng? = null,
+	val isMapMovedWhileCardVisible: Boolean = false,
+	val showRefreshButton: Boolean = false,
 ) : UiState
