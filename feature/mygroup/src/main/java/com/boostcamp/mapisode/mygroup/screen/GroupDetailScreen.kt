@@ -171,7 +171,7 @@ fun GroupDetailScreen(
 			viewModel.onIntent(GroupDetailIntent.OnBackClick)
 		},
 		onEditClick = {
-			viewModel.onIntent(GroupDetailIntent.OnEditClick(detail.groupId))
+			viewModel.onIntent(GroupDetailIntent.OnEditClick)
 		},
 		onIssueCodeClick = {
 			viewModel.onIntent(GroupDetailIntent.OnIssueCodeClick)
@@ -209,15 +209,18 @@ fun GroupDetailContent(
 						)
 					}
 				},
+
 				actions = {
-					MapisodeIconButton(
-						onClick = {
-							onEditClick()
-						},
-					) {
-						MapisodeIcon(
-							id = R.drawable.ic_edit,
-						)
+					if (uiState.isGroupOwner) {
+						MapisodeIconButton(
+							onClick = {
+								onEditClick()
+							},
+						) {
+							MapisodeIcon(
+								id = R.drawable.ic_edit,
+							)
+						}
 					}
 				},
 			)

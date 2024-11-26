@@ -42,7 +42,7 @@ class GroupDetailViewModel @Inject constructor(
 				}
 
 				is GroupDetailIntent.OnEditClick -> {
-					postSideEffect(GroupDetailSideEffect.NavigateToGroupEditScreen(intent.groupId))
+					postSideEffect(GroupDetailSideEffect.NavigateToGroupEditScreen(groupId.value))
 					delay(100)
 					intent { copy(isGroupLoading = true) }
 				}
@@ -99,6 +99,13 @@ class GroupDetailViewModel @Inject constructor(
 						isGroupLoading = false,
 						group = group,
 					)
+				}
+				if (group.adminUser == userPreferenceDataStore.getUserId().first()) {
+					intent {
+						copy(
+							isGroupOwner = true
+						)
+					}
 				}
 			} catch (e: Exception) {
 				postSideEffect(GroupDetailSideEffect.ShowToast(R.string.message_group_not_found))
