@@ -38,8 +38,8 @@ fun MapisodeFilledButton(
 		onClick = onClick,
 		modifier = Modifier
 			.then(modifier)
-			.widthIn(320.dp)
-			.heightIn(52.dp),
+			.widthIn(30.dp)
+			.heightIn(30.dp),
 		backgroundColors = if (enabled) {
 			MapisodeTheme.colorScheme.filledButtonEnableBackground
 		} else {
