@@ -17,7 +17,6 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
-import timber.log.Timber
 
 @Composable
 internal fun NewEpisodePicsScreen(
@@ -65,7 +64,6 @@ fun PickEpisodePhotoButton(
 	val photoPickLauncher = rememberLauncherForActivityResult(
 		contract = ActivityResultContracts.PickMultipleVisualMedia(4),
 		onResult = { uris ->
-			Timber.d(uris.toString())
 			onPickPhotos(uris)
 		},
 	)

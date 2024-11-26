@@ -113,9 +113,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 
 	override suspend fun createEpisode(episodeModel: EpisodeModel): String {
 		val newEpisodeId = UUID.randomUUID().toString().replace("-", "")
-		Timber.d(episodeModel.imageUrls.toString())
 		val uploadedImageUrls = uploadImagesToStorage(newEpisodeId, episodeModel.imageUrls)
-		Timber.d(uploadedImageUrls.toString())
 		return try {
 			episodeCollection
 				.document(newEpisodeId)
@@ -142,14 +140,13 @@ class EpisodeRepositoryImpl @Inject constructor(
 					if (task.isSuccessful) {
 						CoroutineScope(Dispatchers.IO).launch {
 							val downloadUrl = imageRef.downloadUrl.await()
-							Timber.d("Image URL: $downloadUrl")
+							imageStorageUrls.add(downloadUrl.toString())
 						}
 					} else {
 						Timber.e(task.exception)
 						throw task.exception ?: RuntimeException("Image upload failed")
 					}
 				}.await()
-			imageStorageUrls.add(imageRef.downloadUrl.await().toString())
 		}
 
 		return imageStorageUrls

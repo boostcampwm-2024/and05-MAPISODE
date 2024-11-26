@@ -39,7 +39,6 @@ import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.textFieldModifie
 import com.boostcamp.mapisode.episode.intent.NewEpisodeInfo
 import com.boostcamp.mapisode.episode.intent.NewEpisodeState
 import com.naver.maps.geometry.LatLng
-import timber.log.Timber
 import java.util.Date
 import java.util.Locale
 
@@ -87,7 +86,6 @@ internal fun NewEpisodeInfoScreen(
 							onClick = {
 								showDatePickerDialog = false
 								datePickerState.selectedDateMillis?.let {
-									Timber.d(it.toString())
 									updateDate(Date(it))
 								}
 							},
