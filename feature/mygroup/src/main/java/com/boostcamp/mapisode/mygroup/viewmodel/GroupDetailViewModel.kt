@@ -3,6 +3,7 @@ package com.boostcamp.mapisode.mygroup.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
+import com.boostcamp.mapisode.episode.EpisodeRepository
 import com.boostcamp.mapisode.model.GroupMemberModel
 import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.mygroup.R
@@ -14,11 +15,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class GroupDetailViewModel @Inject constructor(
 	private val groupRepository: GroupRepository,
+	private val episodeRepository: EpisodeRepository,
 	private val userPreferenceDataStore: UserPreferenceDataStore,
 ) : BaseViewModel<GroupDetailIntent, GroupDetailState, GroupDetailSideEffect>(GroupDetailState()) {
 	private val groupId = mutableStateOf("")
@@ -68,6 +71,10 @@ class GroupDetailViewModel @Inject constructor(
 
 				is GroupDetailIntent.OnGroupOutCancel -> {
 					postSideEffect(GroupDetailSideEffect.RemoveDialog)
+				}
+
+				is GroupDetailIntent.TryGetGroupEpisodes -> {
+					getGroupEpisodes()
 				}
 			}
 		}
@@ -140,6 +147,22 @@ class GroupDetailViewModel @Inject constructor(
 				postSideEffect(GroupDetailSideEffect.NavigateToGroupScreen)
 			} catch (e: Exception) {
 				postSideEffect(GroupDetailSideEffect.ShowToast(R.string.message_group_out_fail))
+			}
+		}
+	}
+
+	private fun getGroupEpisodes() {
+		viewModelScope.launch {
+			try {
+				val episodes = episodeRepository.getEpisodesByGroup(groupId.value)
+				intent {
+					copy(
+						episodes = episodes
+					)
+				}
+				Timber.e("episodes: $episodes")
+			} catch (e: Exception) {
+				postSideEffect(GroupDetailSideEffect.ShowToast(R.string.message_group_not_found))
 			}
 		}
 	}

@@ -11,5 +11,6 @@ android {
 dependencies {
 	implementation(libs.bundles.coil)
 	implementation(projects.domain.mygroup)
+	implementation(projects.domain.episode)
 	implementation(projects.core.datastore)
 }
