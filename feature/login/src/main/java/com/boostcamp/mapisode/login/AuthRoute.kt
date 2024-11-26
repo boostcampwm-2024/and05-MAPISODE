@@ -19,6 +19,10 @@ fun AuthRoute(
 	val googleOauth = GoogleOauth(context)
 
 	LaunchedEffect(Unit) {
+		viewModel.onIntent(AuthIntent.OnAutoLogin)
+	}
+
+	LaunchedEffect(Unit) {
 		viewModel.sideEffect.collect { effect ->
 			when (effect) {
 				is AuthSideEffect.NavigateToMain -> navigateToMain()
