@@ -1,14 +1,17 @@
 package com.boostcamp.mapisode.mygroup
 
 import com.boostcamp.mapisode.firebase.firestore.FirestoreConstants
+import com.boostcamp.mapisode.model.GroupMemberModel
 import com.boostcamp.mapisode.model.GroupModel
 import com.boostcamp.mapisode.mygroup.model.GroupFirestoreModel
+import com.boostcamp.mapisode.mygroup.model.UserFirestoreModel
 import com.boostcamp.mapisode.mygroup.model.toDomainModel
 import com.boostcamp.mapisode.mygroup.model.toFirestoreModel
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
@@ -53,7 +56,7 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 			.get()
 			.await()
 			.toObject(GroupFirestoreModel::class.java)?.toDomainModel(group.id)
-			?: throw Exception("Group not found")
+			?: throw Exception("그룹을 찾을 수 없습니다.")
 	} catch (e: Exception) {
 		throw e
 	}
@@ -125,5 +128,24 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 		} catch (e: Exception) {
 			throw e
 		}
+	}
+
+	override suspend fun getUserInfoByUserId(userId: String): GroupMemberModel = try {
+		Timber.e("userId: $userId")
+		val firestoreModel = userCollection.document(userId)
+			.get()
+			.await()
+			.toObject(UserFirestoreModel::class.java)
+			?: throw Exception("유저를 찾을 수 없습니다.")
+		Timber.d("memberInfo: ${firestoreModel.name}")
+		GroupMemberModel(
+			name = firestoreModel.name,
+			email = firestoreModel.email,
+			profileUrl = firestoreModel.profileUrl,
+			joinedAt = firestoreModel.joinedAt.toDate(),
+			groups = firestoreModel.groups.map { it.id },
+		)
+	} catch (e: Exception) {
+		throw e
 	}
 }

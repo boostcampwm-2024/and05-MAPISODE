@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.mygroup
 
+import com.boostcamp.mapisode.model.GroupMemberModel
 import com.boostcamp.mapisode.model.GroupModel
 
 interface GroupRepository {
@@ -11,4 +12,6 @@ interface GroupRepository {
 	suspend fun createGroup(groupModel: GroupModel): String
 	suspend fun updateGroup(groupId: String, groupModel: GroupModel)
 	suspend fun deleteGroup(groupId: String)
+
+	suspend fun getUserInfoByUserId(userId: String): GroupMemberModel
 }
