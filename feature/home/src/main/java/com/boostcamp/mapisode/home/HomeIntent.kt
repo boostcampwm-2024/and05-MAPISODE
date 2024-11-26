@@ -17,6 +17,8 @@ sealed class HomeIntent : UiIntent {
 	data class ShowCard(val selectedEpisode: EpisodeModel) : HomeIntent()
 	data object CloseCard : HomeIntent()
 	data object MapMovedWhileCardVisible : HomeIntent()
+	data object StartProgrammaticCameraMove : HomeIntent()
+	data object EndProgrammaticCameraMove : HomeIntent()
 	data class LoadEpisode(
 		val start: EpisodeLatLng,
 		val end: EpisodeLatLng,

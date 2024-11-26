@@ -30,4 +30,5 @@ data class HomeState(
 	val selectedMarkerPosition: LatLng? = null,
 	val isMapMovedWhileCardVisible: Boolean = false,
 	val showRefreshButton: Boolean = false,
+	val isCameraMovingProgrammatically: Boolean = false,
 ) : UiState
