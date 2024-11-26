@@ -39,11 +39,9 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 		preferences[PreferenceKeys.USER_ID]
 	}
 
-	override suspend fun getIsLoggedIn(): Boolean {
-		return dataStore.data.map { preferences ->
-			preferences[PreferenceKeys.IS_LOGGED_IN] ?: false
-		}.first()
-	}
+	override suspend fun getIsLoggedIn(): Boolean = dataStore.data.map { preferences ->
+		preferences[PreferenceKeys.IS_LOGGED_IN] ?: false
+	}.first()
 
 	override suspend fun updateUserId(userId: String) {
 		dataStore.edit { preferences ->
