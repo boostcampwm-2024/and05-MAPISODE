@@ -13,8 +13,8 @@ import com.boostcamp.mapisode.mygroup.navigation.navigateGroupCreation
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupDetail
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupEdit
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupJoin
-import com.boostcamp.mapisode.navigation.AuthRoute
 import com.boostcamp.mapisode.navigation.MainRoute
+import com.boostcamp.mapisode.navigation.Route
 
 internal class MainNavigator(
 	val navController: NavHostController,
@@ -23,7 +23,7 @@ internal class MainNavigator(
 		@Composable get() = navController
 			.currentBackStackEntryAsState().value?.destination
 
-	val startDestination = AuthRoute
+	val startDestination = Route.Auth
 
 	val currentTab: MainNavTab?
 		@Composable get() = MainNavTab.find { tab ->
