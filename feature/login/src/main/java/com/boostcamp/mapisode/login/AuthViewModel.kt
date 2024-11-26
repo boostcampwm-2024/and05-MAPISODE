@@ -30,6 +30,15 @@ class AuthViewModel @Inject constructor(
 		}
 	}
 
+	private suspend fun isUserExist(uid: String): Boolean {
+		return try {
+			userRepository.isUserExist(uid)
+		} catch (e: Exception) {
+			postSideEffect(AuthSideEffect.ShowError(e.message ?: "알 수 없는 오류가 발생했습니다."))
+			false
+		}
+	}
+
 	private fun handleGoogleSignIn(googleOauth: GoogleOauth) {
 		viewModelScope.launch {
 			try {
@@ -37,6 +46,9 @@ class AuthViewModel @Inject constructor(
 					.collect { loginState ->
 						when (loginState) {
 							is LoginState.Success -> {
+								if (isUserExist(loginState.authDataInfo.uid)) {
+									postSideEffect(AuthSideEffect.NavigateToMain)
+								}
 
 								intent {
 									copy(
