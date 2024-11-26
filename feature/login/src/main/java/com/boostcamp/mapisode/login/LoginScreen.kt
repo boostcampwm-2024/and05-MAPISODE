@@ -1,6 +1,5 @@
 package com.boostcamp.mapisode.login
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,51 +12,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.boostcamp.mapisode.designsystem.R.drawable
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
-
-@Composable
-fun LoginRoute(
-	viewModel: AuthViewModel = hiltViewModel(),
-	navigateToSignUp: () -> Unit,
-) {
-	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-	val context = LocalContext.current
-
-	LaunchedEffect(uiState) {
-		when (uiState) {
-			is AuthUiState.Success -> {
-				val userInfo = (uiState as AuthUiState.Success).authData.displayName
-				Toast.makeText(context, "안녕하세요 ${userInfo}님", Toast.LENGTH_SHORT).show()
-			}
-
-			is AuthUiState.Error -> {}
-			else -> {}
-		}
-	}
-
-	LoginScreen(
-		googleSignInClicked = {
-			viewModel.handleGoogleSignIn(context)
-		},
-	)
-}
 
 @Composable
 fun LoginScreen(
