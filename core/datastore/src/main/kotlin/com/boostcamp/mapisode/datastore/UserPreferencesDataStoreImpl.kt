@@ -44,14 +44,14 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 	}.first()
 
 	override suspend fun updateUserId(userId: String) {
-		if (userId.isEmpty()) throw IllegalArgumentException("User ID cannot be empty")
+		if (userId.isBlank()) throw IllegalArgumentException("User ID cannot be empty")
 		dataStore.edit { preferences ->
 			preferences[PreferenceKeys.USER_ID] = userId
 		}
 	}
 
 	override suspend fun updateUsername(username: String) {
-		if (username.isEmpty()) throw IllegalArgumentException("Username cannot be empty")
+		if (username.isBlank()) throw IllegalArgumentException("Username cannot be empty")
 		dataStore.edit { preferences ->
 			preferences[PreferenceKeys.USERNAME] = username
 		}
@@ -77,10 +77,10 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 		}
 	}
 
-	override suspend fun updateCredentialIdToken(credentialIdToken: String) {
-		if (credentialIdToken.isEmpty()) throw IllegalArgumentException("Credential ID Token cannot be empty")
+	override suspend fun updateCredentialIdToken(idToken: String) {
+		if (idToken.isBlank()) throw IllegalArgumentException("Credential ID Token cannot be empty")
 		dataStore.edit { preferences ->
-			preferences[PreferenceKeys.CREDENTIAL_ID_TOKEN] = credentialIdToken
+			preferences[PreferenceKeys.CREDENTIAL_ID_TOKEN] = idToken
 		}
 	}
 
