@@ -60,8 +60,8 @@ fun NavGraphBuilder.addGroupNavGraph(
 		)
 	}
 
-	composable<GroupRoute.Detail> {backStackEntry ->
-		val detail : GroupRoute.Detail = backStackEntry.toRoute()
+	composable<GroupRoute.Detail> { backStackEntry ->
+		val detail: GroupRoute.Detail = backStackEntry.toRoute()
 
 		GroupDetailScreen(
 			detail = detail,
@@ -76,8 +76,8 @@ fun NavGraphBuilder.addGroupNavGraph(
 		)
 	}
 
-	composable<GroupRoute.Edit> {backStackEntry ->
-		val edit : GroupRoute.Edit = backStackEntry.toRoute()
+	composable<GroupRoute.Edit> { backStackEntry ->
+		val edit: GroupRoute.Edit = backStackEntry.toRoute()
 
 		GroupEditScreen(
 			edit = edit,

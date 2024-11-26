@@ -4,8 +4,8 @@ import androidx.compose.runtime.Immutable
 import com.boostcamp.mapisode.ui.base.UiIntent
 
 @Immutable
-sealed class GroupJoinIntent: UiIntent {
+sealed class GroupJoinIntent : UiIntent {
 	data class TryGetGroup(val inviteCode: String) : GroupJoinIntent()
-	data object JoinTheGroup : GroupJoinIntent()
-	data object BackToGroupScreen : GroupJoinIntent()
+	data object OnJoinClick : GroupJoinIntent()
+	data object OnBackClick : GroupJoinIntent()
 }
