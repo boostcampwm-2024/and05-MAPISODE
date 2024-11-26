@@ -39,17 +39,19 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 		preferences[PreferenceKeys.USER_ID]
 	}
 
-	override suspend fun getIsLoggedIn(): Boolean = dataStore.data.map { preferences ->
+	override suspend fun checkLoggedIn(): Boolean = dataStore.data.map { preferences ->
 		preferences[PreferenceKeys.IS_LOGGED_IN] ?: false
 	}.first()
 
 	override suspend fun updateUserId(userId: String) {
+		if (userId.isEmpty()) throw IllegalArgumentException("User ID cannot be empty")
 		dataStore.edit { preferences ->
 			preferences[PreferenceKeys.USER_ID] = userId
 		}
 	}
 
 	override suspend fun updateUsername(username: String) {
+		if (username.isEmpty()) throw IllegalArgumentException("Username cannot be empty")
 		dataStore.edit { preferences ->
 			preferences[PreferenceKeys.USERNAME] = username
 		}
@@ -68,12 +70,15 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 	}
 
 	override suspend fun updateProfileUrl(profileUrl: String) {
+//		커스텀 포토피커 도입 후 주석 삭제하겠습니다.
+//		if (profileUrl.isEmpty()) throw IllegalArgumentException("Profile URL cannot be empty")
 		dataStore.edit { preferences ->
 			preferences[PreferenceKeys.PROFILE_URL] = profileUrl
 		}
 	}
 
 	override suspend fun updateCredentialIdToken(credentialIdToken: String) {
+		if (credentialIdToken.isEmpty()) throw IllegalArgumentException("Credential ID Token cannot be empty")
 		dataStore.edit { preferences ->
 			preferences[PreferenceKeys.CREDENTIAL_ID_TOKEN] = credentialIdToken
 		}
