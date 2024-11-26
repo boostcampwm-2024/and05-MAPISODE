@@ -1,6 +1,5 @@
 package com.boostcamp.mapisode.designsystem.compose.card
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -57,12 +56,17 @@ fun GroupInfoCard(
 					.copy(fontWeight = FontWeight.SemiBold),
 				maxLines = 1,
 			)
+
 			Spacer(modifier = Modifier.padding(4.dp))
 
 			MapisodeText(
 				text = stringResource(R.string.group_created_date) + group.createdAt,
 				style = MapisodeTheme.typography.labelMedium,
+				maxLines = 1,
 			)
+
+			Spacer(modifier = Modifier.height(4.dp))
+
 			MapisodeText(
 				text = stringResource(
 					R.string.group_user_count,
@@ -72,6 +76,9 @@ fun GroupInfoCard(
 				),
 				style = MapisodeTheme.typography.labelMedium,
 			)
+
+			Spacer(modifier = Modifier.height(4.dp))
+
 			MapisodeText(
 				text = stringResource(R.string.group_recent_upload),
 				style = MapisodeTheme.typography.labelMedium,
