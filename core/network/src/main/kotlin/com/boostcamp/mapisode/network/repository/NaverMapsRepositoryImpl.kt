@@ -8,8 +8,8 @@ import javax.inject.Inject
 
 class NaverMapsRepositoryImpl @Inject constructor(private val naverMapsApi: NaverMapsApi) :
 	NaverMapsRepository {
-	override suspend fun reverseGeoCode(coords: String): Result<String> {
-		return try {
+	override suspend fun reverseGeoCode(coords: String): Result<String> =
+		try {
 			val response: ReverseGeocodeResponse = naverMapsApi.reverseGeoCoding(coords)
 			val address = buildString {
 				response.results?.firstOrNull()?.let {
@@ -39,5 +39,4 @@ class NaverMapsRepositoryImpl @Inject constructor(private val naverMapsApi: Nave
 			Timber.e(e)
 			Result.failure(e)
 		}
-	}
 }
