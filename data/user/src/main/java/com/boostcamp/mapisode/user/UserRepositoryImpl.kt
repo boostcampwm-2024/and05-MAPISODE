@@ -25,4 +25,15 @@ class UserRepositoryImpl @Inject constructor(database: FirebaseFirestore) : User
 			throw Exception("Failed to create user", e)
 		}
 	}
+
+	override suspend fun isUserExist(uid: String): Boolean {
+		val userDocument = userCollection.document(uid)
+
+		try {
+			val document = userDocument.get().await()
+			return document.exists()
+		} catch (e: Exception) {
+			throw Exception("Failed to get user", e)
+		}
+	}
 }
