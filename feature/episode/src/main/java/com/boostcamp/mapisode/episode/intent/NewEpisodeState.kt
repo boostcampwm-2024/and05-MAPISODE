@@ -7,6 +7,8 @@ import com.boostcamp.mapisode.model.EpisodeModel
 import com.boostcamp.mapisode.ui.base.UiState
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 import java.util.Date
 
 data class NewEpisodeState(
@@ -44,5 +46,5 @@ data class NewEpisodeInfo(
 data class NewEpisodeContent(
 	val title: String = "",
 	val description: String = "",
-	val images: List<Uri> = emptyList(),
+	val images: PersistentList<Uri> = emptyList<Uri>().toPersistentList(),
 )
