@@ -27,6 +27,17 @@ class AuthViewModel @Inject constructor(
 			}
 
 			is AuthIntent.OnSignUpClick -> handleSignUp()
+			is AuthIntent.OnAutoLogin -> {
+				handleAutoLogin()
+			}
+		}
+	}
+
+	private fun handleAutoLogin() {
+		viewModelScope.launch {
+			if (userDataStore.getIsLoggedIn()) {
+				postSideEffect(AuthSideEffect.NavigateToMain)
+			}
 		}
 	}
 
