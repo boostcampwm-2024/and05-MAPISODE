@@ -1,8 +1,8 @@
 package com.boostcamp.mapisode.episode.intent
 
+import android.net.Uri
 import com.boostcamp.mapisode.ui.base.UiIntent
 import com.naver.maps.geometry.LatLng
-import android.net.Uri
 import kotlinx.collections.immutable.PersistentList
 import java.util.Date
 
