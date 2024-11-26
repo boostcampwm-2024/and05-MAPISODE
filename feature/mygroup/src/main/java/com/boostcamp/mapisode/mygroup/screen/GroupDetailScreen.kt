@@ -8,6 +8,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTab
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTabRow
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
+import com.boostcamp.mapisode.mygroup.intent.GroupDetailIntent
 import com.boostcamp.mapisode.mygroup.viewmodel.GroupDetailViewModel
 import com.boostcamp.mapisode.navigation.GroupRoute
 import kotlinx.coroutines.launch
@@ -35,16 +37,18 @@ fun GroupDetailScreen(
 ) {
 	val pagerState = rememberPagerState(pageCount = { 2 })
 	val list = listOf("그룹 상세", "에피소드")
-	viewModel.getGroupDetail(detail.groupId)
 	val scope = rememberCoroutineScope()
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-	val groupId = detail.groupId
+
+	LaunchedEffect(uiState) {
+		viewModel.onIntent(GroupDetailIntent.GetGroupId(detail.groupId))
+	}
 
 	MapisodeScaffold(
 		isStatusBarPaddingExist = true,
 		topBar = {
 			TopAppBar(
-				title = groupId,
+				title = "그룹 상세",
 				navigationIcon = {
 					MapisodeIconButton(
 						onClick = { onBackClick() },
@@ -57,7 +61,7 @@ fun GroupDetailScreen(
 				actions = {
 					MapisodeIconButton(
 						onClick = {
-							onEditClick(groupId)
+							onEditClick(detail.groupId)
 						},
 					) {
 						MapisodeIcon(

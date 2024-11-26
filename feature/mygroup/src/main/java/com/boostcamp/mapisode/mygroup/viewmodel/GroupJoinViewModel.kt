@@ -60,7 +60,7 @@ class GroupJoinViewModel @Inject constructor(
 		viewModelScope.launch {
 			intent { copy(isGroupLoading = true) }
 			try {
-				val group = groupRepository.getGroupById(inviteCodes)
+				val group = groupRepository.getGroupByInviteCodes(inviteCodes)
 				intent { copy(isGroupExist = true, group = group) }
 				Timber.d("group: $currentState")
 			} catch (e: Exception) {
