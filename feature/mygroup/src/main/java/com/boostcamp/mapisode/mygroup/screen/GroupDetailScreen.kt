@@ -25,8 +25,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -51,6 +53,7 @@ import coil3.compose.AsyncImage
 import com.boostcamp.mapisode.common.util.toFormattedString
 import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.Direction
+import com.boostcamp.mapisode.designsystem.compose.MapisodeCircularLoadingIndicator
 import com.boostcamp.mapisode.designsystem.compose.MapisodeDialog
 import com.boostcamp.mapisode.designsystem.compose.MapisodeDivider
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
@@ -282,88 +285,102 @@ fun GroupDetailContent(
 	onIssueCodeClick: () -> Unit,
 	onGroupOutClick: () -> Unit,
 ) {
-	LazyColumn(
+	Column(
 		modifier = Modifier
 			.fillMaxSize()
 			.padding(horizontal = 20.dp, vertical = 10.dp),
 		horizontalAlignment = Alignment.CenterHorizontally,
-		verticalArrangement = Arrangement.spacedBy(10.dp),
-		contentPadding = PaddingValues(bottom = 20.dp),
 	) {
-		item {
-			GroupInfoCard(
-				group = group,
-			)
+		GroupInfoCard(
+			group = group,
+		)
 
-			Spacer(modifier = Modifier.padding(5.dp))
+		Spacer(modifier = Modifier.padding(5.dp))
 
-			MapisodeDivider(direction = Direction.Horizontal, thickness = Thickness.Thin)
+		MapisodeDivider(direction = Direction.Horizontal, thickness = Thickness.Thin)
 
-			Spacer(modifier = Modifier.padding(5.dp))
+		Spacer(modifier = Modifier.padding(5.dp))
 
+		MapisodeText(
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(start = 4.dp),
+			text = stringResource(S.string.group_description_label),
+			style = MapisodeTheme.typography.labelLarge,
+		)
+
+		Spacer(modifier = Modifier.padding(2.dp))
+
+		Box(
+			modifier = Modifier
+				.clip(RoundedCornerShape(8.dp))
+				.background(MapisodeTheme.colorScheme.textColoredContainer)
+				.padding(10.dp),
+		) {
 			MapisodeText(
 				modifier = Modifier
 					.fillMaxWidth()
+					.wrapContentHeight()
+					.heightIn(min = 50.dp)
 					.padding(start = 4.dp),
-				text = stringResource(S.string.group_description_label),
-				style = MapisodeTheme.typography.labelLarge,
+				text = group.description,
+				style = MapisodeTheme.typography.labelMedium,
 			)
+		}
 
-			Spacer(modifier = Modifier.padding(5.dp))
+		Spacer(modifier = Modifier.padding(10.dp))
 
-			Box(
-				modifier = Modifier
-					.clip(RoundedCornerShape(8.dp))
-					.background(MapisodeTheme.colorScheme.textColoredContainer)
-					.padding(10.dp),
-			) {
-				MapisodeText(
+		MapisodeFilledButton(
+			modifier = Modifier
+				.fillMaxWidth()
+				.heightIn(min = 52.dp, max = 80.dp),
+			onClick = { onIssueCodeClick() },
+			text = stringResource(S.string.btn_issue_code),
+			showRipple = true,
+		)
+
+		Spacer(modifier = Modifier.padding(10.dp))
+
+		MapisodeText(
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(start = 4.dp),
+			text = stringResource(S.string.label_detail_group_member),
+			style = MapisodeTheme.typography.labelLarge,
+		)
+
+		Spacer(modifier = Modifier.padding(2.dp))
+
+		val scrollState = rememberScrollState()
+		Column(
+			modifier = Modifier
+				.fillMaxWidth()
+				.verticalScroll(scrollState),
+			verticalArrangement = Arrangement.Top,
+			horizontalAlignment = Alignment.CenterHorizontally,
+		) {
+			if (members.isEmpty()) {
+				Box(
+					modifier = Modifier.padding(top = 150.dp),
+					contentAlignment = Alignment.Center,
+				) {
+					MapisodeCircularLoadingIndicator()
+				}
+			} else {
+				repeat(members.size) { index ->
+					GroupMemberContent(members[index])
+					Spacer(modifier = Modifier.padding(5.dp))
+				}
+				MapisodeOutlinedButton(
 					modifier = Modifier
 						.fillMaxWidth()
-						.wrapContentHeight()
-						.heightIn(min = 50.dp)
-						.padding(start = 4.dp),
-					text = group.description,
-					style = MapisodeTheme.typography.labelMedium,
+						.heightIn(min = 40.dp, max = 80.dp),
+					borderColor = MapisodeTheme.colorScheme.textColoredContainer,
+					onClick = { onGroupOutClick() },
+					text = stringResource(S.string.btn_group_out),
+					showRipple = true,
 				)
 			}
-
-			Spacer(modifier = Modifier.padding(10.dp))
-
-			MapisodeFilledButton(
-				modifier = Modifier
-					.fillMaxWidth()
-					.heightIn(min = 52.dp, max = 80.dp),
-				onClick = { onIssueCodeClick() },
-				text = stringResource(S.string.btn_issue_code),
-				showRipple = true,
-			)
-
-			Spacer(modifier = Modifier.padding(10.dp))
-
-			MapisodeText(
-				modifier = Modifier
-					.fillMaxWidth()
-					.padding(start = 4.dp),
-				text = stringResource(S.string.label_detail_group_member),
-				style = MapisodeTheme.typography.labelLarge,
-			)
-		}
-
-		items(members) { member ->
-			GroupMemberContent(member)
-		}
-
-		item {
-			MapisodeOutlinedButton(
-				modifier = Modifier
-					.fillMaxWidth()
-					.heightIn(min = 40.dp, max = 80.dp),
-				borderColor = MapisodeTheme.colorScheme.textColoredContainer,
-				onClick = { onGroupOutClick() },
-				text = stringResource(S.string.btn_group_out),
-				showRipple = true,
-			)
 		}
 	}
 }
@@ -433,7 +450,6 @@ fun GroupEpisodesContent(
 				}
 			}
 		}
-
 		items(sortedEpisodes) { episode ->
 			EpisodeCard(episode)
 		}
