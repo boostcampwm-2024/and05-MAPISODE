@@ -83,6 +83,7 @@ import com.boostcamp.mapisode.designsystem.R as Design
 internal fun HomeRoute(
 	viewModel: HomeViewModel = hiltViewModel(),
 	onTextMarkerClick: (EpisodeLatLng) -> Unit = {},
+	onEpisodeClick: (String) -> Unit = {},
 ) {
 	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 	val context = LocalContext.current
@@ -198,6 +199,10 @@ internal fun HomeRoute(
 				is HomeSideEffect.NavigateToEpisode -> {
 					onTextMarkerClick(sideEffect.latLng)
 				}
+
+				is HomeSideEffect.NavigateToEpisodeDetail -> {
+					onEpisodeClick(sideEffect.episodeId)
+				}
 			}
 		}
 	}
@@ -238,6 +243,9 @@ internal fun HomeRoute(
 		onSwipeStart = {
 			viewModel.onIntent(HomeIntent.StartProgrammaticCameraMove)
 		},
+		onEpisodeClick = { episodeId ->
+			viewModel.onIntent(HomeIntent.NavigateToEpisode(episodeId))
+		},
 	)
 }
 
@@ -253,6 +261,7 @@ private fun HomeScreen(
 	onMapClick: () -> Unit = {},
 	onRefreshClick: () -> Unit = {},
 	onSwipeStart: () -> Unit = {},
+	onEpisodeClick: (String) -> Unit = {},
 ) {
 	val context = LocalContext.current
 	val eatIcon = remember { OverlayImage.fromResource(Design.drawable.ic_eat_marker_light) }
@@ -421,9 +430,7 @@ private fun HomeScreen(
 					) {
 						EpisodeCard(
 							episode = episode,
-							onClick = {
-								// TODO : 상세보기로 이동
-							},
+							onClick = onEpisodeClick,
 						)
 					}
 				}

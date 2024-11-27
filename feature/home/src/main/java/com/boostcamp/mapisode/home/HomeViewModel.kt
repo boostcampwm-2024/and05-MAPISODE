@@ -83,6 +83,10 @@ class HomeViewModel @Inject constructor(private val episodeRepository: EpisodeRe
 			is HomeIntent.EndProgrammaticCameraMove -> {
 				setProgrammaticCameraMove(false)
 			}
+
+			is HomeIntent.NavigateToEpisode -> {
+				postSideEffect(HomeSideEffect.NavigateToEpisodeDetail(intent.episodeId))
+			}
 		}
 	}
 
