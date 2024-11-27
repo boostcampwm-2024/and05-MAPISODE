@@ -8,4 +8,5 @@ sealed class HomeSideEffect : SideEffect {
 	data object SetInitialLocation : HomeSideEffect()
 	data object RequestLocationPermission : HomeSideEffect()
 	data class NavigateToEpisode(val latLng: EpisodeLatLng) : HomeSideEffect()
+	data class NavigateToEpisodeDetail(val episodeId: String) : HomeSideEffect()
 }

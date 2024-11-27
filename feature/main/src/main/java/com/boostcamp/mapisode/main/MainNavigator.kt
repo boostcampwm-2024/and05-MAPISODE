@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.boostcamp.mapisode.home.navigation.navigateEpisodeDetail
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupCreation
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupDetail
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupEdit
@@ -49,6 +50,10 @@ internal class MainNavigator(
 
 	fun navigateToMain() {
 		navController.navigate(MainRoute.Home)
+	}
+
+	fun navigateToEpisodeDetail(episodeId: String) {
+		navController.navigateEpisodeDetail(episodeId)
 	}
 
 	fun navigateGroupJoin() {

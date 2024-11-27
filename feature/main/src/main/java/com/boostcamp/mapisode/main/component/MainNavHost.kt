@@ -27,6 +27,7 @@ internal fun MainNavHost(
 		) {
 			addHomeNavGraph(
 				onTextMarkerClick = { navigator.navigate(MainNavTab.EPISODE) },
+				onEpisodeClick = navigator::navigateToEpisodeDetail,
 			)
 			addAuthNavGraph(
 				navigateToMain = navigator::navigateToMain,

@@ -37,7 +37,7 @@ import java.util.Date
 fun EpisodeCard(
 	episode: EpisodeModel,
 	modifier: Modifier = Modifier,
-	onClick: () -> Unit = {},
+	onClick: (String) -> Unit = {},
 ) {
 	val tagString = episode.tags.joinToString(
 		prefix = stringResource(R.string.episode_card_tag_prefix),
@@ -121,13 +121,13 @@ fun EpisodeCard(
 			Spacer(modifier = Modifier.weight(1f))
 
 			Row(
-				modifier = Modifier.fillMaxWidth()
+				modifier = Modifier.fillMaxWidth(),
 			) {
 				Spacer(modifier = Modifier.weight(1f))
 
 				MapisodeFilledButton(
 					text = stringResource(R.string.episode_card_detail),
-					onClick = onClick,
+					onClick = { onClick(episode.id) },
 					textStyle = MapisodeTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
 				)
 			}
