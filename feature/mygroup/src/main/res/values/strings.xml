@@ -5,8 +5,8 @@
 	<string name="group_join_textinput_label">초대 코드</string>
 	<string name="group_join_textfield_hint">초대 코드를 입력해주세요</string>
 	<string name="group_join_btn_direction">확인</string>
-	<string name="group_members_number">"멤버수 : "</string>
-	<string name="group_user_number">"동료 : "</string>
+	<string name="group_members_number">"멤버수 :&#32;"</string>
+	<string name="group_user_number">"동료 :&#32;"</string>
 	<string name="group_overview">그룹 개요</string>
 	<string name="group_descript">그룹 설명</string>
     <string name="group_join_not_exist">그룹이 존재하지 않습니다.</string>
@@ -29,10 +29,10 @@
 	<string name="dialog_group_out_positive">예</string>
 	<string name="dialog_group_out_negative">아니오</string>
 	<string name="label_episode">에피소드</string>
-	<string name="overview_created_by">글쓴이 : </string>
-	<string name="overview_location">위치 : </string>
-	<string name="overview_date">작성일 : </string>
-	<string name="overview_content">내용 : </string>
+	<string name="overview_created_by">글쓴이 :&#32;</string>
+	<string name="overview_location">위치 :&#32;</string>
+	<string name="overview_date">작성일 :&#32;</string>
+	<string name="overview_content">내용 :&#32;</string>
 	<string name="message_error_edit_input">입력 조건을 만족해주세요.</string>
 	<string name="message_error_edit_group">그룹 수정에 실패했습니다.</string>
 	<string name="message_error_creation_group_success">그룹 생성에 성공했습니다.</string>
