@@ -15,6 +15,7 @@ internal fun EpisodeModel.toFirestoreModel(
 		createdBy = database.collection("user").document(createdBy),
 		group = database.collection("group").document(group),
 		imageUrls = imageUrls,
+		address = address,
 		location = GeoPoint(location.latitude, location.longitude),
 		memoryDate = Timestamp(memoryDate),
 		tags = tags,

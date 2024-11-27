@@ -9,6 +9,7 @@ data class EpisodeModel(
 	val createdBy: String = "",
 	val group: String = "",
 	val imageUrls: List<String> = emptyList(),
+	val address: String = "",
 	val location: EpisodeLatLng = EpisodeLatLng(),
 	val memoryDate: Date = Date(),
 	val tags: List<String> = emptyList(),

@@ -29,6 +29,7 @@ data class NewEpisodeState(
 		title = episodeContent.title,
 		content = episodeContent.description,
 		imageUrls = episodeContent.images.map { it.toString() },
+		address = episodeAddress,
 		location = EpisodeLatLng(episodeInfo.location.latitude, episodeInfo.location.longitude),
 		group = requireNotNull(myGroups.find { it.name == episodeInfo.group }?.groupId),
 		category = requireNotNull(episodeInfo.category?.name),
