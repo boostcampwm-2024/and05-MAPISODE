@@ -10,6 +10,7 @@ android {
 
 dependencies {
 	implementation(projects.domain.episode)
+	implementation(projects.domain.user)
 	implementation(libs.bundles.naverMap)
 	implementation(libs.bundles.coil)
 }
