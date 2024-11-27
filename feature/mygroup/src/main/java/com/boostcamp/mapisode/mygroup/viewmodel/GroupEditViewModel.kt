@@ -12,9 +12,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GroupEditViewModel @Inject constructor(
-	private val groupRepository: GroupRepository,
-) : BaseViewModel<GroupEditIntent, GroupEditState, GroupEditSideEffect>(GroupEditState()) {
+class GroupEditViewModel @Inject constructor(private val groupRepository: GroupRepository) :
+	BaseViewModel<GroupEditIntent, GroupEditState, GroupEditSideEffect>(GroupEditState()) {
 	private lateinit var cachedGroupId: String
 
 	override fun onIntent(intent: GroupEditIntent) {
