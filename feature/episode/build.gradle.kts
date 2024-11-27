@@ -9,5 +9,6 @@ android {
 dependencies {
 	implementation(project.libs.bundles.naverMap)
 	implementation(project.libs.bundles.coil)
+	implementation(projects.core.network)
 	implementation(projects.domain.episode)
 }

@@ -19,6 +19,8 @@ data class NewEpisodeState(
 		),
 		MAP_DEFAULT_ZOOM,
 	),
+	val episodeAddress: String = "",
+	val isCameraMoving: Boolean = false,
 	val episodeInfo: NewEpisodeInfo = NewEpisodeInfo(),
 	val episodeContent: NewEpisodeContent = NewEpisodeContent(),
 ) : UiState {

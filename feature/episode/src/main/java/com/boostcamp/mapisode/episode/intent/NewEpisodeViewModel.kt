@@ -3,6 +3,7 @@ package com.boostcamp.mapisode.episode.intent
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.episode.EpisodeRepository
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.MAP_DEFAULT_ZOOM
+import com.boostcamp.mapisode.network.repository.NaverMapsRepository
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.naver.maps.map.CameraPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,8 +12,10 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class NewEpisodeViewModel @Inject constructor(private val episodeRepository: EpisodeRepository) :
-	BaseViewModel<NewEpisodeIntent, NewEpisodeState, NewEpisodeSideEffect>(NewEpisodeState()) {
+class NewEpisodeViewModel @Inject constructor(
+	private val episodeRepository: EpisodeRepository,
+	private val naverMapsRepository: NaverMapsRepository,
+) : BaseViewModel<NewEpisodeIntent, NewEpisodeState, NewEpisodeSideEffect>(NewEpisodeState()) {
 
 	override fun onIntent(intent: NewEpisodeIntent) {
 		when (intent) {
@@ -21,6 +24,18 @@ class NewEpisodeViewModel @Inject constructor(private val episodeRepository: Epi
 					copy(
 						episodeContent = episodeContent.copy(images = intent.pics),
 					)
+				}
+			}
+
+			is NewEpisodeIntent.SetEpisodeAddress -> {
+				viewModelScope.launch {
+					val coord = "${intent.latLng.longitude},${intent.latLng.latitude}"
+					val address = naverMapsRepository.reverseGeoCode(coord).getOrDefault("")
+					intent {
+						copy(
+							episodeAddress = address,
+						)
+					}
 				}
 			}
 

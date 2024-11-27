@@ -10,10 +10,8 @@ import androidx.navigation.compose.rememberNavController
 import com.boostcamp.mapisode.episode.intent.NewEpisodeIntent
 import com.boostcamp.mapisode.episode.intent.NewEpisodeViewModel
 import com.naver.maps.map.compose.CameraPositionState
-import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.rememberCameraPositionState
 
-@OptIn(ExperimentalNaverMapApi::class)
 @Composable
 internal fun EpisodeRoute(
 	viewModel: NewEpisodeViewModel = hiltViewModel(),
@@ -58,10 +56,14 @@ internal fun EpisodeRoute(
 
 		composable("pick_location") {
 			PickLocationScreen(
+				state = uiState,
 				cameraPositionState = cameraPositionState,
 				navController = newEpisodeNavController,
 				updateLocation = { latLng ->
 					viewModel.onIntent(NewEpisodeIntent.SetEpisodeLocation(latLng))
+				},
+				updateAddress = { latLng ->
+					viewModel.onIntent(NewEpisodeIntent.SetEpisodeAddress(latLng))
 				},
 			)
 		}
