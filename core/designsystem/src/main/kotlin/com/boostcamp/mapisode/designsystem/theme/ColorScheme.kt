@@ -13,6 +13,9 @@ data class CustomColorScheme(
 	// Top App Bar
 	val topAppBarTitle: Color,
 
+	// Circular Indicator
+	val circularIndicator: Color,
+
 	// Scaffold
 	val scaffoldBackground: Color,
 
@@ -108,6 +111,9 @@ val lightColorScheme = CustomColorScheme(
 	// Top App Bar
 	topAppBarTitle = Neutral110,
 
+	// Circular Indicator
+	circularIndicator = Primary30,
+
 	// Scaffold
 	scaffoldBackground = Neutral10,
 
@@ -202,6 +208,9 @@ val darkColorScheme = CustomColorScheme(
 
 	// Top App Bar
 	topAppBarTitle = Neutral10,
+
+	// Circular Indicator
+	circularIndicator = Primary40,
 
 	// Scaffold
 	scaffoldBackground = Neutral110,
