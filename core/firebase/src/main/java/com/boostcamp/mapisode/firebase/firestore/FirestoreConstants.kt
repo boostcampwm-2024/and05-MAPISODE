@@ -14,4 +14,5 @@ object FirestoreConstants {
 	const val FIELD_ADMIN_USER = "adminUser"
 	const val FIELD_MEMBERS = "members"
 	const val FIELD_CREATED_AT = "createdAt"
+	const val FIELD_CREATED_BY = "createdBy"
 }

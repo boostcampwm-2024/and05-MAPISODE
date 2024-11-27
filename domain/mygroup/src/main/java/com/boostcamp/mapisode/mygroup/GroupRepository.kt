@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.mygroup
 
+import com.boostcamp.mapisode.model.EpisodeModel
 import com.boostcamp.mapisode.model.GroupMemberModel
 import com.boostcamp.mapisode.model.GroupModel
 
@@ -15,4 +16,5 @@ interface GroupRepository {
 	suspend fun deleteGroup(groupId: String)
 
 	suspend fun getUserInfoByUserId(userId: String): GroupMemberModel
+	suspend fun getEpisodesByGroupIdAndUserId(groupId: String, userId: String): List<EpisodeModel>
 }
