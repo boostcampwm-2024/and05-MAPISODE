@@ -65,6 +65,9 @@ internal fun EpisodeRoute(
 				updateAddress = { latLng ->
 					viewModel.onIntent(NewEpisodeIntent.SetEpisodeAddress(latLng))
 				},
+				updateIsCameraMoving = { isCameraMoving ->
+					viewModel.onIntent(NewEpisodeIntent.SetIsCameraMoving(isCameraMoving))
+				},
 			)
 		}
 
