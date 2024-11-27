@@ -66,19 +66,28 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 		try {
 			database.runTransaction { transaction ->
 				// 그룹 문서의 멤버 리스트에 사용자 추가
-				val groupDocRef = database.collection(FirestoreConstants.COLLECTION_GROUP).document(groupId)
+				val groupDocRef = database
+					.collection(FirestoreConstants.COLLECTION_GROUP)
+					.document(groupId)
 				transaction.update(
 					groupDocRef,
 					FirestoreConstants.FIELD_MEMBERS,
-					FieldValue.arrayUnion(database.collection(FirestoreConstants.COLLECTION_USER).document(userId)),
+					FieldValue.arrayUnion(
+						database.collection(FirestoreConstants.COLLECTION_USER)
+							.document(userId),
+					),
 				)
 
 				// 사용자 문서의 그룹 리스트에 그룹 추가
-				val userDocRef = database.collection(FirestoreConstants.COLLECTION_USER).document(userId)
+				val userDocRef = database.collection(FirestoreConstants.COLLECTION_USER)
+					.document(userId)
 				transaction.update(
 					userDocRef,
 					FirestoreConstants.FIELD_GROUPS,
-					FieldValue.arrayUnion(database.collection(FirestoreConstants.COLLECTION_GROUP).document(groupId)),
+					FieldValue.arrayUnion(
+						database.collection(FirestoreConstants.COLLECTION_GROUP)
+							.document(groupId),
+					),
 				)
 			}.await()
 		} catch (e: Exception) {
@@ -121,17 +130,26 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 		try {
 			database.runTransaction { transaction ->
 				// group의 members 필드에서 사용자 제거
-				val groupDocRef = database.collection(FirestoreConstants.COLLECTION_GROUP).document(groupId)
+				val groupDocRef = database.collection(FirestoreConstants.COLLECTION_GROUP)
+					.document(groupId)
 				val groupSnapshot = transaction.get(groupDocRef)
-				val members = groupSnapshot.get(FirestoreConstants.FIELD_MEMBERS) as MutableList<DocumentReference>
+				val members = groupSnapshot.get(
+					FirestoreConstants.FIELD_MEMBERS,
+				) as MutableList<DocumentReference>
 				members.remove(database.collection(FirestoreConstants.COLLECTION_USER).document(userId))
 				transaction.update(groupDocRef, FirestoreConstants.FIELD_MEMBERS, members)
 
 				// user의 그룹 필드에서 그룹 제거
-				val userDocRef = database.collection(FirestoreConstants.COLLECTION_USER).document(userId)
+				val userDocRef = database.collection(FirestoreConstants.COLLECTION_USER)
+					.document(userId)
 				val userSnapshot = transaction.get(userDocRef)
-				val groups = userSnapshot.get(FirestoreConstants.FIELD_GROUPS) as MutableList<DocumentReference>
-				groups.remove(database.collection(FirestoreConstants.COLLECTION_GROUP).document(groupId))
+				val groups = userSnapshot.get(
+					FirestoreConstants.FIELD_GROUPS,
+				) as MutableList<DocumentReference>
+				groups.remove(
+					database.collection(FirestoreConstants.COLLECTION_GROUP)
+						.document(groupId),
+				)
 				transaction.update(userDocRef, FirestoreConstants.FIELD_GROUPS, groups)
 			}.await()
 		} catch (e: Exception) {
