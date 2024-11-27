@@ -27,6 +27,14 @@ class NewEpisodeViewModel @Inject constructor(
 				}
 			}
 
+			is NewEpisodeIntent.SetIsCameraMoving -> {
+				intent {
+					copy(
+						isCameraMoving = intent.isCameraMoving,
+					)
+				}
+			}
+
 			is NewEpisodeIntent.SetEpisodeAddress -> {
 				viewModelScope.launch {
 					val coord = "${intent.latLng.longitude},${intent.latLng.latitude}"

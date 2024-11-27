@@ -44,15 +44,18 @@ internal fun PickLocationScreen(
 	navController: NavController,
 	updateLocation: (LatLng) -> Unit,
 	updateAddress: (LatLng) -> Unit,
+	updateIsCameraMoving: (Boolean) -> Unit,
 ) {
 	val episodeMarkerState = rememberMarkerState()
 	episodeMarkerState.position = cameraPositionState.position.target
 
 	LaunchedEffect(cameraPositionState.position.target) {
+		updateIsCameraMoving(true)
 		snapshotFlow { cameraPositionState.position.target }
 			.debounce(500L)
 			.collectLatest { target ->
 				updateAddress(target)
+				updateIsCameraMoving(false)
 			}
 	}
 
@@ -103,11 +106,12 @@ internal fun PickLocationScreen(
 					)
 					MapisodeFilledButton(
 						modifier = Modifier.fillMaxWidth(),
-						text = stringResource(R.string.new_episode_pick_location_button),
 						onClick = {
 							updateLocation(episodeMarkerState.position)
 							navController.popBackStack("new_episode_info", false)
 						},
+						text = stringResource(R.string.new_episode_pick_location_button),
+						enabled = state.isCameraMoving.not(),
 						showRipple = true,
 					)
 				}
