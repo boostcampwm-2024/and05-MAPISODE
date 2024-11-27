@@ -48,7 +48,7 @@ class GroupEditViewModel @Inject constructor(private val groupRepository: GroupR
 	private fun checkGroupEdit(title: String, content: String, imageUrl: String) {
 		viewModelScope.launch {
 			try {
-				if (title.length !in 2..8 || content.length < 10 || imageUrl.isEmpty()) {
+				if (title.length !in 2..24 || content.length < 10 || imageUrl.isBlank()) {
 					intent { copy(isGroupEditError = true) }
 					postSideEffect(GroupEditSideEffect.ShowToast(R.string.message_error_edit_input))
 				} else {
