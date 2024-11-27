@@ -11,4 +11,5 @@ dependencies {
 	implementation(project.libs.bundles.coil)
 	implementation(projects.core.network)
 	implementation(projects.domain.episode)
+	implementation(projects.domain.mygroup)
 }

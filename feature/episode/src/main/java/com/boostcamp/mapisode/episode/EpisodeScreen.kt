@@ -36,6 +36,9 @@ internal fun EpisodeRoute(
 			NewEpisodeInfoScreen(
 				navController = newEpisodeNavController,
 				state = uiState,
+				loadMyGroups = {
+					viewModel.onIntent(NewEpisodeIntent.LoadMyGroups)
+				},
 				updateEpisodeInfo = { episodeInfo ->
 					viewModel.onIntent(NewEpisodeIntent.SetEpisodeInfo(episodeInfo))
 				},

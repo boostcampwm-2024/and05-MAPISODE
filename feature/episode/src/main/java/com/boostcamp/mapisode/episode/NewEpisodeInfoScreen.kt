@@ -12,6 +12,7 @@ import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,8 +35,7 @@ import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenu
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.buttonModifier
-import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.categoryMap
-import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.groupMap
+import com.boostcamp.mapisode.episode.intent.EpisodeCategory
 import com.boostcamp.mapisode.episode.intent.NewEpisodeInfo
 import com.boostcamp.mapisode.episode.intent.NewEpisodeState
 import java.util.Date
@@ -44,8 +44,9 @@ import java.util.Date
 internal fun NewEpisodeInfoScreen(
 	state: NewEpisodeState,
 	navController: NavController,
+	loadMyGroups: () -> Unit,
 	updateGroup: (String) -> Unit,
-	updateCategory: (String) -> Unit,
+	updateCategory: (EpisodeCategory) -> Unit,
 	updateTags: (String) -> Unit,
 	updateDate: (Date) -> Unit,
 	updateEpisodeInfo: (NewEpisodeInfo) -> Unit,
@@ -59,6 +60,10 @@ internal fun NewEpisodeInfoScreen(
 	}
 	var showDatePickerDialog by remember { mutableStateOf(false) }
 	val datePickerState = rememberDatePickerState()
+
+	LaunchedEffect(Unit) {
+		loadMyGroups()
+	}
 
 	MapisodeScaffold(
 		topBar = {
@@ -136,18 +141,18 @@ internal fun NewEpisodeInfoScreen(
 						expanded = isGroupDropdownExpanded,
 						onDismissRequest = {
 							isGroupDropdownExpanded = !isGroupDropdownExpanded
-							isGroupBlank = state.episodeInfo.category.isBlank()
+							isGroupBlank = state.episodeInfo.group.isBlank()
 						},
 						modifier = Modifier.fillMaxWidth(0.9f),
 					) {
-						for (group in groupMap.keys) {
+						for (myGroup in state.myGroups) {
 							MapisodeDropdownMenuItem(
 								onClick = {
 									isGroupDropdownExpanded = !isGroupDropdownExpanded
-									updateGroup(group)
+									updateGroup(myGroup.name)
 								},
 							) {
-								MapisodeText(text = group)
+								MapisodeText(text = myGroup.name)
 							}
 						}
 					}
@@ -156,7 +161,7 @@ internal fun NewEpisodeInfoScreen(
 					EpisodeTextFieldGroup(
 						labelRes = R.string.new_episode_info_category,
 						placeholderRes = R.string.new_episode_info_placeholder_category,
-						value = state.episodeInfo.category,
+						value = state.episodeInfo.category?.categoryName ?: "",
 						readOnly = true,
 						trailingIcon = {
 							MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_arrow_drop_down)
@@ -170,18 +175,18 @@ internal fun NewEpisodeInfoScreen(
 						expanded = isCategoryDropdownExpanded,
 						onDismissRequest = {
 							isCategoryDropdownExpanded = !isCategoryDropdownExpanded
-							isCategoryBlank = state.episodeInfo.category.isBlank()
+							isCategoryBlank = checkCategoryIsNull(state.episodeInfo.category)
 						},
 						modifier = Modifier.fillMaxWidth(0.9f),
 					) {
-						for (category in categoryMap.keys) {
+						for (category in EpisodeCategory.entries) {
 							MapisodeDropdownMenuItem(
 								onClick = {
 									isCategoryDropdownExpanded = !isCategoryDropdownExpanded
 									updateCategory(category)
 								},
 							) {
-								MapisodeText(text = category)
+								MapisodeText(text = category.categoryName)
 							}
 						}
 					}
@@ -209,9 +214,11 @@ internal fun NewEpisodeInfoScreen(
 			MapisodeFilledButton(
 				modifier = buttonModifier,
 				onClick = {
-					if (state.episodeInfo.group.isBlank() || state.episodeInfo.category.isBlank()) {
+					if (state.episodeInfo.group.isBlank() ||
+						checkCategoryIsNull(state.episodeInfo.category)
+					) {
 						isGroupBlank = state.episodeInfo.group.isBlank()
-						isCategoryBlank = state.episodeInfo.category.isBlank()
+						isCategoryBlank = checkCategoryIsNull(state.episodeInfo.category)
 						return@MapisodeFilledButton
 					}
 					updateEpisodeInfo(
@@ -227,6 +234,8 @@ internal fun NewEpisodeInfoScreen(
 		}
 	}
 }
+
+private fun checkCategoryIsNull(category: EpisodeCategory?) = category == null
 
 @Composable
 private fun datePickerDialogColors(): DatePickerColors =
@@ -247,6 +256,7 @@ internal fun NewEpisodeInfoScreenPreview() {
 	NewEpisodeInfoScreen(
 		state = NewEpisodeState(),
 		navController = rememberNavController(),
+		loadMyGroups = {},
 		updateEpisodeInfo = {},
 		updateCategory = {},
 		updateGroup = {},
