@@ -35,7 +35,20 @@ class EpisodeDetailPreviewProvider : PreviewParameterProvider<EpisodeDetailState
 					MOCK_IMAGE_URL,
 					MOCK_IMAGE_URL,
 				),
-				address = "경기도 성남시 분당구 어쩌구 저쩌구"
+				address = "경기도 성남시 분당구 어쩌구 저쩌구",
+				tags = listOf(
+					"태그1",
+					"태그2",
+					"태그3",
+					"태그4",
+					"태그5",
+					"태그6",
+					"태그7",
+					"태그8",
+					"태그9",
+					"태그10",
+				),
+				category = "EAT",
 			),
 			author = UserModel(
 				name = "Author",

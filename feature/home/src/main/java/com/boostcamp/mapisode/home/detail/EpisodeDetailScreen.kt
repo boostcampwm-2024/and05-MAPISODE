@@ -7,6 +7,8 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,16 +42,23 @@ import coil3.compose.AsyncImagePreviewHandler
 import coil3.compose.LocalAsyncImagePreviewHandler
 import coil3.test.FakeImage
 import com.boostcamp.mapisode.designsystem.R
+import com.boostcamp.mapisode.designsystem.compose.Direction
 import com.boostcamp.mapisode.designsystem.compose.IconSize
 import com.boostcamp.mapisode.designsystem.compose.MapisodeCircularLoadingIndicator
+import com.boostcamp.mapisode.designsystem.compose.MapisodeDivider
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
+import com.boostcamp.mapisode.designsystem.compose.Thickness
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.AppTypography
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.EpisodeDetailPreviewProvider
+import com.boostcamp.mapisode.home.common.getChipIconTint
+import com.boostcamp.mapisode.home.common.mapCategoryToChipType
+import com.boostcamp.mapisode.home.component.MapisodeChip
 
 @Composable
 internal fun EpisodeDetailRoute(
@@ -86,11 +95,14 @@ internal fun EpisodeDetailRoute(
 	}
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun EpisodeDetailScreen(
 	state: EpisodeDetailState,
 	modifier: Modifier = Modifier,
 ) {
+	val context = LocalContext.current
+
 	MapisodeScaffold(
 		modifier = Modifier.fillMaxSize(),
 		isStatusBarPaddingExist = true,
@@ -198,6 +210,51 @@ internal fun EpisodeDetailScreen(
 						)
 					}
 				}
+
+				MapisodeDivider(
+					direction = Direction.Horizontal,
+					thickness = Thickness.Thin,
+					color = Color.Black,
+				)
+
+				Spacer(modifier = Modifier.height(10.dp))
+
+				FlowRow(
+					modifier = Modifier
+						.fillMaxWidth()
+						.padding(horizontal = 16.dp),
+					itemVerticalAlignment = Alignment.CenterVertically,
+				) {
+					val chipType = mapCategoryToChipType(state.episode.category) ?: ChipType.OTHER
+
+					MapisodeChip(
+						text = context.getString(chipType.textResId),
+						iconId = chipType.iconResId,
+						iconTint = getChipIconTint(chipType),
+						isSelected = true,
+					)
+
+					Spacer(modifier = Modifier.width(6.dp))
+
+					state.episode.tags.forEach { tag ->
+						MapisodeText(
+							text = "# $tag",
+							style = AppTypography.labelMedium,
+							color = MapisodeTheme.colorScheme.textContent,
+							modifier = Modifier
+								.padding(vertical = 4.dp)
+								.background(
+									color = MapisodeTheme.colorScheme.chipSelectedStroke,
+									shape = RoundedCornerShape(6.dp),
+								)
+								.padding(6.dp),
+						)
+
+						Spacer(modifier = Modifier.width(6.dp))
+					}
+				}
+
+				Spacer(modifier = Modifier.height(10.dp))
 			}
 		}
 	}
