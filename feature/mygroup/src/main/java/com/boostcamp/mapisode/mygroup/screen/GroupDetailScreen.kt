@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.boostcamp.mapisode.common.util.toFormattedString
 import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.Direction
 import com.boostcamp.mapisode.designsystem.compose.MapisodeDialog
@@ -67,9 +68,9 @@ import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTabRow
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.model.EpisodeModel
-import com.boostcamp.mapisode.model.GroupMemberModel
 import com.boostcamp.mapisode.model.GroupModel
 import com.boostcamp.mapisode.mygroup.intent.GroupDetailIntent
+import com.boostcamp.mapisode.mygroup.model.GroupUiMemberModel
 import com.boostcamp.mapisode.mygroup.sideeffect.GroupDetailSideEffect
 import com.boostcamp.mapisode.mygroup.sideeffect.rememberFlowWithLifecycle
 import com.boostcamp.mapisode.mygroup.state.GroupDetailState
@@ -277,7 +278,7 @@ fun GroupDetailContent(
 @Composable
 fun GroupDetailContent(
 	group: GroupModel,
-	members: List<GroupMemberModel>,
+	members: List<GroupUiMemberModel>,
 	onIssueCodeClick: () -> Unit,
 	onGroupOutClick: () -> Unit,
 ) {
@@ -441,7 +442,7 @@ fun GroupEpisodesContent(
 
 @Composable
 fun GroupMemberContent(
-	member: GroupMemberModel,
+	member: GroupUiMemberModel,
 ) {
 	Row(
 		modifier = Modifier
@@ -475,14 +476,19 @@ fun GroupMemberContent(
 				style = MapisodeTheme.typography.labelLarge,
 				maxLines = 1,
 			)
+			Spacer(modifier = Modifier.padding(2.dp))
 			MapisodeText(
-				text = "Joined: ${member.joinedAt}",
+				text = stringResource(S.string.content_member_joined_at)
+					+ member.joinedAt.toFormattedString(),
 				style = MapisodeTheme.typography.labelMedium,
 				maxLines = 1,
 			)
 			MapisodeText(
-				text = member.email,
-				style = MapisodeTheme.typography.bodySmall,
+				text = buildString {
+					append(stringResource(S.string.content_recent_episode_upload))
+					append(member.recentCreatedAt?.toFormattedString() ?: "없음")
+				},
+				style = MapisodeTheme.typography.labelMedium,
 				maxLines = 1,
 			)
 		}
@@ -491,13 +497,14 @@ fun GroupMemberContent(
 			horizontalAlignment = Alignment.End,
 		) {
 			MapisodeText(
-				text = "123",
-				style = MapisodeTheme.typography.labelSmall,
+				text = stringResource(S.string.content_episode_count),
+				style = MapisodeTheme.typography.labelMedium,
 				maxLines = 1,
 			)
 			MapisodeText(
-				text = "123",
-				style = MapisodeTheme.typography.labelSmall,
+				text = member.countEpisode.toString()
+					+ stringResource(S.string.content_number_count),
+				style = MapisodeTheme.typography.labelMedium,
 				maxLines = 1,
 			)
 		}

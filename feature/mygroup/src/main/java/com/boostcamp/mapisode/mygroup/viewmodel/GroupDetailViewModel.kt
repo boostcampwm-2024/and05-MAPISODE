@@ -4,10 +4,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
 import com.boostcamp.mapisode.episode.EpisodeRepository
-import com.boostcamp.mapisode.model.GroupMemberModel
 import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.mygroup.R
 import com.boostcamp.mapisode.mygroup.intent.GroupDetailIntent
+import com.boostcamp.mapisode.mygroup.model.GroupUiMemberModel
 import com.boostcamp.mapisode.mygroup.sideeffect.GroupDetailSideEffect
 import com.boostcamp.mapisode.mygroup.state.GroupDetailState
 import com.boostcamp.mapisode.ui.base.BaseViewModel
@@ -126,14 +126,32 @@ class GroupDetailViewModel @Inject constructor(
 	}
 
 	private fun setGroupMembersInfo() {
+		val group = currentState.group ?: throw Exception()
+		val members = group.members
+
 		viewModelScope.launch {
-			val group = currentState.group ?: throw Exception()
-			val members = group.members
-			val memberInfo = mutableListOf<GroupMemberModel>()
+			val memberInfo = mutableListOf<GroupUiMemberModel>()
 			members.forEach { member ->
-				val user = groupRepository.getUserInfoByUserId(member)
-				memberInfo.add(user)
+				val userModel = groupRepository.getUserInfoByUserId(member)
+				val userEpisodeModel = groupRepository.getEpisodesByGroupIdAndUserId(
+					groupId = groupId.value,
+					userId = member,
+				)
+				val latestCreatedAt = userEpisodeModel.maxByOrNull { it.createdAt.time }?.createdAt
+				val numberOfEpisode = userEpisodeModel.size
+				memberInfo.add(
+					GroupUiMemberModel(
+						name = userModel.name,
+						email = userModel.email,
+						profileUrl = userModel.profileUrl,
+						joinedAt = userModel.joinedAt,
+						groups = userModel.groups,
+						recentCreatedAt = latestCreatedAt,
+						countEpisode = numberOfEpisode,
+					),
+				)
 			}
+
 			intent {
 				copy(
 					membersInfo = memberInfo,
@@ -144,7 +162,7 @@ class GroupDetailViewModel @Inject constructor(
 
 	private fun leaveGroup() {
 		viewModelScope.launch {
-			val userId = userPreferenceDataStore.getUserId().first() ?: "xtRVRTS7XnBDOYlOezFE"
+			val userId = userPreferenceDataStore.getUserId().first() ?: throw Exception()
 			val groupId = groupId.value
 			try {
 				groupRepository.leaveGroup(userId, groupId)
