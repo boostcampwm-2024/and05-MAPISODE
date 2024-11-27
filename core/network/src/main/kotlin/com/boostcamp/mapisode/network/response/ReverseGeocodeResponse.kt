@@ -3,13 +3,13 @@ package com.boostcamp.mapisode.network.response
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ReverseGeocodeResponse(val status: Status?, val results: List<Result>?)
+data class ReverseGeocodeResponse(val status: Status?, val results: List<AddressResult>?)
 
 @Serializable
 data class Status(val code: Int?, val name: String?, val message: String?)
 
 @Serializable
-data class Result(val name: String?, val code: Code?, val region: Region?, val land: Land?)
+data class AddressResult(val name: String?, val code: Code?, val region: Region?, val land: Land?)
 
 @Serializable
 data class Code(val id: String?, val type: String?, val mappingId: String?)
