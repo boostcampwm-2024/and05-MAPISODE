@@ -33,6 +33,10 @@ class GroupCreationViewModel @Inject constructor(
 			is GroupCreationIntent.OnGroupCreationClick -> {
 				checkGroupEdit(intent.title, intent.content, intent.imageUrl)
 			}
+
+			is GroupCreationIntent.OnGroupCreationError -> {
+				postSideEffect(GroupCreationSideEffect.ShowToast(R.string.message_error_edit_input))
+			}
 		}
 	}
 
@@ -41,9 +45,6 @@ class GroupCreationViewModel @Inject constructor(
 			try {
 				if (title.length !in 2..24 || content.length < 10 || imageUrl.isBlank()) {
 					intent { copy(isGroupEditError = true) }
-					postSideEffect(
-						GroupCreationSideEffect.ShowToast(R.string.message_error_edit_input),
-					)
 				} else {
 					intent { copy(isGroupEditError = false) }
 					val newGroupId = UUID.randomUUID().toString().replace("-", "")
@@ -68,11 +69,7 @@ class GroupCreationViewModel @Inject constructor(
 					postSideEffect(GroupCreationSideEffect.NavigateToGroupScreen)
 				}
 			} catch (e: Exception) {
-				postSideEffect(
-					GroupCreationSideEffect.ShowToast(
-						R.string.message_error_creation_group_fail,
-					),
-				)
+				intent { copy(isGroupEditError = true) }
 			}
 		}
 	}

@@ -8,4 +8,5 @@ sealed class GroupCreationIntent : UiIntent {
 	data object OnBackClick : GroupCreationIntent()
 	data class OnGroupCreationClick(val title: String, val content: String, val imageUrl: String) :
 		GroupCreationIntent()
+	data object OnGroupCreationError : GroupCreationIntent()
 }
