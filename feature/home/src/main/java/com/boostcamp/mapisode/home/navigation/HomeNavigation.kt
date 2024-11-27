@@ -36,7 +36,7 @@ fun NavGraphBuilder.addHomeNavGraph(
 	}
 
 	composable<HomeRoute.Detail> { backStackEntry ->
-		val episodeId = backStackEntry.toRoute<String>()
+		val episodeId = backStackEntry.toRoute<HomeRoute.Detail>().episodeId
 		EpisodeDetailRoute(episodeId = episodeId)
 	}
 }
