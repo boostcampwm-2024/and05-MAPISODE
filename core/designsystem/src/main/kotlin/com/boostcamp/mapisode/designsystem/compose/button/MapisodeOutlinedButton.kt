@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.compose.IconSize
@@ -23,6 +24,8 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 @Composable
 fun MapisodeOutlinedButton(
 	modifier: Modifier = Modifier,
+	borderColor: Color = MapisodeTheme.colorScheme.outlineButtonStroke,
+	contentColor: Color = MapisodeTheme.colorScheme.outlineButtonContent,
 	onClick: () -> Unit,
 	text: String,
 	enabled: Boolean = true,
@@ -38,10 +41,10 @@ fun MapisodeOutlinedButton(
 			.widthIn(320.dp)
 			.heightIn(40.dp),
 		backgroundColors = MapisodeTheme.colorScheme.outlineButtonBackground,
-		contentColor = MapisodeTheme.colorScheme.outlineButtonContent,
+		contentColor = contentColor,
 		enabled = enabled,
 		showBorder = true,
-		borderColor = MapisodeTheme.colorScheme.outlineButtonStroke,
+		borderColor = borderColor,
 		showRipple = showRipple,
 		interactionSource = interactionSource,
 		rounding = 8.dp,
@@ -57,7 +60,7 @@ fun MapisodeOutlinedButton(
 
 		MapisodeText(
 			text = text,
-			color = MapisodeTheme.colorScheme.outlineButtonContent,
+			color = contentColor,
 			style = MapisodeTheme.typography.labelLarge,
 		)
 
