@@ -38,9 +38,7 @@ import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.groupMap
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.textFieldModifier
 import com.boostcamp.mapisode.episode.intent.NewEpisodeInfo
 import com.boostcamp.mapisode.episode.intent.NewEpisodeState
-import com.naver.maps.geometry.LatLng
 import java.util.Date
-import java.util.Locale
 
 @Composable
 internal fun NewEpisodeInfoScreen(
@@ -100,11 +98,11 @@ internal fun NewEpisodeInfoScreen(
 							text = "취소",
 						)
 					},
-					colors = DatePickerDialogColors(),
+					colors = datePickerDialogColors(),
 				) {
 					DatePicker(
 						state = datePickerState,
-						colors = DatePickerDialogColors(),
+						colors = datePickerDialogColors(),
 						showModeToggle = false,
 					)
 				}
@@ -113,7 +111,7 @@ internal fun NewEpisodeInfoScreen(
 				EpisodeTextFieldGroup(
 					labelRes = R.string.new_episode_info_location,
 					placeholderRes = R.string.new_episode_info_placeholder_location,
-					value = latLngString(state.cameraPosition.target),
+					value = state.episodeAddress,
 					readOnly = true,
 					trailingIcon = { MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_location) },
 					onTrailingIconClick = {
@@ -231,7 +229,7 @@ internal fun NewEpisodeInfoScreen(
 }
 
 @Composable
-private fun DatePickerDialogColors(): DatePickerColors =
+private fun datePickerDialogColors(): DatePickerColors =
 	DatePickerDefaults.colors().copy(
 		containerColor = MapisodeTheme.colorScheme.dialogBackground,
 		selectedYearContainerColor = MapisodeTheme.colorScheme.dialogConfirm,
@@ -240,10 +238,6 @@ private fun DatePickerDialogColors(): DatePickerColors =
 	)
 
 private const val DATE_STRING_FORMAT = "yyyy. MM. dd"
-
-internal fun latLngString(latLng: LatLng): String =
-	String.format(Locale.getDefault(), "%.6f, %.6f", latLng.latitude, latLng.longitude)
-
 private fun dateString(date: Date): String =
 	DateFormat.format(DATE_STRING_FORMAT, date).toString()
 

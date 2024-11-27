@@ -8,13 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
@@ -23,6 +21,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.boostcamp.mapisode.episode.intent.NewEpisodeState
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
@@ -34,29 +33,26 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.compose.rememberMarkerState
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 
 @OptIn(ExperimentalNaverMapApi::class, FlowPreview::class)
 @Composable
 internal fun PickLocationScreen(
+	state: NewEpisodeState,
 	cameraPositionState: CameraPositionState,
 	navController: NavController,
 	updateLocation: (LatLng) -> Unit,
+	updateAddress: (LatLng) -> Unit,
 ) {
 	val episodeMarkerState = rememberMarkerState()
 	episodeMarkerState.position = cameraPositionState.position.target
-	val locationStateFlow = remember {
-		MutableStateFlow(cameraPositionState.position.target)
-	}
-	val location by locationStateFlow.collectAsStateWithLifecycle()
 
 	LaunchedEffect(cameraPositionState.position.target) {
-		locationStateFlow
+		snapshotFlow { cameraPositionState.position.target }
 			.debounce(500L)
-			.collectLatest {
-				locationStateFlow.value = cameraPositionState.position.target
+			.collectLatest { target ->
+				updateAddress(target)
 			}
 	}
 
@@ -102,7 +98,7 @@ internal fun PickLocationScreen(
 						style = MapisodeTheme.typography.headlineSmall,
 					)
 					MapisodeText(
-						text = latLngString(location),
+						text = state.episodeAddress,
 						style = MapisodeTheme.typography.bodyLarge,
 					)
 					MapisodeFilledButton(

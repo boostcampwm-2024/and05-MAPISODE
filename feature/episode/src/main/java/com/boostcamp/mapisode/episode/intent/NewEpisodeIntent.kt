@@ -9,6 +9,7 @@ import java.util.Date
 sealed class NewEpisodeIntent : UiIntent {
 	data class SetEpisodePics(val pics: PersistentList<Uri>) : NewEpisodeIntent()
 	data class SetEpisodeLocation(val latLng: LatLng) : NewEpisodeIntent()
+	data class SetEpisodeAddress(val latLng: LatLng) : NewEpisodeIntent()
 	data class SetEpisodeGroup(val group: String) : NewEpisodeIntent()
 	data class SetEpisodeCategory(val category: String) : NewEpisodeIntent()
 	data class SetEpisodeTags(val tags: String) : NewEpisodeIntent()
