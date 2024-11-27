@@ -494,8 +494,8 @@ fun GroupMemberContent(
 			)
 			Spacer(modifier = Modifier.padding(2.dp))
 			MapisodeText(
-				text = stringResource(S.string.content_member_joined_at)
-					+ member.joinedAt.toFormattedString(),
+				text = stringResource(S.string.content_member_joined_at) +
+					member.joinedAt.toFormattedString(),
 				style = MapisodeTheme.typography.labelMedium,
 				maxLines = 1,
 			)
@@ -518,8 +518,8 @@ fun GroupMemberContent(
 				maxLines = 1,
 			)
 			MapisodeText(
-				text = member.countEpisode.toString()
-					+ stringResource(S.string.content_number_count),
+				text = member.countEpisode.toString() +
+					stringResource(S.string.content_number_count),
 				style = MapisodeTheme.typography.labelMedium,
 				maxLines = 1,
 			)
