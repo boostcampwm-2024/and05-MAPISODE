@@ -105,7 +105,6 @@ fun EpisodeCard(
 			}
 			// TODO 버튼 추가
 			// Spacer(modifier = Modifier.weight(1f))
-
 		}
 	}
 }
