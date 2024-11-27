@@ -1,6 +1,7 @@
 package com.boostcamp.mapisode.mygroup.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
 import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.mygroup.R
 import com.boostcamp.mapisode.mygroup.intent.GroupIntent
@@ -10,12 +11,15 @@ import com.boostcamp.mapisode.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GroupViewModel @Inject constructor(private val groupRepository: GroupRepository) :
-	BaseViewModel<GroupIntent, GroupState, GroupSideEffect>(GroupState()) {
+class GroupViewModel @Inject constructor(
+	private val groupRepository: GroupRepository,
+	private val userPreferenceDataStore: UserPreferenceDataStore,
+) : BaseViewModel<GroupIntent, GroupState, GroupSideEffect>(GroupState()) {
 
 	override fun onIntent(intent: GroupIntent) {
 		when (intent) {
@@ -40,8 +44,9 @@ class GroupViewModel @Inject constructor(private val groupRepository: GroupRepos
 	private fun loadGroups() {
 		viewModelScope.launch {
 			try {
+				val userId = userPreferenceDataStore.getUserId().first() ?: throw Exception()
 				val group = groupRepository
-					.getGroupsByUserId("o6UT6Ze1LFgsvekEvj9J")
+					.getGroupsByUserId(userId)
 					.toPersistentList()
 				intent {
 					copy(
