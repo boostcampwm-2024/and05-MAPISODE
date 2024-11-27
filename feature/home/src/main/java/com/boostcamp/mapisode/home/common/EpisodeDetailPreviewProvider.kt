@@ -4,6 +4,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.boostcamp.mapisode.home.common.HomeConstant.MOCK_IMAGE_URL
 import com.boostcamp.mapisode.home.detail.EpisodeDetailState
 import com.boostcamp.mapisode.model.EpisodeModel
+import com.boostcamp.mapisode.model.UserModel
+import java.util.Date
 
 class EpisodeDetailPreviewProvider : PreviewParameterProvider<EpisodeDetailState> {
 	override val values: Sequence<EpisodeDetailState> = sequenceOf(
@@ -33,6 +35,15 @@ class EpisodeDetailPreviewProvider : PreviewParameterProvider<EpisodeDetailState
 					MOCK_IMAGE_URL,
 					MOCK_IMAGE_URL,
 				),
+				address = "경기도 성남시 분당구 어쩌구 저쩌구"
+			),
+			author = UserModel(
+				name = "Author",
+				profileUrl = MOCK_IMAGE_URL,
+				uid = "author-uid",
+				email = "author-email",
+				joinedAt = Date(),
+				groups = emptyList(),
 			),
 		),
 		EpisodeDetailState(
