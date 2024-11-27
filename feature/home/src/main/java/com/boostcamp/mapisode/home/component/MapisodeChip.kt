@@ -28,8 +28,8 @@ fun MapisodeChip(
 	text: String,
 	@DrawableRes iconId: Int,
 	iconTint: Color,
-	onClick: () -> Unit,
 	modifier: Modifier = Modifier,
+	onClick: (() -> Unit)? = null,
 	isSelected: Boolean = false,
 ) {
 	val backgroundColor = if (isSelected) {
@@ -42,12 +42,19 @@ fun MapisodeChip(
 	} else {
 		MapisodeTheme.colorScheme.chipUnselectedStroke
 	}
-	val rippleColor = MapisodeTheme.colorScheme.otherIconColor
+
+	val chipModifier = modifier
+		.clip(RoundedCornerShape(16.dp))
+		.then(
+			if (onClick != null) {
+				Modifier.clickable(onClick = onClick)
+			} else {
+				Modifier
+			},
+		)
 
 	Surface(
-		modifier = modifier
-			.clip(RoundedCornerShape(16.dp))
-			.clickable(onClick = onClick),
+		modifier = chipModifier,
 		shape = RoundedCornerShape(16.dp),
 		color = backgroundColor,
 		border = BorderStroke(1.dp, strokeColor),
@@ -66,7 +73,7 @@ fun MapisodeChip(
 			MapisodeText(
 				text = text,
 				color = MapisodeTheme.colorScheme.chipText,
-				style = AppTypography.titleSmall,
+				style = if (onClick != null) AppTypography.titleSmall else AppTypography.labelMedium,
 			)
 		}
 	}
