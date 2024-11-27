@@ -11,8 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.boostcamp.mapisode.designsystem.R
+import com.boostcamp.mapisode.designsystem.compose.IconSize
 import com.boostcamp.mapisode.designsystem.compose.MapisodeCircularLoadingIndicator
-import timber.log.Timber
+import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
+import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
+import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
+import com.boostcamp.mapisode.designsystem.compose.MapisodeText
+import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 
 @Composable
 internal fun EpisodeDetailRoute(
@@ -54,6 +60,35 @@ internal fun EpisodeDetailScreen(
 	state: EpisodeDetailState,
 	modifier: Modifier = Modifier,
 ) {
-	Timber.e(state.episode.toString())
-	Timber.e(state.author.toString())
+	MapisodeScaffold(
+		modifier = Modifier.fillMaxSize(),
+		isStatusBarPaddingExist = true,
+		isNavigationBarPaddingExist = true,
+		topBar = {
+			TopAppBar(
+				title = state.episode.title,
+				navigationIcon = {
+					MapisodeIconButton(
+						onClick = {},
+					) {
+						MapisodeIcon(
+							id = R.drawable.ic_arrow_back_ios,
+							iconSize = IconSize.ExtraSmall,
+						)
+					}
+				},
+				actions = {
+					MapisodeIconButton(
+						onClick = {},
+					) {
+						MapisodeIcon(
+							id = R.drawable.ic_edit,
+						)
+					}
+				},
+			)
+		},
+	) {
+		MapisodeText(text = "EpisodeDetailScreen")
+	}
 }

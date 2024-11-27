@@ -6,6 +6,6 @@ import com.boostcamp.mapisode.ui.base.UiState
 
 data class EpisodeDetailState(
 	val isLoading: Boolean = true,
-	val episode: EpisodeModel? = null,
+	val episode: EpisodeModel = EpisodeModel(),
 	val author: UserModel? = null,
 ) : UiState
