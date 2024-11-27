@@ -17,4 +17,5 @@
 	<string name="episode_creator_tag_prefix">생성자 : %1$s</string>
 	<string name="episode_card_category_prefix">카테고리 : %1$s</string>
 	<string name="episode_card_image_description">애피소드 썸네일</string>
+	<string name="episode_card_detail">자세히</string>
 </resources>

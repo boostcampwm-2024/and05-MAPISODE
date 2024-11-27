@@ -26,6 +26,7 @@ import coil3.compose.LocalAsyncImagePreviewHandler
 import coil3.test.FakeImage
 import com.boostcamp.mapisode.common.util.toFormattedString
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
+import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.theme.AppTypography
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.home.R
@@ -73,7 +74,10 @@ fun EpisodeCard(
 				text = episode.title,
 				style = AppTypography.bodyMedium.copy(fontWeight = FontWeight.Medium),
 				color = MapisodeTheme.colorScheme.textContent,
+				maxLines = 1,
 			)
+
+			Spacer(modifier = Modifier.height(2.dp))
 
 			MapisodeText(
 				text = stringResource(
@@ -82,29 +86,51 @@ fun EpisodeCard(
 				),
 				style = AppTypography.labelMedium.copy(fontSize = 10.dp),
 				color = MapisodeTheme.colorScheme.textContent,
+				maxLines = 1,
 			)
+
+			Spacer(modifier = Modifier.height(2.dp))
 
 			MapisodeText(
 				text = stringResource(R.string.episode_creator_tag_prefix, episode.createdBy),
 				style = AppTypography.labelMedium.copy(fontSize = 10.dp),
 				color = MapisodeTheme.colorScheme.textContent,
+				maxLines = 1,
 			)
+
+			Spacer(modifier = Modifier.height(2.dp))
 
 			MapisodeText(
 				text = stringResource(R.string.episode_card_category_prefix, episode.category),
 				style = AppTypography.labelMedium.copy(fontSize = 10.dp),
 				color = MapisodeTheme.colorScheme.textContent,
+				maxLines = 1,
 			)
+
+			Spacer(modifier = Modifier.height(2.dp))
 
 			if (episode.tags.isNotEmpty()) {
 				MapisodeText(
 					text = tagString,
 					style = AppTypography.labelMedium.copy(fontSize = 10.dp),
 					color = MapisodeTheme.colorScheme.textContent,
+					maxLines = 1,
 				)
 			}
-			// TODO 버튼 추가
-			// Spacer(modifier = Modifier.weight(1f))
+
+			Spacer(modifier = Modifier.weight(1f))
+
+			Row(
+				modifier = Modifier.fillMaxWidth()
+			) {
+				Spacer(modifier = Modifier.weight(1f))
+
+				MapisodeFilledButton(
+					text = stringResource(R.string.episode_card_detail),
+					onClick = onClick,
+					textStyle = MapisodeTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+				)
+			}
 		}
 	}
 }
