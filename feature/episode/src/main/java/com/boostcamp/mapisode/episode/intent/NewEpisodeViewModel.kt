@@ -26,7 +26,8 @@ class NewEpisodeViewModel @Inject constructor(
 			is NewEpisodeIntent.LoadMyGroups -> {
 				viewModelScope.launch {
 					try {
-						val userId = userPreferenceDataStore.getUserId().firstOrNull() ?: ""
+						val userId = userPreferenceDataStore.getUserId().firstOrNull()
+							?: throw RuntimeException("유저 id를 찾을 수 없습니다.")
 						val myGroups = groupRepository.getGroupsByUserId(userId)
 							.map { groupModel ->
 								GroupInfo(name = groupModel.name, groupId = groupModel.id)
