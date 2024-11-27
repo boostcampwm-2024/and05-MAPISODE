@@ -62,8 +62,8 @@ fun GroupInfoCard(
 			Spacer(modifier = Modifier.padding(4.dp))
 
 			MapisodeText(
-				text = stringResource(R.string.group_created_date)
-					+ SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+				text = stringResource(R.string.group_created_date) +
+					SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
 					.format(group.createdAt),
 				style = MapisodeTheme.typography.labelMedium,
 				maxLines = 1,
