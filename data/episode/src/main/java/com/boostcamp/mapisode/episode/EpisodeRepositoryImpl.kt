@@ -142,7 +142,6 @@ class EpisodeRepositoryImpl @Inject constructor(
 					throw e
 				}
 			}
-			Timber.d(imageStorageUrls.toString())
 			imageStorageUrls
 		} catch (e: Exception) {
 			throw e
