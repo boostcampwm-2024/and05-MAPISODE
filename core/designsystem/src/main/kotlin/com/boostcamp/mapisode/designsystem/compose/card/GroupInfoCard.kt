@@ -24,6 +24,8 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.Thickness
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.model.GroupModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun GroupInfoCard(
@@ -60,7 +62,9 @@ fun GroupInfoCard(
 			Spacer(modifier = Modifier.padding(4.dp))
 
 			MapisodeText(
-				text = stringResource(R.string.group_created_date) + group.createdAt,
+				text = stringResource(R.string.group_created_date)
+					+ SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+					.format(group.createdAt),
 				style = MapisodeTheme.typography.labelMedium,
 				maxLines = 1,
 			)
