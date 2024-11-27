@@ -33,9 +33,9 @@ import com.boostcamp.mapisode.designsystem.compose.button.MapisodeOutlinedButton
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenu
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.buttonModifier
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.categoryMap
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.groupMap
-import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.textFieldModifier
 import com.boostcamp.mapisode.episode.intent.NewEpisodeInfo
 import com.boostcamp.mapisode.episode.intent.NewEpisodeState
 import java.util.Date
@@ -207,7 +207,7 @@ internal fun NewEpisodeInfoScreen(
 				)
 			}
 			MapisodeFilledButton(
-				modifier = textFieldModifier,
+				modifier = buttonModifier,
 				onClick = {
 					if (state.episodeInfo.group.isBlank() || state.episodeInfo.category.isBlank()) {
 						isGroupBlank = state.episodeInfo.group.isBlank()
