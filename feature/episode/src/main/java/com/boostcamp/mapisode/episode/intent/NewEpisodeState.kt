@@ -44,7 +44,7 @@ data class GroupInfo(val name: String, val groupId: String)
 enum class EpisodeCategory(val categoryName: String) {
 	EAT("먹거리"),
 	SEE("볼거리"),
-	OTHER("나머지")
+	OTHER("나머지"),
 }
 
 data class NewEpisodeInfo(
