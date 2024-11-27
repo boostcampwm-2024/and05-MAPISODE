@@ -241,7 +241,7 @@ fun GroupCreationField(
 			Spacer(modifier = Modifier.padding(5.dp))
 			MapisodeFilledButton(
 				modifier = Modifier
-					.sizeIn(maxWidth = 380.dp, maxHeight = 380.dp)
+					.sizeIn(maxWidth = 380.dp, maxHeight = 80.dp)
 					.fillMaxWidth()
 					.heightIn(52.dp),
 				onClick = {

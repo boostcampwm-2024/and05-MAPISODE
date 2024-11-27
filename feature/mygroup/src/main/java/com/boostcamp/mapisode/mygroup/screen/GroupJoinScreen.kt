@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -182,7 +181,7 @@ fun GroupJoinContent(
 					MapisodeFilledButton(
 						modifier = Modifier
 							.fillParentMaxWidth()
-							.height(40.dp),
+							.heightIn(min = 52.dp, max = 80.dp),
 						onClick = {
 							onGetGroup(joinCodeText)
 						},
@@ -221,7 +220,7 @@ fun GroupJoinContent(
 					MapisodeDivider(direction = Direction.Horizontal, thickness = Thickness.Thin)
 					Spacer(modifier = Modifier.padding(5.dp))
 					MapisodeFilledButton(
-						modifier = Modifier.fillMaxWidth(),
+						modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp, max = 80.dp),
 						onClick = { onJoinGroup() },
 						text = "참여하기",
 						showRipple = true,
