@@ -207,6 +207,7 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 			.toObject(UserFirestoreModel::class.java)
 			?: throw Exception("유저를 찾을 수 없습니다.")
 		GroupMemberModel(
+			id = userId,
 			name = firestoreModel.name,
 			email = firestoreModel.email,
 			profileUrl = firestoreModel.profileUrl,
@@ -217,22 +218,24 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 		throw e
 	}
 
-	override suspend fun getEpisodesByGroupIdAndUserId(groupId: String, userId: String): List<EpisodeModel> =
-		try {
-			val groupDocRef = database.collection(FirestoreConstants.COLLECTION_GROUP).document(groupId)
-			val userDocRef = database.collection(FirestoreConstants.COLLECTION_USER).document(userId)
-			val episodeReferences = database.collection(FirestoreConstants.COLLECTION_EPISODE)
-				.whereEqualTo(FirestoreConstants.FIELD_GROUP, groupDocRef)
-				.whereEqualTo(FirestoreConstants.FIELD_CREATED_BY, userDocRef)
-				.get()
-				.await()
-				.documents
+	override suspend fun getEpisodesByGroupIdAndUserId(groupId: String, userId: String):
+		List<EpisodeModel> = try {
+		val groupDocRef = database
+			.collection(FirestoreConstants.COLLECTION_GROUP).document(groupId)
+		val userDocRef = database
+			.collection(FirestoreConstants.COLLECTION_USER).document(userId)
+		val episodeReferences = database.collection(FirestoreConstants.COLLECTION_EPISODE)
+			.whereEqualTo(FirestoreConstants.FIELD_GROUP, groupDocRef)
+			.whereEqualTo(FirestoreConstants.FIELD_CREATED_BY, userDocRef)
+			.get()
+			.await()
+			.documents
 
-			episodeReferences.mapNotNull { document ->
-				document.toObject(GroupEpisodeFirestoreModel::class.java)?.toDomainModel(userId)
-					?: throw Exception("에피소드를 찾을 수 없습니다.")
-			}
-		} catch (e: Exception) {
-			throw e
+		episodeReferences.mapNotNull { document ->
+			document.toObject(GroupEpisodeFirestoreModel::class.java)?.toDomainModel(userId)
+				?: throw Exception("에피소드를 찾을 수 없습니다.")
 		}
+	} catch (e: Exception) {
+		throw e
+	}
 }

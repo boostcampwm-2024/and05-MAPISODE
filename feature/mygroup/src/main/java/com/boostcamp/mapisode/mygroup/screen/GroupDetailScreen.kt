@@ -67,9 +67,9 @@ import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTab
 import com.boostcamp.mapisode.designsystem.compose.tab.MapisodeTabRow
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
-import com.boostcamp.mapisode.model.EpisodeModel
 import com.boostcamp.mapisode.model.GroupModel
 import com.boostcamp.mapisode.mygroup.intent.GroupDetailIntent
+import com.boostcamp.mapisode.mygroup.model.GroupUiEpisodeModel
 import com.boostcamp.mapisode.mygroup.model.GroupUiMemberModel
 import com.boostcamp.mapisode.mygroup.sideeffect.GroupDetailSideEffect
 import com.boostcamp.mapisode.mygroup.sideeffect.rememberFlowWithLifecycle
@@ -370,7 +370,7 @@ fun GroupDetailContent(
 
 @Composable
 fun GroupEpisodesContent(
-	episodes: List<EpisodeModel>,
+	episodes: List<GroupUiEpisodeModel>,
 ) {
 	var expanded by remember { mutableStateOf(false) }
 	var selectedSortOption by remember { mutableIntStateOf(0) }
@@ -513,7 +513,7 @@ fun GroupMemberContent(
 
 @Composable
 fun EpisodeCard(
-	episode: EpisodeModel,
+	episode: GroupUiEpisodeModel,
 ) {
 	Row(
 		modifier = Modifier
@@ -549,8 +549,8 @@ fun EpisodeCard(
 
 			val textList = listOf(
 				stringResource(S.string.overview_created_by) + episode.createdBy,
-				stringResource(S.string.overview_location) + episode.location.toString(),
-				stringResource(S.string.overview_date) + episode.createdAt.time.toString(),
+				stringResource(S.string.overview_location) + episode.address,
+				stringResource(S.string.overview_date) + episode.createdAt.toFormattedString(),
 				stringResource(S.string.overview_content) + episode.content,
 			)
 

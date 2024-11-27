@@ -3,6 +3,7 @@ package com.boostcamp.mapisode.mygroup.model
 import java.util.Date
 
 data class GroupUiMemberModel(
+	val id: String,
 	val name: String,
 	val email: String,
 	val profileUrl: String,
