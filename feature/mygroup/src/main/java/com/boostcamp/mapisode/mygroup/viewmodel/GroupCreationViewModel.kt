@@ -22,7 +22,7 @@ class GroupCreationViewModel @Inject constructor(
 	private val groupRepository: GroupRepository,
 	private val userPreferenceDataStore: UserPreferenceDataStore,
 ) : BaseViewModel<GroupCreationIntent, GroupCreationState, GroupCreationSideEffect>(
-	GroupCreationState()
+	GroupCreationState(),
 ) {
 	override fun onIntent(intent: GroupCreationIntent) {
 		when (intent) {
@@ -42,7 +42,7 @@ class GroupCreationViewModel @Inject constructor(
 				if (title.length !in 2..24 || content.length < 10 || imageUrl.isBlank()) {
 					intent { copy(isGroupEditError = true) }
 					postSideEffect(
-						GroupCreationSideEffect.ShowToast(R.string.message_error_edit_input)
+						GroupCreationSideEffect.ShowToast(R.string.message_error_edit_input),
 					)
 				} else {
 					intent { copy(isGroupEditError = false) }
@@ -59,12 +59,20 @@ class GroupCreationViewModel @Inject constructor(
 						members = listOf(userId),
 					)
 					groupRepository.createGroup(editedGroup)
-					postSideEffect(GroupCreationSideEffect.ShowToast(R.string.message_error_creation_group_success))
+					postSideEffect(
+						GroupCreationSideEffect.ShowToast(
+							R.string.message_error_creation_group_success,
+						),
+					)
 					delay(100)
 					postSideEffect(GroupCreationSideEffect.NavigateToGroupScreen)
 				}
 			} catch (e: Exception) {
-				postSideEffect(GroupCreationSideEffect.ShowToast(R.string.message_error_creation_group_fail))
+				postSideEffect(
+					GroupCreationSideEffect.ShowToast(
+						R.string.message_error_creation_group_fail,
+					),
+				)
 			}
 		}
 	}
