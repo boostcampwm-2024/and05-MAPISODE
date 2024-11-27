@@ -18,7 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -144,9 +144,9 @@ fun GroupEditField(
 	group: GroupModel,
 	onGroupEditClick: (title: String, content: String, imageUrl: String) -> Unit,
 ) {
-	var name by remember { mutableStateOf(group.name) }
-	var description by remember { mutableStateOf(group.description) }
-	var profileUrl by remember { mutableStateOf(group.imageUrl) }
+	var name by rememberSaveable { mutableStateOf(group.name) }
+	var description by rememberSaveable { mutableStateOf(group.description) }
+	var profileUrl by rememberSaveable { mutableStateOf(group.imageUrl) }
 
 	Box(
 		modifier = Modifier

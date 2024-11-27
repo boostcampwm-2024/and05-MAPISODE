@@ -12,7 +12,6 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 import java.util.Calendar
 import java.util.UUID
 import javax.inject.Inject
@@ -64,16 +63,27 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 	}
 
 	override suspend fun joinGroup(userId: String, groupId: String) {
-		groupCollection.document(groupId).update(
-			FirestoreConstants.FIELD_MEMBERS,
-			// 기존 유저 리스트에 덮어씌우지 않고 추가
-			FieldValue.arrayUnion(userCollection.document(userId)),
-		).await()
+		try {
+			database.runTransaction { transaction ->
+				// 그룹 문서의 멤버 리스트에 사용자 추가
+				val groupDocRef = database.collection(FirestoreConstants.COLLECTION_GROUP).document(groupId)
+				transaction.update(
+					groupDocRef,
+					FirestoreConstants.FIELD_MEMBERS,
+					FieldValue.arrayUnion(database.collection(FirestoreConstants.COLLECTION_USER).document(userId)),
+				)
 
-		userCollection.document(userId).update(
-			FirestoreConstants.FIELD_GROUPS,
-			FieldValue.arrayUnion(groupCollection.document(groupId)),
-		).await()
+				// 사용자 문서의 그룹 리스트에 그룹 추가
+				val userDocRef = database.collection(FirestoreConstants.COLLECTION_USER).document(userId)
+				transaction.update(
+					userDocRef,
+					FirestoreConstants.FIELD_GROUPS,
+					FieldValue.arrayUnion(database.collection(FirestoreConstants.COLLECTION_GROUP).document(groupId)),
+				)
+			}.await()
+		} catch (e: Exception) {
+			throw e
+		}
 	}
 
 	override suspend fun issueInvitationCode(groupId: String): String = try {
@@ -106,26 +116,48 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 		throw e
 	}
 
+	@Suppress("UNCHECKED_CAST")
 	override suspend fun leaveGroup(userId: String, groupId: String) {
-		groupCollection.document(groupId).update(
-			FirestoreConstants.FIELD_MEMBERS,
-			FieldValue.arrayRemove(userCollection.document(userId)),
-		).await()
+		try {
+			database.runTransaction { transaction ->
+				// group의 members 필드에서 사용자 제거
+				val groupDocRef = database.collection(FirestoreConstants.COLLECTION_GROUP).document(groupId)
+				val groupSnapshot = transaction.get(groupDocRef)
+				val members = groupSnapshot.get(FirestoreConstants.FIELD_MEMBERS) as MutableList<DocumentReference>
+				members.remove(database.collection(FirestoreConstants.COLLECTION_USER).document(userId))
+				transaction.update(groupDocRef, FirestoreConstants.FIELD_MEMBERS, members)
 
-		userCollection.document(userId).update(
-			FirestoreConstants.FIELD_GROUPS,
-			FieldValue.arrayRemove(groupCollection.document(groupId)),
-		).await()
+				// user의 그룹 필드에서 그룹 제거
+				val userDocRef = database.collection(FirestoreConstants.COLLECTION_USER).document(userId)
+				val userSnapshot = transaction.get(userDocRef)
+				val groups = userSnapshot.get(FirestoreConstants.FIELD_GROUPS) as MutableList<DocumentReference>
+				groups.remove(database.collection(FirestoreConstants.COLLECTION_GROUP).document(groupId))
+				transaction.update(userDocRef, FirestoreConstants.FIELD_GROUPS, groups)
+			}.await()
+		} catch (e: Exception) {
+			throw e
+		}
 	}
 
 	override suspend fun createGroup(groupModel: GroupModel) {
 		try {
-			groupCollection.document(groupModel.id).set(groupModel.toFirestoreModel(database))
-				.await()
-			userCollection.document(groupModel.adminUser).update(
-				FirestoreConstants.FIELD_GROUPS,
-				FieldValue.arrayUnion(groupCollection.document(groupModel.id)),
-			).await()
+			database.runTransaction { transaction ->
+				// group 컬렉션 생성
+				val groupDocRef = database
+					.collection(FirestoreConstants.COLLECTION_GROUP)
+					.document(groupModel.id)
+				transaction.set(groupDocRef, groupModel.toFirestoreModel(database))
+
+				// user의 group 필드 업데이트
+				val userDocRef = database
+					.collection(FirestoreConstants.COLLECTION_USER)
+					.document(groupModel.adminUser)
+				transaction.update(
+					userDocRef,
+					FirestoreConstants.FIELD_GROUPS,
+					FieldValue.arrayUnion(groupDocRef),
+				)
+			}.await()
 		} catch (e: Exception) {
 			throw e
 		}
@@ -149,13 +181,11 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 	}
 
 	override suspend fun getUserInfoByUserId(userId: String): GroupMemberModel = try {
-		Timber.e("userId: $userId")
 		val firestoreModel = userCollection.document(userId)
 			.get()
 			.await()
 			.toObject(UserFirestoreModel::class.java)
 			?: throw Exception("유저를 찾을 수 없습니다.")
-		Timber.d("memberInfo: ${firestoreModel.name}")
 		GroupMemberModel(
 			name = firestoreModel.name,
 			email = firestoreModel.email,

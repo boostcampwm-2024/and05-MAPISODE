@@ -15,7 +15,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -167,7 +166,6 @@ class GroupDetailViewModel @Inject constructor(
 						episodes = episodes,
 					)
 				}
-				Timber.e("episodes: $episodes")
 			} catch (e: Exception) {
 				postSideEffect(GroupDetailSideEffect.ShowToast(R.string.message_group_not_found))
 			}

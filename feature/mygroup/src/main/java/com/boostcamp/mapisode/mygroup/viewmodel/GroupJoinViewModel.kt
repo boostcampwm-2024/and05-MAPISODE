@@ -12,7 +12,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -64,7 +63,6 @@ class GroupJoinViewModel @Inject constructor(
 			try {
 				val group = groupRepository.getGroupByInviteCodes(inviteCodes)
 				intent { copy(isGroupExist = true, group = group) }
-				Timber.d("group: $currentState")
 			} catch (e: Exception) {
 				intent { copy(isGroupExist = false) }
 				postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_not_exist))
@@ -76,13 +74,11 @@ class GroupJoinViewModel @Inject constructor(
 		viewModelScope.launch {
 			val userId = myId.value
 			val group = currentState.group ?: return@launch
-			Timber.d("userId: $userId, group: $group")
 			intent { copy(isGroupLoading = true) }
 			try {
 				groupRepository.joinGroup(userId, group.id)
 				intent { copy(isJoinedSuccess = true) }
 			} catch (e: Exception) {
-				Timber.e(e)
 				intent { copy(isGroupLoading = false, isJoinedSuccess = false, group = null) }
 				postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_failure))
 			}
