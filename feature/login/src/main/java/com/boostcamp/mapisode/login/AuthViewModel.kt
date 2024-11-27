@@ -50,6 +50,11 @@ class AuthViewModel @Inject constructor(
 						when (loginState) {
 							is LoginState.Success -> {
 								if (isUserExist(loginState.authDataInfo.uid)) {
+									val user = getUserInfo(loginState.authDataInfo.uid)
+									storeUserData(
+										userModel = user,
+										credentialId = loginState.authDataInfo.idToken,
+									)
 									onIntent(AuthIntent.OnLoginSuccess)
 									return@collect
 								}
@@ -88,37 +93,45 @@ class AuthViewModel @Inject constructor(
 				// if (uiState.value.profileUrl.isBlank()) throw IllegalArgumentException("프로필 사진을 선택해주세요.")
 				if (uiState.value.authData == null) throw IllegalArgumentException("로그인 정보가 없습니다.")
 
-				userRepository.createUser(
-					UserModel(
-						uid = uiState.value.authData?.uid
-							?: throw IllegalArgumentException("UID cannot be empty"),
-						email = uiState.value.authData?.email
-							?: throw IllegalArgumentException("Email cannot be empty"),
-						name = uiState.value.nickname,
-						profileUrl = uiState.value.profileUrl,
-						joinedAt = Date.from(java.time.Instant.now()),
-						groups = emptyList(),
-					),
+				val user = UserModel(
+					uid = uiState.value.authData?.uid
+						?: throw IllegalArgumentException("UID cannot be empty"),
+					email = uiState.value.authData?.email
+						?: throw IllegalArgumentException("Email cannot be empty"),
+					name = uiState.value.nickname,
+					profileUrl = uiState.value.profileUrl,
+					joinedAt = Date.from(java.time.Instant.now()),
+					groups = emptyList(),
 				)
 
-				with(userDataStore) {
-					updateCredentialIdToken(
-						uiState.value.authData?.idToken
-							?: throw IllegalArgumentException("로그인 정보가 없습니다."),
-					)
-					updateUserId(
-						uiState.value.authData?.uid
-							?: throw IllegalArgumentException("로그인 정보가 없습니다."),
-					)
-					updateUsername(uiState.value.nickname)
-					updateProfileUrl(uiState.value.profileUrl)
-					updateIsFirstLaunch()
-				}
+				userRepository.createUser(user)
+
+				storeUserData(
+					userModel = user,
+					credentialId = uiState.value.authData?.idToken
+						?: throw IllegalArgumentException("로그인 정보가 없습니다."),
+				)
 
 				onIntent(AuthIntent.OnLoginSuccess)
 			} catch (e: Exception) {
 				postSideEffect(AuthSideEffect.ShowError(e.message ?: "회원가입에 실패했습니다."))
 			}
+		}
+	}
+
+	private suspend fun getUserInfo(uid: String): UserModel = try {
+		userRepository.getUserInfo(uid)
+	} catch (e: Exception) {
+		throw Exception("Failed to get user", e)
+	}
+
+	private fun storeUserData(userModel: UserModel, credentialId: String) {
+		viewModelScope.launch {
+			userDataStore.updateUserId(userModel.uid)
+			userDataStore.updateUsername(userModel.name)
+			userDataStore.updateProfileUrl(userModel.profileUrl)
+			userDataStore.updateIsFirstLaunch()
+			userDataStore.updateCredentialIdToken(credentialId)
 		}
 	}
 
