@@ -235,6 +235,9 @@ internal fun HomeRoute(
 		onRefreshClick = {
 			loadEpisodesInBounds(cameraPositionState, shouldSort = true)
 		},
+		onSwipeStart = {
+			viewModel.onIntent(HomeIntent.StartProgrammaticCameraMove)
+		},
 	)
 }
 
@@ -249,6 +252,7 @@ private fun HomeScreen(
 	onEpisodeMarkerClick: (EpisodeModel) -> Unit = {},
 	onMapClick: () -> Unit = {},
 	onRefreshClick: () -> Unit = {},
+	onSwipeStart: () -> Unit = {},
 ) {
 	val context = LocalContext.current
 	val eatIcon = remember { OverlayImage.fromResource(Design.drawable.ic_eat_marker_light) }
@@ -387,6 +391,7 @@ private fun HomeScreen(
 					val currentEpisode = state.selectedEpisodes.getOrNull(pagerState.currentPage)
 					currentEpisode?.let { episode ->
 						val position = LatLng(episode.location.latitude, episode.location.longitude)
+						onSwipeStart()
 						cameraPositionState.position = CameraPosition(position, DEFAULT_ZOOM)
 					}
 				}
