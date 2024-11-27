@@ -4,8 +4,8 @@ import com.boostcamp.mapisode.model.UserModel
 
 internal fun UserModel.toUserFirestoreModel(): UserFirestoreModel =
 	UserFirestoreModel(
-		uid = uid,
-		nickname = name,
+		name = name,
 		email = email,
-		profileUri = profileUrl,
+		profileUrl = profileUrl,
+		joinedAt = joinedAt,
 	)
