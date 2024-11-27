@@ -15,8 +15,6 @@ fun <T> rememberFlowWithLifecycle(
 	flow: Flow<T>,
 	lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
 	initialValue: T,
-): State<T> {
-	return remember(flow, lifecycleOwner) {
-		flow.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-	}.collectAsState(initial = initialValue)
-}
+): State<T> = remember(flow, lifecycleOwner) {
+	flow.flowWithLifecycle(lifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+}.collectAsState(initial = initialValue)

@@ -21,8 +21,9 @@ import javax.inject.Inject
 class GroupCreationViewModel @Inject constructor(
 	private val groupRepository: GroupRepository,
 	private val userPreferenceDataStore: UserPreferenceDataStore,
-) : BaseViewModel<GroupCreationIntent, GroupCreationState, GroupCreationSideEffect>(GroupCreationState()) {
-
+) : BaseViewModel<GroupCreationIntent, GroupCreationState, GroupCreationSideEffect>(
+	GroupCreationState()
+) {
 	override fun onIntent(intent: GroupCreationIntent) {
 		when (intent) {
 			is GroupCreationIntent.OnBackClick -> {
@@ -40,7 +41,9 @@ class GroupCreationViewModel @Inject constructor(
 			try {
 				if (title.length !in 2..8 || content.length < 10) {
 					intent { copy(isGroupEditError = true) }
-					postSideEffect(GroupCreationSideEffect.ShowToast(R.string.message_error_edit_input))
+					postSideEffect(
+						GroupCreationSideEffect.ShowToast(R.string.message_error_edit_input)
+					)
 				} else {
 					intent { copy(isGroupEditError = false) }
 					val newGroupId = UUID.randomUUID().toString().replace("-", "")
