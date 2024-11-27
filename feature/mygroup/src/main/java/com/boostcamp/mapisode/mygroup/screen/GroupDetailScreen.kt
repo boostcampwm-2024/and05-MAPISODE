@@ -285,10 +285,12 @@ fun GroupDetailContent(
 	onIssueCodeClick: () -> Unit,
 	onGroupOutClick: () -> Unit,
 ) {
+	val outerScrollState = rememberScrollState()
 	Column(
 		modifier = Modifier
 			.fillMaxSize()
-			.padding(horizontal = 20.dp, vertical = 10.dp),
+			.padding(horizontal = 20.dp, vertical = 10.dp)
+			.verticalScroll(outerScrollState),
 		horizontalAlignment = Alignment.CenterHorizontally,
 	) {
 		GroupInfoCard(
@@ -351,11 +353,9 @@ fun GroupDetailContent(
 
 		Spacer(modifier = Modifier.padding(2.dp))
 
-		val scrollState = rememberScrollState()
 		Column(
 			modifier = Modifier
-				.fillMaxWidth()
-				.verticalScroll(scrollState),
+				.fillMaxWidth(),
 			verticalArrangement = Arrangement.Top,
 			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
