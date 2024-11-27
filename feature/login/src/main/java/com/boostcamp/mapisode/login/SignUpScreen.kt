@@ -96,8 +96,11 @@ fun SignUpScreen(
 					text = stringResource(R.string.login_next),
 					onClick = onSignUpClick,
 					modifier = Modifier
+						.weight(1f)
 						.fillMaxWidth(),
 				)
+
+				Spacer(modifier = Modifier.weight(0.6f))
 			}
 		}
 	}
