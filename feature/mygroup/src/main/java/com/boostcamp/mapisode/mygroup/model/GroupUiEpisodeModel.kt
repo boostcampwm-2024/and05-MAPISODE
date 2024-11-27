@@ -27,15 +27,13 @@ data class GroupUiEpisodeModel(
 	}
 }
 
-fun EpisodeModel.toGroupUiEpisodeModel(writer: String): GroupUiEpisodeModel {
-	return GroupUiEpisodeModel(
-		title = title,
-		imageUrls = imageUrls,
-		category = category,
-		createdBy = writer,
-		content = content,
-		address = address,
-		memoryDate = memoryDate,
-		createdAt = createdAt,
-	)
-}
+fun EpisodeModel.toGroupUiEpisodeModel(writer: String): GroupUiEpisodeModel = GroupUiEpisodeModel(
+	title = title,
+	imageUrls = imageUrls,
+	category = category,
+	createdBy = writer,
+	content = content,
+	address = address,
+	memoryDate = memoryDate,
+	createdAt = createdAt,
+)
