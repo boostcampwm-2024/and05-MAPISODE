@@ -7,11 +7,13 @@ import com.boostcamp.mapisode.mygroup.model.GroupFirestoreModel
 import com.boostcamp.mapisode.mygroup.model.UserFirestoreModel
 import com.boostcamp.mapisode.mygroup.model.toDomainModel
 import com.boostcamp.mapisode.mygroup.model.toFirestoreModel
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
+import java.util.Calendar
 import java.util.UUID
 import javax.inject.Inject
 
@@ -89,7 +91,9 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 			existingInviteCodeDocument.id
 		} else {
 			val inviteCode = UUID.randomUUID().toString().replace("-", "")
-			val timestamp = com.google.firebase.Timestamp.now()
+			val timestamp = Timestamp(
+				Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, 7) }.time,
+			)
 			inviteCodesCollection.document(inviteCode).set(
 				mapOf(
 					FirestoreConstants.FIELD_GROUP to groupReference,
