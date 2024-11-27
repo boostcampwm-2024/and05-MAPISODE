@@ -45,7 +45,6 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.mygroup.intent.GroupCreationIntent
 import com.boostcamp.mapisode.mygroup.sideeffect.GroupCreationSideEffect
 import com.boostcamp.mapisode.mygroup.sideeffect.rememberFlowWithLifecycle
-import com.boostcamp.mapisode.mygroup.state.GroupCreationState
 import com.boostcamp.mapisode.mygroup.viewmodel.GroupCreationViewModel
 
 @Composable
@@ -67,8 +66,13 @@ fun GroupCreationScreen(
 		}
 	}
 
+	LaunchedEffect(uiState.value.isGroupEditError) {
+		if (uiState.value.isGroupEditError) {
+			viewModel.onIntent(GroupCreationIntent.OnGroupCreationError)
+		}
+	}
+
 	GroupCreationContent(
-		uiState = uiState.value,
 		onBackClick = onBackClick,
 		onGroupEditClick = { title, content, imageUrl ->
 			viewModel.onIntent(
@@ -84,7 +88,6 @@ fun GroupCreationScreen(
 
 @Composable
 fun GroupCreationContent(
-	uiState: GroupCreationState,
 	onBackClick: () -> Unit,
 	onGroupEditClick: (title: String, content: String, imageUrl: String) -> Unit,
 ) {
