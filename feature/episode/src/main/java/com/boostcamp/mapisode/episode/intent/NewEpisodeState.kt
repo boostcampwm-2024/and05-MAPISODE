@@ -24,7 +24,7 @@ data class NewEpisodeState(
 	val episodeInfo: NewEpisodeInfo = NewEpisodeInfo(),
 	val episodeContent: NewEpisodeContent = NewEpisodeContent(),
 ) : UiState {
-	fun toDomainModel() = EpisodeModel(
+	fun toDomainModel(createdBy: String) = EpisodeModel(
 		title = episodeContent.title,
 		content = episodeContent.description,
 		imageUrls = episodeContent.images.map { it.toString() },
@@ -33,7 +33,7 @@ data class NewEpisodeState(
 		category = episodeInfo.category,
 		tags = episodeInfo.tags.split(","),
 		memoryDate = episodeInfo.date,
-		createdBy = "AndroidDessertClub",
+		createdBy = createdBy,
 	)
 }
 

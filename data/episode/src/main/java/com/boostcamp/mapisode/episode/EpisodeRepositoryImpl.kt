@@ -11,9 +11,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.UUID
@@ -132,24 +129,24 @@ class EpisodeRepositoryImpl @Inject constructor(
 		imageUris: List<String>,
 	): List<String> {
 		val imageStorageUrls = mutableListOf<String>()
-		imageUris.forEachIndexed { index, imageUri ->
-			val imageRef =
-				storage.reference.child("$PATH_IMAGES/$newEpisodeId/${index + 1}")
-			imageRef.putFile(imageUri.toUri())
-				.addOnCompleteListener { task ->
-					if (task.isSuccessful) {
-						CoroutineScope(Dispatchers.IO).launch {
-							val downloadUrl = imageRef.downloadUrl.await()
-							imageStorageUrls.add(downloadUrl.toString())
-						}
-					} else {
-						Timber.e(task.exception)
-						throw task.exception ?: RuntimeException("Image upload failed")
-					}
-				}.await()
+		return try {
+			imageUris.forEachIndexed { index, imageUri ->
+				val imageRef =
+					storage.reference.child("$PATH_IMAGES/$newEpisodeId/${index + 1}")
+				try {
+					val uploadTask = imageRef.putFile(imageUri.toUri()).await()
+					val downloadUrl = uploadTask.task.result.storage.downloadUrl.await()
+					imageStorageUrls.add(downloadUrl.toString())
+				} catch (e: Exception) {
+					Timber.e(e, "Failed to upload Image")
+					throw e
+				}
+			}
+			Timber.d(imageStorageUrls.toString())
+			imageStorageUrls
+		} catch (e: Exception) {
+			throw e
 		}
-
-		return imageStorageUrls
 	}
 
 	private fun QuerySnapshot.toDomainModelList(): List<EpisodeModel> =
