@@ -8,6 +8,7 @@ import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.mygroup.R
 import com.boostcamp.mapisode.mygroup.intent.GroupDetailIntent
 import com.boostcamp.mapisode.mygroup.model.GroupUiMemberModel
+import com.boostcamp.mapisode.mygroup.model.toGroupUiEpisodeModel
 import com.boostcamp.mapisode.mygroup.sideeffect.GroupDetailSideEffect
 import com.boostcamp.mapisode.mygroup.state.GroupDetailState
 import com.boostcamp.mapisode.ui.base.BaseViewModel
@@ -15,6 +16,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -141,6 +143,7 @@ class GroupDetailViewModel @Inject constructor(
 				val numberOfEpisode = userEpisodeModel.size
 				memberInfo.add(
 					GroupUiMemberModel(
+						id = userModel.id,
 						name = userModel.name,
 						email = userModel.email,
 						profileUrl = userModel.profileUrl,
@@ -181,7 +184,13 @@ class GroupDetailViewModel @Inject constructor(
 				val episodes = episodeRepository.getEpisodesByGroup(groupId.value)
 				intent {
 					copy(
-						episodes = episodes,
+						episodes = episodes.map {
+							val name = currentState.membersInfo.firstOrNull { member ->
+								Timber.e("member.id: ${member.id}, it.id: ${it.createdBy}")
+								member.id == it.createdBy
+							}?.name ?: ""
+							it.toGroupUiEpisodeModel(name)
+						},
 					)
 				}
 			} catch (e: Exception) {
