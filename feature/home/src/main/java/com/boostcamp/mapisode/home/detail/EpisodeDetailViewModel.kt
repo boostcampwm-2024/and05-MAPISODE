@@ -27,7 +27,6 @@ internal class EpisodeDetailViewModel @Inject constructor(
 	private fun loadEpisodeDetail(episodeId: String) {
 		viewModelScope.launch {
 			intent { copy(isLoading = true) }
-
 			try {
 				val episode = episodeRepository.getEpisodeById(episodeId)
 				if (episode != null) {
