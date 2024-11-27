@@ -51,6 +51,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.Thickness
+import com.boostcamp.mapisode.designsystem.compose.button.MapisodeOutlinedButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.AppTypography
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
@@ -256,23 +257,36 @@ internal fun EpisodeDetailScreen(
 
 				Spacer(modifier = Modifier.height(6.dp))
 
-				MapisodeText(
-					text = state.episode.content,
-					style = AppTypography.labelMedium,
-					color = MapisodeTheme.colorScheme.textFieldContent,
-					modifier = Modifier
-						.padding(horizontal = 20.dp)
-						.clip(RoundedCornerShape(8.dp))
-						.border(
-							width = 1.dp,
-							color = Color.Black,
-							shape = RoundedCornerShape(8.dp),
-						)
-						.padding(vertical = 12.dp, horizontal = 10.dp),
-				)
+				if (state.episode.content.isNotBlank()) {
+					MapisodeText(
+						text = state.episode.content,
+						style = AppTypography.labelMedium,
+						color = MapisodeTheme.colorScheme.textFieldContent,
+						modifier = Modifier
+							.fillMaxWidth()
+							.padding(horizontal = 20.dp)
+							.clip(RoundedCornerShape(8.dp))
+							.border(
+								width = 1.dp,
+								color = Color.Black,
+								shape = RoundedCornerShape(8.dp),
+							)
+							.padding(vertical = 12.dp, horizontal = 10.dp),
+					)
+				}
 
 				Spacer(modifier = Modifier.height(40.dp))
 			}
+
+			Spacer(modifier = Modifier.weight(1f))
+
+			MapisodeOutlinedButton(
+				text = "삭제하기",
+				onClick = {},
+				modifier = Modifier
+					.fillMaxWidth()
+					.padding(20.dp),
+			)
 		}
 	}
 }
