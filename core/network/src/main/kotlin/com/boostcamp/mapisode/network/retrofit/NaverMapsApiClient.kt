@@ -7,10 +7,17 @@ import com.boostcamp.mapisode.network.retrofit.NaverMapsApiConstants.HEADER_API_
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 object NaverMapsApiClient {
+	private val loggingInterceptor = HttpLoggingInterceptor()
+		.setLevel(HttpLoggingInterceptor.Level.HEADERS).apply {
+			redactHeader(HEADER_API_KEY_ID)
+			redactHeader(HEADER_API_KEY_SECRET)
+		}
+
 	private val okhttpClient = OkHttpClient.Builder()
 		.addInterceptor { chain ->
 			val requestWithHeaders = chain.request().newBuilder()
@@ -19,6 +26,7 @@ object NaverMapsApiClient {
 				.build()
 			chain.proceed(requestWithHeaders)
 		}
+		.addInterceptor(loggingInterceptor)
 		.build()
 
 	private val jsonConverter = Json {
