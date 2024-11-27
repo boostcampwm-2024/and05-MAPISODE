@@ -18,4 +18,6 @@
 	<string name="episode_card_category_prefix">카테고리 : %1$s</string>
 	<string name="episode_card_image_description">애피소드 썸네일</string>
 	<string name="episode_card_detail">자세히</string>
+	<string name="episode_detail_not_found_error">애피소드를 찾을 수 없습니다.</string>
+	<string name="episode_detail_load_error">데이터를 불러오는 중 오류가 발생했습니다.</string>
 </resources>
