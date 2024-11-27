@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -361,14 +362,14 @@ fun GroupDetailContent(
 		) {
 			if (members.isEmpty()) {
 				Box(
-					modifier = Modifier.padding(top = 150.dp),
+					modifier = Modifier.aspectRatio(1.2f),
 					contentAlignment = Alignment.Center,
 				) {
 					MapisodeCircularLoadingIndicator()
 				}
 			} else {
-				repeat(members.size) { index ->
-					GroupMemberContent(members[index])
+				members.forEach {
+					GroupMemberContent(it)
 					Spacer(modifier = Modifier.padding(5.dp))
 				}
 				MapisodeOutlinedButton(
