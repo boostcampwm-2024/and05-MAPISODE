@@ -13,18 +13,16 @@ data class GroupUiEpisodeModel(
 	val memoryDate: Date = Date(),
 	val createdAt: Date = Date(),
 ) {
-	fun toEpisodeModel(): EpisodeModel {
-		return EpisodeModel(
-			title = title,
-			imageUrls = imageUrls,
-			category = category,
-			createdBy = createdBy,
-			content = content,
-			address = address,
-			memoryDate = memoryDate,
-			createdAt = createdAt,
-		)
-	}
+	fun toEpisodeModel(): EpisodeModel = EpisodeModel(
+		title = title,
+		imageUrls = imageUrls,
+		category = category,
+		createdBy = createdBy,
+		content = content,
+		address = address,
+		memoryDate = memoryDate,
+		createdAt = createdAt,
+	)
 }
 
 fun EpisodeModel.toGroupUiEpisodeModel(writer: String): GroupUiEpisodeModel = GroupUiEpisodeModel(
