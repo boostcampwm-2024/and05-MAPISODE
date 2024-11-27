@@ -331,7 +331,8 @@ fun GroupDetailContent(
 
 			MapisodeFilledButton(
 				modifier = Modifier
-					.fillMaxWidth(),
+					.fillMaxWidth()
+					.heightIn(min = 52.dp, max = 80.dp),
 				onClick = { onIssueCodeClick() },
 				text = stringResource(S.string.btn_issue_code),
 				showRipple = true,
@@ -355,7 +356,9 @@ fun GroupDetailContent(
 		item {
 			MapisodeOutlinedButton(
 				modifier = Modifier
-					.fillMaxWidth(),
+					.fillMaxWidth()
+					.heightIn(min = 40.dp, max = 80.dp),
+				borderColor = MapisodeTheme.colorScheme.textColoredContainer,
 				onClick = { onGroupOutClick() },
 				text = stringResource(S.string.btn_group_out),
 				showRipple = true,
