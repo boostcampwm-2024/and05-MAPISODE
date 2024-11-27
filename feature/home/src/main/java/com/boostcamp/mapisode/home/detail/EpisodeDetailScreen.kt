@@ -222,7 +222,7 @@ internal fun EpisodeDetailScreen(
 				FlowRow(
 					modifier = Modifier
 						.fillMaxWidth()
-						.padding(horizontal = 16.dp),
+						.padding(horizontal = 20.dp),
 					itemVerticalAlignment = Alignment.CenterVertically,
 				) {
 					val chipType = mapCategoryToChipType(state.episode.category) ?: ChipType.OTHER
@@ -254,7 +254,24 @@ internal fun EpisodeDetailScreen(
 					}
 				}
 
-				Spacer(modifier = Modifier.height(10.dp))
+				Spacer(modifier = Modifier.height(6.dp))
+
+				MapisodeText(
+					text = state.episode.content,
+					style = AppTypography.labelMedium,
+					color = MapisodeTheme.colorScheme.textFieldContent,
+					modifier = Modifier
+						.padding(horizontal = 20.dp)
+						.clip(RoundedCornerShape(8.dp))
+						.border(
+							width = 1.dp,
+							color = Color.Black,
+							shape = RoundedCornerShape(8.dp),
+						)
+						.padding(vertical = 12.dp, horizontal = 10.dp),
+				)
+
+				Spacer(modifier = Modifier.height(40.dp))
 			}
 		}
 	}
