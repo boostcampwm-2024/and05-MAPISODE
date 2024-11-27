@@ -19,6 +19,7 @@ data class NewEpisodeState(
 		),
 		MAP_DEFAULT_ZOOM,
 	),
+	val myGroups: List<GroupInfo> = emptyList(),
 	val episodeAddress: String = "",
 	val isCameraMoving: Boolean = false,
 	val episodeInfo: NewEpisodeInfo = NewEpisodeInfo(),
@@ -29,18 +30,26 @@ data class NewEpisodeState(
 		content = episodeContent.description,
 		imageUrls = episodeContent.images.map { it.toString() },
 		location = EpisodeLatLng(episodeInfo.location.latitude, episodeInfo.location.longitude),
-		group = episodeInfo.group,
-		category = episodeInfo.category,
+		group = requireNotNull(myGroups.find { it.name == episodeInfo.group }?.groupId),
+		category = requireNotNull(episodeInfo.category?.name),
 		tags = episodeInfo.tags.split(","),
 		memoryDate = episodeInfo.date,
 		createdBy = createdBy,
 	)
 }
 
+data class GroupInfo(val name: String, val groupId: String)
+
+enum class EpisodeCategory(val categoryName: String) {
+	EAT("먹거리"),
+	SEE("볼거리"),
+	OTHER("나머지")
+}
+
 data class NewEpisodeInfo(
 	val location: LatLng = LatLng(0.0, 0.0),
 	val group: String = "",
-	val category: String = "",
+	val category: EpisodeCategory? = null,
 	val tags: String = "",
 	val date: Date = Date(),
 )
