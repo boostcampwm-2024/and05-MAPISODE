@@ -28,6 +28,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.Surface
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.buttonModifier
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.textFieldModifier
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.textFieldVerticalArrangement
 import com.boostcamp.mapisode.episode.intent.NewEpisodeContent
@@ -94,7 +95,7 @@ internal fun NewEpisodeContentScreen(
 				}
 			}
 			MapisodeFilledButton(
-				modifier = textFieldModifier,
+				modifier = buttonModifier,
 				onClick = {
 					submitEpisode(
 						NewEpisodeContent(
