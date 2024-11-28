@@ -10,7 +10,6 @@ import com.boostcamp.mapisode.network.repository.NaverMapsRepository
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.naver.maps.map.CameraPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -135,18 +134,18 @@ class NewEpisodeViewModel @Inject constructor(
 			}
 
 			is NewEpisodeIntent.CreateNewEpisode -> {
-				try {
-					viewModelScope.launch {
+				viewModelScope.launch {
+					try {
 						val userId =
 							requireNotNull(userPreferenceDataStore.getUserId().firstOrNull())
 						val episodeModel = uiState.value.toDomainModel(userId)
 						episodeRepository.createEpisode(episodeModel)
 						clearEpisodeState()
 						postSideEffect(NewEpisodeSideEffect.ShowToast(R.string.new_episode_create_episode_success))
-						delay(100)
+						postSideEffect(NewEpisodeSideEffect.NavigateBackToHome)
+					} catch (e: Exception) {
+						postSideEffect(NewEpisodeSideEffect.ShowToast(R.string.new_episode_create_episode_fail))
 					}
-				} catch (e: Exception) {
-					postSideEffect(NewEpisodeSideEffect.ShowToast(R.string.new_episode_create_episode_fail))
 				}
 			}
 

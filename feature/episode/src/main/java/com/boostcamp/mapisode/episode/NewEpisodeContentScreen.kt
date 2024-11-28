@@ -65,6 +65,10 @@ internal fun NewEpisodeContentScreen(
 						Toast.LENGTH_SHORT,
 					).show()
 				}
+
+				is NewEpisodeSideEffect.NavigateBackToHome -> {
+					onPopBackToMain()
+				}
 			}
 		}
 	}
@@ -140,7 +144,6 @@ internal fun NewEpisodeContentScreen(
 						viewModel.onIntent(NewEpisodeIntent.CreateNewEpisode)
 						titleValue = TextFieldValue("")
 						descriptionValue = TextFieldValue("")
-						onPopBackToMain()
 					} catch (e: Exception) {
 						Timber.e(e)
 					}
