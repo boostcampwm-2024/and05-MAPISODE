@@ -32,6 +32,10 @@ class AuthViewModel @Inject constructor(
 		viewModelScope.launch {
 			if (userDataStore.checkLoggedIn()) {
 				onIntent(AuthIntent.OnLoginSuccess)
+			} else {
+				intent {
+					copy(isLoading = false)
+				}
 			}
 		}
 	}
@@ -45,8 +49,7 @@ class AuthViewModel @Inject constructor(
 	private fun handleGoogleSignIn(googleOauth: GoogleOauth) {
 		viewModelScope.launch {
 			try {
-				googleOauth.googleSignIn()
-					.collect { loginState ->
+				googleOauth.googleSignIn().collect { loginState ->
 						when (loginState) {
 							is LoginState.Success -> {
 								if (isUserExist(loginState.authDataInfo.uid)) {
@@ -108,8 +111,9 @@ class AuthViewModel @Inject constructor(
 
 				storeUserData(
 					userModel = user,
-					credentialId = currentState.authData?.idToken
-						?: throw IllegalArgumentException("로그인 정보가 없습니다."),
+					credentialId = currentState.authData?.idToken ?: throw IllegalArgumentException(
+						"로그인 정보가 없습니다.",
+					),
 				)
 
 				onIntent(AuthIntent.OnLoginSuccess)
