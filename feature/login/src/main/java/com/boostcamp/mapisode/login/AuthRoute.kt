@@ -33,19 +33,27 @@ fun AuthRoute(
 		}
 	}
 
-	if (uiState.isLoginSuccess) {
-		SignUpScreen(
-			nickname = uiState.nickname,
-			onNicknameChanged = { newNickname ->
-				viewModel.onIntent(AuthIntent.OnNicknameChange(newNickname))
-			},
-			onSignUpClick = { viewModel.onIntent(AuthIntent.OnSignUpClick) },
-		)
-	} else {
-		LoginScreen(
-			googleSignInClicked = {
-				viewModel.onIntent(AuthIntent.OnGoogleSignInClick(googleOauth))
-			},
-		)
+	when {
+		uiState.isLoading -> {
+			SplashScreen()
+		}
+
+		uiState.isLoginSuccess -> {
+			SignUpScreen(
+				nickname = uiState.nickname,
+				onNicknameChanged = { newNickname ->
+					viewModel.onIntent(AuthIntent.OnNicknameChange(newNickname))
+				},
+				onSignUpClick = { viewModel.onIntent(AuthIntent.OnSignUpClick) },
+			)
+		}
+
+		else -> {
+			LoginScreen(
+				googleSignInClicked = {
+					viewModel.onIntent(AuthIntent.OnGoogleSignInClick(googleOauth))
+				},
+			)
+		}
 	}
 }
