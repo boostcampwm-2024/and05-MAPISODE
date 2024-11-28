@@ -89,17 +89,17 @@ class AuthViewModel @Inject constructor(
 	private fun handleSignUp() {
 		viewModelScope.launch {
 			try {
-				if (uiState.value.nickname.isBlank()) throw IllegalArgumentException("닉네임을 입력해주세요.")
-				// if (uiState.value.profileUrl.isBlank()) throw IllegalArgumentException("프로필 사진을 선택해주세요.")
-				if (uiState.value.authData == null) throw IllegalArgumentException("로그인 정보가 없습니다.")
+				if (currentState.nickname.isBlank()) throw IllegalArgumentException("닉네임을 입력해주세요.")
+				// if (currentState.profileUrl.isBlank()) throw IllegalArgumentException("프로필 사진을 선택해주세요.")
+				if (currentState.authData == null) throw IllegalArgumentException("로그인 정보가 없습니다.")
 
 				val user = UserModel(
-					uid = uiState.value.authData?.uid
+					uid = currentState.authData?.uid
 						?: throw IllegalArgumentException("UID cannot be empty"),
-					email = uiState.value.authData?.email
+					email = currentState.authData?.email
 						?: throw IllegalArgumentException("Email cannot be empty"),
-					name = uiState.value.nickname,
-					profileUrl = uiState.value.profileUrl,
+					name = currentState.nickname,
+					profileUrl = currentState.profileUrl,
 					joinedAt = Date.from(java.time.Instant.now()),
 					groups = emptyList(),
 				)
@@ -108,7 +108,7 @@ class AuthViewModel @Inject constructor(
 
 				storeUserData(
 					userModel = user,
-					credentialId = uiState.value.authData?.idToken
+					credentialId = currentState.authData?.idToken
 						?: throw IllegalArgumentException("로그인 정보가 없습니다."),
 				)
 
