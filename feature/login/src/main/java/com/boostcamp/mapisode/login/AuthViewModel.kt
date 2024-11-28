@@ -122,7 +122,7 @@ class AuthViewModel @Inject constructor(
 				)
 
 				userRepository.createUser(user)
-				createMyEpisodeGroup(user.uid)
+				createMyEpisodeGroup(user)
 				joinMyGroup(user.uid)
 
 				storeUserData(
@@ -161,19 +161,17 @@ class AuthViewModel @Inject constructor(
 		}
 	}
 
-	private suspend fun createMyEpisodeGroup(
-		uid: String,
-	) {
+	private suspend fun createMyEpisodeGroup(user: UserModel) {
 		viewModelScope.launch {
 			groupRepository.createGroup(
 				GroupModel(
-					id = uid,
-					adminUser = uid,
+					id = user.uid,
+					adminUser = user.uid,
 					createdAt = Date.from(java.time.Instant.now()),
 					description = "내가 작성한 에피소드",
-					imageUrl = "",
+					imageUrl = user.profileUrl,
 					name = "\uD83D\uDC51 나의 에피소드",
-					members = listOf(uid),
+					members = listOf(user.uid),
 				),
 			)
 		}.join()
