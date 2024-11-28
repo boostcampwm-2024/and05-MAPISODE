@@ -115,7 +115,7 @@ class HomeViewModel @Inject constructor(
 		viewModelScope.launch {
 			try {
 				val cachedGroupId = userPreferenceDataStore.getRecentSelectedGroup().firstOrNull()
-					?: userPreferenceDataStore.getUserId().firstOrNull() ?: throw Exception()
+					?: throw Exception()
 
 				intent {
 					copy(selectedGroupId = cachedGroupId)
