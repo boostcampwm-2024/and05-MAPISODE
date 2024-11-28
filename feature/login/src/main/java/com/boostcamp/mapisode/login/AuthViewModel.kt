@@ -50,31 +50,31 @@ class AuthViewModel @Inject constructor(
 		viewModelScope.launch {
 			try {
 				googleOauth.googleSignIn().collect { loginState ->
-						when (loginState) {
-							is LoginState.Success -> {
-								if (isUserExist(loginState.authDataInfo.uid)) {
-									val user = getUserInfo(loginState.authDataInfo.uid)
-									storeUserData(
-										userModel = user,
-										credentialId = loginState.authDataInfo.idToken,
-									)
-									onIntent(AuthIntent.OnLoginSuccess)
-									return@collect
-								}
-
-								intent {
-									copy(
-										isLoginSuccess = true,
-										authData = loginState.authDataInfo,
-									)
-								}
+					when (loginState) {
+						is LoginState.Success -> {
+							if (isUserExist(loginState.authDataInfo.uid)) {
+								val user = getUserInfo(loginState.authDataInfo.uid)
+								storeUserData(
+									userModel = user,
+									credentialId = loginState.authDataInfo.idToken,
+								)
+								onIntent(AuthIntent.OnLoginSuccess)
+								return@collect
 							}
 
-							is LoginState.Error -> {
-								postSideEffect(AuthSideEffect.ShowError(loginState.message))
+							intent {
+								copy(
+									isLoginSuccess = true,
+									authData = loginState.authDataInfo,
+								)
 							}
 						}
+
+						is LoginState.Error -> {
+							postSideEffect(AuthSideEffect.ShowError(loginState.message))
+						}
 					}
+				}
 			} catch (e: Exception) {
 				postSideEffect(AuthSideEffect.ShowError(e.message ?: "알 수 없는 오류가 발생했습니다."))
 			}
