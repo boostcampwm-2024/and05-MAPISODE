@@ -25,12 +25,13 @@ fun GroupCard(
 	groupImage: String,
 	groupName: String,
 	modifier: Modifier = Modifier,
-	onClick: () -> Unit = {},
+	groupId: String = "",
+	onClick: (String) -> Unit = {},
 ) {
 	Column(
 		modifier = modifier
 			.fillMaxWidth()
-			.clickable(onClick = onClick),
+			.clickable(onClick = { onClick(groupId) }),
 		horizontalAlignment = Alignment.CenterHorizontally,
 	) {
 		Box(
