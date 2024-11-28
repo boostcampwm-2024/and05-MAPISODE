@@ -2,6 +2,7 @@ package com.boostcamp.mapisode.episode
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -14,8 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -26,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.boostcamp.mapisode.designsystem.compose.MapisodeCircularLoadingIndicator
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.Surface
@@ -54,6 +58,7 @@ internal fun NewEpisodeContentScreen(
 	var descriptionValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
 		mutableStateOf(TextFieldValue(uiState.episodeContent.description))
 	}
+	var isLoading by remember { mutableStateOf(false) }
 
 	LaunchedEffect(Unit) {
 		viewModel.sideEffect.collect { sideEffect ->
@@ -67,6 +72,7 @@ internal fun NewEpisodeContentScreen(
 				}
 
 				is NewEpisodeSideEffect.NavigateBackToHome -> {
+					isLoading = false
 					onPopBackToMain()
 				}
 			}
@@ -87,6 +93,14 @@ internal fun NewEpisodeContentScreen(
 		},
 		isStatusBarPaddingExist = true,
 	) { innerPadding ->
+		if (isLoading) {
+			Box(
+				modifier = Modifier.fillMaxSize(),
+				contentAlignment = Alignment.Center,
+			) {
+				MapisodeCircularLoadingIndicator()
+			}
+		}
 		Column(
 			modifier = Modifier
 				.padding(innerPadding)
@@ -141,6 +155,7 @@ internal fun NewEpisodeContentScreen(
 						),
 					)
 					try {
+						isLoading = true
 						viewModel.onIntent(NewEpisodeIntent.CreateNewEpisode)
 						titleValue = TextFieldValue("")
 						descriptionValue = TextFieldValue("")
