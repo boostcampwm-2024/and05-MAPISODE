@@ -65,6 +65,7 @@ import com.boostcamp.mapisode.home.component.MapisodeChip
 internal fun EpisodeDetailRoute(
 	episodeId: String,
 	viewModel: EpisodeDetailViewModel = hiltViewModel(),
+	onBackClick: () -> Unit = {},
 ) {
 	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 	val context = LocalContext.current
@@ -92,7 +93,7 @@ internal fun EpisodeDetailRoute(
 			MapisodeCircularLoadingIndicator()
 		}
 	} else {
-		EpisodeDetailScreen(state = uiState)
+		EpisodeDetailScreen(state = uiState, onBackClick = onBackClick)
 	}
 }
 
@@ -101,6 +102,7 @@ internal fun EpisodeDetailRoute(
 internal fun EpisodeDetailScreen(
 	state: EpisodeDetailState,
 	modifier: Modifier = Modifier,
+	onBackClick: () -> Unit = {},
 ) {
 	val context = LocalContext.current
 
@@ -113,7 +115,7 @@ internal fun EpisodeDetailScreen(
 				title = state.episode.title,
 				navigationIcon = {
 					MapisodeIconButton(
-						onClick = {},
+						onClick = onBackClick,
 					) {
 						MapisodeIcon(
 							id = R.drawable.ic_arrow_back_ios,
