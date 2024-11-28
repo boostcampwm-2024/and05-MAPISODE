@@ -48,7 +48,6 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
 import com.boostcamp.mapisode.home.common.HomeConstant.EXTRA_RANGE
-import com.boostcamp.mapisode.home.common.HomeConstant.tempGroupList
 import com.boostcamp.mapisode.home.common.getChipIconTint
 import com.boostcamp.mapisode.home.common.mapCategoryToChipType
 import com.boostcamp.mapisode.home.component.EpisodeCard
@@ -158,6 +157,7 @@ internal fun HomeRoute(
 	}
 
 	LaunchedEffect(Unit) {
+		viewModel.onIntent(HomeIntent.LoadInitialData)
 		viewModel.sideEffect.collect { sideEffect ->
 			when (sideEffect) {
 				is HomeSideEffect.ShowToast -> {
@@ -203,6 +203,12 @@ internal fun HomeRoute(
 				is HomeSideEffect.NavigateToEpisodeDetail -> {
 					onEpisodeClick(sideEffect.episodeId)
 				}
+
+				is HomeSideEffect.MoveCameraToPosition -> {
+					viewModel.onIntent(HomeIntent.StartProgrammaticCameraMove)
+					cameraPositionState.position = CameraPosition(sideEffect.position, DEFAULT_ZOOM)
+					loadEpisodesInBounds(cameraPositionState)
+				}
 			}
 		}
 	}
@@ -224,6 +230,7 @@ internal fun HomeRoute(
 		},
 		onGroupFabClick = {
 			viewModel.onIntent(HomeIntent.ShowBottomSheet)
+			viewModel.onIntent(HomeIntent.LoadGroups)
 		},
 		onCreateNewEpisode = { latLng ->
 			viewModel.onIntent(HomeIntent.ClickTextMarker(latLng.toEpisodeLatLng()))
@@ -246,6 +253,10 @@ internal fun HomeRoute(
 		onEpisodeClick = { episodeId ->
 			viewModel.onIntent(HomeIntent.NavigateToEpisode(episodeId))
 		},
+		onGroupSelected = { groupId ->
+			viewModel.onIntent(HomeIntent.SelectGroup(groupId))
+			viewModel.onIntent(HomeIntent.ShowBottomSheet)
+		},
 	)
 }
 
@@ -262,6 +273,7 @@ private fun HomeScreen(
 	onRefreshClick: () -> Unit = {},
 	onSwipeStart: () -> Unit = {},
 	onEpisodeClick: (String) -> Unit = {},
+	onGroupSelected: (String) -> Unit = {},
 ) {
 	val context = LocalContext.current
 	val eatIcon = remember { OverlayImage.fromResource(Design.drawable.ic_eat_marker_light) }
@@ -444,9 +456,9 @@ private fun HomeScreen(
 			onDismiss = onGroupFabClick,
 			sheetContent = {
 				GroupBottomSheetContent(
-					myProfileImage = "https://avatars.githubusercontent.com/u/98825364?v=4?s=100",
-					groupList = tempGroupList,
+					groupList = state.groups,
 					onDismiss = onGroupFabClick,
+					onGroupClick = onGroupSelected,
 				)
 			},
 		)

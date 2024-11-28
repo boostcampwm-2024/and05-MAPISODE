@@ -3,26 +3,43 @@ package com.boostcamp.mapisode.home
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.common.util.distanceTo
 import com.boostcamp.mapisode.common.util.toEpisodeLatLng
+import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
 import com.boostcamp.mapisode.episode.EpisodeRepository
 import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
 import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.boostcamp.mapisode.model.EpisodeModel
+import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(private val episodeRepository: EpisodeRepository) :
+class HomeViewModel @Inject constructor(
+	private val episodeRepository: EpisodeRepository,
+	private val groupRepository: GroupRepository,
+	private val userPreferenceDataStore: UserPreferenceDataStore,
+) :
 	BaseViewModel<HomeIntent, HomeState, HomeSideEffect>(HomeState()) {
 
 	override fun onIntent(intent: HomeIntent) {
 		when (intent) {
+			is HomeIntent.LoadInitialData -> {
+				loadInitialData()
+				loadGroups()
+			}
+
+			is HomeIntent.LoadGroups -> {
+				loadGroups()
+			}
+
 			is HomeIntent.RequestLocationPermission -> {
 				// 위치 권한 요청이 아직 이루어지지 않은 경우에만 요청
 				if (!currentState.hasRequestedPermission) {
@@ -87,6 +104,27 @@ class HomeViewModel @Inject constructor(private val episodeRepository: EpisodeRe
 			is HomeIntent.NavigateToEpisode -> {
 				postSideEffect(HomeSideEffect.NavigateToEpisodeDetail(intent.episodeId))
 			}
+
+			is HomeIntent.SelectGroup -> {
+				selectGroup(intent.groupId)
+			}
+		}
+	}
+
+	private fun loadInitialData() {
+		viewModelScope.launch {
+			try {
+				val cachedGroupId = userPreferenceDataStore.getRecentSelectedGroup().firstOrNull()
+					?: userPreferenceDataStore.getUserId().firstOrNull() ?: throw Exception()
+
+				intent {
+					copy(selectedGroupId = cachedGroupId)
+				}
+
+				selectGroup(cachedGroupId)
+			} catch (e: Exception) {
+				postSideEffect(HomeSideEffect.ShowToast(R.string.error_load_episodes))
+			}
 		}
 	}
 
@@ -130,7 +168,9 @@ class HomeViewModel @Inject constructor(private val episodeRepository: EpisodeRe
 	) {
 		viewModelScope.launch {
 			try {
-				val groupId = "FwQVGHMot4BVS4nMAJHg" // TODO: 캐싱된 그룹 가져오기
+				val groupId = currentState.selectedGroupId
+					?: userPreferenceDataStore.getRecentSelectedGroup().firstOrNull()
+					?: throw Exception("No group id available")
 				val category = currentState.selectedChip?.name
 
 				val episodes = episodeRepository.getEpisodesByGroupAndLocation(
@@ -222,6 +262,39 @@ class HomeViewModel @Inject constructor(private val episodeRepository: EpisodeRe
 	private fun setProgrammaticCameraMove(isMoving: Boolean) {
 		intent {
 			copy(isCameraMovingProgrammatically = isMoving)
+		}
+	}
+
+	private fun loadGroups() {
+		viewModelScope.launch {
+			try {
+				val userId = userPreferenceDataStore.getUserId().first() ?: throw Exception()
+				val group = groupRepository
+					.getGroupsByUserId(userId)
+					.toPersistentList()
+				intent { copy(groups = group) }
+			} catch (e: Exception) {
+				postSideEffect(HomeSideEffect.ShowToast(R.string.error_group_load_episodes))
+			}
+		}
+	}
+
+	private fun selectGroup(groupId: String) {
+		viewModelScope.launch {
+			intent { copy(selectedGroupId = groupId) }
+
+			userPreferenceDataStore.updateRecentSelectedGroup(groupId)
+
+			val mostRecentEpisode = episodeRepository.getMostRecentEpisodeByGroup(groupId)
+			if (mostRecentEpisode != null) {
+				val position = LatLng(
+					mostRecentEpisode.location.latitude,
+					mostRecentEpisode.location.longitude,
+				)
+				postSideEffect(HomeSideEffect.MoveCameraToPosition(position))
+			} else {
+				postSideEffect(HomeSideEffect.MoveCameraToPosition(currentState.cameraPosition.target))
+			}
 		}
 	}
 }

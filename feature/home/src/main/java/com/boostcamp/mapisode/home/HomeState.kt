@@ -3,6 +3,7 @@ package com.boostcamp.mapisode.home
 import com.boostcamp.mapisode.home.common.ChipType
 import com.boostcamp.mapisode.home.common.HomeConstant.DEFAULT_ZOOM
 import com.boostcamp.mapisode.model.EpisodeModel
+import com.boostcamp.mapisode.model.GroupModel
 import com.boostcamp.mapisode.ui.base.UiState
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
@@ -31,4 +32,6 @@ data class HomeState(
 	val isMapMovedWhileCardVisible: Boolean = false,
 	val showRefreshButton: Boolean = false,
 	val isCameraMovingProgrammatically: Boolean = false,
+	val groups: PersistentList<GroupModel> = persistentListOf(),
+	val selectedGroupId: String? = null,
 ) : UiState
