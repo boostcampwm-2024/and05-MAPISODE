@@ -48,7 +48,7 @@ fun GroupCard(
 			)
 		}
 
-		Spacer(modifier = Modifier.size(4.dp))
+		Spacer(modifier = Modifier.size(6.dp))
 
 		MapisodeText(
 			text = groupName,
