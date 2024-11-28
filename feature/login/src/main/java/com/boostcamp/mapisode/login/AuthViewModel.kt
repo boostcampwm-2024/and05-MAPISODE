@@ -51,7 +51,7 @@ class AuthViewModel @Inject constructor(
 		false
 	}
 
-	private suspend fun getRecentSelectedGroup(uid: String): String? = try {
+	private suspend fun getRecentSelectedGroup(): String? = try {
 		userDataStore.getRecentSelectedGroup().firstOrNull()
 	} catch (e: Exception) {
 		null
@@ -65,7 +65,7 @@ class AuthViewModel @Inject constructor(
 						is LoginState.Success -> {
 							if (isUserExist(loginState.authDataInfo.uid)) {
 								val user = getUserInfo(loginState.authDataInfo.uid)
-								val recentGroup = getRecentSelectedGroup(user.uid) ?: user.uid
+								val recentGroup = getRecentSelectedGroup() ?: user.uid
 
 								storeUserData(
 									userModel = user,
@@ -161,7 +161,7 @@ class AuthViewModel @Inject constructor(
 		}
 	}
 
-	private fun createMyEpisodeGroup(
+	private suspend fun createMyEpisodeGroup(
 		uid: String,
 	) {
 		viewModelScope.launch {
@@ -176,7 +176,7 @@ class AuthViewModel @Inject constructor(
 					members = listOf(uid),
 				),
 			)
-		}
+		}.join()
 	}
 
 	private fun joinMyGroup(uid: String) {
