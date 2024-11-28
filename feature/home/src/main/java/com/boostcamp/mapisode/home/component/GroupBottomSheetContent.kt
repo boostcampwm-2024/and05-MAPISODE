@@ -10,12 +10,17 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.annotation.ExperimentalCoilApi
+import coil3.compose.AsyncImagePreviewHandler
+import coil3.compose.LocalAsyncImagePreviewHandler
+import coil3.test.FakeImage
 import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
@@ -29,7 +34,6 @@ import com.boostcamp.mapisode.home.R as Home
 
 @Composable
 fun GroupBottomSheetContent(
-	myProfileImage: String,
 	groupList: PersistentList<GroupItem>,
 	modifier: Modifier = Modifier,
 	onDismiss: () -> Unit = {},
@@ -64,13 +68,6 @@ fun GroupBottomSheetContent(
 			verticalArrangement = Arrangement.spacedBy(20.dp),
 			horizontalArrangement = Arrangement.Center,
 		) {
-			item {
-				GroupCard(
-					groupImage = myProfileImage,
-					groupName = stringResource(Home.string.group_my_episode_name),
-				)
-			}
-
 			items(groupList) { group ->
 				GroupCard(
 					groupImage = group.imageUrl,
@@ -81,13 +78,19 @@ fun GroupBottomSheetContent(
 	}
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Preview(showBackground = true)
 @Composable
 fun GroupBottomSheetContentPreview() {
-	MapisodeTheme {
-		GroupBottomSheetContent(
-			myProfileImage = "",
-			groupList = tempGroupList,
-		)
+	val previewHandler = AsyncImagePreviewHandler {
+		FakeImage(color = 0xFFE0E0E0.toInt())
+	}
+
+	CompositionLocalProvider(LocalAsyncImagePreviewHandler provides previewHandler) {
+		MapisodeTheme {
+			GroupBottomSheetContent(
+				groupList = tempGroupList,
+			)
+		}
 	}
 }
