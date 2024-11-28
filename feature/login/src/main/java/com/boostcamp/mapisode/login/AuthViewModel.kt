@@ -5,9 +5,11 @@ import com.boostcamp.mapisode.auth.GoogleOauth
 import com.boostcamp.mapisode.auth.LoginState
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
 import com.boostcamp.mapisode.model.UserModel
+import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.boostcamp.mapisode.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
@@ -15,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
 	private val userRepository: UserRepository,
+	private val groupRepository: GroupRepository,
 	private val userDataStore: UserPreferenceDataStore,
 ) : BaseViewModel<AuthIntent, AuthState, AuthSideEffect>(AuthState()) {
 
@@ -47,6 +50,12 @@ class AuthViewModel @Inject constructor(
 		false
 	}
 
+	private suspend fun getRecentSelectedGroup(uid: String): String? = try {
+		userDataStore.getRecentSelectedGroup().firstOrNull()
+	} catch (e: Exception) {
+		null
+	}
+
 	private fun handleGoogleSignIn(googleOauth: GoogleOauth) {
 		viewModelScope.launch {
 			try {
@@ -55,9 +64,12 @@ class AuthViewModel @Inject constructor(
 						is LoginState.Success -> {
 							if (isUserExist(loginState.authDataInfo.uid)) {
 								val user = getUserInfo(loginState.authDataInfo.uid)
+								val recentGroup = getRecentSelectedGroup(user.uid) ?: user.uid
+
 								storeUserData(
 									userModel = user,
 									credentialId = loginState.authDataInfo.idToken,
+									recentGroup = recentGroup,
 								)
 								onIntent(AuthIntent.OnLoginSuccess)
 								return@collect
@@ -109,12 +121,15 @@ class AuthViewModel @Inject constructor(
 				)
 
 				userRepository.createUser(user)
+//				createMyEpisodeGroup(user.uid)
+//				joinMyGroup(user.uid)
 
 				storeUserData(
 					userModel = user,
 					credentialId = currentState.authData?.idToken ?: throw IllegalArgumentException(
 						"로그인 정보가 없습니다.",
 					),
+					recentGroup = user.uid,
 				)
 
 				onIntent(AuthIntent.OnLoginSuccess)
@@ -130,15 +145,44 @@ class AuthViewModel @Inject constructor(
 		throw Exception("Failed to get user", e)
 	}
 
-	private fun storeUserData(userModel: UserModel, credentialId: String) {
+	private fun storeUserData(
+		userModel: UserModel,
+		credentialId: String,
+		recentGroup: String,
+	) {
 		viewModelScope.launch {
 			userDataStore.updateUserId(userModel.uid)
 			userDataStore.updateUsername(userModel.name)
 			userDataStore.updateProfileUrl(userModel.profileUrl)
 			userDataStore.updateIsFirstLaunch()
 			userDataStore.updateCredentialIdToken(credentialId)
+			userDataStore.updateRecentSelectedGroup(recentGroup)
 		}
 	}
+//
+//	private fun createMyEpisodeGroup(
+//		uid: String,
+//	) {
+//		viewModelScope.launch {
+//			groupRepository.createGroup(
+//				GroupModel(
+//					id = "my-episode",
+//					adminUser = uid,
+//					createdAt = Date.from(java.time.Instant.now()),
+//					description = "내가 작성한 에피소드",
+//					imageUrl = "",
+//					name = "\uD83D\uDC51 나의 에피소드",
+//					members = listOf(uid),
+//				),
+//			)
+//		}
+//	}
+//
+//	private fun joinMyGroup(uid: String) {
+//		viewModelScope.launch {
+//			groupRepository.joinGroup(uid, uid)
+//		}
+//	}
 
 	private fun handleLoginSuccess() {
 		viewModelScope.launch {
