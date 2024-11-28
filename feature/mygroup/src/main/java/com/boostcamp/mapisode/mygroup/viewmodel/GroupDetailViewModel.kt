@@ -16,7 +16,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -186,7 +185,6 @@ class GroupDetailViewModel @Inject constructor(
 					copy(
 						episodes = episodes.map {
 							val name = currentState.membersInfo.firstOrNull { member ->
-								Timber.e("member.id: ${member.id}, it.id: ${it.createdBy}")
 								member.id == it.createdBy
 							}?.name ?: ""
 							it.toGroupUiEpisodeModel(name)
