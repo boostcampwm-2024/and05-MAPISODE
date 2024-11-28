@@ -34,7 +34,10 @@ fun AuthRoute(
 	}
 
 	when {
-		uiState.isLoading -> { SplashScreen() }
+		uiState.isLoading -> {
+			SplashScreen()
+		}
+
 		uiState.isLoginSuccess -> {
 			SignUpScreen(
 				nickname = uiState.nickname,
