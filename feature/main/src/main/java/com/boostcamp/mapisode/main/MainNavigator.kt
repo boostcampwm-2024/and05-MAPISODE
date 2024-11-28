@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.navigation.NavBackStackEntry
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -12,6 +13,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.boostcamp.mapisode.episode.navigation.navigatePickLocation
+import com.boostcamp.mapisode.episode.navigation.navigateWriteContent
+import com.boostcamp.mapisode.episode.navigation.navigateWriteInfo
 import com.boostcamp.mapisode.home.navigation.navigateEpisodeDetail
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupCreation
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupDetail
@@ -63,6 +67,25 @@ internal class MainNavigator(
 
 	fun navigateToEpisodeDetail(episodeId: String) {
 		navController.navigateEpisodeDetail(episodeId)
+	}
+
+	fun getEpisodeBackStackEntry(): NavBackStackEntry =
+		navController.getBackStackEntry(startDestination)
+
+	fun popBackEpisodeToMain() {
+		navController.popBackStack(MainRoute.Episode, inclusive = true)
+	}
+
+	fun navigateWriteInfo() {
+		navController.navigateWriteInfo()
+	}
+
+	fun navigatePickLocation() {
+		navController.navigatePickLocation()
+	}
+
+	fun navigateWriteContent() {
+		navController.navigateWriteContent()
 	}
 
 	fun navigateGroupJoin() {

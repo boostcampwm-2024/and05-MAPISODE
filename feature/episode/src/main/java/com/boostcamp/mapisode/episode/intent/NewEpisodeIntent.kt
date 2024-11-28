@@ -19,4 +19,5 @@ sealed class NewEpisodeIntent : UiIntent {
 	data class SetEpisodeInfo(val episodeInfo: NewEpisodeInfo) : NewEpisodeIntent()
 	data class SetEpisodeContent(val episodeContent: NewEpisodeContent) : NewEpisodeIntent()
 	data object CreateNewEpisode : NewEpisodeIntent()
+	data object ClearEpisode : NewEpisodeIntent()
 }

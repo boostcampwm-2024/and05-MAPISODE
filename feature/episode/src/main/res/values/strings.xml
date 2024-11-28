@@ -3,6 +3,10 @@
 	<string name="new_episode_menu_title">새 에피소드</string>
 	<string name="new_episode_menu_create_episode">에피소드 생성</string>
 	<string name="new_episode_menu_add_pictures">사진 추가</string>
+	<string name="new_episode_menu_ok">확인</string>
+	<string name="new_episode_menu_cancel">취소</string>
+
+	<string name="new_episode_pictures_empty">사진을 선택해 주세요.</string>
 
 	<string name="new_episode_info_location">장소</string>
 	<string name="new_episode_info_group">그룹</string>
@@ -28,4 +32,6 @@
 	<string name="new_episode_content_placeholder_description">내용을 입력해주세요</string>
 
 	<string name="new_episode_create_episode">생성하기</string>
+	<string name="new_episode_create_episode_success">에피소드 생성이 완료되었습니다.</string>
+	<string name="new_episode_create_episode_fail">에피소드 생성에 실패하였습니다.</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.episode
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,18 +11,20 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
@@ -32,24 +35,51 @@ import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.buttonModifier
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.textFieldModifier
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.textFieldVerticalArrangement
 import com.boostcamp.mapisode.episode.intent.NewEpisodeContent
-import com.boostcamp.mapisode.episode.intent.NewEpisodeState
+import com.boostcamp.mapisode.episode.intent.NewEpisodeIntent
+import com.boostcamp.mapisode.episode.intent.NewEpisodeSideEffect
+import com.boostcamp.mapisode.episode.intent.NewEpisodeViewModel
+import timber.log.Timber
 
 @Composable
 internal fun NewEpisodeContentScreen(
-	state: NewEpisodeState,
-	navController: NavController,
-	submitEpisode: (NewEpisodeContent) -> Unit = {},
+	viewModel: NewEpisodeViewModel = hiltViewModel(),
+	onPopBack: () -> Unit,
+	onPopBackToMain: () -> Unit,
 ) {
+	val context = LocalContext.current
+	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 	var titleValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-		mutableStateOf(TextFieldValue(state.episodeContent.title))
+		mutableStateOf(TextFieldValue(uiState.episodeContent.title))
 	}
 	var descriptionValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-		mutableStateOf(TextFieldValue(state.episodeContent.description))
+		mutableStateOf(TextFieldValue(uiState.episodeContent.description))
+	}
+
+	LaunchedEffect(Unit) {
+		viewModel.sideEffect.collect { sideEffect ->
+			when (sideEffect) {
+				is NewEpisodeSideEffect.ShowToast -> {
+					Toast.makeText(
+						context,
+						sideEffect.messageResId,
+						Toast.LENGTH_SHORT,
+					).show()
+				}
+			}
+		}
 	}
 
 	MapisodeScaffold(
 		topBar = {
-			NewEpisodeTopbar(navController)
+			NewEpisodeTopBar(
+				onClickBack = {
+					onPopBack()
+				},
+				onClickClear = {
+					viewModel.onIntent(NewEpisodeIntent.ClearEpisode)
+					onPopBackToMain()
+				},
+			)
 		},
 		isStatusBarPaddingExist = true,
 	) { innerPadding ->
@@ -83,7 +113,7 @@ internal fun NewEpisodeContentScreen(
 						contentPadding = PaddingValues(12.dp),
 						horizontalArrangement = Arrangement.spacedBy(10.dp),
 					) {
-						items(state.episodeContent.images) { imageUri ->
+						items(uiState.episodeContent.images) { imageUri ->
 							Surface(Modifier.size(150.dp)) {
 								AsyncImage(
 									model = imageUri,
@@ -97,16 +127,23 @@ internal fun NewEpisodeContentScreen(
 			MapisodeFilledButton(
 				modifier = buttonModifier,
 				onClick = {
-					submitEpisode(
-						NewEpisodeContent(
-							titleValue.text,
-							descriptionValue.text,
-							state.episodeContent.images,
+					viewModel.onIntent(
+						NewEpisodeIntent.SetEpisodeContent(
+							NewEpisodeContent(
+								titleValue.text,
+								descriptionValue.text,
+								uiState.episodeContent.images,
+							),
 						),
 					)
-					titleValue = TextFieldValue("")
-					descriptionValue = TextFieldValue("")
-					navController.popBackStack("new_episode_pics", inclusive = false)
+					try {
+						viewModel.onIntent(NewEpisodeIntent.CreateNewEpisode)
+						titleValue = TextFieldValue("")
+						descriptionValue = TextFieldValue("")
+						onPopBackToMain()
+					} catch (e: Exception) {
+						Timber.e(e)
+					}
 				},
 				text = stringResource(R.string.new_episode_create_episode),
 			)
@@ -118,7 +155,7 @@ internal fun NewEpisodeContentScreen(
 @Composable
 internal fun NewEpisodeContentScreenPreview() {
 	NewEpisodeContentScreen(
-		state = NewEpisodeState(),
-		navController = rememberNavController(),
+		onPopBack = {},
+		onPopBackToMain = {},
 	)
 }
