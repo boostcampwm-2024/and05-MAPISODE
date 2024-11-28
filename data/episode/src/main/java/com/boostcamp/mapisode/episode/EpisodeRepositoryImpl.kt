@@ -9,6 +9,7 @@ import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.boostcamp.mapisode.model.EpisodeModel
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
@@ -153,4 +154,23 @@ class EpisodeRepositoryImpl @Inject constructor(
 			val model = requireNotNull(document.toObject(EpisodeFirestoreModel::class.java))
 			model.toDomainModel(document.id)
 		}
+
+	override suspend fun getMostRecentEpisodeByGroup(groupId: String): EpisodeModel? {
+		val query = episodeCollection
+			.whereEqualTo(FirestoreConstants.FIELD_GROUP, groupCollection.document(groupId))
+			.orderBy(FirestoreConstants.FIELD_CREATED_AT, Query.Direction.DESCENDING)
+			.limit(1)
+		val querySnapshot = query.get().await()
+
+		if (querySnapshot.isEmpty) {
+			return null
+		}
+
+		return try {
+			querySnapshot.documents.first().toObject(EpisodeFirestoreModel::class.java)
+				?.toDomainModel(querySnapshot.documents.first().id)
+		} catch (e: Exception) {
+			throw e
+		}
+	}
 }
