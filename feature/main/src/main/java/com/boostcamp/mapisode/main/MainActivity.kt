@@ -16,8 +16,6 @@ import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-	var isReady by mutableStateOf(false)
-
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 
@@ -25,27 +23,10 @@ class MainActivity : ComponentActivity() {
 
 		setContent {
 			val navigator: MainNavigator = rememberMainNavigator()
+
 			MapisodeTheme {
 				MainScreen(navigator = navigator)
 			}
-			if (navigator.endSplash) {
-				LaunchedEffect(Unit) {
-					delay(300)
-					isReady = true
-				}
-			}
 		}
-
-		val content: View = findViewById(android.R.id.content)
-		content.viewTreeObserver.addOnPreDrawListener(
-			object : ViewTreeObserver.OnPreDrawListener {
-				override fun onPreDraw(): Boolean = if (isReady) {
-					content.viewTreeObserver.removeOnPreDrawListener(this)
-					true
-				} else {
-					false
-				}
-			},
-		)
 	}
 }
