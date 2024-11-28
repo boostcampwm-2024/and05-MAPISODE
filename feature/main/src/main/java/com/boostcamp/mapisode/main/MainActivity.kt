@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -27,9 +28,11 @@ class MainActivity : ComponentActivity() {
 			MapisodeTheme {
 				MainScreen(navigator = navigator)
 			}
-			LaunchedEffect(Unit) {
-				kotlinx.coroutines.delay(300)
-				isReady = true
+			if (navigator.endSplash) {
+				LaunchedEffect(Unit) {
+					delay(300)
+					isReady = true
+				}
 			}
 		}
 

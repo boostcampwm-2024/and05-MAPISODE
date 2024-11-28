@@ -1,7 +1,10 @@
 package com.boostcamp.mapisode.main
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -48,8 +51,14 @@ internal class MainNavigator(
 		}
 	}
 
+	var endSplash by mutableStateOf(false)
+
 	fun navigateToMain() {
 		navController.navigate(MainRoute.Home)
+	}
+
+	fun endSplash(end: Boolean) {
+		endSplash = end
 	}
 
 	fun navigateToEpisodeDetail(episodeId: String) {
