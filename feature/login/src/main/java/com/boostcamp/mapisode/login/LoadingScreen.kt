@@ -15,11 +15,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.boostcamp.mapisode.designsystem.compose.MapisodeCircularLoadingIndicator
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
+import com.boostcamp.mapisode.designsystem.R as S
 
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
 	Box(
-		modifier = Modifier.fillMaxSize(),
+		modifier = modifier.fillMaxSize(),
 		contentAlignment = Alignment.Center,
 	) {
 		Column(
@@ -28,7 +29,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 			Spacer(modifier = Modifier.weight(1f))
 
 			MapisodeIcon(
-				id = com.boostcamp.mapisode.designsystem.R.drawable.ic_mapisode_brand_text,
+				id = S.drawable.ic_mapisode_brand_text,
 				modifier = Modifier
 					.fillMaxWidth(0.45f)
 					.aspectRatio(2.8f),
@@ -36,8 +37,8 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 			)
 
 			Image(
-				painter = painterResource(id = com.boostcamp.mapisode.designsystem.R.drawable.ic_mapisode_sublogo_foreground),
-				contentDescription = stringResource(R.string.login_mapisode_subicon),
+				painter = painterResource(id = S.drawable.ic_mapisode_sublogo_foreground),
+				contentDescription = stringResource(id = R.string.login_mapisode_subicon),
 				modifier = Modifier
 					.fillMaxWidth()
 					.aspectRatio(1.5f),
