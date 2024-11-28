@@ -22,7 +22,8 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 	GroupRepository {
 	private val groupCollection = database.collection(FirestoreConstants.COLLECTION_GROUP)
 	private val userCollection = database.collection(FirestoreConstants.COLLECTION_USER)
-	private val inviteCodesCollection = database.collection(FirestoreConstants.COLLECTION_INVITE_CODES)
+	private val inviteCodesCollection =
+		database.collection(FirestoreConstants.COLLECTION_INVITE_CODES)
 
 	override suspend fun getGroupByGroupId(groupId: String): GroupModel = try {
 		groupCollection.document(groupId)
@@ -38,7 +39,8 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 		val userSnapshot = userCollection.document(userId).get().await()
 
 		@Suppress("UNCHECKED_CAST")
-		val groupReferences = (userSnapshot[FirestoreConstants.FIELD_GROUPS] as List<DocumentReference>)
+		val groupReferences =
+			(userSnapshot[FirestoreConstants.FIELD_GROUPS] as List<DocumentReference>)
 
 		groupReferences.mapNotNull { documentRef ->
 			groupCollection.document(documentRef.id)
@@ -147,7 +149,9 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 					FirestoreConstants.FIELD_GROUPS,
 				) as MutableList<DocumentReference>
 
-				members.remove(database.collection(FirestoreConstants.COLLECTION_USER).document(userId))
+				members.remove(
+					database.collection(FirestoreConstants.COLLECTION_USER).document(userId),
+				)
 				transaction.update(groupDocRef, FirestoreConstants.FIELD_MEMBERS, members)
 
 				groups.remove(
