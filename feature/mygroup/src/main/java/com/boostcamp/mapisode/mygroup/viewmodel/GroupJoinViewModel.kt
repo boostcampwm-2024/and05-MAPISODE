@@ -22,15 +22,7 @@ class GroupJoinViewModel @Inject constructor(
 	private val myId: MutableStateFlow<String> = MutableStateFlow("")
 
 	init {
-		setUserIde()
 		observeUserId()
-	}
-
-	// TODO : 삭제할 임시 함수
-	private fun setUserIde() {
-		viewModelScope.launch {
-			userPreferenceDataStore.updateUserId("J6O9lIukqkSEKANK87XgQjiDpD82")
-		}
 	}
 
 	private fun observeUserId() {
