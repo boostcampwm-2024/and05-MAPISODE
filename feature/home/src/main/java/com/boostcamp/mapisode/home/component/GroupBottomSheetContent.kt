@@ -74,7 +74,7 @@ fun GroupBottomSheetContent(
 					groupId = group.id,
 					groupImage = group.imageUrl,
 					groupName = group.name,
-					onClick = onGroupClick
+					onClick = onGroupClick,
 				)
 			}
 		}
