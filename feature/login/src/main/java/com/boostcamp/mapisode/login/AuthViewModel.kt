@@ -123,7 +123,6 @@ class AuthViewModel @Inject constructor(
 
 				userRepository.createUser(user)
 				createMyEpisodeGroup(user)
-				joinMyGroup(user.uid)
 
 				storeUserData(
 					userModel = user,
