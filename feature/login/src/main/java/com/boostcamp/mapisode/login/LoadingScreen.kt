@@ -17,7 +17,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeCircularLoadingIndica
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 
 @Composable
-fun SplashScreen(modifier: Modifier = Modifier) {
+fun LoadingScreen(modifier: Modifier = Modifier) {
 	Box(
 		modifier = Modifier.fillMaxSize(),
 		contentAlignment = Alignment.Center,
