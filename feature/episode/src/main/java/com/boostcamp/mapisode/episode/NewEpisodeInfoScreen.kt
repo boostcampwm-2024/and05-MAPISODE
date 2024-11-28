@@ -24,8 +24,8 @@ import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
@@ -36,38 +36,44 @@ import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.buttonModifier
 import com.boostcamp.mapisode.episode.intent.EpisodeCategory
-import com.boostcamp.mapisode.episode.intent.NewEpisodeInfo
-import com.boostcamp.mapisode.episode.intent.NewEpisodeState
+import com.boostcamp.mapisode.episode.intent.NewEpisodeIntent
+import com.boostcamp.mapisode.episode.intent.NewEpisodeViewModel
 import java.util.Date
 
 @Composable
 internal fun NewEpisodeInfoScreen(
-	state: NewEpisodeState,
-	navController: NavController,
-	loadMyGroups: () -> Unit,
-	updateGroup: (String) -> Unit,
-	updateCategory: (EpisodeCategory) -> Unit,
-	updateTags: (String) -> Unit,
-	updateDate: (Date) -> Unit,
-	updateEpisodeInfo: (NewEpisodeInfo) -> Unit,
+	viewModel: NewEpisodeViewModel = hiltViewModel(),
+	onPopBack: () -> Unit,
+	onPopBackToMain: () -> Unit,
+	onClickPickLocation: () -> Unit,
+	onNavigateToContent: () -> Unit,
 ) {
+	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 	var isGroupDropdownExpanded by remember { mutableStateOf(false) }
 	var isCategoryDropdownExpanded by remember { mutableStateOf(false) }
 	var isGroupBlank by rememberSaveable { mutableStateOf(false) }
 	var isCategoryBlank by rememberSaveable { mutableStateOf(false) }
 	var tagValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-		mutableStateOf(TextFieldValue(state.episodeInfo.tags))
+		mutableStateOf(TextFieldValue(uiState.episodeInfo.tags))
 	}
 	var showDatePickerDialog by remember { mutableStateOf(false) }
 	val datePickerState = rememberDatePickerState()
 
 	LaunchedEffect(Unit) {
-		loadMyGroups()
+		viewModel.onIntent(NewEpisodeIntent.LoadMyGroups)
 	}
 
 	MapisodeScaffold(
 		topBar = {
-			NewEpisodeTopbar(navController)
+			NewEpisodeTopBar(
+				onClickBack = {
+					onPopBack()
+				},
+				onClickClear = {
+					viewModel.onIntent(NewEpisodeIntent.ClearEpisode)
+					onPopBackToMain()
+				},
+			)
 		},
 		isStatusBarPaddingExist = true,
 	) { innerPadding ->
@@ -89,10 +95,10 @@ internal fun NewEpisodeInfoScreen(
 							onClick = {
 								showDatePickerDialog = false
 								datePickerState.selectedDateMillis?.let {
-									updateDate(Date(it))
+									viewModel.onIntent(NewEpisodeIntent.SetEpisodeDate(Date(it)))
 								}
 							},
-							text = "확인",
+							text = stringResource(R.string.new_episode_menu_ok),
 						)
 					},
 					dismissButton = {
@@ -100,7 +106,7 @@ internal fun NewEpisodeInfoScreen(
 							onClick = {
 								showDatePickerDialog = false
 							},
-							text = "취소",
+							text = stringResource(R.string.new_episode_menu_cancel),
 						)
 					},
 					colors = datePickerDialogColors(),
@@ -116,18 +122,18 @@ internal fun NewEpisodeInfoScreen(
 				EpisodeTextFieldGroup(
 					labelRes = R.string.new_episode_info_location,
 					placeholderRes = R.string.new_episode_info_placeholder_location,
-					value = state.episodeAddress,
+					value = uiState.episodeAddress,
 					readOnly = true,
 					trailingIcon = { MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_location) },
 					onTrailingIconClick = {
-						navController.navigate("pick_location")
+						onClickPickLocation()
 					},
 				)
 				Column {
 					EpisodeTextFieldGroup(
 						labelRes = R.string.new_episode_info_group,
 						placeholderRes = R.string.new_episode_info_placeholder_group,
-						value = state.episodeInfo.group,
+						value = uiState.episodeInfo.group,
 						readOnly = true,
 						trailingIcon = {
 							MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_arrow_drop_down)
@@ -141,15 +147,15 @@ internal fun NewEpisodeInfoScreen(
 						expanded = isGroupDropdownExpanded,
 						onDismissRequest = {
 							isGroupDropdownExpanded = !isGroupDropdownExpanded
-							isGroupBlank = state.episodeInfo.group.isBlank()
+							isGroupBlank = uiState.episodeInfo.group.isBlank()
 						},
 						modifier = Modifier.fillMaxWidth(0.9f),
 					) {
-						for (myGroup in state.myGroups) {
+						for (myGroup in uiState.myGroups) {
 							MapisodeDropdownMenuItem(
 								onClick = {
 									isGroupDropdownExpanded = !isGroupDropdownExpanded
-									updateGroup(myGroup.name)
+									viewModel.onIntent(NewEpisodeIntent.SetEpisodeGroup(myGroup.name))
 								},
 							) {
 								MapisodeText(text = myGroup.name)
@@ -161,7 +167,7 @@ internal fun NewEpisodeInfoScreen(
 					EpisodeTextFieldGroup(
 						labelRes = R.string.new_episode_info_category,
 						placeholderRes = R.string.new_episode_info_placeholder_category,
-						value = state.episodeInfo.category?.categoryName ?: "",
+						value = uiState.episodeInfo.category?.categoryName ?: "",
 						readOnly = true,
 						trailingIcon = {
 							MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_arrow_drop_down)
@@ -175,7 +181,7 @@ internal fun NewEpisodeInfoScreen(
 						expanded = isCategoryDropdownExpanded,
 						onDismissRequest = {
 							isCategoryDropdownExpanded = !isCategoryDropdownExpanded
-							isCategoryBlank = checkCategoryIsNull(state.episodeInfo.category)
+							isCategoryBlank = checkCategoryIsNull(uiState.episodeInfo.category)
 						},
 						modifier = Modifier.fillMaxWidth(0.9f),
 					) {
@@ -183,7 +189,7 @@ internal fun NewEpisodeInfoScreen(
 							MapisodeDropdownMenuItem(
 								onClick = {
 									isCategoryDropdownExpanded = !isCategoryDropdownExpanded
-									updateCategory(category)
+									viewModel.onIntent(NewEpisodeIntent.SetEpisodeCategory(category))
 								},
 							) {
 								MapisodeText(text = category.categoryName)
@@ -201,7 +207,7 @@ internal fun NewEpisodeInfoScreen(
 				EpisodeTextFieldGroup(
 					labelRes = R.string.new_episode_info_date,
 					placeholderRes = R.string.new_episode_info_placeholder_date,
-					value = dateString(state.episodeInfo.date),
+					value = dateString(uiState.episodeInfo.date),
 					readOnly = true,
 					trailingIcon = {
 						MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_calendar)
@@ -214,20 +220,22 @@ internal fun NewEpisodeInfoScreen(
 			MapisodeFilledButton(
 				modifier = buttonModifier,
 				onClick = {
-					if (state.episodeInfo.group.isBlank() ||
-						checkCategoryIsNull(state.episodeInfo.category)
+					if (uiState.episodeInfo.group.isBlank() ||
+						checkCategoryIsNull(uiState.episodeInfo.category)
 					) {
-						isGroupBlank = state.episodeInfo.group.isBlank()
-						isCategoryBlank = checkCategoryIsNull(state.episodeInfo.category)
+						isGroupBlank = uiState.episodeInfo.group.isBlank()
+						isCategoryBlank = checkCategoryIsNull(uiState.episodeInfo.category)
 						return@MapisodeFilledButton
 					}
-					updateEpisodeInfo(
-						state.episodeInfo.copy(
-							location = state.cameraPosition.target,
-							tags = tagValue.text,
+					viewModel.onIntent(
+						NewEpisodeIntent.SetEpisodeInfo(
+							uiState.episodeInfo.copy(
+								location = uiState.cameraPosition.target,
+								tags = tagValue.text,
+							),
 						),
 					)
-					navController.navigate("new_episode_content")
+					onNavigateToContent()
 				},
 				text = stringResource(R.string.new_episode_info_next),
 			)
@@ -254,13 +262,9 @@ private fun dateString(date: Date): String =
 @Composable
 internal fun NewEpisodeInfoScreenPreview() {
 	NewEpisodeInfoScreen(
-		state = NewEpisodeState(),
-		navController = rememberNavController(),
-		loadMyGroups = {},
-		updateEpisodeInfo = {},
-		updateCategory = {},
-		updateGroup = {},
-		updateTags = {},
-		updateDate = {},
+		onPopBack = {},
+		onPopBackToMain = {},
+		onClickPickLocation = {},
+		onNavigateToContent = {},
 	)
 }

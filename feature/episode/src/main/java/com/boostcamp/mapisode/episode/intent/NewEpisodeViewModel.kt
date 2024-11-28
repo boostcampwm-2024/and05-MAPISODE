@@ -3,12 +3,14 @@ package com.boostcamp.mapisode.episode.intent
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
 import com.boostcamp.mapisode.episode.EpisodeRepository
+import com.boostcamp.mapisode.episode.R
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.MAP_DEFAULT_ZOOM
 import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.network.repository.NaverMapsRepository
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.naver.maps.map.CameraPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -44,6 +46,10 @@ class NewEpisodeViewModel @Inject constructor(
 			}
 
 			is NewEpisodeIntent.SetEpisodePics -> {
+				if (intent.pics.isEmpty()) {
+					postSideEffect(NewEpisodeSideEffect.ShowToast(R.string.new_episode_pictures_empty))
+					return
+				}
 				intent {
 					copy(
 						episodeContent = episodeContent.copy(images = intent.pics),
@@ -129,18 +135,30 @@ class NewEpisodeViewModel @Inject constructor(
 			}
 
 			is NewEpisodeIntent.CreateNewEpisode -> {
-				viewModelScope.launch {
-					val userId = userPreferenceDataStore.getUserId().firstOrNull() ?: ""
-					val episodeModel = uiState.value.toDomainModel(userId)
-					episodeRepository.createEpisode(episodeModel)
-					intent {
-						copy(
-							episodeInfo = NewEpisodeInfo(),
-							episodeContent = NewEpisodeContent(),
-						)
+				try {
+					viewModelScope.launch {
+						val userId =
+							requireNotNull(userPreferenceDataStore.getUserId().firstOrNull())
+						val episodeModel = uiState.value.toDomainModel(userId)
+						episodeRepository.createEpisode(episodeModel)
+						clearEpisodeState()
+						postSideEffect(NewEpisodeSideEffect.ShowToast(R.string.new_episode_create_episode_success))
+						delay(100)
 					}
+				} catch (e: Exception) {
+					postSideEffect(NewEpisodeSideEffect.ShowToast(R.string.new_episode_create_episode_fail))
 				}
 			}
+
+			is NewEpisodeIntent.ClearEpisode -> {
+				clearEpisodeState()
+			}
+		}
+	}
+
+	private fun clearEpisodeState() {
+		intent {
+			NewEpisodeState()
 		}
 	}
 }

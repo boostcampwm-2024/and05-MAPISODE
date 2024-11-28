@@ -8,12 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
@@ -21,8 +23,8 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
-import com.boostcamp.mapisode.episode.intent.NewEpisodeState
-import com.naver.maps.geometry.LatLng
+import com.boostcamp.mapisode.episode.intent.NewEpisodeIntent
+import com.boostcamp.mapisode.episode.intent.NewEpisodeViewModel
 import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.LocationTrackingMode
@@ -30,6 +32,7 @@ import com.naver.maps.map.compose.MapProperties
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.compose.rememberMarkerState
 import kotlinx.coroutines.FlowPreview
@@ -39,23 +42,23 @@ import kotlinx.coroutines.flow.debounce
 @OptIn(ExperimentalNaverMapApi::class, FlowPreview::class)
 @Composable
 internal fun PickLocationScreen(
-	state: NewEpisodeState,
-	cameraPositionState: CameraPositionState,
-	navController: NavController,
-	updateLocation: (LatLng) -> Unit,
-	updateAddress: (LatLng) -> Unit,
-	updateIsCameraMoving: (Boolean) -> Unit,
+	viewModel: NewEpisodeViewModel = hiltViewModel(),
+	onPopBackToInfo: () -> Unit,
 ) {
+	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+	val cameraPositionState: CameraPositionState = rememberCameraPositionState {
+		position = uiState.cameraPosition
+	}
 	val episodeMarkerState = rememberMarkerState()
 	episodeMarkerState.position = cameraPositionState.position.target
 
 	LaunchedEffect(cameraPositionState.position.target) {
-		updateIsCameraMoving(true)
+		viewModel.onIntent(NewEpisodeIntent.SetIsCameraMoving(true))
 		snapshotFlow { cameraPositionState.position.target }
 			.debounce(500L)
 			.collectLatest { target ->
-				updateAddress(target)
-				updateIsCameraMoving(false)
+				viewModel.onIntent(NewEpisodeIntent.SetEpisodeAddress(target))
+				viewModel.onIntent(NewEpisodeIntent.SetIsCameraMoving(false))
 			}
 	}
 
@@ -65,7 +68,11 @@ internal fun PickLocationScreen(
 			TopAppBar(
 				title = stringResource(R.string.new_episode_menu_title),
 				navigationIcon = {
-					MapisodeIconButton(onClick = { navController.navigateUp() }) {
+					MapisodeIconButton(
+						onClick = {
+							onPopBackToInfo()
+						},
+					) {
 						MapisodeIcon(com.boostcamp.mapisode.designsystem.R.drawable.ic_arrow_back_ios)
 					}
 				},
@@ -101,17 +108,21 @@ internal fun PickLocationScreen(
 						style = MapisodeTheme.typography.headlineSmall,
 					)
 					MapisodeText(
-						text = state.episodeAddress,
+						text = uiState.episodeAddress,
 						style = MapisodeTheme.typography.bodyLarge,
 					)
 					MapisodeFilledButton(
 						modifier = Modifier.fillMaxWidth(),
 						onClick = {
-							updateLocation(episodeMarkerState.position)
-							navController.popBackStack("new_episode_info", false)
+							viewModel.onIntent(
+								NewEpisodeIntent.SetEpisodeLocation(
+									episodeMarkerState.position,
+								),
+							)
+							onPopBackToInfo()
 						},
 						text = stringResource(R.string.new_episode_pick_location_button),
-						enabled = state.isCameraMoving.not(),
+						enabled = uiState.isCameraMoving.not(),
 						showRipple = true,
 					)
 				}
