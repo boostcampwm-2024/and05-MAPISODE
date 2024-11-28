@@ -59,8 +59,7 @@ class EpisodeDetailPreviewProvider : PreviewParameterProvider<EpisodeDetailState
 					"육즙이 팡 터지는데 진짜 맛있었어! " +
 					"감자튀김도 양이 푸짐하고 바삭해서 " +
 					"버거랑 환상 조합이더라. 🍟",
-
-				),
+			),
 			author = UserModel(
 				name = "Author",
 				profileUrl = MOCK_IMAGE_URL,
