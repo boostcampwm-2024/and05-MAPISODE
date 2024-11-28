@@ -46,6 +46,8 @@ internal fun NewEpisodePicsScreen(
 						Toast.LENGTH_LONG,
 					).show()
 				}
+
+				else -> {}
 			}
 		}
 	}
