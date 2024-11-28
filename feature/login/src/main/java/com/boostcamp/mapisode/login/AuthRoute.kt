@@ -39,10 +39,6 @@ fun AuthRoute(
 	}
 
 	when {
-		uiState.isLoading -> {
-			LoadingScreen()
-		}
-
 		uiState.isLoginSuccess -> {
 			SignUpScreen(
 				nickname = uiState.nickname,
