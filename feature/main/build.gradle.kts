@@ -13,5 +13,4 @@ dependencies {
 	implementation(projects.feature.mygroup)
 	implementation(projects.feature.login)
 	implementation(libs.kotlinx.immutable)
-	implementation(libs.splash)
 }

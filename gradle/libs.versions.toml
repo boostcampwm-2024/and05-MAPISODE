@@ -154,9 +154,6 @@ retrofit-bom = { group = "com.squareup.retrofit2", name = "retrofit-bom", versio
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit" }
 retrofit-kotlinx-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization" }
 
-# Splash
-splash = { group = "androidx.core", name = "core-splashscreen", version.ref = "splash" }
-
 # Timber
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
