@@ -28,15 +28,16 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.theme.AppTypography
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.home.common.HomeConstant.tempGroupList
-import com.boostcamp.mapisode.model.GroupItem
+import com.boostcamp.mapisode.model.GroupModel
 import kotlinx.collections.immutable.PersistentList
 import com.boostcamp.mapisode.home.R as Home
 
 @Composable
 fun GroupBottomSheetContent(
-	groupList: PersistentList<GroupItem>,
+	groupList: PersistentList<GroupModel>,
 	modifier: Modifier = Modifier,
 	onDismiss: () -> Unit = {},
+	onGroupClick: (String) -> Unit = {},
 ) {
 	Column(
 		modifier = modifier.fillMaxWidth(),
@@ -70,8 +71,10 @@ fun GroupBottomSheetContent(
 		) {
 			items(groupList) { group ->
 				GroupCard(
+					groupId = group.id,
 					groupImage = group.imageUrl,
 					groupName = group.name,
+					onClick = onGroupClick
 				)
 			}
 		}
