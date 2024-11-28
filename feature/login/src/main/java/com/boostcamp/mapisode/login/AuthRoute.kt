@@ -12,6 +12,7 @@ import com.boostcamp.mapisode.auth.GoogleOauth
 @Composable
 fun AuthRoute(
 	navigateToMain: () -> Unit,
+	endSplash: (Boolean) -> Unit,
 	viewModel: AuthViewModel = hiltViewModel(),
 ) {
 	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -28,6 +29,10 @@ fun AuthRoute(
 				is AuthSideEffect.NavigateToMain -> navigateToMain()
 				is AuthSideEffect.ShowError -> {
 					Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+				}
+
+				is AuthSideEffect.EndSplash -> {
+					endSplash(effect.end)
 				}
 			}
 		}

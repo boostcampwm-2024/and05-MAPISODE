@@ -7,8 +7,9 @@ import com.boostcamp.mapisode.navigation.Route
 
 fun NavGraphBuilder.addAuthNavGraph(
 	navigateToMain: () -> Unit,
+	endSplash: (Boolean) -> Unit,
 ) {
 	composable<Route.Auth> {
-		AuthRoute(navigateToMain)
+		AuthRoute(navigateToMain, endSplash)
 	}
 }
