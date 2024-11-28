@@ -27,6 +27,7 @@ fun NavController.navigateEpisodeDetail(
 fun NavGraphBuilder.addHomeNavGraph(
 	onTextMarkerClick: (EpisodeLatLng) -> Unit,
 	onEpisodeClick: (String) -> Unit,
+	onBackClick: () -> Unit,
 ) {
 	composable<MainRoute.Home> {
 		HomeRoute(
@@ -37,6 +38,6 @@ fun NavGraphBuilder.addHomeNavGraph(
 
 	composable<HomeRoute.Detail> { backStackEntry ->
 		val episodeId = backStackEntry.toRoute<HomeRoute.Detail>().episodeId
-		EpisodeDetailRoute(episodeId = episodeId)
+		EpisodeDetailRoute(episodeId = episodeId, onBackClick = onBackClick)
 	}
 }
