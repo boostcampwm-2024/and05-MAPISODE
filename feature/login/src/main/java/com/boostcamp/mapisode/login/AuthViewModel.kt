@@ -36,12 +36,12 @@ class AuthViewModel @Inject constructor(
 		viewModelScope.launch {
 			if (userDataStore.checkLoggedIn()) {
 				onIntent(AuthIntent.OnLoginSuccess)
+				postSideEffect(AuthSideEffect.NavigateToMain)
 			} else {
 				intent {
 					copy(isLoading = false)
 				}
 			}
-			postSideEffect(AuthSideEffect.EndSplash(true))
 		}
 	}
 
