@@ -138,8 +138,6 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 				val members = groupSnapshot.get(
 					FirestoreConstants.FIELD_MEMBERS,
 				) as MutableList<DocumentReference>
-				members.remove(database.collection(FirestoreConstants.COLLECTION_USER).document(userId))
-				transaction.update(groupDocRef, FirestoreConstants.FIELD_MEMBERS, members)
 
 				// user의 그룹 필드에서 그룹 제거
 				val userDocRef = database.collection(FirestoreConstants.COLLECTION_USER)
@@ -148,6 +146,10 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 				val groups = userSnapshot.get(
 					FirestoreConstants.FIELD_GROUPS,
 				) as MutableList<DocumentReference>
+
+				members.remove(database.collection(FirestoreConstants.COLLECTION_USER).document(userId))
+				transaction.update(groupDocRef, FirestoreConstants.FIELD_MEMBERS, members)
+
 				groups.remove(
 					database.collection(FirestoreConstants.COLLECTION_GROUP)
 						.document(groupId),
