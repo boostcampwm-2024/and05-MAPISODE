@@ -39,13 +39,11 @@ class MainActivity : ComponentActivity() {
 		val content: View = findViewById(android.R.id.content)
 		content.viewTreeObserver.addOnPreDrawListener(
 			object : ViewTreeObserver.OnPreDrawListener {
-				override fun onPreDraw(): Boolean {
-					return if (isReady) {
-						content.viewTreeObserver.removeOnPreDrawListener(this)
-						true
-					} else {
-						false
-					}
+				override fun onPreDraw(): Boolean = if (isReady) {
+					content.viewTreeObserver.removeOnPreDrawListener(this)
+					true
+				} else {
+					false
 				}
 			},
 		)
