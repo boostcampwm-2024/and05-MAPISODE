@@ -39,6 +39,10 @@ class UserPreferencesDataStoreImpl @Inject constructor(
 		preferences[PreferenceKeys.USER_ID]
 	}
 
+	override fun getRecentSelectedGroup(): Flow<String?> = dataStore.data.map { preferences ->
+		preferences[PreferenceKeys.RECENT_SELECTED_GROUP]
+	}
+
 	override suspend fun checkLoggedIn(): Boolean = dataStore.data.map { preferences ->
 		preferences[PreferenceKeys.IS_LOGGED_IN] ?: false
 	}.first()
