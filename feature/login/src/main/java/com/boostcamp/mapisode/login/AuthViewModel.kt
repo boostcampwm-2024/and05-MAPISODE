@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.auth.GoogleOauth
 import com.boostcamp.mapisode.auth.LoginState
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
+import com.boostcamp.mapisode.model.GroupModel
 import com.boostcamp.mapisode.model.UserModel
 import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.ui.base.BaseViewModel
@@ -121,8 +122,8 @@ class AuthViewModel @Inject constructor(
 				)
 
 				userRepository.createUser(user)
-//				createMyEpisodeGroup(user.uid)
-//				joinMyGroup(user.uid)
+				createMyEpisodeGroup(user.uid)
+				joinMyGroup(user.uid)
 
 				storeUserData(
 					userModel = user,
@@ -159,30 +160,30 @@ class AuthViewModel @Inject constructor(
 			userDataStore.updateRecentSelectedGroup(recentGroup)
 		}
 	}
-//
-//	private fun createMyEpisodeGroup(
-//		uid: String,
-//	) {
-//		viewModelScope.launch {
-//			groupRepository.createGroup(
-//				GroupModel(
-//					id = "my-episode",
-//					adminUser = uid,
-//					createdAt = Date.from(java.time.Instant.now()),
-//					description = "내가 작성한 에피소드",
-//					imageUrl = "",
-//					name = "\uD83D\uDC51 나의 에피소드",
-//					members = listOf(uid),
-//				),
-//			)
-//		}
-//	}
-//
-//	private fun joinMyGroup(uid: String) {
-//		viewModelScope.launch {
-//			groupRepository.joinGroup(uid, uid)
-//		}
-//	}
+
+	private fun createMyEpisodeGroup(
+		uid: String,
+	) {
+		viewModelScope.launch {
+			groupRepository.createGroup(
+				GroupModel(
+					id = uid,
+					adminUser = uid,
+					createdAt = Date.from(java.time.Instant.now()),
+					description = "내가 작성한 에피소드",
+					imageUrl = "",
+					name = "\uD83D\uDC51 나의 에피소드",
+					members = listOf(uid),
+				),
+			)
+		}
+	}
+
+	private fun joinMyGroup(uid: String) {
+		viewModelScope.launch {
+			groupRepository.joinGroup(uid, uid)
+		}
+	}
 
 	private fun handleLoginSuccess() {
 		viewModelScope.launch {
