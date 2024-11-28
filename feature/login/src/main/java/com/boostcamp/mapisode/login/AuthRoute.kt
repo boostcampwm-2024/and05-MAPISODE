@@ -35,7 +35,7 @@ fun AuthRoute(
 
 	when {
 		uiState.isLoading -> {
-			SplashScreen()
+			LoadingScreen()
 		}
 
 		uiState.isLoginSuccess -> {
