@@ -1,6 +1,7 @@
 package com.boostcamp.mapisode.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -79,7 +80,11 @@ fun LoginScreen(
 			onClick = googleSignInClicked,
 			modifier = Modifier
 				.fillMaxWidth(0.8f)
-				.weight(1f),
+				.weight(1f)
+				.border(
+					width = 1.dp,
+					color = MapisodeTheme.colorScheme.outlineButtonStroke,
+				),
 		) {
 			Row(
 				modifier = Modifier.fillMaxSize(),
