@@ -79,7 +79,7 @@ fun MapisodePhotoPicker(
 	}
 
 	PhotoPicker(
-		photos = cameraPhotos + photos,
+		photos = cameraPhotos.reversed() + photos,
 		isCameraNeeded = isCameraNeeded,
 		isCameraAvailable = isPermissionsGranted,
 		addedPhoto = addedPhoto.value,
