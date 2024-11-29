@@ -393,12 +393,22 @@ private fun HomeScreen(
 					)
 				}
 
-				MapisodeFabOverlayButton(
-					onClick = onGroupFabClick,
+				Column(
 					modifier = Modifier
 						.align(Alignment.CenterEnd)
 						.padding(end = 20.dp),
-				)
+					verticalArrangement = Arrangement.spacedBy(16.dp),
+					horizontalAlignment = Alignment.End,
+				) {
+					MapisodeFabOverlayButton(
+						onClick = onGroupFabClick,
+					)
+
+					MapisodeFabOverlayButton(
+						onClick = onGroupFabClick,
+						iconId = Design.drawable.ic_list_bulleted,
+					)
+				}
 			}
 
 			if (state.isCardVisible) {
