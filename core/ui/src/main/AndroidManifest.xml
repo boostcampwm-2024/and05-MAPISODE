@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<uses-permission android:name="android.permission.CAMERA" />
+
+	<!-- Android 13 이상 (API 33 이상) -->
+	<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+	<!-- Android 10-12 (API 29-32) -->
+	<uses-permission
+		android:name="android.permission.READ_EXTERNAL_STORAGE"
+		android:maxSdkVersion="32" />
+
+	<!-- Android 9 이하 (API 28 이하) -->
+	<uses-permission
+		android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+		android:maxSdkVersion="28" />
+</manifest>
