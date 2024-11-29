@@ -45,6 +45,10 @@ fun AuthRoute(
 				onNicknameChanged = { newNickname ->
 					viewModel.onIntent(AuthIntent.OnNicknameChange(newNickname))
 				},
+				profileUrl = uiState.profileUrl,
+				onProfileUrlchange = { profileUrl ->
+					viewModel.onIntent(AuthIntent.OnProfileUrlchange(profileUrl))
+				},
 				onSignUpClick = { viewModel.onIntent(AuthIntent.OnSignUpClick) },
 			)
 		}
