@@ -5,3 +5,9 @@ plugins {
 android {
 	namespace = "com.boostcamp.mapisode.ui"
 }
+
+dependencies {
+	implementation(projects.core.model)
+	implementation(projects.core.designsystem)
+	implementation(libs.bundles.coil)
+}
