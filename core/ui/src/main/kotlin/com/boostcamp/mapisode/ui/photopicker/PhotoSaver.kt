@@ -14,9 +14,8 @@ import java.util.Locale
 
 object PhotoSaver {
 	fun savePhoto(context: Context, bitmap: Bitmap?): Uri? {
-		if (bitmap == null) {
-			return null
-		}
+		if (bitmap == null) return null
+
 		val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
 		val imageFileName = "JPEG_${timestamp}"
 
