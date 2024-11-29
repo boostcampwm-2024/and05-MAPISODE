@@ -29,8 +29,7 @@ import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.ui.photopicker.component.CameraItem
 import com.boostcamp.mapisode.ui.photopicker.component.PhotoItem
 import com.boostcamp.mapisode.ui.photopicker.model.PhotoInfo
-import com.boostcamp.mapisode.ui.photopicker.permissionHandler.CameraPermissionHandler
-import com.boostcamp.mapisode.ui.photopicker.permissionHandler.PhotoPermissionHandler
+import com.boostcamp.mapisode.ui.photopicker.permissionHandler.PermissionHandler
 import java.time.Instant
 import java.util.Date
 
@@ -44,14 +43,13 @@ fun MapisodePhotoPicker(
 ) {
 	val context = LocalContext.current
 	var photos by remember { mutableStateOf<List<PhotoInfo>>(emptyList()) }
-	var isCameraAvailable: Boolean by rememberSaveable { mutableStateOf(false) }
-	var isPermissionGranted by rememberSaveable { mutableStateOf(false) }
+	var isPermissionsGranted by rememberSaveable { mutableStateOf(false) }
 	val addedPhotos = remember { mutableStateListOf<PhotoInfo>() }
 
 	val photoLoader = remember { PhotoLoader(context) }
 
-	LaunchedEffect(isPermissionGranted) {
-		if (isPermissionGranted) {
+	LaunchedEffect(isPermissionsGranted) {
+		if (isPermissionsGranted) {
 			try {
 				photos = photoLoader.loadPhotos(100)
 			} catch (e: Exception) {
@@ -60,27 +58,15 @@ fun MapisodePhotoPicker(
 		}
 	}
 
-	if (!isPermissionGranted) {
-		PhotoPermissionHandler(
-			onPermissionGranted = {
-				isPermissionGranted = true
-			},
-			onPermissionDenied = {
-				isPermissionGranted = false
-			},
-		)
-	}
-
-	if (isCameraNeeded) {
-		CameraPermissionHandler(
-			onPermissionGranted = {
-				isCameraAvailable = true
-			},
-			onPermissionDenied = {
-				isCameraAvailable = false
-			},
-		)
-	}
+	PermissionHandler(
+		isCameraNeeded = isCameraNeeded,
+		onPermissionsGranted = {
+			isPermissionsGranted = true
+		},
+		onPermissionsDenied = {
+			isPermissionsGranted = false
+		},
+	)
 
 	val cameraLauncher = rememberLauncherForActivityResult(
 		contract = ActivityResultContracts.TakePicturePreview(),
@@ -94,7 +80,7 @@ fun MapisodePhotoPicker(
 	PhotoPicker(
 		photos = photos,
 		isCameraNeeded = isCameraNeeded,
-		isCameraAvailable = isCameraAvailable,
+		isCameraAvailable = isPermissionsGranted,
 		addedPhotos = addedPhotos,
 		numOfPhoto = numOfPhoto,
 		onPhotoSelected = { selectedPhotos ->
@@ -102,7 +88,7 @@ fun MapisodePhotoPicker(
 		},
 		onBackPressed = onBackPressed,
 		onCameraClick = {
-			if (isCameraNeeded && isCameraAvailable) {
+			if (isCameraNeeded && isPermissionsGranted) {
 				cameraLauncher.launch()
 			}
 		},
@@ -205,7 +191,6 @@ fun PhotoPicker(
 		}
 	}
 }
-
 
 @Preview
 @Composable
