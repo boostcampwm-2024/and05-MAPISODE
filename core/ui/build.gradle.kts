@@ -1,5 +1,6 @@
 plugins {
 	alias(libs.plugins.mapisode.android.compose)
+	id("kotlin-parcelize")
 }
 
 android {
