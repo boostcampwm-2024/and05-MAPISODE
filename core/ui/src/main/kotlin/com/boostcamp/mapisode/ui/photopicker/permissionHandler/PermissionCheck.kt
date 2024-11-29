@@ -22,19 +22,17 @@ class PermissionCheck(private val context: Context) {
 
 		private val CAMERA_PERMISSION = arrayOf(Manifest.permission.CAMERA)
 
-		fun getRequiredPermissions(isCameraNeeded: Boolean): Array<String> {
-			return if (isCameraNeeded) {
-				STORAGE_PERMISSIONS + CAMERA_PERMISSION
-			} else {
-				STORAGE_PERMISSIONS
-			}
+		fun getRequiredPermissions(isCameraNeeded: Boolean): Array<String> = if (isCameraNeeded) {
+			STORAGE_PERMISSIONS + CAMERA_PERMISSION
+		} else {
+			STORAGE_PERMISSIONS
 		}
+
 	}
 
-	fun hasPermissions(isCameraNeeded: Boolean): Boolean {
-		return getRequiredPermissions(isCameraNeeded).all {
+	fun hasPermissions(isCameraNeeded: Boolean): Boolean =
+		getRequiredPermissions(isCameraNeeded).all {
 			ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
 		}
-	}
 }
 

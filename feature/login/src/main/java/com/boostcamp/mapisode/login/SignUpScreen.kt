@@ -52,7 +52,7 @@ fun SignUpScreen(
 				isPhotoPickerClicked.value = false
 			},
 			onBackPressed = { isPhotoPickerClicked.value = false },
-			isCameraNeeded = true,
+			isCameraNeeded = false,
 		)
 	} else {
 		MapisodeScaffold(
@@ -141,7 +141,6 @@ fun SignUpScreen(
 		}
 	}
 }
-
 
 @Composable
 fun SignUpTopBar() {

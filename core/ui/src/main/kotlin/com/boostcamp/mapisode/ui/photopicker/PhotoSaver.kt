@@ -17,7 +17,7 @@ object PhotoSaver {
 		if (bitmap == null) return null
 
 		val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-		val imageFileName = "JPEG_${timestamp}"
+		val imageFileName = "JPEG_$timestamp"
 
 		val contentValues = ContentValues().apply {
 			put(MediaStore.MediaColumns.DISPLAY_NAME, imageFileName)
