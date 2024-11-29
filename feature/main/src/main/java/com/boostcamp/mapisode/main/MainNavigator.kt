@@ -17,6 +17,7 @@ import com.boostcamp.mapisode.episode.navigation.navigatePickLocation
 import com.boostcamp.mapisode.episode.navigation.navigateWriteContent
 import com.boostcamp.mapisode.episode.navigation.navigateWriteInfo
 import com.boostcamp.mapisode.home.navigation.navigateEpisodeDetail
+import com.boostcamp.mapisode.home.navigation.navigateEpisodeList
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupCreation
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupDetail
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupEdit
@@ -67,6 +68,10 @@ internal class MainNavigator(
 
 	fun navigateToEpisodeDetail(episodeId: String) {
 		navController.navigateEpisodeDetail(episodeId)
+	}
+
+	fun navigateToEpisodeList(groupId: String) {
+		navController.navigateEpisodeList(groupId)
 	}
 
 	fun getEpisodeBackStackEntry(): NavBackStackEntry =
