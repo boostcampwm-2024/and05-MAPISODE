@@ -3,6 +3,7 @@ package com.boostcamp.mapisode.ui.photopicker
 import android.content.ContentUris
 import android.content.Context
 import android.provider.MediaStore
+import com.boostcamp.mapisode.ui.photopicker.model.PhotoInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.Date
