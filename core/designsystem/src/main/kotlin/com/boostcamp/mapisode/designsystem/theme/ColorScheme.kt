@@ -99,6 +99,10 @@ data class CustomColorScheme(
 	// System Bar
 	val systemBarTransparent: Color,
 	val systemBarColored: Color,
+
+	// Checkbox
+	val checkboxBackground: Color,
+	val checkboxStroke: Color,
 )
 
 // Light Theme Color Scheme
@@ -197,6 +201,10 @@ val lightColorScheme = CustomColorScheme(
 	// System Bar
 	systemBarTransparent = Color.Transparent,
 	systemBarColored = Primary10,
+
+	// Checkbox
+	checkboxBackground = Color.Transparent,
+	checkboxStroke = Neutral10,
 )
 
 // Dark Theme Color Scheme
@@ -295,4 +303,8 @@ val darkColorScheme = CustomColorScheme(
 	// System Bar
 	systemBarTransparent = Color.Transparent,
 	systemBarColored = Primary90,
+
+	// Checkbox
+	checkboxBackground = Color.Transparent,
+	checkboxStroke = Neutral40,
 )
