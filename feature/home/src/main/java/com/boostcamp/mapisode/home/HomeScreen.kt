@@ -83,6 +83,7 @@ internal fun HomeRoute(
 	viewModel: HomeViewModel = hiltViewModel(),
 	onTextMarkerClick: (EpisodeLatLng) -> Unit = {},
 	onEpisodeClick: (String) -> Unit = {},
+	onListFabClick: (String) -> Unit = {},
 ) {
 	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 	val context = LocalContext.current
@@ -232,6 +233,9 @@ internal fun HomeRoute(
 			viewModel.onIntent(HomeIntent.ShowBottomSheet)
 			viewModel.onIntent(HomeIntent.LoadGroups)
 		},
+		onListFabClick = {
+
+		},
 		onCreateNewEpisode = { latLng ->
 			viewModel.onIntent(HomeIntent.ClickTextMarker(latLng.toEpisodeLatLng()))
 		},
@@ -267,6 +271,7 @@ private fun HomeScreen(
 	cameraPositionState: CameraPositionState,
 	onChipSelected: (ChipType) -> Unit = {},
 	onGroupFabClick: () -> Unit = {},
+	onListFabClick: () -> Unit = {},
 	onCreateNewEpisode: (LatLng) -> Unit = {},
 	onEpisodeMarkerClick: (EpisodeModel) -> Unit = {},
 	onMapClick: () -> Unit = {},
@@ -405,7 +410,7 @@ private fun HomeScreen(
 					)
 
 					MapisodeFabOverlayButton(
-						onClick = onGroupFabClick,
+						onClick = onListFabClick,
 						iconId = Design.drawable.ic_list_bulleted,
 					)
 				}

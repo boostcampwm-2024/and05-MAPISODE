@@ -6,4 +6,7 @@ import kotlinx.serialization.Serializable
 sealed interface HomeRoute : Route {
 	@Serializable
 	data class Detail(val episodeId: String) : HomeRoute
+
+	@Serializable
+	data class List(val groupId: String) : HomeRoute
 }
