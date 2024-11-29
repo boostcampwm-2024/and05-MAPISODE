@@ -13,14 +13,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
@@ -42,11 +40,12 @@ fun MapisodePhotoPicker(
 	isCameraNeeded: Boolean = true,
 ) {
 	val context = LocalContext.current
-	var photos by remember { mutableStateOf<List<PhotoInfo>>(emptyList()) }
+	var photos by rememberSaveable { mutableStateOf<List<PhotoInfo>>(emptyList()) }
 	var isPermissionsGranted by rememberSaveable { mutableStateOf(false) }
-	val addedPhotos = remember { mutableStateListOf<PhotoInfo>() }
+	val addedPhoto = rememberSaveable { mutableStateOf<PhotoInfo?>(null) }
+	val cameraPhotos = rememberMutableStateListOf<PhotoInfo>()
 
-	val photoLoader = remember { PhotoLoader(context) }
+	val photoLoader = remember(context) { PhotoLoader(context) }
 
 	LaunchedEffect(isPermissionsGranted) {
 		if (isPermissionsGranted) {
@@ -73,15 +72,16 @@ fun MapisodePhotoPicker(
 	) { bitmap ->
 		val uri = PhotoSaver.savePhoto(context, bitmap)
 		bitmap?.let {
-			addedPhotos.add(PhotoInfo(uri = uri.toString(), dateTaken = Date.from(Instant.now())))
+			val photo = PhotoInfo(uri = uri.toString(), dateTaken = Date.from(Instant.now()))
+
 		}
 	}
 
 	PhotoPicker(
-		photos = photos,
+		photos = cameraPhotos + photos,
 		isCameraNeeded = isCameraNeeded,
 		isCameraAvailable = isPermissionsGranted,
-		addedPhotos = addedPhotos,
+		addedPhoto = addedPhoto.value,
 		numOfPhoto = numOfPhoto,
 		onPhotoSelected = { selectedPhotos ->
 			onPhotoSelected(selectedPhotos)
@@ -103,13 +103,11 @@ fun PhotoPicker(
 	onBackPressed: () -> Unit,
 	isCameraNeeded: Boolean,
 	isCameraAvailable: Boolean,
-	addedPhotos: List<PhotoInfo> = emptyList(),
+	addedPhoto: PhotoInfo?,
 	numOfPhoto: Int,
 	onCameraClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
-	val selectedPhotos = remember { mutableStateListOf<PhotoInfo>() }
-	selectedPhotos.addAll(addedPhotos)
 
 	MapisodeScaffold(
 		modifier = Modifier.fillMaxSize(),
@@ -159,21 +157,6 @@ fun PhotoPicker(
 				}
 			}
 
-			items(addedPhotos) { photo ->
-				PhotoItem(
-					photo = photo,
-					checked = selectedPhotos.contains(photo),
-					onPhotoClick = {
-						if (selectedPhotos.contains(photo)) {
-							selectedPhotos.remove(photo)
-						} else if (selectedPhotos.size < numOfPhoto) {
-							selectedPhotos.add(photo)
-						}
-					},
-					modifier = Modifier.padding(4.dp),
-				)
-			}
-
 			items(photos) { photo ->
 				PhotoItem(
 					photo = photo,
@@ -190,24 +173,4 @@ fun PhotoPicker(
 			}
 		}
 	}
-}
-
-@Preview
-@Composable
-fun CircleWithNumberPreview() {
-	PhotoPicker(
-		photos = listOf(
-			PhotoInfo(
-				uri = "https://picsum.photos/200",
-				dateTaken = null,
-			),
-		),
-		onPhotoSelected = {},
-		onBackPressed = {},
-		isCameraNeeded = true,
-		isCameraAvailable = true,
-		numOfPhoto = 5,
-		onCameraClick = {},
-		modifier = Modifier.fillMaxSize(),
-	)
 }
