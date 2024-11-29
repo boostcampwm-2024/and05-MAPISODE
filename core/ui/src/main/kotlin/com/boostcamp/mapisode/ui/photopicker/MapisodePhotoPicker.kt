@@ -73,7 +73,8 @@ fun MapisodePhotoPicker(
 		val uri = PhotoSaver.savePhoto(context, bitmap)
 		bitmap?.let {
 			val photo = PhotoInfo(uri = uri.toString(), dateTaken = Date.from(Instant.now()))
-
+			addedPhoto.value = photo
+			cameraPhotos.add(photo)
 		}
 	}
 
@@ -108,6 +109,8 @@ fun PhotoPicker(
 	onCameraClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
+	val selectedPhotos = rememberMutableStateListOf<PhotoInfo>()
+	if (addedPhoto != null) selectedPhotos.add(addedPhoto)
 
 	MapisodeScaffold(
 		modifier = Modifier.fillMaxSize(),
