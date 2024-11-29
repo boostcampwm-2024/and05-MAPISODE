@@ -26,6 +26,7 @@ class AuthViewModel @Inject constructor(
 		when (intent) {
 			is AuthIntent.OnGoogleSignInClick -> handleGoogleSignIn(intent.googleOauth)
 			is AuthIntent.OnNicknameChange -> onNicknameChange(intent.nickname)
+			is AuthIntent.OnProfileUrlchange -> onProfileUrlChange(intent.profileUrl)
 			is AuthIntent.OnSignUpClick -> handleSignUp()
 			is AuthIntent.OnAutoLogin -> handleAutoLogin()
 			is AuthIntent.OnLoginSuccess -> handleLoginSuccess()
@@ -103,6 +104,14 @@ class AuthViewModel @Inject constructor(
 		}
 	}
 
+	private fun onProfileUrlChange(profileUrl: String) {
+		intent {
+			copy(
+				profileUrl = profileUrl,
+			)
+		}
+	}
+
 	private fun handleSignUp() {
 		viewModelScope.launch {
 			try {
@@ -174,12 +183,6 @@ class AuthViewModel @Inject constructor(
 				),
 			)
 		}.join()
-	}
-
-	private fun joinMyGroup(uid: String) {
-		viewModelScope.launch {
-			groupRepository.joinGroup(uid, uid)
-		}
 	}
 
 	private fun handleLoginSuccess() {
