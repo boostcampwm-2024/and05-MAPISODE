@@ -53,6 +53,7 @@ internal fun MainNavHost(
 				onGroupEditClick = { groupId: String ->
 					navigator.navigateGroupEdit(groupId)
 				},
+				onEpisodeClick = navigator::navigateToEpisodeDetail,
 			)
 			addMyPageNavGraph()
 		}

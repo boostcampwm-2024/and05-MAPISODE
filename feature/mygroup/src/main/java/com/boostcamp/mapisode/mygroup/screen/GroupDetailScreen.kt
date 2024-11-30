@@ -6,6 +6,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -88,6 +89,7 @@ fun GroupDetailScreen(
 	detail: GroupRoute.Detail,
 	onBackClick: () -> Unit,
 	onEditClick: (String) -> Unit,
+	onEpisodeClick: (String) -> Unit,
 	viewModel: GroupDetailViewModel = hiltViewModel(),
 ) {
 	val context = LocalContext.current
@@ -151,7 +153,7 @@ fun GroupDetailScreen(
 			}
 
 			is GroupDetailSideEffect.NavigateToEpisode -> {
-				// TODO: Navigate to Episode
+				onEpisodeClick(effect.episodeId)
 			}
 
 			is GroupDetailSideEffect.IssueInvitationCode -> {
@@ -184,6 +186,9 @@ fun GroupDetailScreen(
 		onGroupOutClick = {
 			viewModel.onIntent(GroupDetailIntent.OnGroupOutClick)
 		},
+		onEpisodeClick = { episodeId ->
+			viewModel.onIntent(GroupDetailIntent.OnEpisodeClick(episodeId))
+		},
 	)
 }
 
@@ -194,6 +199,7 @@ fun GroupDetailContent(
 	onEditClick: () -> Unit,
 	onIssueCodeClick: () -> Unit,
 	onGroupOutClick: () -> Unit,
+	onEpisodeClick: (String) -> Unit,
 ) {
 	val scope = rememberCoroutineScope()
 	val pagerState = rememberPagerState(pageCount = { 2 })
@@ -271,6 +277,7 @@ fun GroupDetailContent(
 					1 -> {
 						GroupEpisodesContent(
 							episodes = uiState.episodes,
+							onEpisodeClick = onEpisodeClick,
 						)
 					}
 				}
@@ -389,6 +396,7 @@ fun GroupDetailContent(
 @Composable
 fun GroupEpisodesContent(
 	episodes: List<GroupUiEpisodeModel>,
+	onEpisodeClick: (String) -> Unit,
 ) {
 	var expanded by remember { mutableStateOf(false) }
 	var selectedSortOption by remember { mutableIntStateOf(0) }
@@ -452,7 +460,7 @@ fun GroupEpisodesContent(
 			}
 		}
 		items(sortedEpisodes) { episode ->
-			EpisodeCard(episode)
+			EpisodeCard(episode, onEpisodeClick = onEpisodeClick)
 		}
 	}
 }
@@ -531,6 +539,7 @@ fun GroupMemberContent(
 @Composable
 fun EpisodeCard(
 	episode: GroupUiEpisodeModel,
+	onEpisodeClick: (String) -> Unit,
 ) {
 	Row(
 		modifier = Modifier
@@ -538,7 +547,10 @@ fun EpisodeCard(
 			.height(130.dp)
 			.background(Color.White, shape = RoundedCornerShape(8.dp))
 			.border(1.dp, Color.LightGray, shape = RoundedCornerShape(8.dp))
-			.padding(10.dp),
+			.padding(10.dp)
+			.clickable {
+				onEpisodeClick(episode.id)
+			},
 	) {
 		// Image on the left
 		AsyncImage(
