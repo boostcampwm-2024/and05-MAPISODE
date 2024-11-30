@@ -9,6 +9,7 @@ import com.boostcamp.mapisode.network.repository.NaverMapsRepository
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -41,7 +42,7 @@ class EpisodeEditViewModel @Inject constructor(
 				intent {
 					copy(
 						isSelectingLocation = true,
-						editedEpisode = episode?.copy(
+						episode = episode.copy(
 							location = intent.latLng,
 						),
 					)
@@ -52,14 +53,29 @@ class EpisodeEditViewModel @Inject constructor(
 				getAddress(intent.latLng)
 				intent {
 					copy(
-						editedEpisode = editedEpisode?.copy(
+						episode = episode.copy(
 						),
 					)
 				}
 			}
 
-			is EpisodeEditIntent.OnSetPictures -> {
+			is EpisodeEditIntent.OnFinishLocationSelection -> {
+				intent {
+					copy(
+						isSelectingLocation = false,
+					)
+				}
+			}
 
+			is EpisodeEditIntent.OnSetPictures -> {
+				intent {
+					copy(
+						isSelectingPicture = false,
+						episode = episode.copy(
+							localImageUrl = intent.imageUrlList.toPersistentList(),
+						),
+					)
+				}
 			}
 
 			is EpisodeEditIntent.OnEditClick -> {
@@ -79,7 +95,7 @@ class EpisodeEditViewModel @Inject constructor(
 				intent {
 					copy(
 						isInitializing = false,
-						episode = episode,
+						episode = episode.toEpisodeEditInfo(),
 					)
 				}
 			} catch (e: Exception) {
@@ -99,7 +115,7 @@ class EpisodeEditViewModel @Inject constructor(
 				val address = naverMapsRepository.reverseGeoCode(coord).getOrDefault("")
 				intent {
 					copy(
-						editedEpisode = editedEpisode?.copy(
+						episode = episode.copy(
 							address = address,
 							location = latLng.toEpisodeLatLng(),
 						),
