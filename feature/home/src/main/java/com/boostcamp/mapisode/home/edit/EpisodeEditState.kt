@@ -15,7 +15,7 @@ data class EpisodeEditState(
 	val isInitializing: Boolean = true,
 	val isSelectingLocation: Boolean = false,
 	val isSelectingPicture: Boolean = false,
-	val isEpisodeEditError: Boolean = false,
+	val isEditingInProgress: Boolean = false,
 	val episode: EpisodeEditInfo = EpisodeEditInfo(),
 	val groups: PersistentList<GroupsId> = persistentListOf(),
 ) : UiState
