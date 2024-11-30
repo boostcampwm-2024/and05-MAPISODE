@@ -10,4 +10,5 @@ sealed interface AuthIntent : UiIntent {
 	data object OnSignUpClick : AuthIntent
 	data object OnAutoLogin : AuthIntent
 	data object OnLoginSuccess : AuthIntent
+	data object OnBackClickedInSignUp : AuthIntent
 }

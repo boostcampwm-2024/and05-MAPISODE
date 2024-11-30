@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.login
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,9 +41,18 @@ fun SignUpScreen(
 	profileUrl: String,
 	onProfileUrlchange: (String) -> Unit,
 	onSignUpClick: () -> Unit,
+	onBackClickedInSignUp: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
 	val isPhotoPickerClicked = rememberSaveable { mutableStateOf(false) }
+
+	BackHandler {
+		if (isPhotoPickerClicked.value) {
+			isPhotoPickerClicked.value = false
+		} else {
+			onBackClickedInSignUp()
+		}
+	}
 
 	if (isPhotoPickerClicked.value) {
 		MapisodePhotoPicker(
@@ -59,7 +69,7 @@ fun SignUpScreen(
 			modifier = modifier.fillMaxSize(),
 			isStatusBarPaddingExist = true,
 			isNavigationBarPaddingExist = true,
-			topBar = { SignUpTopBar() },
+			topBar = { SignUpTopBar(onBackClickedInSignUp) },
 		) { paddingValues ->
 			Box(
 				modifier = modifier
@@ -143,11 +153,13 @@ fun SignUpScreen(
 }
 
 @Composable
-fun SignUpTopBar() {
+fun SignUpTopBar(
+	onBackClickedInSignUp: () -> Unit,
+) {
 	TopAppBar(
 		navigationIcon = {
 			MapisodeIconButton(
-				onClick = { },
+				onClick = { onBackClickedInSignUp() },
 			) {
 				MapisodeIcon(id = drawable.ic_arrow_back_ios)
 			}
@@ -171,6 +183,7 @@ fun SignUpScreenPreview() {
 			profileUrl = "",
 			onProfileUrlchange = {},
 			onSignUpClick = {},
+			onBackClickedInSignUp = {},
 		)
 	}
 }

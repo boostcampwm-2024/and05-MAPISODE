@@ -50,6 +50,7 @@ fun AuthRoute(
 					viewModel.onIntent(AuthIntent.OnProfileUrlchange(profileUrl))
 				},
 				onSignUpClick = { viewModel.onIntent(AuthIntent.OnSignUpClick) },
+				onBackClickedInSignUp = { viewModel.onIntent(AuthIntent.OnBackClickedInSignUp) },
 			)
 		}
 

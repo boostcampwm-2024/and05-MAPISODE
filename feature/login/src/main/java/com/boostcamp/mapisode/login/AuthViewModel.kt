@@ -30,6 +30,17 @@ class AuthViewModel @Inject constructor(
 			is AuthIntent.OnSignUpClick -> handleSignUp()
 			is AuthIntent.OnAutoLogin -> handleAutoLogin()
 			is AuthIntent.OnLoginSuccess -> handleLoginSuccess()
+			is AuthIntent.OnBackClickedInSignUp -> onBackClickedInSignUp()
+		}
+	}
+
+	private fun onBackClickedInSignUp() {
+		intent {
+			copy(
+				isLoginSuccess = false,
+				nickname = "",
+				profileUrl = "",
+			)
 		}
 	}
 
