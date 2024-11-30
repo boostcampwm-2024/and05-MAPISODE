@@ -13,12 +13,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
@@ -285,10 +285,10 @@ fun EpisodeEditScreen(
 			Spacer(modifier = Modifier.height(8.dp))
 
 			MapisodeTextField(
-				modifier = modifier.fillMaxWidth(),
+				modifier = modifier.fillMaxWidth().aspectRatio(3f),
 				value = description,
 				onValueChange = { descriptionText -> description = descriptionText },
-				placeholder = "내용을 입력해주세요",
+				placeholder = "",
 				isError = description.isEmpty(),
 			)
 
@@ -463,6 +463,8 @@ fun EpisodeEditScreen(
 				},
 				text = "수정하기",
 			)
+
+			Spacer(modifier = Modifier.height(20.dp))
 		}
 	}
 }
