@@ -53,7 +53,10 @@ internal fun MainNavHost(
 					navigator.navigateGroupEdit(groupId)
 				},
 			)
-			addMyPageNavGraph()
+			addMyPageNavGraph(
+				onBackClick = navigator::popBackStackIfNotHome,
+				onProfileEditClick = navigator::navigateToProfileEdit,
+			)
 		}
 	}
 }
