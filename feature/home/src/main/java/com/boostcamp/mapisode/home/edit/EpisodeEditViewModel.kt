@@ -2,19 +2,24 @@ package com.boostcamp.mapisode.home.edit
 
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.common.util.toEpisodeLatLng
+import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
 import com.boostcamp.mapisode.episode.EpisodeRepository
 import com.boostcamp.mapisode.home.R
 import com.boostcamp.mapisode.model.EpisodeModel
+import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.network.repository.NaverMapsRepository
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class EpisodeEditViewModel @Inject constructor(
+	private val userPreferenceDataStore: UserPreferenceDataStore,
+	private val groupRepository: GroupRepository,
 	private val episodeRepository: EpisodeRepository,
 	private val naverMapsRepository: NaverMapsRepository,
 ) : BaseViewModel<EpisodeEditIntent, EpisodeEditState, EpisodeEditSideEffect>(
@@ -92,10 +97,18 @@ class EpisodeEditViewModel @Inject constructor(
 		viewModelScope.launch {
 			try {
 				val episode = episodeRepository.getEpisodeById(episodeId) ?: throw Exception()
+				val userId = userPreferenceDataStore.getUserId().first() ?: throw Exception()
+				val myGroups = groupRepository.getGroupsByUserId(userId)
+					.map { groupModel ->
+						GroupsId(name = groupModel.name, id = groupModel.id)
+					}
 				intent {
 					copy(
 						isInitializing = false,
-						episode = episode.toEpisodeEditInfo(),
+						episode = episode.toEpisodeEditInfo().copy(
+							groups = myGroups.first{ it.id == episode.group }.name,
+						),
+						groups = myGroups.toPersistentList(),
 					)
 				}
 			} catch (e: Exception) {
