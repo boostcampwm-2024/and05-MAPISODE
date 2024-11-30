@@ -21,6 +21,7 @@ import com.boostcamp.mapisode.mygroup.navigation.navigateGroupCreation
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupDetail
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupEdit
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupJoin
+import com.boostcamp.mapisode.mypage.navigation.navigateToProfileEdit
 import com.boostcamp.mapisode.navigation.MainRoute
 import com.boostcamp.mapisode.navigation.Route
 
@@ -111,6 +112,10 @@ internal class MainNavigator(
 
 	fun navigateGroupEdit(groupId: String) {
 		navController.navigateGroupEdit(groupId)
+	}
+
+	fun navigateToProfileEdit() {
+		navController.navigateToProfileEdit()
 	}
 
 	private fun popBackStack() {
