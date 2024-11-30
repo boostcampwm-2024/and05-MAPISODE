@@ -6,11 +6,14 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -20,10 +23,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -43,6 +46,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -62,6 +66,7 @@ import com.boostcamp.mapisode.designsystem.compose.button.MapisodeImageButton
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenu
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
+import com.boostcamp.mapisode.designsystem.theme.MapisodeTextStyle
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.naver.maps.map.CameraPosition
@@ -418,6 +423,8 @@ fun EpisodeEditScreen(
 				style = MapisodeTheme.typography.labelLarge,
 			)
 
+			Spacer(modifier = Modifier.height(8.dp))
+
 			TagInputField(
 				tags = state.episode.tags.joinToString { " " },
 				onTagChange = { newTags -> tag = newTags },
@@ -438,7 +445,7 @@ fun EpisodeEditScreen(
 			MapisodeImageButton(
 				modifier = modifier
 					.fillMaxWidth()
-					.height(42.dp),
+					.height(48.dp),
 				onClick = { showDatePickerDialog = true },
 				showImage = false,
 				imageContent = {
@@ -524,63 +531,71 @@ fun PictureSelectionScreen(
 }
 
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TagInputField(
 	tags: String,
 	onTagChange: (List<String>) -> Unit,
 ) {
 	var text by rememberSaveable { mutableStateOf("") }
-	val tagList = tags.split(" ").filter { it.isNotEmpty() }.toMutableList()
+	val tagList = tags.split(" ").filter { it.isNotEmpty() }
+	var updatedTagList by remember { mutableStateOf(tagList) }
 
-	Column(
-		modifier = Modifier.wrapContentHeight(),
+	FlowRow(
+		modifier = Modifier
+			.fillMaxWidth()
+			.background(MapisodeTheme.colorScheme.tagFieldBackground, RoundedCornerShape(8.dp))
+			.border(1.dp, MapisodeTheme.colorScheme.tagBorder, RoundedCornerShape(8.dp))
+			.padding(8.dp),
+		horizontalArrangement = Arrangement.spacedBy(8.dp),
+		verticalArrangement = Arrangement.Center,
 	) {
-		Row(
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(4.dp)
-				.horizontalScroll(rememberScrollState()),
-			horizontalArrangement = Arrangement.spacedBy(4.dp),
-		) {
-			tagList.forEach { tag ->
-				Box(
+		updatedTagList.forEach { tag ->
+			Row(
+				modifier = Modifier
+					.padding(vertical = 4.dp)
+					.background(
+						MapisodeTheme.colorScheme.tagBackground,
+						RoundedCornerShape(8.dp),
+					)
+					.padding(horizontal = 8.dp, vertical = 4.dp),
+			) {
+				MapisodeText(text = tag, color = MapisodeTheme.colorScheme.tagText)
+				Spacer(modifier = Modifier.width(4.dp))
+				MapisodeIcon(
+					id = R.drawable.ic_clear,
 					modifier = Modifier
-						.clip(RoundedCornerShape(8.dp))
-						.background(MapisodeTheme.colorScheme.filledButtonEnableBackground)
-						.padding(horizontal = 8.dp, vertical = 4.dp),
-				) {
-					Row(verticalAlignment = Alignment.CenterVertically) {
-						MapisodeText(
-							text = tag,
-						)
-						MapisodeIconButton(
-							onClick = {
-								tagList.remove(tag)
-								onTagChange(tagList)
-							},
-						) {
-							MapisodeIcon(
-								id = R.drawable.ic_clear,
-								iconSize = IconSize.ExtraSmall,
-							)
-						}
-					}
-				}
+						.align(Alignment.CenterVertically)
+						.clickable {
+						updatedTagList = updatedTagList - tag
+						onTagChange(updatedTagList)
+					},
+					iconSize = IconSize.EExtraSmall,
+				)
 			}
 		}
 
-		MapisodeTextField(
+		BasicTextField(
 			value = text,
 			onValueChange = { newText ->
 				if (newText.endsWith(" ")) {
-					tagList.add(newText.trim())
-					onTagChange(tagList)
+					updatedTagList = updatedTagList + (newText.trim())
+					onTagChange(updatedTagList)
 					text = ""
 				} else {
 					text = newText
 				}
 			},
-			placeholder = "태그를 입력해주세요",
+			modifier = Modifier
+				.weight(1f)
+				.fillMaxRowHeight()
+				.padding(4.dp),
+			textStyle = MapisodeTextStyle.Default.toTextStyle().copy(
+				lineHeightStyle = LineHeightStyle(
+					LineHeightStyle.Alignment.Bottom,
+					LineHeightStyle.Default.trim,
+				),
+			),
 		)
 	}
 }
