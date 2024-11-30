@@ -5,7 +5,6 @@ import com.boostcamp.mapisode.common.util.toEpisodeLatLng
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
 import com.boostcamp.mapisode.episode.EpisodeRepository
 import com.boostcamp.mapisode.home.R
-import com.boostcamp.mapisode.model.EpisodeModel
 import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.network.repository.NaverMapsRepository
 import com.boostcamp.mapisode.ui.base.BaseViewModel
@@ -31,10 +30,6 @@ class EpisodeEditViewModel @Inject constructor(
 				loadEpisode(intent.episodeId)
 			}
 
-			is EpisodeEditIntent.OnEpisodeEditClick -> {
-				editEpisode()
-			}
-
 			is EpisodeEditIntent.OnPictureClick -> {
 				intent {
 					copy(
@@ -56,12 +51,6 @@ class EpisodeEditViewModel @Inject constructor(
 
 			is EpisodeEditIntent.OnSetLocation -> {
 				getAddress(intent.latLng)
-				intent {
-					copy(
-						episode = episode.copy(
-						),
-					)
-				}
 			}
 
 			is EpisodeEditIntent.OnFinishLocationSelection -> {
@@ -84,11 +73,11 @@ class EpisodeEditViewModel @Inject constructor(
 			}
 
 			is EpisodeEditIntent.OnEditClick -> {
-
+				editEpisode(intent.newState)
 			}
 
 			is EpisodeEditIntent.OnBackClick -> {
-				postSideEffect(EpisodeEditSideEffect.NavigateToEpisodeDetailScreen)
+				postSideEffect(EpisodeEditSideEffect.NavigateBackScreen)
 			}
 		}
 	}
@@ -106,7 +95,8 @@ class EpisodeEditViewModel @Inject constructor(
 					copy(
 						isInitializing = false,
 						episode = episode.toEpisodeEditInfo().copy(
-							groups = myGroups.first{ it.id == episode.group }.name,
+							id = episodeId,
+							group = myGroups.first { it.id == episode.group }.name,
 						),
 						groups = myGroups.toPersistentList(),
 					)
@@ -142,11 +132,11 @@ class EpisodeEditViewModel @Inject constructor(
 		}
 	}
 
-	private fun editEpisode() {
+	private fun editEpisode(editedEpisode: EpisodeEditInfo) {
 		try {
 			viewModelScope.launch {
-				episodeRepository.updateEpisode(EpisodeModel())
-				postSideEffect(EpisodeEditSideEffect.NavigateToEpisodeDetailScreen)
+				episodeRepository.updateEpisode(editedEpisode.toDomainModel())
+				postSideEffect(EpisodeEditSideEffect.NavigateBackScreen)
 			}
 		} catch (e: Exception) {
 			postSideEffect(

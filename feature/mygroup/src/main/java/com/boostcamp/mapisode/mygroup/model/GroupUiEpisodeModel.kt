@@ -4,7 +4,7 @@ import com.boostcamp.mapisode.model.EpisodeModel
 import java.util.Date
 
 data class GroupUiEpisodeModel(
-	val id : String = "",
+	val id: String = "",
 	val title: String = "",
 	val imageUrls: List<String> = emptyList(),
 	val category: String = "",

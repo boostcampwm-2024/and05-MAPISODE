@@ -33,7 +33,6 @@ import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
-import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.compose.rememberMarkerState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -78,7 +77,6 @@ internal fun LocationSelectionScreen(
 					isLocationButtonEnabled = true,
 					isLogoClickEnabled = false,
 				),
-				locationSource = rememberFusedLocationSource(),
 			) {
 				Marker(state = episodeMarkerState)
 			}
@@ -90,7 +88,7 @@ internal fun LocationSelectionScreen(
 					modifier = Modifier.padding(20.dp),
 					verticalArrangement = Arrangement.spacedBy(20.dp),
 				) {
-					if(isCameraMoving) {
+					if (isCameraMoving) {
 						MapisodeText(
 							text = "위치를 탐색중입니다",
 							modifier = Modifier.fillMaxWidth(),
@@ -103,7 +101,7 @@ internal fun LocationSelectionScreen(
 							textAlignment = TextAlignment.Center,
 							style = MapisodeTheme.typography.bodyLarge,
 						)
-					} else{
+					} else {
 						MapisodeText(
 							text = "이 장소로 할래요",
 							style = MapisodeTheme.typography.headlineSmall,
@@ -122,7 +120,7 @@ internal fun LocationSelectionScreen(
 							)
 							onPopBackToInfo()
 						},
-						text = if(isCameraMoving) "위치 설정중" else "선택하기",
+						text = if (isCameraMoving) "위치 설정중" else "선택하기",
 						enabled = isCameraMoving.not(),
 						showRipple = true,
 					)

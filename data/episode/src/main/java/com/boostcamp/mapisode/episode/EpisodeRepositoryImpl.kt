@@ -13,7 +13,6 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 import java.util.UUID
 import javax.inject.Inject
 
@@ -38,8 +37,6 @@ class EpisodeRepositoryImpl @Inject constructor(
 		return try {
 			querySnapshot.toDomainModelList()
 		} catch (e: Exception) {
-			Timber.tag("getEpisodesByGroup")
-				.e(e)
 			throw e
 		}
 	}
@@ -74,8 +71,6 @@ class EpisodeRepositoryImpl @Inject constructor(
 		return try {
 			querySnapshot.toDomainModelList()
 		} catch (e: Exception) {
-			Timber.tag("getEpisodesByGroupAndLocation")
-				.e(e)
 			throw e
 		}
 	}
@@ -96,8 +91,6 @@ class EpisodeRepositoryImpl @Inject constructor(
 		return try {
 			querySnapshot.toDomainModelList()
 		} catch (e: Exception) {
-			Timber.tag("getEpisodesByGroupAndLocation")
-				.e(e)
 			throw e
 		}
 	}
@@ -119,8 +112,6 @@ class EpisodeRepositoryImpl @Inject constructor(
 				.await()
 			newEpisodeId
 		} catch (e: Exception) {
-			Timber.tag("createEpisode")
-				.e(e)
 			throw e
 		}
 	}
@@ -139,7 +130,6 @@ class EpisodeRepositoryImpl @Inject constructor(
 					val downloadUrl = uploadTask.task.result.storage.downloadUrl.await()
 					imageStorageUrls.add(downloadUrl.toString())
 				} catch (e: Exception) {
-					Timber.e(e, "Failed to upload Image")
 					throw e
 				}
 			}
@@ -176,11 +166,27 @@ class EpisodeRepositoryImpl @Inject constructor(
 
 	override suspend fun updateEpisode(episodeModel: EpisodeModel) {
 		try {
-			val newUrls = uploadImagesToStorage(episodeModel.id, episodeModel.imageUrls)
+			val updatedUrls = mutableListOf<String>()
+			episodeModel.imageUrls.forEachIndexed { index, _ ->
+				val imageRef =
+					storage.reference.child("$PATH_IMAGES/${episodeModel.id}/${index + 1}")
+				val downloadUrl = imageRef.downloadUrl.await()
+				updatedUrls.add(downloadUrl.toString())
+			}
+			episodeModel.imageUrlsUsedForOnlyUpdate.forEachIndexed { index, imageUri ->
+				val imageRef =
+					storage.reference.child(
+						"$PATH_IMAGES/${episodeModel.id}/${index + episodeModel.imageUrls.size + 1}",
+					)
+				val uploadTask = imageRef.putFile(imageUri.toUri()).await()
+				val downloadUrl = uploadTask.task.result.storage.downloadUrl.await()
+				updatedUrls.add(downloadUrl.toString())
+			}
 
-			database.collection(FirestoreConstants.COLLECTION_EPISODE)
-				.document(episodeModel.id)
-				.set(episodeModel.toFirestoreModel(database, newUrls))
+			val createdBy = database.collection("user").document(episodeModel.createdBy)
+			val group = database.collection("group").document(episodeModel.group)
+			database.document("episode/${episodeModel.id}")
+				.set(episodeModel.toFirestoreModel(createdBy, group, updatedUrls))
 				.await()
 		} catch (e: Exception) {
 			throw e
