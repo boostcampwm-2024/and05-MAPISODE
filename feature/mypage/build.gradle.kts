@@ -5,3 +5,7 @@ plugins {
 android {
 	namespace = "com.boostcamp.mapisode.mypage"
 }
+
+dependencies {
+	implementation(libs.bundles.coil)
+}
