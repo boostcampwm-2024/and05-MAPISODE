@@ -28,6 +28,7 @@ import com.boostcamp.mapisode.designsystem.R.drawable.ic_withdrawal
 import com.boostcamp.mapisode.designsystem.compose.IconSize
 import com.boostcamp.mapisode.designsystem.compose.MapisodeDivider
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
+import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.Thickness
@@ -36,10 +37,13 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.mypage.R
 
 @Composable
-internal fun MypageRoute() {
+internal fun MypageRoute(
+	onProfileEditClick: () -> Unit,
+) {
 	MypageScreen(
 		name = "이름",
 		profileUrl = "https://avatars.githubusercontent.com/u/77449569?v=4",
+		onProfileEditClick = onProfileEditClick,
 	)
 }
 
@@ -47,6 +51,7 @@ internal fun MypageRoute() {
 private fun MypageScreen(
 	name: String,
 	profileUrl: String,
+	onProfileEditClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
 	MapisodeScaffold(
@@ -87,6 +92,7 @@ private fun MypageScreen(
 				Profile(
 					name = name,
 					profileUrl = profileUrl,
+					onProfileEditClick = onProfileEditClick,
 				)
 
 				Spacer(modifier = Modifier.height(16.dp))
@@ -124,6 +130,7 @@ private fun MypageScreen(
 private fun Profile(
 	name: String,
 	profileUrl: String,
+	onProfileEditClick: () -> Unit,
 ) {
 	Row(
 		modifier = Modifier
@@ -148,10 +155,14 @@ private fun Profile(
 
 		Spacer(modifier = Modifier.weight(1f))
 
-		MapisodeIcon(
-			id = ic_edit,
-			iconSize = IconSize.Large,
-		)
+		MapisodeIconButton(
+			onClick = onProfileEditClick,
+		) {
+			MapisodeIcon(
+				id = ic_edit,
+				iconSize = IconSize.Large,
+			)
+		}
 	}
 }
 
