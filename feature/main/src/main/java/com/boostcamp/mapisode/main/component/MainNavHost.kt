@@ -56,7 +56,10 @@ internal fun MainNavHost(
 				},
 				onEpisodeClick = navigator::navigateToEpisodeDetail,
 			)
-			addMyPageNavGraph()
+			addMyPageNavGraph(
+				onBackClick = navigator::popBackStackIfNotHome,
+				onProfileEditClick = navigator::navigateToProfileEdit,
+			)
 		}
 	}
 }
