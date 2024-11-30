@@ -1,4 +1,4 @@
-package com.boostcamp.mapisode.mypage
+package com.boostcamp.mapisode.mypage.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,6 +33,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.Thickness
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.boostcamp.mapisode.mypage.R
 
 @Composable
 internal fun MypageRoute() {
