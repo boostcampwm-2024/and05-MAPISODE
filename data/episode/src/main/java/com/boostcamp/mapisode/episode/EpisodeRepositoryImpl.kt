@@ -173,4 +173,17 @@ class EpisodeRepositoryImpl @Inject constructor(
 			throw e
 		}
 	}
+
+	override suspend fun updateEpisode(episodeModel: EpisodeModel) {
+		try {
+			val newUrls = uploadImagesToStorage(episodeModel.id, episodeModel.imageUrls)
+
+			database.collection(FirestoreConstants.COLLECTION_EPISODE)
+				.document(episodeModel.id)
+				.set(episodeModel.toFirestoreModel(database, newUrls))
+				.await()
+		} catch (e: Exception) {
+			throw e
+		}
+	}
 }
