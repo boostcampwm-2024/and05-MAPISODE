@@ -132,6 +132,17 @@ fun EpisodeEditRoute(
 			onEditClick = { viewModel.onIntent(EpisodeEditIntent.OnEditClick(it)) },
 			onBackClick = onBackClick,
 		)
+
+		if (uiState.isEditingInProgress) {
+			Box(
+				modifier = Modifier
+					.fillMaxSize()
+					.background(MapisodeTheme.colorScheme.scrim),
+				contentAlignment = Alignment.Center,
+			) {
+				MapisodeCircularLoadingIndicator()
+			}
+		}
 	}
 }
 
@@ -147,7 +158,9 @@ fun EpisodeEditScreen(
 	var title by rememberSaveable { mutableStateOf(state.episode.title) }
 	var description by rememberSaveable { mutableStateOf(state.episode.content) }
 	var group by rememberSaveable { mutableStateOf(state.episode.group) }
-	var category by rememberSaveable { mutableStateOf(CategoryMapper.mapToCategoryName(state.episode.category)) }
+	var category by rememberSaveable {
+		mutableStateOf(CategoryMapper.mapToCategoryName(state.episode.category))
+	}
 	var tag by rememberSaveable { mutableStateOf(state.episode.tags) }
 	var date by rememberSaveable {
 		mutableStateOf(state.episode.memoryDate)

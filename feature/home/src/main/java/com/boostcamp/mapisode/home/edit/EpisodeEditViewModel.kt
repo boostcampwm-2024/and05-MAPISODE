@@ -73,6 +73,11 @@ class EpisodeEditViewModel @Inject constructor(
 			}
 
 			is EpisodeEditIntent.OnEditClick -> {
+				intent {
+					copy(
+						isEditingInProgress = true,
+					)
+				}
 				editEpisode(intent.newState)
 			}
 
@@ -126,7 +131,7 @@ class EpisodeEditViewModel @Inject constructor(
 				}
 			} catch (e: Exception) {
 				postSideEffect(
-					EpisodeEditSideEffect.ShowToast(1),
+					EpisodeEditSideEffect.ShowToast(R.string.error_address_not_loaded),
 				)
 			}
 		}
@@ -136,9 +141,16 @@ class EpisodeEditViewModel @Inject constructor(
 		try {
 			viewModelScope.launch {
 				episodeRepository.updateEpisode(editedEpisode.toDomainModel())
+				intent { copy(isEditingInProgress = false) }
 				postSideEffect(EpisodeEditSideEffect.NavigateBackScreen)
+				postSideEffect(
+					EpisodeEditSideEffect.ShowToast(
+						R.string.success_episode_edit,
+					),
+				)
 			}
 		} catch (e: Exception) {
+			intent { copy(isEditingInProgress = false) }
 			postSideEffect(
 				EpisodeEditSideEffect.ShowToast(
 					R.string.error_episode_not_edited,

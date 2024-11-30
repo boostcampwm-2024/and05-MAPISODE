@@ -33,4 +33,6 @@
 	<!-- EpisodeEdit -->
 	<string name="error_episode_not_loaded">에피소드를 불러오는데 실패했습니다.</string>
 	<string name="error_episode_not_edited">에피소드를 편집하는데 실패했습니다.</string>
+	<string name="success_episode_edit">에피소드가 수정되었습니다.</string>
+	<string name="error_address_not_loaded">주소를 가져오는데 실패했습니다.</string>
 </resources>
