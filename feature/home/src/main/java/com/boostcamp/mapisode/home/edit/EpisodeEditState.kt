@@ -5,7 +5,6 @@ import androidx.compose.runtime.Immutable
 import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.boostcamp.mapisode.model.EpisodeModel
 import com.boostcamp.mapisode.ui.base.UiState
-import com.naver.maps.geometry.LatLng
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -53,10 +52,18 @@ data class EpisodeEditInfo(
 	)
 }
 
-enum class EpisodeCategory(val categoryName: String) {
-	EAT("먹거리"),
-	SEE("볼거리"),
-	OTHER("나머지"),
+object CategoryMapper {
+	fun mapToCategory(category: String): String = when (category) {
+		"먹거리" -> "EAT"
+		"볼거리" -> "SEE"
+		else -> "OTHER"
+	}
+
+	fun mapToCategoryName(category: String): String = when (category) {
+		"EAT" -> "먹거리"
+		"SEE" -> "볼거리"
+		else -> "나머지"
+	}
 }
 
 fun EpisodeModel.toEpisodeEditInfo(): EpisodeEditInfo = EpisodeEditInfo(

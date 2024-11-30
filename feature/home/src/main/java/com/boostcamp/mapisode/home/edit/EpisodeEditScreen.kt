@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
@@ -30,6 +31,7 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -38,8 +40,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -56,7 +59,6 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.MapisodeTextField
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeImageButton
-import com.boostcamp.mapisode.designsystem.compose.button.MapisodeOutlinedButton
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenu
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
@@ -70,7 +72,7 @@ import java.util.Date
 
 @Composable
 fun EpisodeEditRoute(
-	episodeId: String = "03eee421c48e48f991bd9cfd6398d632\n",
+	episodeId: String,
 	viewModel: EpisodeEditViewModel = hiltViewModel(),
 	onBackClick: () -> Unit = {},
 ) {
@@ -140,13 +142,15 @@ fun EpisodeEditScreen(
 	var title by rememberSaveable { mutableStateOf(state.episode.title) }
 	var description by rememberSaveable { mutableStateOf(state.episode.content) }
 	var group by rememberSaveable { mutableStateOf(state.episode.groups) }
-	var category by rememberSaveable { mutableStateOf(state.episode.category) }
+	var category by rememberSaveable { mutableStateOf(CategoryMapper.mapToCategoryName(state.episode.category)) }
 	var tag by rememberSaveable { mutableStateOf(state.episode.tags) }
 	var date by rememberSaveable {
 		mutableStateOf(state.episode.memoryDate)
 	}
-	var isMenuPoppedUp by remember { mutableStateOf(false) }
+	var isGroupMenuPoppedUp by remember { mutableStateOf(false) }
+	var isCategoryMenuPoppedUp by remember { mutableStateOf(false) }
 	var showDatePickerDialog by remember { mutableStateOf(false) }
+	var contentWidth by remember { mutableIntStateOf(0) }
 	val datePickerState = rememberDatePickerState()
 
 	MapisodeScaffold(
@@ -176,7 +180,11 @@ fun EpisodeEditScreen(
 				.verticalScroll(rememberScrollState()),
 		) {
 			Box(
-				modifier = Modifier.fillMaxWidth(),
+				modifier = Modifier
+					.fillMaxWidth()
+					.onGloballyPositioned { layoutCoordinates ->
+						contentWidth = layoutCoordinates.size.width
+					},
 				contentAlignment = Alignment.Center,
 			) {
 				Row(
@@ -285,7 +293,9 @@ fun EpisodeEditScreen(
 			Spacer(modifier = Modifier.height(8.dp))
 
 			MapisodeTextField(
-				modifier = modifier.fillMaxWidth().aspectRatio(3f),
+				modifier = modifier
+					.fillMaxWidth()
+					.aspectRatio(3f),
 				value = description,
 				onValueChange = { descriptionText -> description = descriptionText },
 				placeholder = "",
@@ -304,30 +314,43 @@ fun EpisodeEditScreen(
 
 			Spacer(modifier = Modifier.height(8.dp))
 
-			MapisodeTextField(
-				modifier = modifier
-					.fillMaxWidth()
-					.clickable {},
-				value = group,
-				onValueChange = { groupText -> group = groupText },
-				readOnly = true,
-				placeholder = "그룹을 입력해주세요",
-				isError = group.isEmpty(),
-			)
+			Column {
+				MapisodeTextField(
+					modifier = modifier
+						.fillMaxWidth()
+						.clickable {},
+					value = group,
+					onValueChange = { groupText -> group = groupText },
+					readOnly = true,
+					placeholder = "그룹을 입력해주세요",
+					isError = group.isEmpty(),
+					trailingIcon = {
+						MapisodeIconButton(
+							onClick = { isGroupMenuPoppedUp = true },
+						) {
+							MapisodeIcon(
+								id = R.drawable.ic_arrow_drop_down,
+							)
+						}
+					},
+				)
 
-			MapisodeDropdownMenu(
-				expanded = isMenuPoppedUp,
-				onDismissRequest = { isMenuPoppedUp = false },
-				offset = DpOffset(0.dp, 0.dp).minus(DpOffset(0.dp, 0.dp)),
-				modifier = Modifier.fillMaxWidth(),
-			) {
-				state.groups.forEach {
-					MapisodeDropdownMenuItem(
-						onClick = { group = it.name },
-					) {
-						MapisodeText(
-							text = it.name,
-						)
+				MapisodeDropdownMenu(
+					expanded = isGroupMenuPoppedUp,
+					onDismissRequest = { isGroupMenuPoppedUp = false },
+					modifier = Modifier.width(with(LocalDensity.current) { contentWidth.toDp() }),
+				) {
+					state.groups.forEach {
+						MapisodeDropdownMenuItem(
+							onClick = {
+								group = it.name
+								isGroupMenuPoppedUp = false
+							},
+						) {
+							MapisodeText(
+								text = it.name,
+							)
+						}
 					}
 				}
 			}
@@ -344,30 +367,43 @@ fun EpisodeEditScreen(
 
 			Spacer(modifier = Modifier.height(8.dp))
 
-			MapisodeTextField(
-				modifier = modifier
-					.fillMaxWidth()
-					.clickable { isMenuPoppedUp = true },
-				value = category,
-				onValueChange = { categoryText -> category = categoryText },
-				readOnly = true,
-				placeholder = "카테고리를 입력해주세요",
-				isError = category.isEmpty(),
-			)
+			Column {
+				MapisodeTextField(
+					modifier = modifier
+						.fillMaxWidth()
+						.clickable { isCategoryMenuPoppedUp = true },
+					value = category,
+					onValueChange = { categoryText -> category = categoryText },
+					readOnly = true,
+					placeholder = "카테고리를 입력해주세요",
+					isError = category.isEmpty(),
+					trailingIcon = {
+						MapisodeIconButton(
+							onClick = { isCategoryMenuPoppedUp = true },
+						) {
+							MapisodeIcon(
+								id = R.drawable.ic_arrow_drop_down,
+							)
+						}
+					},
+				)
 
-			MapisodeDropdownMenu(
-				expanded = isMenuPoppedUp,
-				onDismissRequest = { isMenuPoppedUp = false },
-				offset = DpOffset(0.dp, 0.dp).minus(DpOffset(0.dp, 0.dp)),
-				modifier = Modifier.fillMaxWidth(),
-			) {
-				persistentListOf("볼거리", "먹거리", "나머지").forEach {
-					MapisodeDropdownMenuItem(
-						onClick = { category = it },
-					) {
-						MapisodeText(
-							text = it,
-						)
+				MapisodeDropdownMenu(
+					expanded = isCategoryMenuPoppedUp,
+					onDismissRequest = { isCategoryMenuPoppedUp = false },
+					modifier = Modifier.width(with(LocalDensity.current) { contentWidth.toDp() }),
+				) {
+					persistentListOf("볼거리", "먹거리", "나머지").forEach {
+						MapisodeDropdownMenuItem(
+							onClick = {
+								category = it
+								isCategoryMenuPoppedUp = false
+							},
+						) {
+							MapisodeText(
+								text = it,
+							)
+						}
 					}
 				}
 			}
@@ -416,8 +452,8 @@ fun EpisodeEditScreen(
 				DatePickerDialog(
 					onDismissRequest = { showDatePickerDialog = false },
 					confirmButton = {
-						MapisodeOutlinedButton(
-							modifier = Modifier.padding(top = 8.dp),
+						MapisodeFilledButton(
+							modifier = Modifier.padding(end = 20.dp, bottom = 32.dp),
 							onClick = {
 								showDatePickerDialog = false
 								datePickerState.selectedDateMillis?.let { milli ->
@@ -428,7 +464,8 @@ fun EpisodeEditScreen(
 						)
 					},
 					dismissButton = {
-						MapisodeOutlinedButton(
+						MapisodeFilledButton(
+							modifier = Modifier.padding(end = 12.dp, bottom = 32.dp),
 							onClick = { showDatePickerDialog = false },
 							text = "취소",
 						)
@@ -454,7 +491,7 @@ fun EpisodeEditScreen(
 								title = title,
 								content = description,
 								groups = group,
-								category = category,
+								category = CategoryMapper.mapToCategory(category),
 								tags = tag,
 								memoryDate = date,
 							),
