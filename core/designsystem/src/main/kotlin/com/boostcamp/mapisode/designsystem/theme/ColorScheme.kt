@@ -58,6 +58,12 @@ data class CustomColorScheme(
 	val textFieldContent: Color,
 	val textFieldStroke: Color,
 
+	// Tag
+	val tagFieldBackground: Color,
+	val tagBorder: Color,
+	val tagBackground: Color,
+	val tagText: Color,
+
 	// Dialog
 	val dialogBackground: Color,
 	val dialogStroke: Color,
@@ -160,6 +166,12 @@ val lightColorScheme = CustomColorScheme(
 	textFieldContent = Neutral60,
 	textFieldStroke = Neutral60,
 
+	// Tag
+	tagFieldBackground = Neutral10,
+	tagBorder = Neutral60,
+	tagBackground = Primary20,
+	tagText = Neutral70,
+
 	// Dialog
 	dialogBackground = Neutral20,
 	dialogStroke = Color.Unspecified,
@@ -261,6 +273,12 @@ val darkColorScheme = CustomColorScheme(
 	textFieldBackground = Color.Unspecified,
 	textFieldContent = Neutral70,
 	textFieldStroke = Neutral70,
+
+	// Tag
+	tagFieldBackground = Neutral110,
+	tagBorder = Neutral70,
+	tagBackground = Primary40,
+	tagText = Neutral10,
 
 	// Dialog
 	dialogBackground = Neutral100,
