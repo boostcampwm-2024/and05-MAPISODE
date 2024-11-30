@@ -4,6 +4,7 @@ import com.boostcamp.mapisode.model.EpisodeModel
 import java.util.Date
 
 data class GroupUiEpisodeModel(
+	val id : String = "",
 	val title: String = "",
 	val imageUrls: List<String> = emptyList(),
 	val category: String = "",
@@ -14,6 +15,7 @@ data class GroupUiEpisodeModel(
 	val createdAt: Date = Date(),
 ) {
 	fun toEpisodeModel(): EpisodeModel = EpisodeModel(
+		id = id,
 		title = title,
 		imageUrls = imageUrls,
 		category = category,
@@ -26,6 +28,7 @@ data class GroupUiEpisodeModel(
 }
 
 fun EpisodeModel.toGroupUiEpisodeModel(writer: String): GroupUiEpisodeModel = GroupUiEpisodeModel(
+	id = id,
 	title = title,
 	imageUrls = imageUrls,
 	category = category,
