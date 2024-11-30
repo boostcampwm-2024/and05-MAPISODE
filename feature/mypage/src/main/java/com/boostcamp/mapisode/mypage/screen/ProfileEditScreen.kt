@@ -33,7 +33,9 @@ import com.boostcamp.mapisode.mypage.R
 import com.boostcamp.mapisode.ui.photopicker.MapisodePhotoPicker
 
 @Composable
-fun ProfileEditRoute() {
+fun ProfileEditRoute(
+	onBackClick: () -> Unit,
+) {
 	ProfileEditScreen(
 		isPhotoPickerClicked = false,
 		onPhotoPickerClick = { },
@@ -41,6 +43,7 @@ fun ProfileEditRoute() {
 		onNicknameChanged = { },
 		profileUrl = "",
 		onEditClick = { },
+		onBackClick = onBackClick,
 	)
 }
 
@@ -52,6 +55,7 @@ fun ProfileEditScreen(
 	onNicknameChanged: (String) -> Unit,
 	profileUrl: String,
 	onEditClick: () -> Unit,
+	onBackClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
 	if (isPhotoPickerClicked) {
@@ -67,7 +71,11 @@ fun ProfileEditScreen(
 			modifier = modifier.fillMaxSize(),
 			isStatusBarPaddingExist = true,
 			isNavigationBarPaddingExist = true,
-			topBar = { ProfileEditTopBar() },
+			topBar = {
+				ProfileEditTopBar(
+					onBackClick = onBackClick,
+				)
+			},
 		) { paddingValues ->
 			Box(
 				modifier = modifier
@@ -149,11 +157,13 @@ fun ProfileEditScreen(
 }
 
 @Composable
-fun ProfileEditTopBar() {
+fun ProfileEditTopBar(
+	onBackClick: () -> Unit,
+) {
 	TopAppBar(
 		navigationIcon = {
 			MapisodeIconButton(
-				onClick = { },
+				onClick = onBackClick,
 			) {
 				MapisodeIcon(id = drawable.ic_arrow_back_ios)
 			}
@@ -176,6 +186,7 @@ fun SignUpScreenPreview() {
 			onNicknameChanged = { },
 			profileUrl = "",
 			onEditClick = { },
+			onBackClick = { },
 		)
 	}
 }
