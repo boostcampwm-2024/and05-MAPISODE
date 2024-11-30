@@ -1,10 +1,13 @@
 package com.boostcamp.mapisode.home.edit
 
 import androidx.lifecycle.viewModelScope
+import com.boostcamp.mapisode.common.util.toEpisodeLatLng
 import com.boostcamp.mapisode.episode.EpisodeRepository
 import com.boostcamp.mapisode.home.R
 import com.boostcamp.mapisode.model.EpisodeModel
+import com.boostcamp.mapisode.network.repository.NaverMapsRepository
 import com.boostcamp.mapisode.ui.base.BaseViewModel
+import com.naver.maps.geometry.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -12,6 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EpisodeEditViewModel @Inject constructor(
 	private val episodeRepository: EpisodeRepository,
+	private val naverMapsRepository: NaverMapsRepository,
 ) : BaseViewModel<EpisodeEditIntent, EpisodeEditState, EpisodeEditSideEffect>(
 	EpisodeEditState(),
 ) {
@@ -25,8 +29,45 @@ class EpisodeEditViewModel @Inject constructor(
 				editEpisode()
 			}
 
+			is EpisodeEditIntent.OnPictureClick -> {
+				intent {
+					copy(
+						isSelectingPicture = true,
+					)
+				}
+			}
+
+			is EpisodeEditIntent.OnLocationClick -> {
+				intent {
+					copy(
+						isSelectingLocation = true,
+						editedEpisode = episode?.copy(
+							location = intent.latLng,
+						),
+					)
+				}
+			}
+
+			is EpisodeEditIntent.OnSetLocation -> {
+				getAddress(intent.latLng)
+				intent {
+					copy(
+						editedEpisode = editedEpisode?.copy(
+						),
+					)
+				}
+			}
+
+			is EpisodeEditIntent.OnSetPictures -> {
+
+			}
+
+			is EpisodeEditIntent.OnEditClick -> {
+
+			}
+
 			is EpisodeEditIntent.OnBackClick -> {
-				postSideEffect(EpisodeEditSideEffect.NavigateToGroupEpisodeDetailScreen)
+				postSideEffect(EpisodeEditSideEffect.NavigateToEpisodeDetailScreen)
 			}
 		}
 	}
@@ -51,11 +92,32 @@ class EpisodeEditViewModel @Inject constructor(
 		}
 	}
 
+	private fun getAddress(latLng: LatLng) {
+		viewModelScope.launch {
+			try {
+				val coord = "${latLng.longitude},${latLng.latitude}"
+				val address = naverMapsRepository.reverseGeoCode(coord).getOrDefault("")
+				intent {
+					copy(
+						editedEpisode = editedEpisode?.copy(
+							address = address,
+							location = latLng.toEpisodeLatLng(),
+						),
+					)
+				}
+			} catch (e: Exception) {
+				postSideEffect(
+					EpisodeEditSideEffect.ShowToast(1),
+				)
+			}
+		}
+	}
+
 	private fun editEpisode() {
 		try {
 			viewModelScope.launch {
 				episodeRepository.updateEpisode(EpisodeModel())
-				postSideEffect(EpisodeEditSideEffect.NavigateToGroupEpisodeDetailScreen)
+				postSideEffect(EpisodeEditSideEffect.NavigateToEpisodeDetailScreen)
 			}
 		} catch (e: Exception) {
 			postSideEffect(
