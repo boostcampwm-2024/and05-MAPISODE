@@ -36,7 +36,7 @@ fun MapisodePhotoPicker(
 	numOfPhoto: Int,
 	onPhotoSelected: (List<PhotoInfo>) -> Unit,
 	onBackPressed: () -> Unit,
-	modifier: Modifier = Modifier.fillMaxSize(),
+	modifier: Modifier = Modifier,
 	isCameraNeeded: Boolean = true,
 ) {
 	val context = LocalContext.current
@@ -93,7 +93,7 @@ fun MapisodePhotoPicker(
 				cameraLauncher.launch()
 			}
 		},
-		modifier = modifier,
+		modifier = modifier.fillMaxSize(),
 	)
 }
 
