@@ -17,6 +17,7 @@ sealed class EpisodeEditIntent : UiIntent {
 	data object OnPictureClick : EpisodeEditIntent()
 	data class OnLocationClick(val latLng: EpisodeLatLng) : EpisodeEditIntent()
 	data class OnSetLocation(val latLng: LatLng) : EpisodeEditIntent()
+	data object OnFinishLocationSelection : EpisodeEditIntent()
 	data class OnSetPictures(val imageUrlList: PersistentList<Uri>) : EpisodeEditIntent()
 	data class OnEditClick(val newState: EpisodeEditState) : EpisodeEditIntent()
 	data object OnBackClick : EpisodeEditIntent()

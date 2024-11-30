@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -53,7 +54,6 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.MapisodeTextField
-import com.boostcamp.mapisode.designsystem.compose.button.MapisodeButton
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeImageButton
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeOutlinedButton
@@ -62,7 +62,6 @@ import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.model.EpisodeLatLng
-import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -90,11 +89,9 @@ fun EpisodeEditRoute(
 					Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 				}
 
-				EpisodeEditSideEffect.NavigateToEpisodeDetailScreen -> {
+				is EpisodeEditSideEffect.NavigateToEpisodeDetailScreen -> {
 					onBackClick()
 				}
-
-				else -> {}
 			}
 		}
 	}
@@ -112,14 +109,13 @@ fun EpisodeEditRoute(
 		)
 	} else if (uiState.isSelectingLocation) {
 		LocationSelectionScreen(
-			episodeAddress = uiState.editedEpisode?.address ?: "",
+			episodeAddress = uiState.episode.address,
 			cameraPosition = CameraPosition(
-				uiState.editedEpisode?.location?.toLatLng()
-					?: LatLng(37.0, 37.0),
+				uiState.episode.location.toLatLng(),
 				16.0,
 			),
 			onSetEpisodeLocation = { viewModel.onIntent(EpisodeEditIntent.OnSetLocation(it)) },
-			onPopBackToInfo = { viewModel.onIntent(EpisodeEditIntent.OnBackClick) },
+			onPopBackToInfo = { viewModel.onIntent(EpisodeEditIntent.OnFinishLocationSelection) },
 		)
 	} else {
 		EpisodeEditScreen(
@@ -141,13 +137,13 @@ fun EpisodeEditScreen(
 	onEditClick: (EpisodeEditState) -> Unit,
 	onBackClick: () -> Unit = {},
 ) {
-	var title by rememberSaveable { mutableStateOf(state.episode?.title ?: "") }
-	var description by rememberSaveable { mutableStateOf(state.episode?.content ?: "") }
-	var group by rememberSaveable { mutableStateOf(state.episode?.group ?: "") }
-	var category by rememberSaveable { mutableStateOf(state.episode?.category ?: "") }
-	var tag by rememberSaveable { mutableStateOf(state.episode?.tags ?: listOf()) }
+	var title by rememberSaveable { mutableStateOf(state.episode.title) }
+	var description by rememberSaveable { mutableStateOf(state.episode.content) }
+	var group by rememberSaveable { mutableStateOf(state.episode.groups) }
+	var category by rememberSaveable { mutableStateOf(state.episode.category) }
+	var tag by rememberSaveable { mutableStateOf(state.episode.tags) }
 	var date by rememberSaveable {
-		mutableStateOf(state.episode?.memoryDate ?: Date())
+		mutableStateOf(state.episode.memoryDate)
 	}
 	var isMenuPoppedUp by remember { mutableStateOf(false) }
 	var showDatePickerDialog by remember { mutableStateOf(false) }
@@ -187,24 +183,34 @@ fun EpisodeEditScreen(
 					modifier = Modifier
 						.wrapContentWidth()
 						.horizontalScroll(rememberScrollState()),
-					horizontalArrangement = Arrangement.spacedBy(4.dp),
+					horizontalArrangement = Arrangement.spacedBy(10.dp),
 					verticalAlignment = Alignment.CenterVertically,
 				) {
-					state.episode?.imageUrls?.forEach { imageUrl ->
+					state.episode.serverImageUrl.forEach { imageUrl ->
 						AsyncImage(
 							model = imageUrl,
 							contentDescription = "애피소드 이미지",
 							modifier = Modifier
 								.size(110.dp)
-								.clip(RoundedCornerShape(16.dp)),
+								.clip(RoundedCornerShape(8.dp)),
+							contentScale = ContentScale.Crop,
+						)
+					}
+					state.episode.localImageUrl.forEach { imageUrl ->
+						AsyncImage(
+							model = imageUrl.toString(),
+							contentDescription = "애피소드 이미지",
+							modifier = Modifier
+								.size(110.dp)
+								.clip(RoundedCornerShape(8.dp)),
+							contentScale = ContentScale.Crop,
 						)
 					}
 					MapisodeImageButton(
 						onClick = onPickPhotos,
 						showImage = true,
 						modifier = Modifier
-							.size(110.dp)
-							.clip(RoundedCornerShape(16.dp)),
+							.size(110.dp),
 						imageContent = {},
 					)
 				}
@@ -222,28 +228,29 @@ fun EpisodeEditScreen(
 
 			Spacer(modifier = Modifier.height(8.dp))
 
-			MapisodeButton(
+			MapisodeTextField(
 				modifier = modifier
-					.fillMaxWidth()
-					.height(42.dp),
-				onClick = {
-					onLocationClick(
-						state.episode?.location ?: EpisodeLatLng(),
-					)
+					.fillMaxWidth(),
+				value = state.episode.address,
+				readOnly = true,
+				placeholder = "장소를 입력해주세요",
+				isError = state.episode.address.isEmpty(),
+				onValueChange = {},
+				trailingIcon = {
+					MapisodeIconButton(
+						onClick = {
+							onLocationClick(
+								state.episode.location,
+							)
+						},
+					) {
+						MapisodeIcon(
+							id = R.drawable.ic_location,
+							iconSize = IconSize.ExtraSmall,
+						)
+					}
 				},
-				showBorder = true,
-				backgroundColors = MapisodeTheme.colorScheme.outlineButtonBackground,
-				contentColor = MapisodeTheme.colorScheme.outlineButtonContent,
-			) {
-				MapisodeText(
-					modifier = Modifier.fillMaxWidth(),
-					text = state.episode?.address ?: "장소를 입력해주세요",
-				)
-				Spacer(modifier = Modifier.width(8.dp))
-				MapisodeIcon(
-					id = R.drawable.ic_location,
-				)
-			}
+			)
 
 			Spacer(modifier = Modifier.height(20.dp))
 
@@ -376,7 +383,7 @@ fun EpisodeEditScreen(
 			)
 
 			TagInputField(
-				tags = state.episode?.tags?.joinToString { " " } ?: "",
+				tags = state.episode.tags.joinToString { " " },
 				onTagChange = { newTags -> tag = newTags },
 			)
 
@@ -443,10 +450,10 @@ fun EpisodeEditScreen(
 				onClick = {
 					onEditClick(
 						EpisodeEditState(
-							episode = state.episode?.copy(
+							episode = state.episode.copy(
 								title = title,
 								content = description,
-								group = group,
+								groups = group,
 								category = category,
 								tags = tag,
 								memoryDate = date,
