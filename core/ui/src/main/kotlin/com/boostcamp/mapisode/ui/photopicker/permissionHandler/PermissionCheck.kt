@@ -30,7 +30,7 @@ class PermissionCheck(private val context: Context) {
 
 	}
 
-	fun hasPermissions(isCameraNeeded: Boolean): Boolean =
+	fun arePermissionsGranted(isCameraNeeded: Boolean): Boolean =
 		getRequiredPermissions(isCameraNeeded).all {
 			ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
 		}
