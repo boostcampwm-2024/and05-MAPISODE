@@ -96,7 +96,7 @@ fun EpisodeEditRoute(
 					Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 				}
 
-				is EpisodeEditSideEffect.NavigateToEpisodeDetailScreen -> {
+				is EpisodeEditSideEffect.NavigateBackScreen -> {
 					onBackClick()
 				}
 			}
@@ -141,12 +141,12 @@ fun EpisodeEditScreen(
 	modifier: Modifier = Modifier,
 	onPickPhotos: () -> Unit,
 	onLocationClick: (EpisodeLatLng) -> Unit,
-	onEditClick: (EpisodeEditState) -> Unit,
+	onEditClick: (EpisodeEditInfo) -> Unit,
 	onBackClick: () -> Unit = {},
 ) {
 	var title by rememberSaveable { mutableStateOf(state.episode.title) }
 	var description by rememberSaveable { mutableStateOf(state.episode.content) }
-	var group by rememberSaveable { mutableStateOf(state.episode.groups) }
+	var group by rememberSaveable { mutableStateOf(state.episode.group) }
 	var category by rememberSaveable { mutableStateOf(CategoryMapper.mapToCategoryName(state.episode.category)) }
 	var tag by rememberSaveable { mutableStateOf(state.episode.tags) }
 	var date by rememberSaveable {
@@ -426,7 +426,7 @@ fun EpisodeEditScreen(
 			Spacer(modifier = Modifier.height(8.dp))
 
 			TagInputField(
-				tags = state.episode.tags.joinToString { " " },
+				tagList = state.episode.tags,
 				onTagChange = { newTags -> tag = newTags },
 			)
 
@@ -493,15 +493,19 @@ fun EpisodeEditScreen(
 					.height(52.dp),
 				onClick = {
 					onEditClick(
-						EpisodeEditState(
-							episode = state.episode.copy(
-								title = title,
-								content = description,
-								groups = group,
-								category = CategoryMapper.mapToCategory(category),
-								tags = tag,
-								memoryDate = date,
-							),
+						EpisodeEditInfo(
+							id = state.episode.id,
+							category = CategoryMapper.mapToCategory(category),
+							content = description,
+							group = state.groups.first { grp -> grp.name == group }.id,
+							serverImageUrl = state.episode.serverImageUrl,
+							localImageUrl = state.episode.localImageUrl,
+							address = state.episode.address,
+							location = state.episode.location,
+							memoryDate = date,
+							tags = tag,
+							title = title,
+							createdBy = state.episode.createdBy,
 						),
 					)
 				},
@@ -530,15 +534,13 @@ fun PictureSelectionScreen(
 	}
 }
 
-
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TagInputField(
-	tags: String,
+	tagList: List<String>,
 	onTagChange: (List<String>) -> Unit,
 ) {
 	var text by rememberSaveable { mutableStateOf("") }
-	val tagList = tags.split(" ").filter { it.isNotEmpty() }
 	var updatedTagList by remember { mutableStateOf(tagList) }
 
 	FlowRow(
@@ -567,9 +569,9 @@ fun TagInputField(
 					modifier = Modifier
 						.align(Alignment.CenterVertically)
 						.clickable {
-						updatedTagList = updatedTagList - tag
-						onTagChange(updatedTagList)
-					},
+							updatedTagList = updatedTagList - tag
+							onTagChange(updatedTagList)
+						},
 					iconSize = IconSize.EExtraSmall,
 				)
 			}
