@@ -22,4 +22,6 @@ interface EpisodeRepository {
 	suspend fun createEpisode(episodeModel: EpisodeModel): String
 
 	suspend fun getMostRecentEpisodeByGroup(groupId: String): EpisodeModel?
+
+	suspend fun updateEpisode(episodeModel: EpisodeModel)
 }
