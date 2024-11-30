@@ -29,4 +29,8 @@
 	<string name="sort_option_recent">최신순</string>
 	<string name="sort_option_oldest">과거순</string>
 	<string name="sort_option_name">이름순</string>
+
+	<!-- EpisodeEdit -->
+	<string name="error_episode_not_loaded">에피소드를 불러오는데 실패했습니다.</string>
+	<string name="error_episode_not_edited">에피소드를 편집하는데 실패했습니다.</string>
 </resources>
