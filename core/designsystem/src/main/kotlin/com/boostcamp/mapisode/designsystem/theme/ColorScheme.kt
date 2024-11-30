@@ -203,8 +203,8 @@ val lightColorScheme = CustomColorScheme(
 	systemBarColored = Primary10,
 
 	// Checkbox
-	checkboxBackground = Color.Transparent,
-	checkboxStroke = Neutral10,
+	checkboxBackground = Primary20.copy(alpha = 0.5f),
+	checkboxStroke = Primary50.copy(alpha = 0.5f),
 )
 
 // Dark Theme Color Scheme
@@ -305,6 +305,6 @@ val darkColorScheme = CustomColorScheme(
 	systemBarColored = Primary90,
 
 	// Checkbox
-	checkboxBackground = Color.Transparent,
+	checkboxBackground = Primary20.copy(alpha = 0.6f),
 	checkboxStroke = Neutral40,
 )
