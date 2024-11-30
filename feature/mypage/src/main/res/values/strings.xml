@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="mypage_title">마이페이지</string>
+	<string name="mypage_logout">로그아웃</string>
+	<string name="mypage_profile_image">프로필 이미지</string>
+	<string name="mypage_withdrawal">회원탈퇴</string>
+	<string name="mypage_account">Account</string>
+	<string name="mypage_terms_of_use">이용약관</string>
+	<string name="mypage_placeholder_nickname">닉네임을 입력해주세요.</string>
+	<string name="mypage_nickname">닉네임</string>
+	<string name="mypage_edit_profile">프로필 수정하기</string>
+	<string name="mypage_edit">수정하기</string>
+</resources>
