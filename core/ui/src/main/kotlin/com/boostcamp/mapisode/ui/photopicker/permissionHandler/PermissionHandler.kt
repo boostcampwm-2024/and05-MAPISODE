@@ -18,7 +18,7 @@ fun PermissionHandler(
 ) {
 	val context = LocalContext.current
 	var hasPermissions by rememberSaveable {
-		mutableStateOf(PermissionCheck(context).hasPermissions(isCameraNeeded))
+		mutableStateOf(PermissionCheck(context).arePermissionsGranted(isCameraNeeded))
 	}
 
 	val launcher = rememberLauncherForActivityResult(
