@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.ui.photopicker
 
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
@@ -93,6 +94,9 @@ fun MapisodePhotoPicker(
 				cameraLauncher.launch()
 			}
 		},
+		clickDenialToast = {
+			Toast.makeText(context, "최대 $numOfPhoto 개의 사진만 선택할 수 있습니다.", Toast.LENGTH_SHORT).show()
+		},
 		modifier = modifier.fillMaxSize(),
 	)
 }
@@ -107,6 +111,7 @@ fun PhotoPicker(
 	addedPhoto: PhotoInfo?,
 	numOfPhoto: Int,
 	onCameraClick: () -> Unit,
+	clickDenialToast: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
 	val selectedPhotos = rememberMutableStateListOf<PhotoInfo>()
@@ -153,6 +158,8 @@ fun PhotoPicker(
 						onCameraClick = {
 							if (selectedPhotos.size < numOfPhoto) {
 								onCameraClick()
+							} else {
+								clickDenialToast()
 							}
 						},
 						modifier = Modifier.padding(4.dp),
@@ -169,6 +176,8 @@ fun PhotoPicker(
 							selectedPhotos.remove(photo)
 						} else if (selectedPhotos.size < numOfPhoto) {
 							selectedPhotos.add(photo)
+						} else {
+							clickDenialToast()
 						}
 					},
 					modifier = Modifier.padding(4.dp),
