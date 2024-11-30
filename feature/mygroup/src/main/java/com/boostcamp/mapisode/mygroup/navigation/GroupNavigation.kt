@@ -45,6 +45,7 @@ fun NavGraphBuilder.addGroupNavGraph(
 	onGroupDetailClick: (String) -> Unit,
 	onGroupCreationClick: () -> Unit,
 	onGroupEditClick: (String) -> Unit,
+	onEpisodeClick: (String) -> Unit,
 ) {
 	composable<MainRoute.Group> {
 		MainGroupRoute(
@@ -67,6 +68,7 @@ fun NavGraphBuilder.addGroupNavGraph(
 			detail = detail,
 			onBackClick = onBackClick,
 			onEditClick = onGroupEditClick,
+			onEpisodeClick = onEpisodeClick,
 		)
 	}
 

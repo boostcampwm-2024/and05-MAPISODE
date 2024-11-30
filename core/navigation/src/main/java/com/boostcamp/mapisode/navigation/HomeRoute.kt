@@ -9,4 +9,7 @@ sealed interface HomeRoute : Route {
 
 	@Serializable
 	data class List(val groupId: String) : HomeRoute
+
+	@Serializable
+	data class Edit(val episodeId: String) : HomeRoute
 }
