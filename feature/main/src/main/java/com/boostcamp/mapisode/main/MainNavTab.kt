@@ -17,7 +17,7 @@ internal enum class MainNavTab(
 	EPISODE(
 		iconResId = R.drawable.ic_edit_note,
 		contentDescription = "새 에피소드",
-		route = MainRoute.Episode,
+		route = MainRoute.Episode(),
 	),
 	GROUP(
 		iconResId = R.drawable.ic_groups_2,
@@ -28,7 +28,8 @@ internal enum class MainNavTab(
 		iconResId = R.drawable.ic_account_circle,
 		contentDescription = "마이페이지",
 		route = MainRoute.Mypage,
-	), ;
+	),
+	;
 
 	companion object {
 		@Composable

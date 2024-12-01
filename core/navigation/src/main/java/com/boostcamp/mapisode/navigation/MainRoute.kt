@@ -8,7 +8,7 @@ sealed interface MainRoute : Route {
 	data object Home : MainRoute
 
 	@Serializable
-	data object Episode : MainRoute
+	data class Episode(val lat: Double? = null, val lng: Double? = null) : MainRoute
 
 	@Serializable
 	data object Group : MainRoute

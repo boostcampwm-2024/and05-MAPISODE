@@ -26,7 +26,9 @@ internal fun MainNavHost(
 			startDestination = navigator.startDestination,
 		) {
 			addHomeNavGraph(
-				onTextMarkerClick = { navigator.navigate(MainNavTab.EPISODE) },
+				onTextMarkerClick = { latLng ->
+					navigator.navigate(MainNavTab.EPISODE, latLng)
+				},
 				onEpisodeClick = navigator::navigateToEpisodeDetail,
 				onListFabClick = navigator::navigateToEpisodeList,
 				onBackClick = navigator::popBackStackIfNotHome,
