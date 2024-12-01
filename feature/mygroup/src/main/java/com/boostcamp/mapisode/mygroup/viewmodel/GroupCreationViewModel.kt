@@ -2,7 +2,6 @@ package com.boostcamp.mapisode.mygroup.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
-import com.boostcamp.mapisode.model.GroupModel
 import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.mygroup.R
 import com.boostcamp.mapisode.mygroup.intent.GroupCreationIntent
@@ -10,11 +9,14 @@ import com.boostcamp.mapisode.mygroup.sideeffect.GroupCreationSideEffect
 import com.boostcamp.mapisode.mygroup.state.GroupCreationState
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.Date
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,8 +26,14 @@ class GroupCreationViewModel @Inject constructor(
 ) : BaseViewModel<GroupCreationIntent, GroupCreationState, GroupCreationSideEffect>(
 	GroupCreationState(),
 ) {
+	private val userId: ConcurrentHashMap<String, String> = ConcurrentHashMap()
+
 	override fun onIntent(intent: GroupCreationIntent) {
 		when (intent) {
+			is GroupCreationIntent.Initialize -> {
+				initializeCreatingGroup()
+			}
+
 			is GroupCreationIntent.OnBackClick -> {
 				postSideEffect(GroupCreationSideEffect.NavigateToGroupScreen)
 			}
@@ -37,29 +45,57 @@ class GroupCreationViewModel @Inject constructor(
 			is GroupCreationIntent.OnGroupCreationError -> {
 				postSideEffect(GroupCreationSideEffect.ShowToast(R.string.message_error_edit_input))
 			}
+
+			is GroupCreationIntent.OnPhotoPickerClick -> {
+				intent { copy(isSelectingGroupImage = true) }
+			}
+
+			is GroupCreationIntent.OnGroupImageSelect -> {
+				imageApply(intent.imageUrl)
+			}
+
+			is GroupCreationIntent.OnBackToGroupCreation -> {
+				intent { copy(isSelectingGroupImage = false) }
+			}
+		}
+	}
+
+	private fun initializeCreatingGroup() {
+		viewModelScope.launch {
+			userId["userId"] = userPreferenceDataStore.getUserId().first() ?: ""
+			intent {
+				copy(
+					isInitializing = false,
+					group = group.copy(
+						id = UUID.randomUUID().toString().replace("-", ""),
+						adminUser = userId["userId"] ?: "",
+						createdAt = Date(),
+						members = persistentListOf(userId["userId"] ?: ""),
+					),
+				)
+			}
 		}
 	}
 
 	private fun checkGroupEdit(title: String, content: String, imageUrl: String) {
 		viewModelScope.launch {
 			try {
-				if (title.length !in 2..24 || content.length < 10 || imageUrl.isBlank()) {
+				if (title.length !in 2..24 || content.length < 2 || imageUrl.isBlank()) {
 					intent { copy(isGroupEditError = true) }
+					delay(100)
 				} else {
-					intent { copy(isGroupEditError = false) }
-					val newGroupId = UUID.randomUUID().toString().replace("-", "")
-					val userId = userPreferenceDataStore.getUserId().first()
-					val editedGroup = GroupModel(
-						id = newGroupId,
-						name = title,
-						createdAt = Date(),
-						description = content,
-						imageUrl = imageUrl,
-						adminUser = userId
-							?: throw Exception(),
-						members = listOf(userId),
-					)
-					groupRepository.createGroup(editedGroup)
+					intent {
+						copy(
+							isGroupEditError = false,
+							group = group.copy(
+								name = title,
+								description = content,
+								imageUrl = imageUrl,
+							),
+						)
+					}
+					Timber.e("Group: ${currentState.group}")
+					groupRepository.createGroup(currentState.group.toGroupModel())
 					postSideEffect(
 						GroupCreationSideEffect.ShowToast(
 							R.string.message_error_creation_group_success,
@@ -70,6 +106,17 @@ class GroupCreationViewModel @Inject constructor(
 				}
 			} catch (e: Exception) {
 				intent { copy(isGroupEditError = true) }
+			}
+		}
+	}
+
+	private fun imageApply(imageUrl: String) {
+		viewModelScope.launch {
+			intent {
+				copy(
+					isSelectingGroupImage = false,
+					group = group.copy(imageUrl = imageUrl),
+				)
 			}
 		}
 	}
