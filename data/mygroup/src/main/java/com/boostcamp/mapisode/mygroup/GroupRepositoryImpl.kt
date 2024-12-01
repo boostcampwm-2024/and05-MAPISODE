@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.mygroup
 
+import androidx.core.net.toUri
 import com.boostcamp.mapisode.firebase.firestore.FirestoreConstants
 import com.boostcamp.mapisode.model.EpisodeModel
 import com.boostcamp.mapisode.model.GroupMemberModel
@@ -13,12 +14,16 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import java.util.Calendar
 import java.util.UUID
 import javax.inject.Inject
 
-class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFirestore) :
+class GroupRepositoryImpl @Inject constructor(
+	private val database: FirebaseFirestore,
+	private val storage: FirebaseStorage,
+) :
 	GroupRepository {
 	private val groupCollection = database.collection(FirestoreConstants.COLLECTION_GROUP)
 	private val userCollection = database.collection(FirestoreConstants.COLLECTION_USER)
@@ -167,14 +172,23 @@ class GroupRepositoryImpl @Inject constructor(private val database: FirebaseFire
 
 	override suspend fun createGroup(groupModel: GroupModel) {
 		try {
+			val imageRef = storage.reference.child(
+				"group/${groupModel.id}/1",
+			)
+			val uploadTask = imageRef.putFile(groupModel.imageUrl.toUri()).await()
+			val downloadUrl = uploadTask.task.result.storage.downloadUrl.await()
+
+
 			database.runTransaction { transaction ->
-				// group 컬렉션 생성
 				val groupDocRef = database
 					.collection(FirestoreConstants.COLLECTION_GROUP)
 					.document(groupModel.id)
-				transaction.set(groupDocRef, groupModel.toFirestoreModel(database))
 
-				// user의 group 필드 업데이트
+				val groupFirestoreModel = groupModel.toFirestoreModel(database).copy(
+					imageUrl = downloadUrl.toString(),
+				)
+				transaction.set(groupDocRef, groupFirestoreModel)
+
 				val userDocRef = database
 					.collection(FirestoreConstants.COLLECTION_USER)
 					.document(groupModel.adminUser)
