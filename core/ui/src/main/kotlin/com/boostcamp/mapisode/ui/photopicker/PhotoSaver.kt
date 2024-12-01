@@ -33,7 +33,8 @@ object PhotoSaver {
 		val imageUri = contentResolver.insert(
 			MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
 			contentValues,
-		) ?: return null
+		) ?: throw IOException("사진 저장에 실패했습니다.")
+
 
 		try {
 			contentResolver.openOutputStream(imageUri)?.use { outputStream ->
@@ -49,7 +50,7 @@ object PhotoSaver {
 			return imageUri
 		} catch (e: IOException) {
 			contentResolver.delete(imageUri, null, null)
-			return null
+			throw IOException("사진 저장에 실패했습니다.")
 		}
 	}
 }

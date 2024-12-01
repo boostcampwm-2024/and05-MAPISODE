@@ -29,6 +29,7 @@ import com.boostcamp.mapisode.ui.photopicker.component.CameraItem
 import com.boostcamp.mapisode.ui.photopicker.component.PhotoItem
 import com.boostcamp.mapisode.ui.photopicker.model.PhotoInfo
 import com.boostcamp.mapisode.ui.photopicker.permissionHandler.PermissionHandler
+import okio.IOException
 import java.time.Instant
 import java.util.Date
 
@@ -73,11 +74,15 @@ fun MapisodePhotoPicker(
 	val cameraLauncher = rememberLauncherForActivityResult(
 		contract = ActivityResultContracts.TakePicturePreview(),
 	) { bitmap ->
-		val uri = PhotoSaver.savePhoto(context, bitmap)
-		bitmap?.let {
-			val photo = PhotoInfo(uri = uri.toString(), dateTaken = Date.from(Instant.now()))
-			addedPhoto.value = photo
-			cameraPhotos.add(photo)
+		try {
+			val uri = PhotoSaver.savePhoto(context, bitmap)
+			bitmap?.let {
+				val photo = PhotoInfo(uri = uri.toString(), dateTaken = Date.from(Instant.now()))
+				addedPhoto.value = photo
+				cameraPhotos.add(photo)
+			}
+		} catch (e: IOException) {
+			Toast.makeText(context, "사진 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
 		}
 	}
 
