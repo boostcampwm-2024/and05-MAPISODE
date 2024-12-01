@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
@@ -68,7 +69,7 @@ fun GroupEditScreen(
 	).value
 
 	BackHandler {
-		if (uiState.value.isSelectingGroupImage ) {
+		if (uiState.value.isSelectingGroupImage) {
 			viewModel.onIntent(GroupEditIntent.OnBackToGroupCreation)
 		} else {
 			viewModel.onIntent(GroupEditIntent.OnBackClick)
@@ -230,6 +231,7 @@ fun GroupEditField(
 							model = profileUrl,
 							contentDescription = "그룹 이미지",
 							modifier = Modifier.fillMaxSize(),
+							contentScale = ContentScale.FillBounds,
 						)
 					}
 				}
