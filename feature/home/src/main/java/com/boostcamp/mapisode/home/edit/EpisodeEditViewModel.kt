@@ -53,10 +53,25 @@ class EpisodeEditViewModel @Inject constructor(
 				getAddress(intent.latLng)
 			}
 
-			is EpisodeEditIntent.OnFinishLocationSelection -> {
+			is EpisodeEditIntent.OnRequestSelection -> {
 				intent {
 					copy(
 						isSelectingLocation = false,
+						episode = episode.copy(
+							selectedAddress = intent.selectedAddress,
+							searchedAddress = "",
+						),
+					)
+				}
+			}
+
+			is EpisodeEditIntent.OnDismissSelection -> {
+				intent {
+					copy(
+						isSelectingLocation = false,
+						episode = episode.copy(
+							searchedAddress = "",
+						),
 					)
 				}
 			}
@@ -124,7 +139,7 @@ class EpisodeEditViewModel @Inject constructor(
 				intent {
 					copy(
 						episode = episode.copy(
-							address = address,
+							searchedAddress = address,
 							location = latLng.toEpisodeLatLng(),
 						),
 					)

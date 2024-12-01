@@ -116,13 +116,14 @@ fun EpisodeEditRoute(
 		)
 	} else if (uiState.isSelectingLocation) {
 		LocationSelectionScreen(
-			episodeAddress = uiState.episode.address,
+			episodeAddress = uiState.episode.searchedAddress,
 			cameraPosition = CameraPosition(
 				uiState.episode.location.toLatLng(),
 				16.0,
 			),
 			onSetEpisodeLocation = { viewModel.onIntent(EpisodeEditIntent.OnSetLocation(it)) },
-			onPopBackToInfo = { viewModel.onIntent(EpisodeEditIntent.OnFinishLocationSelection) },
+			onRequestSelection = { viewModel.onIntent(EpisodeEditIntent.OnRequestSelection(it)) },
+			onDismissSelection = { viewModel.onIntent(EpisodeEditIntent.OnDismissSelection) },
 		)
 	} else {
 		EpisodeEditScreen(
@@ -183,7 +184,6 @@ fun EpisodeEditScreen(
 					) {
 						MapisodeIcon(
 							id = R.drawable.ic_arrow_back_ios,
-							iconSize = IconSize.ExtraSmall,
 						)
 					}
 				},
@@ -257,10 +257,10 @@ fun EpisodeEditScreen(
 			MapisodeTextField(
 				modifier = modifier
 					.fillMaxWidth(),
-				value = state.episode.address,
+				value = state.episode.selectedAddress,
 				readOnly = true,
 				placeholder = "장소를 입력해주세요",
-				isError = state.episode.address.isEmpty(),
+				isError = state.episode.selectedAddress.isEmpty(),
 				onValueChange = {},
 				trailingIcon = {
 					MapisodeIconButton(
@@ -513,7 +513,7 @@ fun EpisodeEditScreen(
 							group = state.groups.first { grp -> grp.name == group }.id,
 							serverImageUrl = state.episode.serverImageUrl,
 							localImageUrl = state.episode.localImageUrl,
-							address = state.episode.address,
+							selectedAddress = state.episode.selectedAddress,
 							location = state.episode.location,
 							memoryDate = date,
 							tags = tag,
