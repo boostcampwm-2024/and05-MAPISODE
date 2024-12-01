@@ -7,8 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.boostcamp.mapisode.home.HomeRoute
 import com.boostcamp.mapisode.home.detail.EpisodeDetailRoute
-import com.boostcamp.mapisode.home.list.EpisodeListRoute
 import com.boostcamp.mapisode.home.edit.EpisodeEditRoute
+import com.boostcamp.mapisode.home.list.EpisodeListRoute
 import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.boostcamp.mapisode.navigation.HomeRoute
 import com.boostcamp.mapisode.navigation.MainRoute
