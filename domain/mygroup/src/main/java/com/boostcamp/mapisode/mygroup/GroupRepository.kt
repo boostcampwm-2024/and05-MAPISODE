@@ -12,7 +12,7 @@ interface GroupRepository {
 	suspend fun issueInvitationCode(groupId: String): String
 	suspend fun leaveGroup(userId: String, groupId: String)
 	suspend fun createGroup(groupModel: GroupModel)
-	suspend fun updateGroup(groupId: String, groupModel: GroupModel)
+	suspend fun updateGroup(groupModel: GroupModel)
 	suspend fun deleteGroup(groupId: String)
 
 	suspend fun getUserInfoByUserId(userId: String): GroupMemberModel

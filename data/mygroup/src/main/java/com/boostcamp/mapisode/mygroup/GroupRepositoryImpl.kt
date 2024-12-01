@@ -14,6 +14,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import java.util.Calendar
@@ -178,7 +179,6 @@ class GroupRepositoryImpl @Inject constructor(
 			val uploadTask = imageRef.putFile(groupModel.imageUrl.toUri()).await()
 			val downloadUrl = uploadTask.task.result.storage.downloadUrl.await()
 
-
 			database.runTransaction { transaction ->
 				val groupDocRef = database
 					.collection(FirestoreConstants.COLLECTION_GROUP)
@@ -203,10 +203,41 @@ class GroupRepositoryImpl @Inject constructor(
 		}
 	}
 
-	override suspend fun updateGroup(groupId: String, groupModel: GroupModel) {
+	override suspend fun updateGroup(groupModel: GroupModel) {
 		try {
-			groupCollection.document(groupId).set(groupModel.toFirestoreModel(database))
-				.await()
+			val groupDocRef = database
+				.collection(FirestoreConstants.COLLECTION_GROUP)
+				.document(groupModel.id)
+
+			val existingGroup = groupDocRef.get().await().toObject(GroupFirestoreModel::class.java)
+				?: throw Exception()
+
+			// 앱에서 설정한 이미지와 firebase storage URL 비교하여 다르면 업로드
+			val isImageUrlDifferent = existingGroup.imageUrl != groupModel.imageUrl
+
+			val updatedImageUrl = if (isImageUrlDifferent) {
+				val imageRef = storage.reference.child("group/${groupModel.id}/1")
+				val uploadTask = imageRef.putFile(groupModel.imageUrl.toUri()).await()
+				uploadTask.task.result.storage.downloadUrl.await().toString()
+			} else {
+				existingGroup.imageUrl
+			}
+
+			database.runTransaction { transaction ->
+				val updatedGroupFirestoreModel = groupModel.toFirestoreModel(database).copy(
+					imageUrl = updatedImageUrl,
+				)
+				transaction.set(groupDocRef, updatedGroupFirestoreModel, SetOptions.merge())
+
+				val userDocRef = database
+					.collection(FirestoreConstants.COLLECTION_USER)
+					.document(groupModel.adminUser)
+				transaction.update(
+					userDocRef,
+					FirestoreConstants.FIELD_GROUPS,
+					FieldValue.arrayUnion(groupDocRef),
+				)
+			}.await()
 		} catch (e: Exception) {
 			throw e
 		}
