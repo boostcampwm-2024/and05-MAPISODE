@@ -6,14 +6,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.boostcamp.mapisode.episode.NewEpisodeContentScreen
 import com.boostcamp.mapisode.episode.NewEpisodeInfoScreen
 import com.boostcamp.mapisode.episode.NewEpisodePicsScreen
 import com.boostcamp.mapisode.episode.PickLocationScreen
+import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.boostcamp.mapisode.navigation.MainRoute
 import com.boostcamp.mapisode.navigation.NewEpisodeRoute
 
-fun NavController.navigateEpisode(
+fun NavController.navigateToEpisode(
 	navOptions: NavOptions? = null,
 ) {
 	navigate(MainRoute.Episode, navOptions)
@@ -51,8 +53,14 @@ fun NavGraphBuilder.addEpisodeNavGraph(
 	onClickPickLocation: () -> Unit,
 	onNavigateToContent: () -> Unit,
 ) {
-	composable<MainRoute.Episode> {
+	composable<MainRoute.Episode> { backStackEntry ->
+		val lat = backStackEntry.toRoute<MainRoute.Episode>().lat
+		val lng = backStackEntry.toRoute<MainRoute.Episode>().lng
+		val initialLatLng: EpisodeLatLng? = if (lat == null || lng == null) null
+		else EpisodeLatLng(lat, lng)
+
 		NewEpisodePicsScreen(
+			initialLatLng = initialLatLng,
 			viewModel = hiltViewModel(getBackStackEntry()),
 			onNavigateToInfo = onNavigateToInfo,
 		)

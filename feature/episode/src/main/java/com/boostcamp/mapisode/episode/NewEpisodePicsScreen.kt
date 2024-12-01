@@ -26,15 +26,23 @@ import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.episode.intent.NewEpisodeIntent
 import com.boostcamp.mapisode.episode.intent.NewEpisodeSideEffect
 import com.boostcamp.mapisode.episode.intent.NewEpisodeViewModel
+import com.boostcamp.mapisode.model.EpisodeLatLng
+import com.naver.maps.geometry.LatLng
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 internal fun NewEpisodePicsScreen(
+	initialLatLng: EpisodeLatLng? = null,
 	viewModel: NewEpisodeViewModel = hiltViewModel(),
 	onNavigateToInfo: () -> Unit,
 ) {
 	val context = LocalContext.current
+	initialLatLng?.let { latLng ->
+		val mapsLatLng = LatLng(latLng.latitude, latLng.longitude)
+		viewModel.onIntent(NewEpisodeIntent.SetEpisodeLocation(mapsLatLng))
+		viewModel.onIntent(NewEpisodeIntent.SetEpisodeAddress(mapsLatLng))
+	}
 
 	LaunchedEffect(Unit) {
 		viewModel.sideEffect.collect { sideEffect ->

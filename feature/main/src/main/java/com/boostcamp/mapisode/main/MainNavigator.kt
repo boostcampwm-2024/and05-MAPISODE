@@ -18,6 +18,7 @@ import com.boostcamp.mapisode.episode.navigation.navigateWriteContent
 import com.boostcamp.mapisode.episode.navigation.navigateWriteInfo
 import com.boostcamp.mapisode.home.navigation.navigateEpisodeDetail
 import com.boostcamp.mapisode.home.navigation.navigateEpisodeList
+import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupCreation
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupDetail
 import com.boostcamp.mapisode.mygroup.navigation.navigateGroupEdit
@@ -39,7 +40,7 @@ internal class MainNavigator(
 			currentDestination?.hasRoute(tab::class) == true
 		}
 
-	fun navigate(tab: MainNavTab) {
+	fun navigate(tab: MainNavTab, latLng: EpisodeLatLng? = null) {
 		val navOptions = navOptions {
 			popUpTo(navController.graph.findStartDestination().id) {
 				saveState = true
@@ -50,7 +51,14 @@ internal class MainNavigator(
 
 		when (tab) {
 			MainNavTab.HOME -> navController.navigate(MainNavTab.HOME.route, navOptions)
-			MainNavTab.EPISODE -> navController.navigate(MainNavTab.EPISODE.route, navOptions)
+			MainNavTab.EPISODE -> navController.navigate(
+				MainRoute.Episode(
+					lat = latLng?.latitude,
+					lng = latLng?.longitude,
+				),
+				navOptions,
+			)
+
 			MainNavTab.GROUP -> navController.navigate(MainNavTab.GROUP.route, navOptions)
 			MainNavTab.MYPAGE -> navController.navigate(MainNavTab.MYPAGE.route, navOptions)
 		}
