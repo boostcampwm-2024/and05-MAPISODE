@@ -16,9 +16,12 @@ import com.naver.maps.map.CameraPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +31,8 @@ class HomeViewModel @Inject constructor(
 	private val userPreferenceDataStore: UserPreferenceDataStore,
 ) :
 	BaseViewModel<HomeIntent, HomeState, HomeSideEffect>(HomeState()) {
+
+	private val userNameCache = ConcurrentHashMap<String, String>()
 
 	override fun onIntent(intent: HomeIntent) {
 		when (intent) {
@@ -180,14 +185,37 @@ class HomeViewModel @Inject constructor(
 					category = category,
 				).toPersistentList()
 
+				val creatorIds = episodes.map { it.createdBy }.distinct()
+
+				val newCreatorIds = creatorIds.filter { !userNameCache.containsKey(it) }
+
+				val deferred = newCreatorIds.map { creatorId ->
+					async {
+						try {
+							val userInfo = groupRepository.getUserInfoByUserId(creatorId)
+							userNameCache[creatorId] = userInfo.name
+						} catch (e: Exception) {
+							userNameCache[creatorId] = "UNKNOWN"
+						}
+					}
+				}
+
+				deferred.awaitAll()
+
+				val episodesWithCreatorName = episodes.map { episode ->
+					val creatorName = userNameCache[episode.createdBy] ?: "UNKNOWN"
+					episode.copy(createdByName = creatorName)
+				}.toPersistentList()
+
 				if (shouldSort) {
 					val referenceLocation = currentState.selectedMarkerPosition?.toEpisodeLatLng()
 						?: EpisodeLatLng(0.0, 0.0)
-					val sortedEpisodes = sortEpisodesByDistance(episodes, referenceLocation)
+					val sortedEpisodes =
+						sortEpisodesByDistance(episodesWithCreatorName, referenceLocation)
 
 					intent {
 						copy(
-							episodes = episodes,
+							episodes = episodesWithCreatorName,
 							selectedEpisodes = sortedEpisodes.toPersistentList(),
 							selectedEpisodeIndex = 0,
 							isMapMovedWhileCardVisible = false,
@@ -197,7 +225,7 @@ class HomeViewModel @Inject constructor(
 				} else {
 					intent {
 						copy(
-							episodes = episodes,
+							episodes = episodesWithCreatorName,
 						)
 					}
 				}

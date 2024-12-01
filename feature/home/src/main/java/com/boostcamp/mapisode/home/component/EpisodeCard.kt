@@ -92,7 +92,7 @@ fun EpisodeCard(
 			Spacer(modifier = Modifier.height(2.dp))
 
 			MapisodeText(
-				text = stringResource(R.string.episode_creator_tag_prefix, episode.createdBy),
+				text = stringResource(R.string.episode_creator_tag_prefix, episode.createdByName),
 				style = AppTypography.labelMedium.copy(fontSize = 10.dp),
 				color = MapisodeTheme.colorScheme.textContent,
 				maxLines = 1,

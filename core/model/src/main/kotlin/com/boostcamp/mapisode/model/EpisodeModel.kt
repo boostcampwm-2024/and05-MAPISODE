@@ -7,6 +7,7 @@ data class EpisodeModel(
 	val category: String = "",
 	val content: String = "",
 	val createdBy: String = "",
+	val createdByName: String = "",
 	val group: String = "",
 	val imageUrls: List<String> = emptyList(),
 	val address: String = "",

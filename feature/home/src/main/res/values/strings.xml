@@ -21,4 +21,13 @@
 	<string name="episode_card_detail">자세히</string>
 	<string name="episode_detail_not_found_error">애피소드를 찾을 수 없습니다.</string>
 	<string name="episode_detail_load_error">데이터를 불러오는 중 오류가 발생했습니다.</string>
+
+	<!-- EpisodeList -->
+	<string name="overview_created_by">"글쓴이 :&#32;"</string>
+	<string name="overview_location">"위치 :&#32;"</string>
+	<string name="overview_date">"작성일 :&#32;"</string>
+	<string name="overview_content">"내용 :&#32;"</string>
+	<string name="sort_option_recent">최신순</string>
+	<string name="sort_option_oldest">과거순</string>
+	<string name="sort_option_name">이름순</string>
 </resources>
