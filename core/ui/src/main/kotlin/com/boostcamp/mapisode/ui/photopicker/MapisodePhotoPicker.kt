@@ -36,6 +36,7 @@ import java.util.Date
 fun MapisodePhotoPicker(
 	numOfPhoto: Int,
 	onPhotoSelected: (List<PhotoInfo>) -> Unit,
+	onPermissionDenied: () -> Unit,
 	onBackPressed: () -> Unit,
 	modifier: Modifier = Modifier,
 	isCameraNeeded: Boolean = true,
@@ -65,6 +66,7 @@ fun MapisodePhotoPicker(
 		},
 		onPermissionsDenied = {
 			isPermissionsGranted = false
+			onPermissionDenied()
 		},
 	)
 
