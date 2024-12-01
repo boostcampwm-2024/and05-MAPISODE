@@ -7,6 +7,7 @@
 	<string name="new_episode_menu_cancel">취소</string>
 
 	<string name="new_episode_pictures_empty">사진을 선택해 주세요.</string>
+	<string name="new_episode_pictures_permission_denied">사진에 대한 권한이 거부되었어요. 권한을 다시 요청해 주세요.</string>
 
 	<string name="new_episode_info_location">장소</string>
 	<string name="new_episode_info_group">그룹</string>

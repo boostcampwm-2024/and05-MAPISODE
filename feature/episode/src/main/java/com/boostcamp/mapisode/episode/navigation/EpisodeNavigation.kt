@@ -68,6 +68,7 @@ fun NavGraphBuilder.addEpisodeNavGraph(
 			initialLatLng = initialLatLng(),
 			viewModel = hiltViewModel(getBackStackEntry()),
 			onNavigateToInfo = onNavigateToInfo,
+			onBackPressed = onPopBack,
 		)
 	}
 

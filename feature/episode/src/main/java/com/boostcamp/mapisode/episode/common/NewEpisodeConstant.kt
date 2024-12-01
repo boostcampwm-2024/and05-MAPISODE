@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 
 object NewEpisodeConstant {
 	const val MAP_DEFAULT_ZOOM = 16.0
+	const val MAX_PHOTO_COUNTS = 4
 
 	val textFieldModifier = Modifier
 		.fillMaxWidth()
