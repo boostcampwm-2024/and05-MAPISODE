@@ -39,6 +39,7 @@ import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberCameraPositionState
+import com.naver.maps.map.compose.rememberFusedLocationSource
 import com.naver.maps.map.compose.rememberMarkerState
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -82,13 +83,14 @@ internal fun LocationSelectionScreen(
 				modifier = Modifier.fillMaxHeight(0.75f),
 				cameraPositionState = cameraPositionState,
 				properties = MapProperties(
-					locationTrackingMode = LocationTrackingMode.Follow,
+					locationTrackingMode = LocationTrackingMode.NoFollow,
 				),
 				uiSettings = MapUiSettings(
 					isZoomControlEnabled = false,
 					isLocationButtonEnabled = true,
 					isLogoClickEnabled = false,
 				),
+				locationSource = rememberFusedLocationSource(),
 			) {
 				Marker(state = episodeMarkerState)
 			}
@@ -150,7 +152,7 @@ internal fun LocationSelectionScreen(
 			onClick = onDismissSelection,
 			modifier = Modifier
 				.systemBarsPadding()
-				.padding(start = 12.dp),
+				.padding(start = 12.dp, top = 4.dp),
 		) {
 			MapisodeIcon(
 				id = R.drawable.ic_arrow_back_ios,
