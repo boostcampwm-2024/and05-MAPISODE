@@ -59,7 +59,7 @@ fun GroupCreationScreen(
 		initialValue = GroupCreationSideEffect.Idle,
 	).value
 
-	if(uiState.value.isInitializing) {
+	if (uiState.value.isInitializing) {
 		viewModel.onIntent(GroupCreationIntent.Initialize)
 	}
 
@@ -212,7 +212,8 @@ fun GroupCreationField(
 						AsyncImage(
 							model = profileUrl,
 							contentDescription = "그룹 이미지",
-							modifier = Modifier.fillMaxSize()
+							modifier = Modifier
+								.fillMaxSize()
 								.aspectRatio(1f),
 						)
 					}
