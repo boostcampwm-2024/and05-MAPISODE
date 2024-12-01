@@ -70,7 +70,7 @@ internal class MainNavigator(
 		navController.navigateEpisodeDetail(episodeId)
 	}
 
-	fun navigateToEpisodeList(groupId: String) {
+	fun navigateToEpisodeList(groupId: String?) {
 		navController.navigateEpisodeList(groupId)
 	}
 
