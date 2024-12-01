@@ -234,12 +234,15 @@ internal fun HomeRoute(
 			viewModel.onIntent(HomeIntent.LoadGroups)
 		},
 		onListFabClick = { groupId ->
-			if (groupId != null) onListFabClick(groupId)
-			else Toast.makeText(
-				context,
-				context.getString(R.string.error_group_load_episodes),
-				Toast.LENGTH_SHORT,
-			).show()
+			if (groupId != null) {
+				onListFabClick(groupId)
+			} else {
+				Toast.makeText(
+					context,
+					context.getString(R.string.error_group_load_episodes),
+					Toast.LENGTH_SHORT,
+				).show()
+			}
 		},
 		onCreateNewEpisode = { latLng ->
 			viewModel.onIntent(HomeIntent.ClickTextMarker(latLng.toEpisodeLatLng()))
