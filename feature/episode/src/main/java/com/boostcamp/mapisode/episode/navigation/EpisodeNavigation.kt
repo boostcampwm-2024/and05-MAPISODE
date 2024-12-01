@@ -57,8 +57,11 @@ fun NavGraphBuilder.addEpisodeNavGraph(
 		val lat = backStackEntry.toRoute<MainRoute.Episode>().lat
 		val lng = backStackEntry.toRoute<MainRoute.Episode>().lng
 		val initialLatLng: () -> EpisodeLatLng? = {
-			if (lat == null || lng == null) null
-			else EpisodeLatLng(lat, lng)
+			if (lat == null || lng == null) {
+				null
+			} else {
+				EpisodeLatLng(lat, lng)
+			}
 		}
 
 		NewEpisodePicsScreen(
