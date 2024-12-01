@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
@@ -68,7 +69,7 @@ fun GroupCreationScreen(
 	}
 
 	BackHandler {
-		if (uiState.value.isSelectingGroupImage ) {
+		if (uiState.value.isSelectingGroupImage) {
 			viewModel.onIntent(GroupCreationIntent.OnBackToGroupCreation)
 		} else {
 			viewModel.onIntent(GroupCreationIntent.OnBackClick)
@@ -216,7 +217,7 @@ fun GroupCreationField(
 							.fillMaxWidth()
 							.aspectRatio(1f),
 						onClick = { onPhotoPickerClick() },
-						showImage = false,
+						showImage = profileUrl == "",
 						text = "이미지를 선택하세요",
 					) {
 						AsyncImage(
@@ -225,6 +226,7 @@ fun GroupCreationField(
 							modifier = Modifier
 								.fillMaxSize()
 								.aspectRatio(1f),
+							contentScale = ContentScale.FillBounds,
 						)
 					}
 				}
