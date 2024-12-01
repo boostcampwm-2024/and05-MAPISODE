@@ -61,8 +61,9 @@ fun SignUpScreen(
 				onProfileUrlchange(selectedPhotos[0].uri)
 				isPhotoPickerClicked.value = false
 			},
+			onPermissionDenied = { isPhotoPickerClicked.value = false },
 			onBackPressed = { isPhotoPickerClicked.value = false },
-			isCameraNeeded = false,
+			isCameraNeeded = true,
 		)
 	} else {
 		MapisodeScaffold(
