@@ -120,13 +120,20 @@ class HomeViewModel @Inject constructor(
 		viewModelScope.launch {
 			try {
 				val cachedGroupId = userPreferenceDataStore.getRecentSelectedGroup().firstOrNull()
-					?: throw Exception()
+				if (cachedGroupId != null) {
+					intent {
+						copy(selectedGroupId = cachedGroupId)
+					}
 
-				intent {
-					copy(selectedGroupId = cachedGroupId)
+					selectGroup(cachedGroupId)
+				} else {
+					val userId =
+						userPreferenceDataStore.getUserId().firstOrNull() ?: throw Exception()
+					intent {
+						copy(selectedGroupId = userId)
+					}
+					selectGroup(userId)
 				}
-
-				selectGroup(cachedGroupId)
 			} catch (e: Exception) {
 				postSideEffect(HomeSideEffect.ShowToast(R.string.error_load_episodes))
 			}
