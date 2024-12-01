@@ -34,8 +34,7 @@ object PhotoSaver {
 			MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
 			contentValues,
 		) ?: throw IOException("사진 저장에 실패했습니다.")
-
-
+		
 		try {
 			contentResolver.openOutputStream(imageUri)?.use { outputStream ->
 				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)

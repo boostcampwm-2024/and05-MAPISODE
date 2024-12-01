@@ -1,6 +1,5 @@
 package com.boostcamp.mapisode.ui.photopicker.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -10,10 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import coil3.compose.rememberAsyncImagePainter
-import coil3.request.ImageRequest
+import coil3.compose.AsyncImage
+import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.Surface
 import com.boostcamp.mapisode.ui.photopicker.model.PhotoInfo
 
@@ -30,11 +29,11 @@ fun PhotoItem(
 			.clickable(onClick = onPhotoClick),
 	) {
 		Box(modifier = Modifier.fillMaxSize()) {
-			Image(
-				painter = rememberAsyncImagePainter(
-					ImageRequest.Builder(LocalContext.current).data(data = photo.uri).build(),
-				),
+			AsyncImage(
+				model = photo.uri,
 				contentDescription = "Photo",
+				placeholder = painterResource(R.drawable.ic_mapisode_brand_text),
+				error = painterResource(R.drawable.ic_error),
 				contentScale = ContentScale.Crop,
 				modifier = Modifier.fillMaxSize(),
 			)
