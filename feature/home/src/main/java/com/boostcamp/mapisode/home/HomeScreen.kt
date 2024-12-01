@@ -233,8 +233,13 @@ internal fun HomeRoute(
 			viewModel.onIntent(HomeIntent.ShowBottomSheet)
 			viewModel.onIntent(HomeIntent.LoadGroups)
 		},
-		onListFabClick = {
-
+		onListFabClick = { groupId ->
+			if (groupId != null) onListFabClick(groupId)
+			else Toast.makeText(
+				context,
+				context.getString(R.string.error_group_load_episodes),
+				Toast.LENGTH_SHORT,
+			).show()
 		},
 		onCreateNewEpisode = { latLng ->
 			viewModel.onIntent(HomeIntent.ClickTextMarker(latLng.toEpisodeLatLng()))
@@ -271,7 +276,7 @@ private fun HomeScreen(
 	cameraPositionState: CameraPositionState,
 	onChipSelected: (ChipType) -> Unit = {},
 	onGroupFabClick: () -> Unit = {},
-	onListFabClick: () -> Unit = {},
+	onListFabClick: (String?) -> Unit = {},
 	onCreateNewEpisode: (LatLng) -> Unit = {},
 	onEpisodeMarkerClick: (EpisodeModel) -> Unit = {},
 	onMapClick: () -> Unit = {},
@@ -410,7 +415,7 @@ private fun HomeScreen(
 					)
 
 					MapisodeFabOverlayButton(
-						onClick = onListFabClick,
+						onClick = { onListFabClick(state.selectedGroupId) },
 						iconId = Design.drawable.ic_list_bulleted,
 					)
 				}

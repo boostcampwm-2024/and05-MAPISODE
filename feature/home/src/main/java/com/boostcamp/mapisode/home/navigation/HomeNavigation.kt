@@ -53,6 +53,6 @@ fun NavGraphBuilder.addHomeNavGraph(
 
 	composable<HomeRoute.List> { backStackEntry ->
 		val groupId = backStackEntry.toRoute<HomeRoute.List>().groupId
-		EpisodeListRoute(groupId = groupId)
+		EpisodeListRoute(groupId = groupId, onBackClick = onBackClick)
 	}
 }
