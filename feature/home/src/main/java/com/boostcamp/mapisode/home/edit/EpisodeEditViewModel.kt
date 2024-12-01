@@ -96,7 +96,16 @@ class EpisodeEditViewModel @Inject constructor(
 				editEpisode(intent.newState)
 			}
 
-			is EpisodeEditIntent.OnBackClick -> {
+			is EpisodeEditIntent.OnBackClickToEditScreen -> {
+				intent {
+					copy(
+						isSelectingLocation = false,
+						isSelectingPicture = false,
+					)
+				}
+			}
+
+			is EpisodeEditIntent.OnBackClickToOutOfEditScreen -> {
 				postSideEffect(EpisodeEditSideEffect.NavigateBackScreen)
 			}
 		}

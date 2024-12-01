@@ -2,6 +2,7 @@ package com.boostcamp.mapisode.home.edit
 
 import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -83,6 +84,14 @@ fun EpisodeEditRoute(
 ) {
 	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 	val context = LocalContext.current
+
+	BackHandler {
+		if (uiState.isSelectingPicture || uiState.isSelectingLocation) {
+			viewModel.onIntent(EpisodeEditIntent.OnBackClickToEditScreen)
+		} else {
+			viewModel.onIntent(EpisodeEditIntent.OnBackClickToOutOfEditScreen)
+		}
+	}
 
 	LaunchedEffect(Unit) {
 		viewModel.onIntent(EpisodeEditIntent.LoadEpisode(episodeId))
