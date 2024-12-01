@@ -84,7 +84,7 @@ internal fun PickLocationScreen(
 				modifier = Modifier.fillMaxHeight(0.75f),
 				cameraPositionState = cameraPositionState,
 				properties = MapProperties(
-					locationTrackingMode = LocationTrackingMode.Follow,
+					locationTrackingMode = LocationTrackingMode.NoFollow,
 				),
 				uiSettings = MapUiSettings(
 					isZoomControlEnabled = false,
