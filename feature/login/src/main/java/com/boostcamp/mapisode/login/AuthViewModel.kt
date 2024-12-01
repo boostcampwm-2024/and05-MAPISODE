@@ -189,7 +189,7 @@ class AuthViewModel @Inject constructor(
 					createdAt = Date.from(java.time.Instant.now()),
 					description = "내가 작성한 에피소드",
 					imageUrl = user.profileUrl,
-					name = "\uD83D\uDC51 나의 에피소드",
+					name = "\uD83D\uDC51 나만의 에피소드",
 					members = listOf(user.uid),
 				),
 			)

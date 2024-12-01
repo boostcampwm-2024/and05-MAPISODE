@@ -17,7 +17,6 @@ object NewEpisodeConstant {
 		.fillMaxWidth()
 		.fillMaxHeight(0.3f)
 	val textFieldVerticalArrangement = Arrangement.spacedBy(12.dp)
-	val groupMap = mapOf("나의 에피소드" to "my_episode")
 
 	private const val CATEGORY_NAME_EAT = "먹을 것"
 	private const val CATEGORY_NAME_SEE = "볼 것"
