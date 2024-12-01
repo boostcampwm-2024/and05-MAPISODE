@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.mygroup.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -61,6 +62,14 @@ fun GroupCreationScreen(
 
 	if (uiState.value.isInitializing) {
 		viewModel.onIntent(GroupCreationIntent.Initialize)
+	}
+
+	BackHandler {
+		if (uiState.value.isSelectingGroupImage ) {
+			viewModel.onIntent(GroupCreationIntent.OnBackToGroupCreation)
+		} else {
+			viewModel.onIntent(GroupCreationIntent.OnBackClick)
+		}
 	}
 
 	LaunchedEffect(effect) {

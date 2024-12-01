@@ -1,6 +1,7 @@
 package com.boostcamp.mapisode.mygroup.screen
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -65,6 +66,14 @@ fun GroupEditScreen(
 		flow = viewModel.sideEffect,
 		initialValue = GroupEditSideEffect.Idle,
 	).value
+
+	BackHandler {
+		if (uiState.value.isSelectingGroupImage ) {
+			viewModel.onIntent(GroupEditIntent.OnBackToGroupCreation)
+		} else {
+			viewModel.onIntent(GroupEditIntent.OnBackClick)
+		}
+	}
 
 	LaunchedEffect(Unit) {
 		if (uiState.value.isInitializing) {
