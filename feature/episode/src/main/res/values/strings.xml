@@ -9,6 +9,11 @@
 	<string name="new_episode_pictures_empty">사진을 선택해 주세요.</string>
 	<string name="new_episode_pictures_permission_denied">사진에 대한 권한이 거부되었어요. 권한을 다시 요청해 주세요.</string>
 
+	<string name="new_episode_clear_dialog_title">에피소드 작성 취소</string>
+	<string name="new_episode_clear_dialog_content">현재 작성한 정보가 사라져요. 정말로 취소하시겠어요?</string>
+	<string name="new_episode_clear_dialog_confirm">네</string>
+	<string name="new_episode_clear_dialog_cancel">아니오</string>
+
 	<string name="new_episode_info_location">장소</string>
 	<string name="new_episode_info_group">그룹</string>
 	<string name="new_episode_info_category">카테고리</string>
