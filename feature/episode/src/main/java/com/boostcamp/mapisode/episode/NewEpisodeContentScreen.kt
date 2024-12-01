@@ -59,6 +59,7 @@ internal fun NewEpisodeContentScreen(
 		mutableStateOf(TextFieldValue(uiState.episodeContent.description))
 	}
 	var isLoading by remember { mutableStateOf(false) }
+	var showClearDialog by rememberSaveable { mutableStateOf(false) }
 
 	LaunchedEffect(Unit) {
 		viewModel.sideEffect.collect { sideEffect ->
@@ -79,6 +80,20 @@ internal fun NewEpisodeContentScreen(
 		}
 	}
 
+	if (showClearDialog) {
+		ClearDialog(
+			onResultRequest = { result ->
+				if (result) {
+					viewModel.onIntent(NewEpisodeIntent.ClearEpisode)
+					onPopBackToMain()
+				}
+			},
+			onDismissRequest = {
+				showClearDialog = false
+			},
+		)
+	}
+
 	MapisodeScaffold(
 		topBar = {
 			NewEpisodeTopBar(
@@ -86,8 +101,7 @@ internal fun NewEpisodeContentScreen(
 					onPopBack()
 				},
 				onClickClear = {
-					viewModel.onIntent(NewEpisodeIntent.ClearEpisode)
-					onPopBackToMain()
+					showClearDialog = true
 				},
 			)
 		},

@@ -58,9 +58,24 @@ internal fun NewEpisodeInfoScreen(
 	}
 	var showDatePickerDialog by remember { mutableStateOf(false) }
 	val datePickerState = rememberDatePickerState()
+	var showClearDialog by rememberSaveable { mutableStateOf(false) }
 
 	LaunchedEffect(Unit) {
 		viewModel.onIntent(NewEpisodeIntent.LoadMyGroups)
+	}
+
+	if (showClearDialog) {
+		ClearDialog(
+			onResultRequest = { result ->
+				if (result) {
+					viewModel.onIntent(NewEpisodeIntent.ClearEpisode)
+					onPopBackToMain()
+				}
+			},
+			onDismissRequest = {
+				showClearDialog = false
+			},
+		)
 	}
 
 	MapisodeScaffold(
@@ -70,8 +85,7 @@ internal fun NewEpisodeInfoScreen(
 					onPopBack()
 				},
 				onClickClear = {
-					viewModel.onIntent(NewEpisodeIntent.ClearEpisode)
-					onPopBackToMain()
+					showClearDialog = true
 				},
 			)
 		},
