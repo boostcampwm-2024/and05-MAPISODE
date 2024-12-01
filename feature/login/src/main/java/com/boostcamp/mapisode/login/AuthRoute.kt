@@ -12,7 +12,6 @@ import com.boostcamp.mapisode.auth.GoogleOauth
 @Composable
 fun AuthRoute(
 	navigateToMain: () -> Unit,
-	endSplash: (Boolean) -> Unit,
 	viewModel: AuthViewModel = hiltViewModel(),
 ) {
 	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -30,15 +29,17 @@ fun AuthRoute(
 				is AuthSideEffect.ShowError -> {
 					Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
 				}
-
-				is AuthSideEffect.EndSplash -> {
-					endSplash(effect.end)
-				}
 			}
 		}
 	}
 
 	when {
+		uiState.isLoading -> {
+			if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.S) {
+				SplashScreen()
+			}
+		}
+
 		uiState.isLoginSuccess -> {
 			SignUpScreen(
 				nickname = uiState.nickname,
