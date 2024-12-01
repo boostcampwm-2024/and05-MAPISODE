@@ -35,7 +35,6 @@ internal fun MainNavHost(
 			)
 			addAuthNavGraph(
 				navigateToMain = navigator::navigateToMain,
-				endSplash = navigator::endSplash,
 			)
 			addEpisodeNavGraph(
 				getBackStackEntry = navigator::getEpisodeBackStackEntry,

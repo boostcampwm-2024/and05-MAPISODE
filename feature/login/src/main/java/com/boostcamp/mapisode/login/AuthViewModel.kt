@@ -53,7 +53,6 @@ class AuthViewModel @Inject constructor(
 					copy(isLoading = false)
 				}
 			}
-			postSideEffect(AuthSideEffect.EndSplash(true))
 		}
 	}
 
