@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.mygroup.screen
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -24,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -54,6 +56,7 @@ fun GroupCreationScreen(
 	onBackClick: () -> Unit,
 	viewModel: GroupCreationViewModel = hiltViewModel(),
 ) {
+	val context = LocalContext.current
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 	val effect = rememberFlowWithLifecycle(
 		flow = viewModel.sideEffect,
@@ -77,12 +80,10 @@ fun GroupCreationScreen(
 			is GroupCreationSideEffect.NavigateToGroupScreen -> {
 				onBackClick()
 			}
-		}
-	}
-
-	LaunchedEffect(Unit) {
-		if (uiState.value.isGroupEditError) {
-			viewModel.onIntent(GroupCreationIntent.OnGroupCreationError)
+			is GroupCreationSideEffect.ShowToast -> {
+				Toast.makeText(context, effect.messageResId, Toast.LENGTH_SHORT).show()
+			}
+			else -> {}
 		}
 	}
 

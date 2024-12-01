@@ -42,10 +42,6 @@ class GroupCreationViewModel @Inject constructor(
 				checkGroupEdit(intent.title, intent.content, intent.imageUrl)
 			}
 
-			is GroupCreationIntent.OnGroupCreationError -> {
-				postSideEffect(GroupCreationSideEffect.ShowToast(R.string.message_error_edit_input))
-			}
-
 			is GroupCreationIntent.OnPhotoPickerClick -> {
 				intent { copy(isSelectingGroupImage = true) }
 			}
@@ -77,16 +73,35 @@ class GroupCreationViewModel @Inject constructor(
 		}
 	}
 
+	private fun imageApply(imageUrl: String) {
+		viewModelScope.launch {
+			intent {
+				copy(
+					isSelectingGroupImage = false,
+					group = group.copy(imageUrl = imageUrl),
+				)
+			}
+		}
+	}
+
 	private fun checkGroupEdit(title: String, content: String, imageUrl: String) {
 		viewModelScope.launch {
 			try {
-				if (title.length !in 2..24 || content.length < 2 || imageUrl.isBlank()) {
-					intent { copy(isGroupEditError = true) }
-					delay(100)
+				if (title.length !in 2..24) {
+					postSideEffect(
+						GroupCreationSideEffect.ShowToast(R.string.message_error_title_length),
+					)
+				} else if (content.isEmpty()) {
+					postSideEffect(
+						GroupCreationSideEffect.ShowToast(R.string.message_error_content_empty),
+					)
+				} else if (imageUrl.isBlank()) {
+					postSideEffect(
+						GroupCreationSideEffect.ShowToast(R.string.message_error_image_url_blank),
+					)
 				} else {
 					intent {
 						copy(
-							isGroupEditError = false,
 							group = group.copy(
 								name = title,
 								description = content,
@@ -105,18 +120,9 @@ class GroupCreationViewModel @Inject constructor(
 					postSideEffect(GroupCreationSideEffect.NavigateToGroupScreen)
 				}
 			} catch (e: Exception) {
-				intent { copy(isGroupEditError = true) }
-			}
-		}
-	}
-
-	private fun imageApply(imageUrl: String) {
-		viewModelScope.launch {
-			intent {
-				copy(
-					isSelectingGroupImage = false,
-					group = group.copy(imageUrl = imageUrl),
-				)
+				postSideEffect(GroupCreationSideEffect.ShowToast(R.string.message_error_edit_group))
+				delay(100)
+				postSideEffect(GroupCreationSideEffect.Idle)
 			}
 		}
 	}

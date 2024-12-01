@@ -7,7 +7,6 @@ import com.boostcamp.mapisode.ui.base.UiState
 @Immutable
 data class GroupEditState(
 	val isInitializing: Boolean = true,
-	val isRetryingInitializing: Boolean = false,
 	val isSelectingGroupImage: Boolean = false,
 	val group: GroupCreationModel = GroupCreationModel(),
 ) : UiState
