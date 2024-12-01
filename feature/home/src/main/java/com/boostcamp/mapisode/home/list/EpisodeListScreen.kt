@@ -48,6 +48,7 @@ fun EpisodeListRoute(
 	val context = LocalContext.current
 
 	LaunchedEffect(Unit) {
+		viewModel.onIntent(EpisodeListIntent.LoadInitialData(groupId))
 		viewModel.onIntent(EpisodeListIntent.LoadEpisodeList(groupId))
 	}
 
@@ -89,13 +90,12 @@ fun EpisodeListScreen(
 	var expanded by rememberSaveable { mutableStateOf(false) }
 	val sortOptions = SortOption.entries.toImmutableList()
 
-
 	MapisodeScaffold(
 		isStatusBarPaddingExist = true,
 		isNavigationBarPaddingExist = true,
 		topBar = {
 			TopAppBar(
-				title = "", // TODO 그룹 이름 가져오기,
+				title = state.groupName,
 				navigationIcon = {
 					MapisodeIconButton(
 						onClick = { onBackClick() },
@@ -169,7 +169,7 @@ fun EpisodeListScreen(
 				EpisodeListCard(
 					imageUrl = episode.imageUrls.first(),
 					title = episode.title,
-					createdBy = episode.createdBy,
+					createdBy = episode.createdByName,
 					address = episode.address,
 					createdAt = episode.createdAt,
 					content = episode.content,

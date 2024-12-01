@@ -10,4 +10,5 @@ data class EpisodeListState(
 	val isLoading: Boolean = true,
 	val episodes: PersistentList<EpisodeModel> = persistentListOf(),
 	val selectedSortOption: SortOption = SortOption.LATEST,
+	val groupName: String = "",
 ) : UiState
