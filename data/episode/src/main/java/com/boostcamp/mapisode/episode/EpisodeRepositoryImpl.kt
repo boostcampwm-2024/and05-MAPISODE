@@ -2,7 +2,7 @@ package com.boostcamp.mapisode.episode
 
 import androidx.core.net.toUri
 import com.boostcamp.mapisode.episode.model.EpisodeFirestoreModel
-import com.boostcamp.mapisode.episode.model.toFirestoreModel
+import com.boostcamp.mapisode.episode.model.toFirestoreModelForUpdate
 import com.boostcamp.mapisode.firebase.firestore.FirestoreConstants
 import com.boostcamp.mapisode.firebase.firestore.StorageConstants.PATH_IMAGES
 import com.boostcamp.mapisode.model.EpisodeLatLng
@@ -110,7 +110,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 		return try {
 			episodeCollection
 				.document(newEpisodeId)
-				.set(episodeModel.toFirestoreModel(database, uploadedImageUrls))
+				.set(episodeModel.toFirestoreModelForUpdate(database, uploadedImageUrls))
 				.await()
 			newEpisodeId
 		} catch (e: Exception) {
@@ -189,7 +189,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 				val createdBy = database.collection("user").document(episodeModel.createdBy)
 				val group = database.collection("group").document(episodeModel.group)
 				database.document("episode/${episodeModel.id}")
-					.set(episodeModel.toFirestoreModel(createdBy, group, updatedUrls))
+					.set(episodeModel.toFirestoreModelForUpdate(createdBy, group, updatedUrls))
 					.await()
 			}
 		} catch (e: TimeoutCancellationException) {
