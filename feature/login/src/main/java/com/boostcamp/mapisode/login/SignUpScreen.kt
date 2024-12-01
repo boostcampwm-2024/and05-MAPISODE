@@ -63,7 +63,7 @@ fun SignUpScreen(
 			},
 			onPermissionDenied = { isPhotoPickerClicked.value = false },
 			onBackPressed = { isPhotoPickerClicked.value = false },
-			isCameraNeeded = true,
+			isCameraNeeded = false,
 		)
 	} else {
 		MapisodeScaffold(
