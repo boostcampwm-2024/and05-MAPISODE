@@ -86,7 +86,7 @@ internal class MainNavigator(
 		navController.getBackStackEntry(startDestination)
 
 	fun popBackEpisodeToMain() {
-		navController.popBackStack(MainRoute.Episode, inclusive = true)
+		navController.popBackStack(Route.Auth, inclusive = false)
 	}
 
 	fun navigateWriteInfo() {
