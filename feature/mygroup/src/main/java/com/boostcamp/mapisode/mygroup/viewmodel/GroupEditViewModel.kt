@@ -78,11 +78,17 @@ class GroupEditViewModel @Inject constructor(private val groupRepository: GroupR
 		viewModelScope.launch {
 			try {
 				if (title.length !in 2..24) {
-					postSideEffect(GroupEditSideEffect.ShowToast(R.string.message_error_title_length))
+					postSideEffect(
+						GroupEditSideEffect.ShowToast(R.string.message_error_title_length),
+					)
 				} else if (content.isEmpty()) {
-					postSideEffect(GroupEditSideEffect.ShowToast(R.string.message_error_content_empty))
+					postSideEffect(
+						GroupEditSideEffect.ShowToast(R.string.message_error_content_empty),
+					)
 				} else if (imageUrl.isBlank()) {
-					postSideEffect(GroupEditSideEffect.ShowToast(R.string.message_error_image_url_blank))
+					postSideEffect(
+						GroupEditSideEffect.ShowToast(R.string.message_error_image_url_blank),
+					)
 				} else {
 					intent {
 						copy(

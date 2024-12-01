@@ -8,6 +8,5 @@ import com.boostcamp.mapisode.ui.base.UiState
 data class GroupCreationState(
 	val isInitializing: Boolean = true,
 	val isSelectingGroupImage: Boolean = false,
-	val isGroupEditError: Boolean = false,
 	val group: GroupCreationModel = GroupCreationModel(),
 ) : UiState
