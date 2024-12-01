@@ -6,7 +6,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 
-internal fun EpisodeModel.toFirestoreModel(
+internal fun EpisodeModel.toFirestoreModelForUpdate(
 	database: FirebaseFirestore,
 	imageUrls: List<String>,
 ): EpisodeFirestoreModel =
@@ -24,7 +24,7 @@ internal fun EpisodeModel.toFirestoreModel(
 		createdAt = Timestamp(createdAt),
 	)
 
-internal fun EpisodeModel.toFirestoreModel(
+internal fun EpisodeModel.toFirestoreModelForUpdate(
 	createdBy: DocumentReference,
 	group: DocumentReference,
 	imageUrls: List<String>,
