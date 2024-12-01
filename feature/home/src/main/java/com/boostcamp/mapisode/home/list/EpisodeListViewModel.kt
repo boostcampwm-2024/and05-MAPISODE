@@ -20,8 +20,7 @@ import javax.inject.Inject
 class EpisodeListViewModel @Inject constructor(
 	private val episodeRepository: EpisodeRepository,
 	private val groupRepository: GroupRepository,
-) :
-	BaseViewModel<EpisodeListIntent, EpisodeListState, EpisodeListSideEffect>(EpisodeListState()) {
+) : BaseViewModel<EpisodeListIntent, EpisodeListState, EpisodeListSideEffect>(EpisodeListState()) {
 
 	private val userNameCache = ConcurrentHashMap<String, String>()
 
