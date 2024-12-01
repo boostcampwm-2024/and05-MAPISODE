@@ -46,6 +46,7 @@ import com.boostcamp.mapisode.mygroup.intent.GroupCreationIntent
 import com.boostcamp.mapisode.mygroup.sideeffect.GroupCreationSideEffect
 import com.boostcamp.mapisode.mygroup.sideeffect.rememberFlowWithLifecycle
 import com.boostcamp.mapisode.mygroup.viewmodel.GroupCreationViewModel
+import com.boostcamp.mapisode.ui.photopicker.MapisodePhotoPicker
 
 @Composable
 fun GroupCreationScreen(
@@ -58,6 +59,10 @@ fun GroupCreationScreen(
 		initialValue = GroupCreationSideEffect.Idle,
 	).value
 
+	if(uiState.value.isInitializing) {
+		viewModel.onIntent(GroupCreationIntent.Initialize)
+	}
+
 	LaunchedEffect(effect) {
 		when (effect) {
 			is GroupCreationSideEffect.NavigateToGroupScreen -> {
@@ -66,30 +71,54 @@ fun GroupCreationScreen(
 		}
 	}
 
-	LaunchedEffect(uiState.value.isGroupEditError) {
+	LaunchedEffect(Unit) {
 		if (uiState.value.isGroupEditError) {
 			viewModel.onIntent(GroupCreationIntent.OnGroupCreationError)
 		}
 	}
 
-	GroupCreationContent(
-		onBackClick = onBackClick,
-		onGroupEditClick = { title, content, imageUrl ->
-			viewModel.onIntent(
-				GroupCreationIntent.OnGroupCreationClick(
-					title = title,
-					content = content,
-					imageUrl = imageUrl,
-				),
-			)
-		},
-	)
+	if (uiState.value.isSelectingGroupImage) {
+		MapisodePhotoPicker(
+			numOfPhoto = 1,
+			onPhotoSelected = { photoList ->
+				viewModel.onIntent(
+					GroupCreationIntent.OnGroupImageSelect(
+						photoList.first().uri,
+					),
+				)
+			},
+			onPermissionDenied = { viewModel.onIntent(GroupCreationIntent.OnBackToGroupCreation) },
+			onBackPressed = {
+				viewModel.onIntent(GroupCreationIntent.OnBackToGroupCreation)
+			},
+			isCameraNeeded = false,
+		)
+	} else {
+		GroupCreationContent(
+			imageUrl = uiState.value.group.imageUrl,
+			onBackClick = onBackClick,
+			onGroupEditClick = { title, content, imageUrl ->
+				viewModel.onIntent(
+					GroupCreationIntent.OnGroupCreationClick(
+						title = title,
+						content = content,
+						imageUrl = imageUrl,
+					),
+				)
+			},
+			onPhotoPickerClick = {
+				viewModel.onIntent(GroupCreationIntent.OnPhotoPickerClick)
+			},
+		)
+	}
 }
 
 @Composable
 fun GroupCreationContent(
+	imageUrl: String,
 	onBackClick: () -> Unit,
 	onGroupEditClick: (title: String, content: String, imageUrl: String) -> Unit,
+	onPhotoPickerClick: () -> Unit,
 ) {
 	val focusManager = LocalFocusManager.current
 
@@ -107,7 +136,7 @@ fun GroupCreationContent(
 		isNavigationBarPaddingExist = true,
 		topBar = {
 			TopAppBar(
-				title = "그룹 편집",
+				title = "그룹 생성",
 				navigationIcon = {
 					MapisodeIconButton(
 						onClick = {
@@ -124,7 +153,9 @@ fun GroupCreationContent(
 	) { paddingValues ->
 		GroupCreationField(
 			paddingValues = paddingValues,
+			imageUrl = imageUrl,
 			onGroupEditClick = onGroupEditClick,
+			onPhotoPickerClick = onPhotoPickerClick,
 		)
 	}
 }
@@ -132,11 +163,19 @@ fun GroupCreationContent(
 @Composable
 fun GroupCreationField(
 	paddingValues: PaddingValues,
+	imageUrl: String,
 	onGroupEditClick: (title: String, content: String, imageUrl: String) -> Unit,
+	onPhotoPickerClick: () -> Unit,
 ) {
 	var name by rememberSaveable { mutableStateOf("") }
 	var description by rememberSaveable { mutableStateOf("") }
 	var profileUrl by rememberSaveable { mutableStateOf("") }
+
+	LaunchedEffect(imageUrl) {
+		if (imageUrl.isNotBlank()) {
+			profileUrl = imageUrl
+		}
+	}
 
 	Box(
 		modifier = Modifier
@@ -166,14 +205,15 @@ fun GroupCreationField(
 							.sizeIn(maxWidth = 380.dp, maxHeight = 380.dp)
 							.fillMaxWidth()
 							.aspectRatio(1f),
-						onClick = { },
+						onClick = { onPhotoPickerClick() },
 						showImage = false,
 						text = "이미지를 선택하세요",
 					) {
 						AsyncImage(
 							model = profileUrl,
 							contentDescription = "그룹 이미지",
-							modifier = Modifier.fillMaxSize(),
+							modifier = Modifier.fillMaxSize()
+								.aspectRatio(1f),
 						)
 					}
 				}
@@ -247,7 +287,7 @@ fun GroupCreationField(
 				onClick = {
 					onGroupEditClick(name, description, profileUrl)
 				},
-				text = "편집하기",
+				text = "생성하기",
 				showRipple = true,
 			)
 		}
