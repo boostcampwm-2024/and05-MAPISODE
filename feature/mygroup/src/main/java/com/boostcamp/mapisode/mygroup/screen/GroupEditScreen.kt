@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.mygroup.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -23,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -42,13 +44,14 @@ import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeImageButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
-import com.boostcamp.mapisode.model.GroupModel
 import com.boostcamp.mapisode.mygroup.intent.GroupEditIntent
+import com.boostcamp.mapisode.mygroup.model.GroupCreationModel
 import com.boostcamp.mapisode.mygroup.sideeffect.GroupEditSideEffect
 import com.boostcamp.mapisode.mygroup.sideeffect.rememberFlowWithLifecycle
 import com.boostcamp.mapisode.mygroup.state.GroupEditState
 import com.boostcamp.mapisode.mygroup.viewmodel.GroupEditViewModel
 import com.boostcamp.mapisode.navigation.GroupRoute
+import com.boostcamp.mapisode.ui.photopicker.MapisodePhotoPicker
 
 @Composable
 fun GroupEditScreen(
@@ -56,15 +59,16 @@ fun GroupEditScreen(
 	onBackClick: () -> Unit,
 	viewModel: GroupEditViewModel = hiltViewModel(),
 ) {
+	val context = LocalContext.current
 	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 	val effect = rememberFlowWithLifecycle(
 		flow = viewModel.sideEffect,
 		initialValue = GroupEditSideEffect.Idle,
 	).value
 
-	LaunchedEffect(uiState.value) {
+	LaunchedEffect(Unit) {
 		if (uiState.value.isInitializing) {
-			viewModel.onIntent(GroupEditIntent.LoadGroups(edit.groupId))
+			viewModel.onIntent(GroupEditIntent.Initialize(edit.groupId))
 		}
 	}
 
@@ -73,22 +77,48 @@ fun GroupEditScreen(
 			is GroupEditSideEffect.NavigateToGroupDetailScreen -> {
 				onBackClick()
 			}
+			is GroupEditSideEffect.ShowToast -> {
+				Toast.makeText(context, effect.messageResId, Toast.LENGTH_SHORT).show()
+			}
+
+			else -> {}
 		}
 	}
 
-	GroupEditContent(
-		uiState = uiState.value,
-		onBackClick = onBackClick,
-		onGroupEditClick = { title, content, imageUrl ->
-			viewModel.onIntent(
-				GroupEditIntent.OnGroupEditClick(
-					title = title,
-					content = content,
-					imageUrl = imageUrl,
-				),
-			)
-		},
-	)
+	if (uiState.value.isSelectingGroupImage) {
+		MapisodePhotoPicker(
+			numOfPhoto = 1,
+			onPhotoSelected = { photoList ->
+				viewModel.onIntent(
+					GroupEditIntent.OnGroupImageSelect(
+						photoList.first().uri,
+					),
+				)
+			},
+			onPermissionDenied = { viewModel.onIntent(GroupEditIntent.DenyPhotoPermission) },
+			onBackPressed = {
+				viewModel.onIntent(GroupEditIntent.OnBackToGroupCreation)
+			},
+			isCameraNeeded = false,
+		)
+	} else {
+		GroupEditContent(
+			uiState = uiState.value,
+			onBackClick = onBackClick,
+			onGroupEditClick = { title, content, imageUrl ->
+				viewModel.onIntent(
+					GroupEditIntent.OnGroupEditClick(
+						title = title,
+						content = content,
+						imageUrl = imageUrl,
+					),
+				)
+			},
+			onPhotoPickerClick = {
+				viewModel.onIntent(GroupEditIntent.OnPhotoPickerClick)
+			},
+		)
+	}
 }
 
 @Composable
@@ -96,6 +126,7 @@ fun GroupEditContent(
 	uiState: GroupEditState,
 	onBackClick: () -> Unit,
 	onGroupEditClick: (title: String, content: String, imageUrl: String) -> Unit,
+	onPhotoPickerClick: () -> Unit,
 ) {
 	val focusManager = LocalFocusManager.current
 
@@ -128,25 +159,31 @@ fun GroupEditContent(
 			)
 		},
 	) { paddingValues ->
-		if (uiState.group != null) {
-			GroupEditField(
-				paddingValues = paddingValues,
-				group = uiState.group,
-				onGroupEditClick = onGroupEditClick,
-			)
-		}
+		GroupEditField(
+			paddingValues = paddingValues,
+			group = uiState.group,
+			onGroupEditClick = onGroupEditClick,
+			onPhotoPickerClick = onPhotoPickerClick,
+		)
 	}
 }
 
 @Composable
 fun GroupEditField(
 	paddingValues: PaddingValues,
-	group: GroupModel,
+	group: GroupCreationModel,
 	onGroupEditClick: (title: String, content: String, imageUrl: String) -> Unit,
+	onPhotoPickerClick: () -> Unit,
 ) {
 	var name by rememberSaveable { mutableStateOf(group.name) }
 	var description by rememberSaveable { mutableStateOf(group.description) }
 	var profileUrl by rememberSaveable { mutableStateOf(group.imageUrl) }
+
+	LaunchedEffect(group) {
+		profileUrl = group.imageUrl
+		name = group.name
+		description = group.description
+	}
 
 	Box(
 		modifier = Modifier
@@ -176,7 +213,7 @@ fun GroupEditField(
 							.sizeIn(maxWidth = 380.dp, maxHeight = 380.dp)
 							.fillMaxWidth()
 							.aspectRatio(1f),
-						onClick = { },
+						onClick = { onPhotoPickerClick() },
 						showImage = false,
 						text = "이미지를 선택하세요",
 					) {
