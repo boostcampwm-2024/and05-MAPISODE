@@ -1,8 +1,8 @@
 package com.boostcamp.mapisode.designsystem.compose
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,8 +27,8 @@ fun BottomBar(
 ) {
 	AnimatedVisibility(
 		visible = visible,
-		enter = fadeIn(),
-		exit = fadeOut(),
+		enter = expandVertically(),
+		exit = shrinkVertically(),
 	) {
 		Surface(
 			color = backgroundColor,
