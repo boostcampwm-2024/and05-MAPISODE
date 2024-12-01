@@ -21,6 +21,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
@@ -28,7 +29,6 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.TextAlignment
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
-import com.boostcamp.mapisode.designsystem.R
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.CameraPositionState
@@ -125,7 +125,9 @@ internal fun LocationSelectionScreen(
 					}
 
 					MapisodeFilledButton(
-						modifier = Modifier.fillMaxWidth().height(42.dp),
+						modifier = Modifier
+							.fillMaxWidth()
+							.height(42.dp),
 						onClick = {
 							onRequestSelection(searchingAddress)
 						},
@@ -143,10 +145,12 @@ internal fun LocationSelectionScreen(
 	Box(
 		modifier = Modifier.fillMaxSize(),
 		contentAlignment = Alignment.TopStart,
-	){
+	) {
 		MapisodeIconButton(
 			onClick = onDismissSelection,
-			modifier = Modifier.systemBarsPadding().padding(start = 12.dp),
+			modifier = Modifier
+				.systemBarsPadding()
+				.padding(start = 12.dp),
 		) {
 			MapisodeIcon(
 				id = R.drawable.ic_arrow_back_ios,

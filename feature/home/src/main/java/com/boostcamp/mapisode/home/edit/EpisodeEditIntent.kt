@@ -17,5 +17,6 @@ sealed class EpisodeEditIntent : UiIntent {
 	data object OnDismissSelection : EpisodeEditIntent()
 	data class OnSetPictures(val imageUrlList: PersistentList<Uri>) : EpisodeEditIntent()
 	data class OnEditClick(val newState: EpisodeEditInfo) : EpisodeEditIntent()
-	data object OnBackClick : EpisodeEditIntent()
+	data object OnBackClickToEditScreen : EpisodeEditIntent()
+	data object OnBackClickToOutOfEditScreen : EpisodeEditIntent()
 }
