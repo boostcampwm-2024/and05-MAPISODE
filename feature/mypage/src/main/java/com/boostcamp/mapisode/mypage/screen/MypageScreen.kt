@@ -187,12 +187,6 @@ private fun MypageScreen(
 				)
 
 				Spacer(modifier = Modifier.height(20.dp))
-
-//				MyPageContent(
-//					text = stringResource(R.string.mypage_withdrawal),
-//					iconId = ic_withdrawal,
-//					onClick = {},
-//				)
 			}
 		}
 	}
