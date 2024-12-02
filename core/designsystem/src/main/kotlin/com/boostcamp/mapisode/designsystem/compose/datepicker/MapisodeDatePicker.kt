@@ -44,17 +44,16 @@ fun MapisodeDatePicker(
 			onDismissRequest()
 		},
 		properties = DialogProperties(
-			dismissOnBackPress = true,
-			dismissOnClickOutside = false,
 			securePolicy = SecureFlagPolicy.Inherit,
 		),
 	) {
 		Box(
 			modifier = Modifier
-				.height(380.dp)
+				.height(360.dp)
 				.clip(RoundedCornerShape(16.dp))
 				.background(MapisodeTheme.colorScheme.datePickerBackground)
-				.padding(20.dp),
+				.padding(horizontal = 20.dp, vertical = 10.dp)
+				.padding(bottom = 10.dp),
 		) {
 			Column(
 				modifier = Modifier.fillMaxSize(),
@@ -102,9 +101,7 @@ fun MapisodeDatePicker(
 					color = MapisodeTheme.colorScheme.datePickerRequest,
 					style = MapisodeTheme.typography.labelLarge,
 				)
-				Spacer(modifier = Modifier.width(8.dp))
 			}
-			Spacer(modifier = Modifier.height(8.dp))
 		}
 	}
 }
