@@ -2,6 +2,7 @@ package com.boostcamp.mapisode.designsystem.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
+import okhttp3.internal.http2.Header
 
 @Immutable
 data class CustomColorScheme(
@@ -31,6 +32,11 @@ data class CustomColorScheme(
 	val dateBoxUnselectedText: Color,
 	val dateBoxTodayText: Color,
 	val dateBoxSundayText: Color,
+	val dayOfWeekText: Color,
+	val datePickerHeader: Color,
+	val datePickerRequest: Color,
+	val datePickerDismiss: Color,
+	val datePickerBackground: Color,
 
 	// Menu
 	val menuBackground: Color,
@@ -146,6 +152,11 @@ val lightColorScheme = CustomColorScheme(
 	dateBoxUnselectedText = Neutral80,
 	dateBoxTodayText = Neutral100,
 	dateBoxSundayText = Error40,
+	dayOfWeekText = Neutral90,
+	datePickerHeader = Neutral110,
+	datePickerRequest = Neutral110,
+	datePickerDismiss = Error30,
+	datePickerBackground = Neutral10,
 
 	// Menu
 	menuBackground = Neutral10,
@@ -261,6 +272,11 @@ val darkColorScheme = CustomColorScheme(
 	dateBoxUnselectedText = Neutral70,
 	dateBoxTodayText = Neutral10,
 	dateBoxSundayText = Error10,
+	dayOfWeekText = Neutral40,
+	datePickerHeader = Neutral10,
+	datePickerRequest = Neutral10,
+	datePickerDismiss = Error20,
+	datePickerBackground = Neutral110,
 
 	// Menu
 	menuBackground = Neutral110,
