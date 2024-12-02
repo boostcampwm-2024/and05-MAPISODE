@@ -7,6 +7,7 @@ import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import com.boostcamp.mapisode.model.AuthData
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.AuthResult
@@ -65,22 +66,43 @@ class GoogleOauth(private val context: Context) {
 		}
 	}
 
+	suspend fun googleSignOut() = FirebaseAuth.getInstance().signOut()
+
+	suspend fun isUserLoggedIn(): Boolean = FirebaseAuth.getInstance().currentUser != null
+
+	suspend fun deleteCurrentUser() {
+		try {
+			val credentialManager = initializeCredentialManager()
+			val googleIdOption = GetGoogleIdOption.Builder().setFilterByAuthorizedAccounts(true)
+				.setNonce(generateNonce()).build()
+			val request: GetCredentialRequest =
+				GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
+
+			val resultCredential = credentialManager.getCredential(context, request).credential
+			val validatedCredential = validateCredential(resultCredential)
+
+			val authCredential = GoogleAuthProvider.getCredential(validatedCredential.idToken, null)
+
+			FirebaseAuth.getInstance().currentUser?.let { user ->
+				user.reauthenticate(authCredential).await()
+				user.delete().await()
+			} ?: throw Exception("현재 로그인된 사용자가 없습니다.")
+		} catch (e: Exception) {
+			throw Exception("계정 삭제 실패: ${e.message}")
+		}
+	}
+
 	private fun initializeCredentialManager(): CredentialManager = CredentialManager.create(context)
 
-	private fun createGoogleSignInOption(): GetSignInWithGoogleOption = GetSignInWithGoogleOption
-		.Builder(BuildConfig.GOOGLE_WEB_CLIENT_ID)
-		.setNonce(generateNonce())
-		.build()
+	private fun createGoogleSignInOption(): GetSignInWithGoogleOption =
+		GetSignInWithGoogleOption.Builder(BuildConfig.GOOGLE_WEB_CLIENT_ID)
+			.setNonce(generateNonce()).build()
 
-	private fun createCredentialRequest(googleIdOption: GetSignInWithGoogleOption):
-		GetCredentialRequest = GetCredentialRequest.Builder()
-		.addCredentialOption(googleIdOption)
-		.build()
+	private fun createCredentialRequest(googleIdOption: GetSignInWithGoogleOption): GetCredentialRequest =
+		GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
 
 	private fun validateCredential(credential: Credential): GoogleIdTokenCredential {
-		if (credential is CustomCredential &&
-			credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-		) {
+		if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
 			return GoogleIdTokenCredential.createFrom(credential.data)
 		} else {
 			throw RuntimeException("유효하지 않는 credential type")
@@ -91,8 +113,7 @@ class GoogleOauth(private val context: Context) {
 		firebaseAuth: FirebaseAuth,
 		googleIdTokenCredential: GoogleIdTokenCredential,
 	): AuthResult {
-		val authCredential =
-			GoogleAuthProvider.getCredential(googleIdTokenCredential.idToken, null)
+		val authCredential = GoogleAuthProvider.getCredential(googleIdTokenCredential.idToken, null)
 		return firebaseAuth.signInWithCredential(authCredential).await()
 	}
 
