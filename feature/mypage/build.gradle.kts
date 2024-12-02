@@ -26,4 +26,5 @@ dependencies {
 	implementation(libs.androidx.browser)
 	implementation(projects.core.auth)
 	implementation(projects.domain.user)
+	implementation(projects.domain.storage)
 }
