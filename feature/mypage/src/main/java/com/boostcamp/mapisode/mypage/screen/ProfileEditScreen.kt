@@ -1,5 +1,6 @@
 package com.boostcamp.mapisode.mypage.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,13 +12,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.boostcamp.mapisode.designsystem.R.drawable
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
@@ -29,20 +35,48 @@ import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeImageButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.boostcamp.mapisode.mypage.ProfileEditIntent
+import com.boostcamp.mapisode.mypage.ProfileEditSideEffect
+import com.boostcamp.mapisode.mypage.ProfileEditViewModel
 import com.boostcamp.mapisode.mypage.R
 import com.boostcamp.mapisode.ui.photopicker.MapisodePhotoPicker
 
 @Composable
 fun ProfileEditRoute(
 	onBackClick: () -> Unit,
+	viewModel: ProfileEditViewModel = hiltViewModel(),
 ) {
+	val context = LocalContext.current
+	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+	LaunchedEffect(Unit) {
+		viewModel.onIntent(ProfileEditIntent.Init)
+	}
+
+	LaunchedEffect(Unit) {
+		viewModel.sideEffect.collect { sideEffect ->
+			when (sideEffect) {
+				is ProfileEditSideEffect.Idle -> {}
+				is ProfileEditSideEffect.NavigateToMypage -> onBackClick()
+				is ProfileEditSideEffect.ShowToast -> {
+					Toast.makeText(
+						context,
+						sideEffect.messageResId,
+						Toast.LENGTH_SHORT,
+					).show()
+				}
+			}
+		}
+	}
+
 	ProfileEditScreen(
-		isPhotoPickerClicked = false,
-		onPhotoPickerClick = { },
-		nickname = "닉네임",
-		onNicknameChanged = { },
-		profileUrl = "",
-		onEditClick = { },
+		isPhotoPickerClicked = uiState.isPhotoPickerClicked,
+		onPhotoPickerClick = { viewModel.onIntent(ProfileEditIntent.PhotopickerClick) },
+		nickname = uiState.name,
+		onNicknameChanged = { viewModel.onIntent(ProfileEditIntent.NameChanged(it)) },
+		profileUrl = uiState.profileUrl,
+		onProfileUrlChange = { viewModel.onIntent(ProfileEditIntent.ProfileChanged(it)) },
+		onEditClick = { viewModel.onIntent(ProfileEditIntent.EditClick) },
 		onBackClick = onBackClick,
 	)
 }
@@ -54,6 +88,7 @@ fun ProfileEditScreen(
 	nickname: String,
 	onNicknameChanged: (String) -> Unit,
 	profileUrl: String,
+	onProfileUrlChange: (String) -> Unit,
 	onEditClick: () -> Unit,
 	onBackClick: () -> Unit,
 	modifier: Modifier = Modifier,
@@ -62,8 +97,11 @@ fun ProfileEditScreen(
 		MapisodePhotoPicker(
 			numOfPhoto = 1,
 			onPhotoSelected = { selectedPhotos ->
+				onProfileUrlChange(selectedPhotos.first().uri)
+				onPhotoPickerClick()
 			},
-			onBackPressed = { },
+			onPermissionDenied = { onPhotoPickerClick() },
+			onBackPressed = { onPhotoPickerClick() },
 			isCameraNeeded = false,
 		)
 	} else {
@@ -100,7 +138,7 @@ fun ProfileEditScreen(
 
 					MapisodeTextField(
 						value = nickname,
-						onValueChange = onNicknameChanged,
+						onValueChange = { onNicknameChanged(it) },
 						placeholder = stringResource(R.string.mypage_placeholder_nickname),
 						modifier = Modifier
 							.fillMaxWidth(),
@@ -181,12 +219,13 @@ fun SignUpScreenPreview() {
 	MapisodeTheme {
 		ProfileEditScreen(
 			isPhotoPickerClicked = false,
-			onPhotoPickerClick = { },
-			nickname = "닉네임",
-			onNicknameChanged = { },
+			onPhotoPickerClick = {},
+			nickname = "nickname",
+			onNicknameChanged = {},
 			profileUrl = "",
-			onEditClick = { },
-			onBackClick = { },
+			onProfileUrlChange = {},
+			onEditClick = {},
+			onBackClick = {},
 		)
 	}
 }
