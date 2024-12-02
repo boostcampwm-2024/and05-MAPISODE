@@ -39,7 +39,7 @@ fun SignUpScreen(
 	nickname: String,
 	onNicknameChanged: (String) -> Unit,
 	profileUrl: String,
-	onProfileUrlchange: (String) -> Unit,
+	onProfileUrlChange: (String) -> Unit,
 	onSignUpClick: () -> Unit,
 	onBackClickedInSignUp: () -> Unit,
 	modifier: Modifier = Modifier,
@@ -58,7 +58,7 @@ fun SignUpScreen(
 		MapisodePhotoPicker(
 			numOfPhoto = 1,
 			onPhotoSelected = { selectedPhotos ->
-				onProfileUrlchange(selectedPhotos[0].uri)
+				onProfileUrlChange(selectedPhotos[0].uri)
 				isPhotoPickerClicked.value = false
 			},
 			onPermissionDenied = { isPhotoPickerClicked.value = false },
@@ -182,7 +182,7 @@ fun SignUpScreenPreview() {
 			nickname = "닉네임",
 			onNicknameChanged = {},
 			profileUrl = "",
-			onProfileUrlchange = {},
+			onProfileUrlChange = {},
 			onSignUpClick = {},
 			onBackClickedInSignUp = {},
 		)

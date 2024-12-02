@@ -8,4 +8,7 @@
 	<string name="login_next">다음</string>
 	<string name="login_signup">회원가입</string>
 	<string name="login_nickname_placeholder">닉네임을 입력해주세요.</string>
+	<string name="login_google_login">구글 로그인</string>
+	<string name="login_auth_failed">구글 로그인에 실패했습니다.</string>
+	<string name="login_signup_failed">회원가입에 실패했습니다.</string>
 </resources>
