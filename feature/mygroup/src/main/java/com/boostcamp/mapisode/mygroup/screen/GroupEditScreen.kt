@@ -28,6 +28,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -54,6 +55,7 @@ import com.boostcamp.mapisode.mygroup.state.GroupEditState
 import com.boostcamp.mapisode.mygroup.viewmodel.GroupEditViewModel
 import com.boostcamp.mapisode.navigation.GroupRoute
 import com.boostcamp.mapisode.ui.photopicker.MapisodePhotoPicker
+import com.boostcamp.mapisode.mygroup.R as S
 
 @Composable
 fun GroupEditScreen(
@@ -62,14 +64,14 @@ fun GroupEditScreen(
 	viewModel: GroupEditViewModel = hiltViewModel(),
 ) {
 	val context = LocalContext.current
-	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 	val effect = rememberFlowWithLifecycle(
 		flow = viewModel.sideEffect,
 		initialValue = GroupEditSideEffect.Idle,
 	).value
 
 	BackHandler {
-		if (uiState.value.isSelectingGroupImage) {
+		if (uiState.isSelectingGroupImage) {
 			viewModel.onIntent(GroupEditIntent.OnBackToGroupCreation)
 		} else {
 			viewModel.onIntent(GroupEditIntent.OnBackClick)
@@ -77,7 +79,7 @@ fun GroupEditScreen(
 	}
 
 	LaunchedEffect(Unit) {
-		if (uiState.value.isInitializing) {
+		if (!uiState.isInitializing) {
 			viewModel.onIntent(GroupEditIntent.Initialize(edit.groupId))
 		}
 	}
@@ -87,6 +89,7 @@ fun GroupEditScreen(
 			is GroupEditSideEffect.NavigateToGroupDetailScreen -> {
 				onBackClick()
 			}
+
 			is GroupEditSideEffect.ShowToast -> {
 				Toast.makeText(context, effect.messageResId, Toast.LENGTH_SHORT).show()
 			}
@@ -95,7 +98,7 @@ fun GroupEditScreen(
 		}
 	}
 
-	if (uiState.value.isSelectingGroupImage) {
+	if (uiState.isSelectingGroupImage) {
 		MapisodePhotoPicker(
 			numOfPhoto = 1,
 			onPhotoSelected = { photoList ->
@@ -113,7 +116,7 @@ fun GroupEditScreen(
 		)
 	} else {
 		GroupEditContent(
-			uiState = uiState.value,
+			uiState = uiState,
 			onBackClick = onBackClick,
 			onGroupEditClick = { title, content, imageUrl ->
 				viewModel.onIntent(
@@ -154,7 +157,7 @@ fun GroupEditContent(
 		isNavigationBarPaddingExist = true,
 		topBar = {
 			TopAppBar(
-				title = "그룹 편집",
+				title = stringResource(S.string.group_edit_topbar_title),
 				navigationIcon = {
 					MapisodeIconButton(
 						onClick = {
@@ -211,7 +214,7 @@ fun GroupEditField(
 			item {
 				Column {
 					MapisodeText(
-						text = "그룹 대표 이미지",
+						text = stringResource(S.string.group_creation_image_label),
 						style = MapisodeTheme.typography.titleMedium
 							.copy(fontWeight = FontWeight.SemiBold),
 					)
@@ -225,7 +228,7 @@ fun GroupEditField(
 							.aspectRatio(1f),
 						onClick = { onPhotoPickerClick() },
 						showImage = false,
-						text = "이미지를 선택하세요",
+						text = stringResource(S.string.group_creation_select_image_guide),
 					) {
 						AsyncImage(
 							model = profileUrl,
@@ -243,7 +246,7 @@ fun GroupEditField(
 						.fillMaxWidth(),
 				) {
 					MapisodeText(
-						text = "이름",
+						text = stringResource(S.string.group_creation_name_label),
 						style = MapisodeTheme.typography.titleMedium
 							.copy(fontWeight = FontWeight.SemiBold),
 					)
@@ -266,7 +269,7 @@ fun GroupEditField(
 						.fillMaxWidth(),
 				) {
 					MapisodeText(
-						text = "설명",
+						text = stringResource(S.string.group_creation_description_label),
 						style = MapisodeTheme.typography.titleMedium
 							.copy(fontWeight = FontWeight.SemiBold),
 					)
@@ -305,7 +308,7 @@ fun GroupEditField(
 				onClick = {
 					onGroupEditClick(name, description, profileUrl)
 				},
-				text = "편집하기",
+				text = stringResource(S.string.group_edit_button),
 				showRipple = true,
 			)
 		}

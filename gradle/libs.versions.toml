@@ -79,7 +79,6 @@ junit = "4.13.2"
 androidx-junit = "1.2.1"
 espresso-core = "3.6.1"
 material = "1.12.0"
-firebaseStorage = "21.0.1"
 
 [libraries]
 # Androidx Core
@@ -173,7 +172,6 @@ compose-compiler-gradlePlugin = { group = "org.jetbrains.kotlin", name = "compos
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 hilt-gradlePlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-google-firebase-storage = { group = "com.google.firebase", name = "firebase-storage", version.ref = "firebaseStorage" }
 
 [bundles]
 # AndroidX Core Libraries
