@@ -8,4 +8,7 @@ android {
 
 dependencies {
 	implementation(libs.bundles.coil)
+	implementation(libs.androidx.browser)
+	implementation(projects.core.auth)
+	implementation(projects.domain.user)
 }
