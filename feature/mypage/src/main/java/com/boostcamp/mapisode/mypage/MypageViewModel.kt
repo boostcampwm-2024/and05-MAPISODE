@@ -35,17 +35,21 @@ class MypageViewModel @Inject constructor(
 	}
 
 	private fun initState() {
-		viewModelScope.launch {
-			userPreferenceDataStore.getUserPreferencesFlow().first().let { userPreferences ->
-				intent {
-					copy(
-						isLoading = false,
-						name = userPreferences.username ?: throw Exception("Username is null"),
-						profileUrl = userPreferences.profileUrl
-							?: throw Exception("ProfileUrl is null"),
-					)
+		try {
+			viewModelScope.launch {
+				userPreferenceDataStore.getUserPreferencesFlow().first().let { userPreferences ->
+					intent {
+						copy(
+							isLoading = false,
+							name = userPreferences.username ?: throw Exception("Username is null"),
+							profileUrl = userPreferences.profileUrl
+								?: throw Exception("ProfileUrl is null"),
+						)
+					}
 				}
 			}
+		} catch (e: Exception) {
+			postSideEffect(MypageSideEffect.ShowToast(R.string.mypage_error_load_profile))
 		}
 	}
 
