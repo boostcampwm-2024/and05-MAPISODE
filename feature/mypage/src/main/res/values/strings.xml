@@ -15,4 +15,5 @@
 	<string name="mypage_withdrawal_message">탈퇴하시면 지금까지 쌓아온 에피소드의 복구가 불가능합니다.</string>
 	<string name="mypage_withdrawal_confirm">회원탈퇴</string>
 	<string name="mypage_error_profile_edit">프로필 수정에 실패했습니다.</string>
+	<string name="mypage_error_load_profile">회원정보를 불러올 수 없습니다.</string>
 </resources>
