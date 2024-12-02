@@ -44,4 +44,5 @@ dependencies {
 	implementation(projects.data.episode)
 	implementation(projects.data.user)
 	implementation(projects.data.mygroup)
+	implementation(projects.data.storage)
 }
