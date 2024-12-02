@@ -29,9 +29,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -64,6 +61,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.MapisodeTextField
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeImageButton
+import com.boostcamp.mapisode.designsystem.compose.datepicker.MapisodeDatePicker
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenu
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
@@ -74,6 +72,7 @@ import com.naver.maps.map.CameraPosition
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import java.time.ZoneId
 import java.util.Date
 
 @Composable
@@ -176,10 +175,9 @@ fun EpisodeEditScreen(
 		mutableStateOf(state.episode.memoryDate)
 	}
 	var isGroupMenuPoppedUp by remember { mutableStateOf(false) }
-	var isCategoryMenuPoppedUp by remember { mutableStateOf(false) }
+	var isCategoryMenuPoppedUp by rememberSaveable { mutableStateOf(false) }
 	var showDatePickerDialog by remember { mutableStateOf(false) }
 	var contentWidth by remember { mutableIntStateOf(0) }
-	val datePickerState = rememberDatePickerState()
 
 	MapisodeScaffold(
 		isNavigationBarPaddingExist = true,
@@ -478,33 +476,13 @@ fun EpisodeEditScreen(
 			)
 
 			if (showDatePickerDialog) {
-				DatePickerDialog(
+				MapisodeDatePicker(
 					onDismissRequest = { showDatePickerDialog = false },
-					confirmButton = {
-						MapisodeFilledButton(
-							modifier = Modifier.padding(end = 20.dp, bottom = 32.dp),
-							onClick = {
-								showDatePickerDialog = false
-								datePickerState.selectedDateMillis?.let { milli ->
-									date = Date(milli)
-								}
-							},
-							text = "확인",
-						)
+					onDateSelected = { localDate ->
+						date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
+						showDatePickerDialog = false
 					},
-					dismissButton = {
-						MapisodeFilledButton(
-							modifier = Modifier.padding(end = 12.dp, bottom = 32.dp),
-							onClick = { showDatePickerDialog = false },
-							text = "취소",
-						)
-					},
-				) {
-					DatePicker(
-						state = datePickerState,
-						showModeToggle = false,
-					)
-				}
+				)
 			}
 
 			Spacer(modifier = Modifier.height(20.dp))
