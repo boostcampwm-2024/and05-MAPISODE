@@ -16,4 +16,5 @@
 	<string name="mypage_withdrawal_confirm">회원탈퇴</string>
 	<string name="mypage_error_profile_edit">프로필 수정에 실패했습니다.</string>
 	<string name="mypage_error_load_profile">회원정보를 불러올 수 없습니다.</string>
+	<string name="mypage_withdrawal_cancel">취소</string>
 </resources>
