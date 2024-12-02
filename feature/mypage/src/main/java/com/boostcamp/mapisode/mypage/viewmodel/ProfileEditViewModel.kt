@@ -6,6 +6,7 @@ import com.boostcamp.mapisode.mypage.R
 import com.boostcamp.mapisode.mypage.intent.ProfileEditIntent
 import com.boostcamp.mapisode.mypage.sideeffect.ProfileEditSideEffect
 import com.boostcamp.mapisode.mypage.state.ProfileEditState
+import com.boostcamp.mapisode.storage.StorageRepository
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.boostcamp.mapisode.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
+	private val storageRepository: StorageRepository,
 	private val userRepository: UserRepository,
 	private val userPreferenceDataStore: UserPreferenceDataStore,
 ) : BaseViewModel<ProfileEditIntent, ProfileEditState, ProfileEditSideEffect>(ProfileEditState()) {
@@ -80,12 +82,24 @@ class ProfileEditViewModel @Inject constructor(
 	private fun editClick() {
 		try {
 			viewModelScope.launch {
+				updateProfileUrl(getStorageUrl())
 				storeInUserPreferenceDataStore()
 				storeInUserRepository()
 				navigateToMypage()
 			}
 		} catch (e: Exception) {
 			postSideEffect(ProfileEditSideEffect.ShowToast(R.string.mypage_error_profile_edit))
+		}
+	}
+
+	private suspend fun getStorageUrl(): String {
+		try {
+			return storageRepository.uploadSingleImageToStorage(
+				imageUri = currentState.profileUrl,
+				uid = currentState.uid,
+			)
+		} catch (e: Exception) {
+			throw e
 		}
 	}
 
