@@ -7,4 +7,5 @@ sealed interface MypageSideEffect : SideEffect {
 	data class ShowToast(val messageResId: Int) : MypageSideEffect
 	data object NavigateToLoginScreen : MypageSideEffect
 	data object NavigateToEditScreen : MypageSideEffect
+	data object OpenPrivacyPolicy : MypageSideEffect
 }

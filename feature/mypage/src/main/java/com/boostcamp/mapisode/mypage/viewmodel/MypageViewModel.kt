@@ -1,9 +1,5 @@
 package com.boostcamp.mapisode.mypage.viewmodel
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.auth.GoogleOauth
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
@@ -27,11 +23,7 @@ class MypageViewModel @Inject constructor(
 			is MypageIntent.Init -> initState()
 			is MypageIntent.LogoutClick -> handleLogoutClick(intent.googleOauth)
 			is MypageIntent.ProfileEditClick -> handleProfileEditClick()
-			is MypageIntent.PrivacyPolicyClick -> handlePrivacyPolicyClick(
-				intent.context,
-				intent.useCustomTab,
-			)
-
+			is MypageIntent.PrivacyPolicyClick -> handlePrivacyPolicyClick()
 			is MypageIntent.WithdrawalClick -> handleWithdrawalClick()
 			is MypageIntent.TurnOffDialog -> turnOffDialog()
 			is MypageIntent.ConfirmClick -> handleConfirmClick(intent.googleOauth)
@@ -74,29 +66,8 @@ class MypageViewModel @Inject constructor(
 		postSideEffect(MypageSideEffect.NavigateToEditScreen)
 	}
 
-	private fun handlePrivacyPolicyClick(
-		context: Context,
-		useCustomTab: Boolean,
-	) {
-		openPrivacyPolicy(context, useCustomTab)
-	}
-
-	private fun openPrivacyPolicy(context: Context, useCustomTab: Boolean) {
-		val url = "https://pricey-visitor-e41.notion.site/14e94239a962805b9dadf87c68353909?pvs=4"
-		try {
-			if (useCustomTab) {
-				val customTabsIntent = CustomTabsIntent.Builder()
-					.setShowTitle(true)
-					.build()
-				customTabsIntent.launchUrl(context, Uri.parse(url))
-			} else {
-				val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-				context.startActivity(intent)
-			}
-		} catch (e: Exception) {
-			val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-			context.startActivity(intent)
-		}
+	private fun handlePrivacyPolicyClick() {
+		postSideEffect(MypageSideEffect.OpenPrivacyPolicy)
 	}
 
 	private fun handleWithdrawalClick() {

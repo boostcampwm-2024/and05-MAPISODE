@@ -1,6 +1,9 @@
 package com.boostcamp.mapisode.mypage.screen
 
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +44,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.Thickness
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.boostcamp.mapisode.mypage.BuildConfig
 import com.boostcamp.mapisode.mypage.R
 import com.boostcamp.mapisode.mypage.intent.MypageIntent
 import com.boostcamp.mapisode.mypage.sideeffect.MypageSideEffect
@@ -72,6 +76,19 @@ internal fun MypageRoute(
 						sideEffect.messageResId,
 						Toast.LENGTH_SHORT,
 					).show()
+				}
+
+				is MypageSideEffect.OpenPrivacyPolicy -> {
+					val url = BuildConfig.PRIVACY_POLICY
+					try {
+						val customTabsIntent = CustomTabsIntent.Builder()
+							.setShowTitle(true)
+							.build()
+						customTabsIntent.launchUrl(context, Uri.parse(url))
+					} catch (e: Exception) {
+						val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+						context.startActivity(intent)
+					}
 				}
 			}
 		}
