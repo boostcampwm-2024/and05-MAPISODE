@@ -56,7 +56,6 @@ fun ProfileEditRoute(
 	LaunchedEffect(Unit) {
 		viewModel.sideEffect.collect { sideEffect ->
 			when (sideEffect) {
-				is ProfileEditSideEffect.Idle -> {}
 				is ProfileEditSideEffect.NavigateToMypage -> onBackClick()
 				is ProfileEditSideEffect.ShowToast -> {
 					Toast.makeText(
