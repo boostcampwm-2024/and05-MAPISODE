@@ -25,6 +25,13 @@ data class CustomColorScheme(
 	// Scrim
 	val scrim: Color,
 
+	// Date Picker
+	val dateBoxSelectedBackground: Color,
+	val dateBoxSelectedText: Color,
+	val dateBoxUnselectedText: Color,
+	val dateBoxTodayText: Color,
+	val dateBoxSundayText: Color,
+
 	// Menu
 	val menuBackground: Color,
 	val menuStroke: Color,
@@ -133,6 +140,13 @@ val lightColorScheme = CustomColorScheme(
 	// Scrim
 	scrim = Neutral110.copy(alpha = 0.32f),
 
+	// Date Picker
+	dateBoxSelectedBackground = Primary30,
+	dateBoxSelectedText = Neutral10,
+	dateBoxUnselectedText = Neutral80,
+	dateBoxTodayText = Neutral100,
+	dateBoxSundayText = Error40,
+
 	// Menu
 	menuBackground = Neutral10,
 	menuStroke = Neutral110,
@@ -240,6 +254,13 @@ val darkColorScheme = CustomColorScheme(
 
 	// Scrim
 	scrim = Neutral10.copy(alpha = 0.32f),
+
+	// Date Picker
+	dateBoxSelectedBackground = Primary40,
+	dateBoxSelectedText = Neutral10,
+	dateBoxUnselectedText = Neutral70,
+	dateBoxTodayText = Neutral10,
+	dateBoxSundayText = Error10,
 
 	// Menu
 	menuBackground = Neutral110,
