@@ -41,10 +41,10 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.Thickness
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
-import com.boostcamp.mapisode.mypage.MypageIntent
-import com.boostcamp.mapisode.mypage.MypageSideEffect
-import com.boostcamp.mapisode.mypage.MypageViewModel
 import com.boostcamp.mapisode.mypage.R
+import com.boostcamp.mapisode.mypage.intent.MypageIntent
+import com.boostcamp.mapisode.mypage.sideeffect.MypageSideEffect
+import com.boostcamp.mapisode.mypage.viewmodel.MypageViewModel
 
 @Composable
 internal fun MypageRoute(

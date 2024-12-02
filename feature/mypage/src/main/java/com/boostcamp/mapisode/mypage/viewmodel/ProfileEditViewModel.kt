@@ -1,7 +1,11 @@
-package com.boostcamp.mapisode.mypage
+package com.boostcamp.mapisode.mypage.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
+import com.boostcamp.mapisode.mypage.R
+import com.boostcamp.mapisode.mypage.intent.ProfileEditIntent
+import com.boostcamp.mapisode.mypage.sideeffect.ProfileEditSideEffect
+import com.boostcamp.mapisode.mypage.state.ProfileEditState
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.boostcamp.mapisode.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
