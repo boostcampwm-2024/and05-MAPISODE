@@ -28,6 +28,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -51,6 +52,7 @@ import com.boostcamp.mapisode.mygroup.sideeffect.GroupCreationSideEffect
 import com.boostcamp.mapisode.mygroup.sideeffect.rememberFlowWithLifecycle
 import com.boostcamp.mapisode.mygroup.viewmodel.GroupCreationViewModel
 import com.boostcamp.mapisode.ui.photopicker.MapisodePhotoPicker
+import com.boostcamp.mapisode.mygroup.R as S
 
 @Composable
 fun GroupCreationScreen(
@@ -58,21 +60,23 @@ fun GroupCreationScreen(
 	viewModel: GroupCreationViewModel = hiltViewModel(),
 ) {
 	val context = LocalContext.current
-	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 	val effect = rememberFlowWithLifecycle(
 		flow = viewModel.sideEffect,
 		initialValue = GroupCreationSideEffect.Idle,
 	).value
 
-	if (uiState.value.isInitializing) {
-		viewModel.onIntent(GroupCreationIntent.Initialize)
-	}
-
 	BackHandler {
-		if (uiState.value.isSelectingGroupImage) {
+		if (uiState.isSelectingGroupImage) {
 			viewModel.onIntent(GroupCreationIntent.OnBackToGroupCreation)
 		} else {
 			viewModel.onIntent(GroupCreationIntent.OnBackClick)
+		}
+	}
+
+	LaunchedEffect(Unit) {
+		if (!uiState.isInitializing) {
+			viewModel.onIntent(GroupCreationIntent.Initialize)
 		}
 	}
 
@@ -81,14 +85,16 @@ fun GroupCreationScreen(
 			is GroupCreationSideEffect.NavigateToGroupScreen -> {
 				onBackClick()
 			}
+
 			is GroupCreationSideEffect.ShowToast -> {
 				Toast.makeText(context, effect.messageResId, Toast.LENGTH_SHORT).show()
 			}
+
 			else -> {}
 		}
 	}
 
-	if (uiState.value.isSelectingGroupImage) {
+	if (uiState.isSelectingGroupImage) {
 		MapisodePhotoPicker(
 			numOfPhoto = 1,
 			onPhotoSelected = { photoList ->
@@ -106,7 +112,7 @@ fun GroupCreationScreen(
 		)
 	} else {
 		GroupCreationContent(
-			imageUrl = uiState.value.group.imageUrl,
+			imageUrl = uiState.group.imageUrl,
 			onBackClick = onBackClick,
 			onGroupEditClick = { title, content, imageUrl ->
 				viewModel.onIntent(
@@ -147,7 +153,7 @@ fun GroupCreationContent(
 		isNavigationBarPaddingExist = true,
 		topBar = {
 			TopAppBar(
-				title = "그룹 생성",
+				title = stringResource(S.string.group_creation_topbar_title),
 				navigationIcon = {
 					MapisodeIconButton(
 						onClick = {
@@ -204,7 +210,7 @@ fun GroupCreationField(
 			item {
 				Column {
 					MapisodeText(
-						text = "그룹 대표 이미지",
+						text = stringResource(S.string.group_creation_image_label),
 						style = MapisodeTheme.typography.titleMedium
 							.copy(fontWeight = FontWeight.SemiBold),
 					)
@@ -217,8 +223,8 @@ fun GroupCreationField(
 							.fillMaxWidth()
 							.aspectRatio(1f),
 						onClick = { onPhotoPickerClick() },
-						showImage = profileUrl == "",
-						text = "이미지를 선택하세요",
+						showImage = profileUrl.isEmpty(),
+						text = stringResource(S.string.group_creation_select_image_guide),
 					) {
 						AsyncImage(
 							model = profileUrl,
@@ -238,7 +244,7 @@ fun GroupCreationField(
 						.fillMaxWidth(),
 				) {
 					MapisodeText(
-						text = "이름",
+						text = stringResource(S.string.group_creation_name_label),
 						style = MapisodeTheme.typography.titleMedium
 							.copy(fontWeight = FontWeight.SemiBold),
 					)
@@ -261,7 +267,7 @@ fun GroupCreationField(
 						.fillMaxWidth(),
 				) {
 					MapisodeText(
-						text = "설명",
+						text = stringResource(S.string.group_creation_description_label),
 						style = MapisodeTheme.typography.titleMedium
 							.copy(fontWeight = FontWeight.SemiBold),
 					)
@@ -300,7 +306,7 @@ fun GroupCreationField(
 				onClick = {
 					onGroupEditClick(name, description, profileUrl)
 				},
-				text = "생성하기",
+				text = stringResource(S.string.group_creation_create_button),
 				showRipple = true,
 			)
 		}

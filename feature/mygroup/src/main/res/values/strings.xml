@@ -46,4 +46,12 @@
 	<string name="content_number_count">개</string>
 	<string name="content_recent_episode_upload">"최근 업로드 :&#32;"</string>
 	<string name="message_error_permission_denied">권한이 없습니다.</string>
+    <string name="group_creation_topbar_title">그룹 생성</string>
+	<string name="group_creation_image_label">그룹 대표 이미지</string>
+	<string name="group_creation_select_image_guide">이미지를 선택하세요</string>
+	<string name="group_creation_name_label">이름</string>
+	<string name="group_creation_description_label">설명</string>
+	<string name="group_creation_create_button">생성하기</string>
+	<string name="group_edit_topbar_title">그룹 편집</string>
+	<string name="group_edit_button">편집하기</string>
 </resources>

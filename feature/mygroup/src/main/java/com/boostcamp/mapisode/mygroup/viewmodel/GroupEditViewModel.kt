@@ -53,7 +53,7 @@ class GroupEditViewModel @Inject constructor(private val groupRepository: GroupR
 				val group = groupRepository.getGroupByGroupId(groupId).toGroupCreationModel()
 				intent {
 					copy(
-						isInitializing = false,
+						isInitializing = true,
 						group = group,
 					)
 				}

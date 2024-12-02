@@ -61,7 +61,7 @@ class GroupCreationViewModel @Inject constructor(
 			userId["userId"] = userPreferenceDataStore.getUserId().first() ?: ""
 			intent {
 				copy(
-					isInitializing = false,
+					isInitializing = true,
 					group = group.copy(
 						id = UUID.randomUUID().toString().replace("-", ""),
 						adminUser = userId["userId"] ?: "",
