@@ -1,4 +1,4 @@
-package com.boostcamp.mapisode.mypage
+package com.boostcamp.mapisode.mypage.viewmodel
 
 import android.content.Context
 import android.content.Intent
@@ -7,6 +7,10 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.auth.GoogleOauth
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
+import com.boostcamp.mapisode.mypage.R
+import com.boostcamp.mapisode.mypage.intent.MypageIntent
+import com.boostcamp.mapisode.mypage.sideeffect.MypageSideEffect
+import com.boostcamp.mapisode.mypage.state.MypageState
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first

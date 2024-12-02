@@ -35,10 +35,10 @@ import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeImageButton
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
-import com.boostcamp.mapisode.mypage.ProfileEditIntent
-import com.boostcamp.mapisode.mypage.ProfileEditSideEffect
-import com.boostcamp.mapisode.mypage.ProfileEditViewModel
 import com.boostcamp.mapisode.mypage.R
+import com.boostcamp.mapisode.mypage.intent.ProfileEditIntent
+import com.boostcamp.mapisode.mypage.sideeffect.ProfileEditSideEffect
+import com.boostcamp.mapisode.mypage.viewmodel.ProfileEditViewModel
 import com.boostcamp.mapisode.ui.photopicker.MapisodePhotoPicker
 
 @Composable
@@ -65,6 +65,8 @@ fun ProfileEditRoute(
 						Toast.LENGTH_SHORT,
 					).show()
 				}
+
+				is ProfileEditSideEffect.OpenPrivacyPolicy -> TODO()
 			}
 		}
 	}

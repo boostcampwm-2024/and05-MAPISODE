@@ -1,4 +1,4 @@
-package com.boostcamp.mapisode.mypage
+package com.boostcamp.mapisode.mypage.intent
 
 import android.content.Context
 import com.boostcamp.mapisode.auth.GoogleOauth
@@ -12,13 +12,4 @@ sealed interface MypageIntent : UiIntent {
 	data object WithdrawalClick : MypageIntent
 	data class ConfirmClick(val googleOauth: GoogleOauth) : MypageIntent
 	data object TurnOffDialog : MypageIntent
-}
-
-sealed interface ProfileEditIntent : UiIntent {
-	data object Init : ProfileEditIntent
-	data class NameChanged(val nickname: String) : ProfileEditIntent
-	data class ProfileChanged(val url: String) : ProfileEditIntent
-	data object PhotopickerClick : ProfileEditIntent
-	data object EditClick : ProfileEditIntent
-	data object BackClick : ProfileEditIntent
 }
