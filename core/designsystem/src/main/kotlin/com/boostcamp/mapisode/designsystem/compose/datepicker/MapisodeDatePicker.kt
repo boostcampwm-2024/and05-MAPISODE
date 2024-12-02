@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +38,7 @@ fun MapisodeDatePicker(
 	onDateSelected: (LocalDate) -> Unit,
 	initialDate: LocalDate = LocalDate.now(),
 ) {
-	var selectedDate by remember { mutableStateOf(initialDate) }
+	var selectedDate by rememberSaveable { mutableStateOf(initialDate) }
 
 	Dialog(
 		onDismissRequest = {
@@ -60,7 +61,7 @@ fun MapisodeDatePicker(
 				horizontalAlignment = Alignment.CenterHorizontally,
 			) {
 				MapisodeDateSelector(
-					initialDate = initialDate,
+					initialDate = selectedDate,
 					onDateSelected = {
 						selectedDate = it
 					},

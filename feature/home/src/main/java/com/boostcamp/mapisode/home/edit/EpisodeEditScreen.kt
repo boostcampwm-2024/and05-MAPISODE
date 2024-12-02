@@ -175,8 +175,8 @@ fun EpisodeEditScreen(
 		mutableStateOf(state.episode.memoryDate)
 	}
 	var isGroupMenuPoppedUp by remember { mutableStateOf(false) }
-	var isCategoryMenuPoppedUp by rememberSaveable { mutableStateOf(false) }
-	var showDatePickerDialog by remember { mutableStateOf(false) }
+	var isCategoryMenuPoppedUp by remember { mutableStateOf(false) }
+	var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
 	var contentWidth by remember { mutableIntStateOf(0) }
 
 	MapisodeScaffold(
@@ -482,6 +482,7 @@ fun EpisodeEditScreen(
 						date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant())
 						showDatePickerDialog = false
 					},
+					initialDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
 				)
 			}
 
