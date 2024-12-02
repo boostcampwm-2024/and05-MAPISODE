@@ -19,7 +19,7 @@ fun AuthRoute(
 	val googleOauth = GoogleOauth(context)
 
 	LaunchedEffect(Unit) {
-		viewModel.onIntent(AuthIntent.OnAutoLogin)
+		viewModel.onIntent(AuthIntent.Init)
 	}
 
 	LaunchedEffect(Unit) {

@@ -24,14 +24,18 @@ class AuthViewModel @Inject constructor(
 
 	override fun onIntent(intent: AuthIntent) {
 		when (intent) {
+			is AuthIntent.Init -> onInit()
 			is AuthIntent.OnGoogleSignInClick -> handleGoogleSignIn(intent.googleOauth)
 			is AuthIntent.OnNicknameChange -> onNicknameChange(intent.nickname)
 			is AuthIntent.OnProfileUrlchange -> onProfileUrlChange(intent.profileUrl)
 			is AuthIntent.OnSignUpClick -> handleSignUp()
-			is AuthIntent.OnAutoLogin -> handleAutoLogin()
 			is AuthIntent.OnLoginSuccess -> handleLoginSuccess()
 			is AuthIntent.OnBackClickedInSignUp -> onBackClickedInSignUp()
 		}
+	}
+
+	private fun onInit() {
+		handleAutoLogin()
 	}
 
 	private fun onBackClickedInSignUp() {
