@@ -79,18 +79,12 @@ internal fun MypageRoute(
 
 	if (uiState.showWithdrawalDialog) {
 		MapisodeDialog(
-			titleText = context.getString(R.string.mypage_withdrawal_title),
-			contentText = context.getString(R.string.mypage_withdrawal_message),
-			confirmText = context.getString(R.string.mypage_withdrawal_confirm),
-			cancelText = "취소",
+			titleText = stringResource(R.string.mypage_withdrawal_title),
+			contentText = stringResource(R.string.mypage_withdrawal_message),
+			confirmText = stringResource(R.string.mypage_withdrawal_confirm),
+			cancelText = stringResource(R.string.mypage_withdrawal_cancel),
 			onResultRequest = { isConfirm ->
-				when (isConfirm) {
-					true -> {
-						viewModel.onIntent(MypageIntent.ConfirmClick(googleOauth))
-					}
-
-					false -> {}
-				}
+				if (isConfirm) viewModel.onIntent(MypageIntent.ConfirmClick(googleOauth))
 			},
 			onDismissRequest = {
 				viewModel.onIntent(MypageIntent.TurnOffDialog)
