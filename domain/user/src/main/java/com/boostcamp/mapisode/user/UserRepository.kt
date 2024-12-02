@@ -7,4 +7,6 @@ interface UserRepository {
 
 	suspend fun getUserInfo(uid: String): UserModel
 	suspend fun isUserExist(uid: String): Boolean
+
+	suspend fun updateUserNameAndProfileUrl(uid: String, userName: String, profileUrl: String)
 }
