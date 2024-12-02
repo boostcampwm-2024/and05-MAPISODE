@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -50,14 +49,12 @@ fun MapisodeDatePicker(
 	) {
 		Box(
 			modifier = Modifier
-				.height(360.dp)
+				.height(340.dp)
 				.clip(RoundedCornerShape(16.dp))
 				.background(MapisodeTheme.colorScheme.datePickerBackground)
-				.padding(horizontal = 20.dp, vertical = 10.dp)
-				.padding(bottom = 10.dp),
+				.padding(vertical = 10.dp, horizontal = 20.dp),
 		) {
 			Column(
-				modifier = Modifier.fillMaxSize(),
 				horizontalAlignment = Alignment.CenterHorizontally,
 			) {
 				MapisodeDateSelector(
@@ -71,7 +68,8 @@ fun MapisodeDatePicker(
 			Row(
 				modifier = Modifier
 					.fillMaxWidth()
-					.align(Alignment.BottomEnd),
+					.align(Alignment.BottomEnd)
+					.padding(end = 10.dp, bottom = 10.dp),
 				horizontalArrangement = Arrangement.End,
 			) {
 				MapisodeText(
