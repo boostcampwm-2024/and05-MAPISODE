@@ -55,11 +55,11 @@ class GoogleOauth(private val context: Context) {
 				)
 			} catch (e: GetCredentialCancellationException) {
 				trySend(
-					LoginState.Error(e.message ?: "Google Sign 실패"),
+					LoginState.Cancel,
 				)
 			} catch (e: Exception) {
 				trySend(
-					LoginState.Error(e.message ?: "Google Sign 실패"),
+					LoginState.Error(e.message ?: "구글 로그인에 실패했습니다."),
 				)
 			}
 			awaitClose { }

@@ -99,13 +99,15 @@ class AuthViewModel @Inject constructor(
 							}
 						}
 
+						is LoginState.Cancel -> Unit
+
 						is LoginState.Error -> {
-							postSideEffect(AuthSideEffect.ShowError(loginState.message))
+							postSideEffect(AuthSideEffect.ShowToast(loginState.message))
 						}
 					}
 				}
 			} catch (e: Exception) {
-				postSideEffect(AuthSideEffect.ShowError(e.message ?: "알 수 없는 오류가 발생했습니다."))
+				postSideEffect(AuthSideEffect.ShowToast("구글 로그인에 실패했습니다."))
 			}
 		}
 	}
@@ -157,7 +159,7 @@ class AuthViewModel @Inject constructor(
 
 				onIntent(AuthIntent.OnLoginSuccess)
 			} catch (e: Exception) {
-				postSideEffect(AuthSideEffect.ShowError(e.message ?: "회원가입에 실패했습니다."))
+				postSideEffect(AuthSideEffect.ShowToast(e.message ?: "회원가입에 실패했습니다."))
 			}
 		}
 	}
