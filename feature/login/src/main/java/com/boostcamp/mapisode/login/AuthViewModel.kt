@@ -27,7 +27,7 @@ class AuthViewModel @Inject constructor(
 			is AuthIntent.Init -> onInit()
 			is AuthIntent.OnGoogleSignInClick -> handleGoogleSignIn(intent.googleOauth)
 			is AuthIntent.OnNicknameChange -> onNicknameChange(intent.nickname)
-			is AuthIntent.OnProfileUrlchange -> onProfileUrlChange(intent.profileUrl)
+			is AuthIntent.OnProfileUrlChange -> onProfileUrlChange(intent.profileUrl)
 			is AuthIntent.OnSignUpClick -> handleSignUp()
 			is AuthIntent.OnLoginSuccess -> handleLoginSuccess()
 			is AuthIntent.OnBackClickedInSignUp -> onBackClickedInSignUp()
@@ -102,12 +102,12 @@ class AuthViewModel @Inject constructor(
 						is LoginState.Cancel -> Unit
 
 						is LoginState.Error -> {
-							postSideEffect(AuthSideEffect.ShowToast(loginState.message))
+							postSideEffect(AuthSideEffect.ShowToast(R.string.login_auth_failed))
 						}
 					}
 				}
 			} catch (e: Exception) {
-				postSideEffect(AuthSideEffect.ShowToast("구글 로그인에 실패했습니다."))
+				postSideEffect(AuthSideEffect.ShowToast(R.string.login_auth_failed))
 			}
 		}
 	}
@@ -159,7 +159,7 @@ class AuthViewModel @Inject constructor(
 
 				onIntent(AuthIntent.OnLoginSuccess)
 			} catch (e: Exception) {
-				postSideEffect(AuthSideEffect.ShowToast(e.message ?: "회원가입에 실패했습니다."))
+				postSideEffect(AuthSideEffect.ShowToast(R.string.login_signup_failed))
 			}
 		}
 	}
@@ -176,12 +176,14 @@ class AuthViewModel @Inject constructor(
 		recentGroup: String,
 	) {
 		viewModelScope.launch {
-			userDataStore.updateUserId(userModel.uid)
-			userDataStore.updateUsername(userModel.name)
-			userDataStore.updateProfileUrl(userModel.profileUrl)
-			userDataStore.updateIsFirstLaunch()
-			userDataStore.updateCredentialIdToken(credentialId)
-			userDataStore.updateRecentSelectedGroup(recentGroup)
+			with(userDataStore) {
+				updateUserId(userModel.uid)
+				updateUsername(userModel.name)
+				updateProfileUrl(userModel.profileUrl)
+				updateIsFirstLaunch()
+				updateCredentialIdToken(credentialId)
+				updateRecentSelectedGroup(recentGroup)
+			}
 		}
 	}
 

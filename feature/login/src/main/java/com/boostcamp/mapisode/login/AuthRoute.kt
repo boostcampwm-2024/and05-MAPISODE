@@ -23,11 +23,15 @@ fun AuthRoute(
 	}
 
 	LaunchedEffect(Unit) {
-		viewModel.sideEffect.collect { effect ->
-			when (effect) {
+		viewModel.sideEffect.collect { sideEffect ->
+			when (sideEffect) {
 				is AuthSideEffect.NavigateToMain -> navigateToMain()
-				is AuthSideEffect.ShowError -> {
-					Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+				is AuthSideEffect.ShowToast -> {
+					Toast.makeText(
+						context,
+						context.getString(sideEffect.messageId),
+						Toast.LENGTH_SHORT,
+					).show()
 				}
 			}
 		}
@@ -47,8 +51,8 @@ fun AuthRoute(
 					viewModel.onIntent(AuthIntent.OnNicknameChange(newNickname))
 				},
 				profileUrl = uiState.profileUrl,
-				onProfileUrlchange = { profileUrl ->
-					viewModel.onIntent(AuthIntent.OnProfileUrlchange(profileUrl))
+				onProfileUrlChange = { profileUrl ->
+					viewModel.onIntent(AuthIntent.OnProfileUrlChange(profileUrl))
 				},
 				onSignUpClick = { viewModel.onIntent(AuthIntent.OnSignUpClick) },
 				onBackClickedInSignUp = { viewModel.onIntent(AuthIntent.OnBackClickedInSignUp) },
