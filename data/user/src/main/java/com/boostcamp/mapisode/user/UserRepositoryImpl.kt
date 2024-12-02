@@ -55,4 +55,23 @@ class UserRepositoryImpl @Inject constructor(database: FirebaseFirestore) : User
 			throw Exception("Failed to get user", e)
 		}
 	}
+
+	override suspend fun updateUserNameAndProfileUrl(
+		uid: String,
+		userName: String,
+		profileUrl: String,
+	) {
+		val userDocument = userCollection.document(uid)
+
+		try {
+			userDocument.update(
+				mapOf(
+					"name" to userName,
+					"profileUrl" to profileUrl,
+				),
+			).await()
+		} catch (e: Exception) {
+			throw Exception("Failed to update user", e)
+		}
+	}
 }
