@@ -16,7 +16,7 @@ import java.time.YearMonth
 fun MapisodeDateTable(
 	selectedMonth: YearMonth,
 	selectedDate: LocalDate,
-	onDateSelect: (LocalDate) -> Unit
+	onDateSelect: (LocalDate) -> Unit,
 ) {
 	// 해당 월의 일 수
 	val daysInMonth = selectedMonth.lengthOfMonth()
@@ -37,7 +37,7 @@ fun MapisodeDateTable(
 
 	LazyVerticalGrid(
 		columns = GridCells.Fixed(7),
-		contentPadding = PaddingValues(vertical = 8.dp)
+		contentPadding = PaddingValues(vertical = 8.dp),
 	) {
 		items(finalDateList) { date ->
 			date?.let {
@@ -45,7 +45,7 @@ fun MapisodeDateTable(
 					date = it,
 					isSelected = it == selectedDate,
 					isSunday = it.dayOfWeek.value == 7,
-					onSelect = { onDateSelect(it) }
+					onSelect = { onDateSelect(it) },
 				)
 			} ?: Spacer(modifier = Modifier.size(36.dp))
 		}
