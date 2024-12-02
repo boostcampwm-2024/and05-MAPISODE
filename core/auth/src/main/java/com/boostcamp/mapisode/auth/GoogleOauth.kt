@@ -98,16 +98,11 @@ class GoogleOauth(private val context: Context) {
 		GetSignInWithGoogleOption.Builder(BuildConfig.GOOGLE_WEB_CLIENT_ID)
 			.setNonce(generateNonce()).build()
 
-	private fun createCredentialRequest(googleIdOption: GetSignInWithGoogleOption):
-		GetCredentialRequest = GetCredentialRequest
-		.Builder()
-		.addCredentialOption(googleIdOption).build()
+	private fun createCredentialRequest(googleIdOption: GetSignInWithGoogleOption): GetCredentialRequest =
+		GetCredentialRequest.Builder().addCredentialOption(googleIdOption).build()
 
 	private fun validateCredential(credential: Credential): GoogleIdTokenCredential {
-		if (credential is CustomCredential
-			&& credential.type
-			== GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-		) {
+		if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
 			return GoogleIdTokenCredential.createFrom(credential.data)
 		} else {
 			throw RuntimeException("유효하지 않는 credential type")
