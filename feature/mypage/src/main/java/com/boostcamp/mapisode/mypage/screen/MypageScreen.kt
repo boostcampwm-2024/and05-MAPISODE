@@ -73,7 +73,6 @@ internal fun MypageRoute(
 						Toast.LENGTH_SHORT,
 					).show()
 				}
-
 			}
 		}
 	}
