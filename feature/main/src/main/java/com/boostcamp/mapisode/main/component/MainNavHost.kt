@@ -59,6 +59,7 @@ internal fun MainNavHost(
 			addMyPageNavGraph(
 				onBackClick = navigator::popBackStackIfNotHome,
 				onProfileEditClick = navigator::navigateToProfileEdit,
+				onNavgiatetoLogin = navigator::navigateToLogin,
 			)
 		}
 	}
