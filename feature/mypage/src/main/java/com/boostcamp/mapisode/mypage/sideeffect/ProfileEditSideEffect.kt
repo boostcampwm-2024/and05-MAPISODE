@@ -6,5 +6,4 @@ sealed interface ProfileEditSideEffect : SideEffect {
 	data object Idle : ProfileEditSideEffect
 	data class ShowToast(val messageResId: Int) : ProfileEditSideEffect
 	data object NavigateToMypage : ProfileEditSideEffect
-	data class OpenPrivacyPolicy(val useCustomTab: Boolean) : ProfileEditSideEffect
 }

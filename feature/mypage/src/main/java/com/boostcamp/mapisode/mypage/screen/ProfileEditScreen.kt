@@ -65,8 +65,6 @@ fun ProfileEditRoute(
 						Toast.LENGTH_SHORT,
 					).show()
 				}
-
-				is ProfileEditSideEffect.OpenPrivacyPolicy -> TODO()
 			}
 		}
 	}
