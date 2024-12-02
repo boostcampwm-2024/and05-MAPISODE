@@ -24,10 +24,12 @@ fun NavController.navigateToProfileEdit(
 fun NavGraphBuilder.addMyPageNavGraph(
 	onBackClick: () -> Unit,
 	onProfileEditClick: () -> Unit,
+	onNavgiatetoLogin: () -> Unit,
 ) {
 	composable<MainRoute.Mypage> {
 		MypageRoute(
 			onProfileEditClick = onProfileEditClick,
+			onNavigateToLogin = onNavgiatetoLogin,
 		)
 	}
 

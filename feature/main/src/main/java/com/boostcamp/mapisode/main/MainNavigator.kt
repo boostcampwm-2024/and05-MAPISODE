@@ -63,6 +63,12 @@ internal class MainNavigator(
 		}
 	}
 
+	var endSplash by mutableStateOf(false)
+
+	fun navigateToLogin() {
+		navController.navigate(Route.Auth)
+	}
+
 	fun navigateToMain() {
 		navController.navigate(MainRoute.Home)
 	}
