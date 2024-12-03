@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,7 @@ fun GroupInfoCard(
 			modifier = Modifier
 				.size(140.dp)
 				.clip(shape = RoundedCornerShape(16.dp)),
+			contentScale = ContentScale.Crop,
 		)
 		MapisodeDivider(thickness = Thickness.Thick)
 		Column(
