@@ -1,6 +1,7 @@
 package com.boostcamp.mapisode.episode
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,11 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -29,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.boostcamp.mapisode.common.util.throttleFirst
 import com.boostcamp.mapisode.designsystem.compose.MapisodeCircularLoadingIndicator
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
@@ -58,7 +61,7 @@ internal fun NewEpisodeContentScreen(
 	var descriptionValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
 		mutableStateOf(TextFieldValue(uiState.episodeContent.description))
 	}
-	var isLoading by remember { mutableStateOf(false) }
+	var isCreatingEpisode by rememberSaveable { mutableStateOf(false) }
 	var showClearDialog by rememberSaveable { mutableStateOf(false) }
 
 	LaunchedEffect(Unit) {
@@ -73,11 +76,37 @@ internal fun NewEpisodeContentScreen(
 				}
 
 				is NewEpisodeSideEffect.NavigateBackToHome -> {
-					isLoading = false
+					isCreatingEpisode = false
 					onPopBackToMain()
 				}
 			}
 		}
+	}
+
+	LaunchedEffect(isCreatingEpisode) {
+		snapshotFlow { isCreatingEpisode }
+			.throttleFirst(1000L)
+			.collect { isCreating ->
+				if (isCreating) {
+					viewModel.onIntent(
+						NewEpisodeIntent.SetEpisodeContent(
+							NewEpisodeContent(
+								titleValue.text,
+								descriptionValue.text,
+								uiState.episodeContent.images,
+							),
+						),
+					)
+					try {
+						viewModel.onIntent(NewEpisodeIntent.CreateNewEpisode)
+						titleValue = TextFieldValue("")
+						descriptionValue = TextFieldValue("")
+					} catch (e: Exception) {
+						Timber.e(e)
+					}
+					isCreatingEpisode = false
+				}
+			}
 	}
 
 	if (showClearDialog) {
@@ -107,9 +136,13 @@ internal fun NewEpisodeContentScreen(
 		},
 		isStatusBarPaddingExist = true,
 	) { innerPadding ->
-		if (isLoading) {
+		if (isCreatingEpisode) {
 			Box(
-				modifier = Modifier.fillMaxSize(),
+				modifier = Modifier
+					.fillMaxSize()
+					.background(
+						color = Color.Black.copy(alpha = 0.3f),
+					),
 				contentAlignment = Alignment.Center,
 			) {
 				MapisodeCircularLoadingIndicator()
@@ -159,25 +192,12 @@ internal fun NewEpisodeContentScreen(
 			MapisodeFilledButton(
 				modifier = buttonModifier,
 				onClick = {
-					viewModel.onIntent(
-						NewEpisodeIntent.SetEpisodeContent(
-							NewEpisodeContent(
-								titleValue.text,
-								descriptionValue.text,
-								uiState.episodeContent.images,
-							),
-						),
-					)
-					try {
-						isLoading = true
-						viewModel.onIntent(NewEpisodeIntent.CreateNewEpisode)
-						titleValue = TextFieldValue("")
-						descriptionValue = TextFieldValue("")
-					} catch (e: Exception) {
-						Timber.e(e)
+					if (isCreatingEpisode.not()) {
+						isCreatingEpisode = true
 					}
 				},
 				text = stringResource(R.string.new_episode_create_episode),
+				enabled = isCreatingEpisode.not(),
 			)
 		}
 	}
