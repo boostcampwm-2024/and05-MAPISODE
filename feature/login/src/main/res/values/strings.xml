@@ -12,4 +12,5 @@
 	<string name="login_google_login">구글 로그인</string>
 	<string name="login_auth_failed">구글 로그인에 실패했습니다.</string>
 	<string name="login_signup_failed">회원가입에 실패했습니다.</string>
+	<string name="login_google_button_text">Google로 시작하기</string>
 </resources>
