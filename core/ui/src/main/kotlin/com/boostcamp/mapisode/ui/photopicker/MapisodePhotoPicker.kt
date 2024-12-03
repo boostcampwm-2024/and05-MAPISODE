@@ -45,7 +45,7 @@ fun MapisodePhotoPicker(
 	val context = LocalContext.current
 	var photos by rememberSaveable { mutableStateOf<List<PhotoInfo>>(emptyList()) }
 	var isPermissionsGranted by rememberSaveable { mutableStateOf(false) }
-	val addedPhoto = rememberSaveable { mutableStateOf<PhotoInfo?>(null) }
+	val addedPhoto = remember { mutableStateOf<PhotoInfo?>(null) }
 	val cameraPhotos = rememberMutableStateListOf<PhotoInfo>()
 
 	val photoLoader = remember(context) { PhotoLoader(context) }
@@ -122,7 +122,12 @@ fun PhotoPicker(
 	modifier: Modifier = Modifier,
 ) {
 	val selectedPhotos = rememberMutableStateListOf<PhotoInfo>()
-	if (addedPhoto != null) selectedPhotos.add(addedPhoto)
+
+	LaunchedEffect(addedPhoto) {
+		if (addedPhoto != null && !selectedPhotos.contains(addedPhoto)) {
+			selectedPhotos.add(addedPhoto)
+		}
+	}
 
 	MapisodeScaffold(
 		modifier = Modifier.fillMaxSize(),
