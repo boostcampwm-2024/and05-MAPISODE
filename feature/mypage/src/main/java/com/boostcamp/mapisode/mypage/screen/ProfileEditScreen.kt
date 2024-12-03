@@ -26,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.boostcamp.mapisode.designsystem.R.drawable
+import com.boostcamp.mapisode.designsystem.compose.MapisodeCircularLoadingIndicator
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
@@ -68,16 +69,25 @@ fun ProfileEditRoute(
 		}
 	}
 
-	ProfileEditScreen(
-		isPhotoPickerClicked = uiState.isPhotoPickerClicked,
-		onPhotoPickerClick = { viewModel.onIntent(ProfileEditIntent.PhotopickerClick) },
-		nickname = uiState.name,
-		onNicknameChanged = { viewModel.onIntent(ProfileEditIntent.NameChanged(it)) },
-		profileUrl = uiState.profileUrl,
-		onProfileUrlChange = { viewModel.onIntent(ProfileEditIntent.ProfileChanged(it)) },
-		onEditClick = { viewModel.onIntent(ProfileEditIntent.EditClick) },
-		onBackClick = onBackClick,
-	)
+	if (uiState.isLoading) {
+		Box(
+			modifier = Modifier.fillMaxSize(),
+			contentAlignment = Alignment.Center,
+		) {
+			MapisodeCircularLoadingIndicator()
+		}
+	} else {
+		ProfileEditScreen(
+			isPhotoPickerClicked = uiState.isPhotoPickerClicked,
+			onPhotoPickerClick = { viewModel.onIntent(ProfileEditIntent.PhotopickerClick) },
+			nickname = uiState.name,
+			onNicknameChanged = { viewModel.onIntent(ProfileEditIntent.NameChanged(it)) },
+			profileUrl = uiState.profileUrl,
+			onProfileUrlChange = { viewModel.onIntent(ProfileEditIntent.ProfileChanged(it)) },
+			onEditClick = { viewModel.onIntent(ProfileEditIntent.EditClick) },
+			onBackClick = onBackClick,
+		)
+	}
 }
 
 @Composable
@@ -121,8 +131,7 @@ fun ProfileEditScreen(
 				contentAlignment = Alignment.Center,
 			) {
 				Column(
-					modifier = Modifier
-						.fillMaxWidth(0.85f),
+					modifier = Modifier.fillMaxWidth(0.85f),
 					horizontalAlignment = Alignment.CenterHorizontally,
 				) {
 					Spacer(modifier = Modifier.weight(0.5f))
@@ -139,8 +148,7 @@ fun ProfileEditScreen(
 						value = nickname,
 						onValueChange = { onNicknameChanged(it) },
 						placeholder = stringResource(R.string.mypage_placeholder_nickname),
-						modifier = Modifier
-							.fillMaxWidth(),
+						modifier = Modifier.fillMaxWidth(),
 						keyboardOptions = KeyboardOptions(
 							imeAction = ImeAction.Done,
 						),
@@ -171,8 +179,7 @@ fun ProfileEditScreen(
 							AsyncImage(
 								model = profileUrl,
 								contentDescription = stringResource(R.string.mypage_profile_image),
-								modifier = Modifier
-									.fillMaxSize(),
+								modifier = Modifier.fillMaxSize(),
 								contentScale = ContentScale.Crop,
 							)
 						}
