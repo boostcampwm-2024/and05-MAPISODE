@@ -147,9 +147,8 @@ fun StoryViewer(
 			MapisodeText(
 				text = authorName,
 				color = Color.White,
-				modifier = Modifier
-					.align(Alignment.CenterVertically),
-				style = AppTypography.bodyLarge
+				modifier = Modifier.align(Alignment.CenterVertically),
+				style = AppTypography.bodyLarge,
 			)
 		}
 	}
@@ -171,7 +170,7 @@ fun StoryViewerPreview() {
 				"https://github.com/user-attachments/assets/502a3888-7a98-420c-93e1-1286d340f9dc",
 			),
 			authorName = "haeti",
-			authorProfileUrl = "https://github.com/user-attachments/assets/46a5a57f-d7a4-4962-ba21-74eca38d48c6",
+			authorProfileUrl = "",
 		)
 	}
 }
