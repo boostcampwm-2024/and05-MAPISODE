@@ -12,6 +12,7 @@
     <string name="group_join_not_exist">그룹이 존재하지 않습니다.</string>
 	<string name="group_join_success">그룹 참여 성공</string>
 	<string name="group_join_failure">그룹 참여 실패</string>
+	<string name="message_already_joined">이미 참여중인 그룹입니다.</string>
 	<string name="group_load_failure">그룹을 불러오는데 실패했습니다.</string>
 	<string name="group_description_label">그룹 설명</string>
 	<string name="message_issue_code">클립보드에 복사되었습니다.</string>
