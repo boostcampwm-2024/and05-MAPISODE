@@ -54,7 +54,7 @@ class AuthViewModel @Inject constructor(
 				onIntent(AuthIntent.OnLoginSuccess)
 			} else {
 				intent {
-					copy(isLoading = false)
+					copy(showSplash = false)
 				}
 			}
 		}
@@ -129,11 +129,19 @@ class AuthViewModel @Inject constructor(
 	}
 
 	private fun handleSignUp() {
+		intent {
+			copy(isLoading = true)
+		}
+
 		viewModelScope.launch {
 			try {
 				if (currentState.nickname.isBlank()) throw IllegalArgumentException("닉네임을 입력해주세요.")
-				// if (currentState.profileUrl.isBlank()) throw IllegalArgumentException("프로필 사진을 선택해주세요.")
+				if (currentState.profileUrl.isBlank()) throw IllegalArgumentException("프로필 사진을 선택해주세요.")
 				if (currentState.authData == null) throw IllegalArgumentException("로그인 정보가 없습니다.")
+
+				val localUri = currentState.profileUrl
+				val storageUrl = getStorageUrl()
+				onProfileUrlChange(storageUrl)
 
 				val user = UserModel(
 					uid = currentState.authData?.uid
@@ -147,7 +155,11 @@ class AuthViewModel @Inject constructor(
 				)
 
 				userRepository.createUser(user)
-				createMyEpisodeGroup(user)
+				createMyEpisodeGroup(
+					user.copy(
+						profileUrl = localUri,
+					),
+				)
 
 				storeUserData(
 					userModel = user,
@@ -161,6 +173,18 @@ class AuthViewModel @Inject constructor(
 			} catch (e: Exception) {
 				postSideEffect(AuthSideEffect.ShowToast(R.string.login_signup_failed))
 			}
+		}
+	}
+
+	private suspend fun getStorageUrl(): String {
+		try {
+			return userRepository.uploadProfileImageToStorage(
+				imageUri = currentState.profileUrl,
+				uid = currentState.authData?.uid
+					?: throw IllegalArgumentException("UID cannot be empty"),
+			)
+		} catch (e: Exception) {
+			throw e
 		}
 	}
 
