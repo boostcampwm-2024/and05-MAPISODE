@@ -81,7 +81,7 @@ class UserRepositoryImpl @Inject constructor(
 		}
 	}
 
-	override suspend fun uploadSingleImageToStorage(
+	override suspend fun uploadProfileImageToStorage(
 		imageUri: String,
 		uid: String,
 	): String {
