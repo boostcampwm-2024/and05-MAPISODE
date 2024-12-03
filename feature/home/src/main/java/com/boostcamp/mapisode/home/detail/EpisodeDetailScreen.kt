@@ -155,6 +155,7 @@ internal fun EpisodeDetailScreen(
 				Row(
 					modifier = Modifier
 						.wrapContentWidth()
+						.padding(horizontal = 20.dp)
 						.horizontalScroll(rememberScrollState()),
 					horizontalArrangement = Arrangement.spacedBy(10.dp),
 					verticalAlignment = Alignment.CenterVertically,

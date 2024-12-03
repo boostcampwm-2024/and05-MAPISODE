@@ -225,7 +225,7 @@ fun EpisodeEditScreen(
 							contentDescription = "애피소드 이미지",
 							modifier = Modifier
 								.size(110.dp)
-								.clip(RoundedCornerShape(8.dp)),
+								.clip(RoundedCornerShape(16.dp)),
 							contentScale = ContentScale.Crop,
 						)
 					}
