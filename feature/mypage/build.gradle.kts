@@ -27,4 +27,5 @@ dependencies {
 	implementation(projects.core.auth)
 	implementation(projects.domain.user)
 	implementation(projects.domain.storage)
+	implementation(projects.domain.mygroup)
 }
