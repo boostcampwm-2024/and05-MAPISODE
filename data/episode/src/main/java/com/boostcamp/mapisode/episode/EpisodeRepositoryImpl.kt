@@ -14,7 +14,12 @@ import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 
 class EpisodeRepositoryImpl @Inject constructor(
@@ -121,20 +126,33 @@ class EpisodeRepositoryImpl @Inject constructor(
 		newEpisodeId: String,
 		imageUris: List<String>,
 	): List<String> {
-		val imageStorageUrls = mutableListOf<String>()
-		return try {
-			imageUris.forEachIndexed { index, imageUri ->
-				val imageRef =
-					storage.reference.child("$PATH_IMAGES/$newEpisodeId/${index + 1}")
-				try {
-					val uploadTask = imageRef.putFile(imageUri.toUri()).await()
-					val downloadUrl = uploadTask.task.result.storage.downloadUrl.await()
-					imageStorageUrls.add(downloadUrl.toString())
-				} catch (e: Exception) {
-					throw e
-				}
+		try {
+			val imageStorageUrls = coroutineScope {
+				imageUris.mapIndexed { index, imageUri ->
+					async(Dispatchers.IO) {
+						val imageRef =
+							storage.reference.child("$PATH_IMAGES/$newEpisodeId/${index + 1}")
+						imageRef.putFile(imageUri.toUri()).continueWithTask { task ->
+							if (task.isSuccessful.not()) {
+								task.exception?.let { e ->
+									throw e
+								}
+							}
+							imageRef.downloadUrl
+						}.addOnCompleteListener { task ->
+							if (task.isSuccessful) {
+								val imageUrl = task.result
+								Timber.d("image url: $imageUrl")
+							} else {
+								task.exception?.let { e ->
+									throw e
+								}
+							}
+						}.await()
+					}
+				}.awaitAll()
 			}
-			imageStorageUrls
+			return imageStorageUrls.map { it.toString() }
 		} catch (e: Exception) {
 			throw e
 		}

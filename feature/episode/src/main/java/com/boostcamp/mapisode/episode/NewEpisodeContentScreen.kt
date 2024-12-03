@@ -76,6 +76,8 @@ internal fun NewEpisodeContentScreen(
 				}
 
 				is NewEpisodeSideEffect.NavigateBackToHome -> {
+					titleValue = TextFieldValue("")
+					descriptionValue = TextFieldValue("")
 					isCreatingEpisode = false
 					onPopBackToMain()
 				}
@@ -99,8 +101,6 @@ internal fun NewEpisodeContentScreen(
 					)
 					try {
 						viewModel.onIntent(NewEpisodeIntent.CreateNewEpisode)
-						titleValue = TextFieldValue("")
-						descriptionValue = TextFieldValue("")
 					} catch (e: Exception) {
 						Timber.e(e)
 					}
