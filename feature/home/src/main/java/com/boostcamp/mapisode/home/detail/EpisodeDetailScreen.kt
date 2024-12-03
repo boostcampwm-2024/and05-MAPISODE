@@ -65,6 +65,7 @@ import com.boostcamp.mapisode.home.component.MapisodeChip
 internal fun EpisodeDetailRoute(
 	episodeId: String,
 	viewModel: EpisodeDetailViewModel = hiltViewModel(),
+	onEpisodeEditClick: (String) -> Unit,
 	onBackClick: () -> Unit = {},
 ) {
 	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -93,7 +94,11 @@ internal fun EpisodeDetailRoute(
 			MapisodeCircularLoadingIndicator()
 		}
 	} else {
-		EpisodeDetailScreen(state = uiState, onBackClick = onBackClick)
+		EpisodeDetailScreen(
+			state = uiState,
+			onEpisodeEditClick = { onEpisodeEditClick(episodeId) },
+			onBackClick = onBackClick,
+		)
 	}
 }
 
@@ -102,6 +107,7 @@ internal fun EpisodeDetailRoute(
 internal fun EpisodeDetailScreen(
 	state: EpisodeDetailState,
 	modifier: Modifier = Modifier,
+	onEpisodeEditClick: () -> Unit,
 	onBackClick: () -> Unit = {},
 ) {
 	val context = LocalContext.current
@@ -125,7 +131,7 @@ internal fun EpisodeDetailScreen(
 				},
 				actions = {
 					MapisodeIconButton(
-						onClick = {},
+						onClick = { onEpisodeEditClick() },
 					) {
 						MapisodeIcon(
 							id = R.drawable.ic_edit,
@@ -150,7 +156,7 @@ internal fun EpisodeDetailScreen(
 					modifier = Modifier
 						.wrapContentWidth()
 						.horizontalScroll(rememberScrollState()),
-					horizontalArrangement = Arrangement.spacedBy(4.dp),
+					horizontalArrangement = Arrangement.spacedBy(10.dp),
 					verticalAlignment = Alignment.CenterVertically,
 				) {
 					imageUrls.forEach { imageUrl ->
@@ -160,6 +166,7 @@ internal fun EpisodeDetailScreen(
 							modifier = Modifier
 								.size(110.dp)
 								.clip(RoundedCornerShape(16.dp)),
+							contentScale = ContentScale.Crop,
 						)
 					}
 				}
@@ -304,6 +311,6 @@ fun EpisodeDetailScreenPreview(
 	}
 
 	CompositionLocalProvider(LocalAsyncImagePreviewHandler provides previewHandler) {
-		EpisodeDetailScreen(state = state)
+		EpisodeDetailScreen(state = state, onEpisodeEditClick = {})
 	}
 }

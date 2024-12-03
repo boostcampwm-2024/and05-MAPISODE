@@ -42,6 +42,7 @@ fun NavController.navigateEpisodeEdit(
 
 fun NavGraphBuilder.addHomeNavGraph(
 	onTextMarkerClick: (EpisodeLatLng) -> Unit,
+	onEpisodeEditClick: (String) -> Unit,
 	onEpisodeClick: (String) -> Unit,
 	onListFabClick: (String) -> Unit,
 	onBackClick: () -> Unit,
@@ -56,7 +57,11 @@ fun NavGraphBuilder.addHomeNavGraph(
 
 	composable<HomeRoute.Detail> { backStackEntry ->
 		val episodeId = backStackEntry.toRoute<HomeRoute.Detail>().episodeId
-		EpisodeDetailRoute(episodeId = episodeId, onBackClick = onBackClick)
+		EpisodeDetailRoute(
+			episodeId = episodeId,
+			onEpisodeEditClick = onEpisodeEditClick,
+			onBackClick = onBackClick,
+		)
 	}
 
 	composable<HomeRoute.List> { backStackEntry ->
