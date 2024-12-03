@@ -22,6 +22,7 @@ data class NewEpisodeState(
 	val myGroups: List<GroupInfo> = emptyList(),
 	val episodeAddress: String = "",
 	val isCameraMoving: Boolean = false,
+	val isCreatingEpisode: Boolean = false,
 	val episodeInfo: NewEpisodeInfo = NewEpisodeInfo(),
 	val episodeContent: NewEpisodeContent = NewEpisodeContent(),
 ) : UiState {

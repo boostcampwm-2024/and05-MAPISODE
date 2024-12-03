@@ -2,6 +2,7 @@ package com.boostcamp.mapisode.episode
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -61,7 +62,6 @@ internal fun NewEpisodeContentScreen(
 	var descriptionValue by rememberSaveable(stateSaver = TextFieldValue.Saver) {
 		mutableStateOf(TextFieldValue(uiState.episodeContent.description))
 	}
-	var isCreatingEpisode by rememberSaveable { mutableStateOf(false) }
 	var showClearDialog by rememberSaveable { mutableStateOf(false) }
 
 	LaunchedEffect(Unit) {
@@ -78,15 +78,14 @@ internal fun NewEpisodeContentScreen(
 				is NewEpisodeSideEffect.NavigateBackToHome -> {
 					titleValue = TextFieldValue("")
 					descriptionValue = TextFieldValue("")
-					isCreatingEpisode = false
 					onPopBackToMain()
 				}
 			}
 		}
 	}
 
-	LaunchedEffect(isCreatingEpisode) {
-		snapshotFlow { isCreatingEpisode }
+	LaunchedEffect(uiState.isCreatingEpisode) {
+		snapshotFlow { uiState.isCreatingEpisode }
 			.throttleFirst(1000L)
 			.collect { isCreating ->
 				if (isCreating) {
@@ -104,7 +103,6 @@ internal fun NewEpisodeContentScreen(
 					} catch (e: Exception) {
 						Timber.e(e)
 					}
-					isCreatingEpisode = false
 				}
 			}
 	}
@@ -136,18 +134,6 @@ internal fun NewEpisodeContentScreen(
 		},
 		isStatusBarPaddingExist = true,
 	) { innerPadding ->
-		if (isCreatingEpisode) {
-			Box(
-				modifier = Modifier
-					.fillMaxSize()
-					.background(
-						color = Color.Black.copy(alpha = 0.3f),
-					),
-				contentAlignment = Alignment.Center,
-			) {
-				MapisodeCircularLoadingIndicator()
-			}
-		}
 		Column(
 			modifier = Modifier
 				.padding(innerPadding)
@@ -192,13 +178,30 @@ internal fun NewEpisodeContentScreen(
 			MapisodeFilledButton(
 				modifier = buttonModifier,
 				onClick = {
-					if (isCreatingEpisode.not()) {
-						isCreatingEpisode = true
+					if (uiState.isCreatingEpisode.not()) {
+						viewModel.onIntent(NewEpisodeIntent.SetIsCreatingEpisode(true))
 					}
 				},
 				text = stringResource(R.string.new_episode_create_episode),
-				enabled = isCreatingEpisode.not(),
+				enabled = uiState.isCreatingEpisode.not(),
 			)
+		}
+	}
+
+	if (uiState.isCreatingEpisode) {
+		Box(
+			modifier = Modifier
+				.fillMaxSize()
+				.clickable(
+					enabled = false,
+					onClick = {},
+				)
+				.background(
+					color = Color.Black.copy(alpha = 0.3f),
+				),
+			contentAlignment = Alignment.Center,
+		) {
+			MapisodeCircularLoadingIndicator()
 		}
 	}
 }
