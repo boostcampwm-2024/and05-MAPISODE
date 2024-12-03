@@ -29,6 +29,7 @@ internal fun MainNavHost(
 				onTextMarkerClick = { latLng ->
 					navigator.navigate(MainNavTab.EPISODE, latLng)
 				},
+				onEpisodeEditClick = navigator::navigateToEpisodeEdit,
 				onEpisodeClick = navigator::navigateToEpisodeDetail,
 				onListFabClick = navigator::navigateToEpisodeList,
 				onBackClick = navigator::popBackStackIfNotHome,
