@@ -100,6 +100,10 @@ class GroupEditViewModel @Inject constructor(private val groupRepository: GroupR
 						)
 					}
 					groupRepository.updateGroup(currentState.group.toGroupModel())
+					postSideEffect(
+						GroupEditSideEffect.ShowToast(R.string.message_success_edit_group),
+					)
+					delay(100)
 					postSideEffect(GroupEditSideEffect.NavigateToGroupDetailScreen)
 				}
 			} catch (e: Exception) {
