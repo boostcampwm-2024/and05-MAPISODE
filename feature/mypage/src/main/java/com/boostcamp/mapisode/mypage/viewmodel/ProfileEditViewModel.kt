@@ -107,7 +107,7 @@ class ProfileEditViewModel @Inject constructor(
 
 	private suspend fun getStorageUrl(): String {
 		try {
-			return userRepository.uploadSingleImageToStorage(
+			return userRepository.uploadProfileImageToStorage(
 				imageUri = currentState.profileUrl,
 				uid = currentState.uid,
 			)

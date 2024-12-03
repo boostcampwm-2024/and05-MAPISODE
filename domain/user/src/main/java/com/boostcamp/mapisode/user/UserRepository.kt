@@ -9,5 +9,5 @@ interface UserRepository {
 	suspend fun isUserExist(uid: String): Boolean
 
 	suspend fun updateUserNameAndProfileUrl(uid: String, userName: String, profileUrl: String)
-	suspend fun uploadSingleImageToStorage(imageUri: String, uid: String): String
+	suspend fun uploadProfileImageToStorage(imageUri: String, uid: String): String
 }
