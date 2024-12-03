@@ -33,7 +33,7 @@ class EpisodeEditViewModel @Inject constructor(
 			is EpisodeEditIntent.OnPictureClick -> {
 				intent {
 					copy(
-						isSelectingPicture = true,
+						isSelectingPicture = !isSelectingPicture,
 					)
 				}
 			}
