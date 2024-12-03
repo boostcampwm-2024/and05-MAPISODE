@@ -25,10 +25,10 @@ class ProfileEditViewModel @Inject constructor(
 	override fun onIntent(intent: ProfileEditIntent) {
 		when (intent) {
 			is ProfileEditIntent.Init -> initState()
-			is ProfileEditIntent.BackClick -> navigateToMypage()
 			is ProfileEditIntent.NameChanged -> updateName(intent.nickname)
 			is ProfileEditIntent.ProfileChanged -> updateProfileUrl(intent.url)
 			is ProfileEditIntent.PhotopickerClick -> changePhotopickerClicked()
+			is ProfileEditIntent.BackClick -> navigateToMypage()
 			is ProfileEditIntent.EditClick -> editClick()
 		}
 	}
@@ -69,10 +69,6 @@ class ProfileEditViewModel @Inject constructor(
 		}
 	}
 
-	private fun navigateToMypage() {
-		postSideEffect(ProfileEditSideEffect.NavigateToMypage)
-	}
-
 	private fun changePhotopickerClicked() {
 		intent {
 			copy(
@@ -81,11 +77,27 @@ class ProfileEditViewModel @Inject constructor(
 		}
 	}
 
+	private fun navigateToMypage() {
+		intent {
+			copy(
+				isLoading = false,
+			)
+		}
+		postSideEffect(ProfileEditSideEffect.NavigateToMypage)
+	}
+
 	private fun editClick() {
+		val localUrl = currentState.profileUrl
+		intent {
+			copy(
+				isLoading = true,
+			)
+		}
+
 		try {
 			viewModelScope.launch {
-				updateMyGroupProfileUrl()
 				updateProfileUrl(getStorageUrl())
+				updateMyGroupProfileUrl(localUrl)
 				storeInUserPreferenceDataStore()
 				storeInUserRepository()
 				navigateToMypage()
@@ -106,10 +118,10 @@ class ProfileEditViewModel @Inject constructor(
 		}
 	}
 
-	private suspend fun updateMyGroupProfileUrl() {
+	private suspend fun updateMyGroupProfileUrl(url: String) {
 		viewModelScope.launch {
 			val myGroup = groupRepository.getGroupByGroupId(currentState.uid)
-			groupRepository.updateGroup(myGroup.copy(imageUrl = currentState.profileUrl))
+			groupRepository.updateGroup(myGroup.copy(imageUrl = url))
 		}
 	}
 
@@ -119,7 +131,7 @@ class ProfileEditViewModel @Inject constructor(
 				updateUsername(currentState.name)
 				updateProfileUrl(currentState.profileUrl)
 			}
-		}.join()
+		}
 	}
 
 	private suspend fun storeInUserRepository() {
@@ -129,6 +141,6 @@ class ProfileEditViewModel @Inject constructor(
 				userName = currentState.name,
 				profileUrl = currentState.profileUrl,
 			)
-		}.join()
+		}
 	}
 }
