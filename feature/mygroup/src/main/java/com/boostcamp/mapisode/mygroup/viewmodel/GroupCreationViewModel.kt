@@ -113,14 +113,16 @@ class GroupCreationViewModel @Inject constructor(
 					groupRepository.createGroup(currentState.group.toGroupModel())
 					postSideEffect(
 						GroupCreationSideEffect.ShowToast(
-							R.string.message_error_creation_group_success,
+							R.string.message_success_creation_group,
 						),
 					)
 					delay(100)
 					postSideEffect(GroupCreationSideEffect.NavigateToGroupScreen)
 				}
 			} catch (e: Exception) {
-				postSideEffect(GroupCreationSideEffect.ShowToast(R.string.message_error_edit_group))
+				postSideEffect(
+					GroupCreationSideEffect.ShowToast(R.string.message_error_creation_group),
+				)
 				delay(100)
 				postSideEffect(GroupCreationSideEffect.Idle)
 			}

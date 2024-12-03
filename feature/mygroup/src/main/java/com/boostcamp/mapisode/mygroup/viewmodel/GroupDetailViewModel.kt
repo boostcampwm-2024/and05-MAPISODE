@@ -118,8 +118,6 @@ class GroupDetailViewModel @Inject constructor(
 			try {
 				val code = groupRepository.issueInvitationCode(groupId.value)
 				postSideEffect(GroupDetailSideEffect.IssueInvitationCode(code))
-				delay(100)
-				postSideEffect(GroupDetailSideEffect.ShowToast(R.string.message_issue_code_success))
 			} catch (e: Exception) {
 				postSideEffect(GroupDetailSideEffect.ShowToast(R.string.message_issue_code_fail))
 			}
