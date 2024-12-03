@@ -1,6 +1,7 @@
 package com.boostcamp.mapisode.episode
 
 import androidx.core.net.toUri
+import com.boostcamp.mapisode.common.util.UuidGenerator
 import com.boostcamp.mapisode.episode.model.EpisodeFirestoreModel
 import com.boostcamp.mapisode.episode.model.toFirestoreModelForUpdate
 import com.boostcamp.mapisode.firebase.firestore.FirestoreConstants
@@ -14,7 +15,6 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
-import java.util.UUID
 import javax.inject.Inject
 
 class EpisodeRepositoryImpl @Inject constructor(
@@ -104,7 +104,7 @@ class EpisodeRepositoryImpl @Inject constructor(
 			?.toDomainModel(episodeId)
 
 	override suspend fun createEpisode(episodeModel: EpisodeModel): String {
-		val newEpisodeId = UUID.randomUUID().toString().replace("-", "")
+		val newEpisodeId = UuidGenerator.generate()
 		val uploadedImageUrls = uploadImagesToStorage(newEpisodeId, episodeModel.imageUrls)
 		return try {
 			episodeCollection
