@@ -23,7 +23,7 @@ fun StoryProgressBars(
 	imageCount: Int,
 	currentIndex: Int,
 	progress: Float,
-	barHeight: Dp = 10.dp,
+	barHeight: Dp = 6.dp,
 	spacing: Dp = 6.dp,
 ) {
 	Row(
