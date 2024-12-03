@@ -3,6 +3,7 @@ package com.boostcamp.mapisode.home.detail
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -65,7 +66,6 @@ import com.boostcamp.mapisode.home.component.MapisodeChip
 internal fun EpisodeDetailRoute(
 	episodeId: String,
 	viewModel: EpisodeDetailViewModel = hiltViewModel(),
-	onEpisodeEditClick: (String) -> Unit,
 	onBackClick: () -> Unit = {},
 ) {
 	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -82,6 +82,10 @@ internal fun EpisodeDetailRoute(
 					val message = context.getString(sideEffect.messageResId)
 					Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 				}
+
+				is EpisodeDetailSideEffect.OpenStoryViewer -> {
+					onOpenStoryViewer()
+				}
 			}
 		}
 	}
@@ -96,8 +100,9 @@ internal fun EpisodeDetailRoute(
 	} else {
 		EpisodeDetailScreen(
 			state = uiState,
-			onEpisodeEditClick = { onEpisodeEditClick(episodeId) },
 			onBackClick = onBackClick,
+			onEpisodeEditClick = { onEpisodeEditClick(episodeId) },
+			onOpenStoryViewer = { viewModel.onIntent(EpisodeDetailIntent.OpenStoryViewer) },
 		)
 	}
 }
@@ -236,7 +241,8 @@ internal fun EpisodeDetailScreen(
 						.padding(horizontal = 20.dp),
 					itemVerticalAlignment = Alignment.CenterVertically,
 				) {
-					val chipType = mapCategoryToChipType(state.episode.category) ?: ChipType.OTHER
+					val chipType =
+						mapCategoryToChipType(state.episode.category) ?: ChipType.OTHER
 
 					MapisodeChip(
 						text = context.getString(chipType.textResId),

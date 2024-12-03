@@ -12,4 +12,7 @@ sealed interface HomeRoute : Route {
 
 	@Serializable
 	data class Edit(val episodeId: String) : HomeRoute
+
+	@Serializable
+	data object Story : HomeRoute
 }

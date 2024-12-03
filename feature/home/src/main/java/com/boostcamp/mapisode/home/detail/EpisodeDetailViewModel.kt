@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-internal class EpisodeDetailViewModel @Inject constructor(
+class EpisodeDetailViewModel @Inject constructor(
 	private val episodeRepository: EpisodeRepository,
 	private val userRepository: UserRepository,
 ) : BaseViewModel<EpisodeDetailIntent, EpisodeDetailState, EpisodeDetailSideEffect>(
@@ -18,9 +18,8 @@ internal class EpisodeDetailViewModel @Inject constructor(
 ) {
 	override fun onIntent(intent: EpisodeDetailIntent) {
 		when (intent) {
-			is EpisodeDetailIntent.LoadEpisodeDetail -> {
-				loadEpisodeDetail(intent.episodeId)
-			}
+			is EpisodeDetailIntent.LoadEpisodeDetail -> loadEpisodeDetail(intent.episodeId)
+			is EpisodeDetailIntent.OpenStoryViewer -> postSideEffect(EpisodeDetailSideEffect.OpenStoryViewer)
 		}
 	}
 
