@@ -7,14 +7,13 @@ import com.boostcamp.mapisode.firebase.firestore.FirestoreConstants
 import com.boostcamp.mapisode.firebase.firestore.StorageConstants.PATH_IMAGES
 import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.boostcamp.mapisode.model.EpisodeModel
+import com.google.firebase.FirebaseException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withTimeout
 import java.util.UUID
 import javax.inject.Inject
 
@@ -168,31 +167,30 @@ class EpisodeRepositoryImpl @Inject constructor(
 
 	override suspend fun updateEpisode(episodeModel: EpisodeModel) {
 		try {
-			withTimeout(5000) {
-				val updatedUrls = mutableListOf<String>()
-				episodeModel.imageUrls.forEachIndexed { index, _ ->
-					val imageRef =
-						storage.reference.child("$PATH_IMAGES/${episodeModel.id}/${index + 1}")
-					val downloadUrl = imageRef.downloadUrl.await()
-					updatedUrls.add(downloadUrl.toString())
-				}
-				episodeModel.imageUrlsUsedForOnlyUpdate.forEachIndexed { index, imageUri ->
-					val imageRef =
-						storage.reference.child(
-							"$PATH_IMAGES/${episodeModel.id}/${index + episodeModel.imageUrls.size + 1}",
-						)
-					val uploadTask = imageRef.putFile(imageUri.toUri()).await()
-					val downloadUrl = uploadTask.task.result.storage.downloadUrl.await()
-					updatedUrls.add(downloadUrl.toString())
-				}
-
-				val createdBy = database.collection("user").document(episodeModel.createdBy)
-				val group = database.collection("group").document(episodeModel.group)
-				database.document("episode/${episodeModel.id}")
-					.set(episodeModel.toFirestoreModelForUpdate(createdBy, group, updatedUrls))
-					.await()
+			val updatedUrls = mutableListOf<String>()
+			episodeModel.imageUrls.forEachIndexed { index, _ ->
+				val imageRef =
+					storage.reference.child("$PATH_IMAGES/${episodeModel.id}/${index + 1}")
+				val downloadUrl = imageRef.downloadUrl.await()
+				updatedUrls.add(downloadUrl.toString())
 			}
-		} catch (e: TimeoutCancellationException) {
+			episodeModel.imageUrlsUsedForOnlyUpdate.forEachIndexed { index, imageUri ->
+				val imageRef =
+					storage.reference.child(
+						"$PATH_IMAGES/${episodeModel.id}/${index + episodeModel.imageUrls.size + 1}",
+					)
+				val uploadTask = imageRef.putFile(imageUri.toUri()).await()
+				val downloadUrl = uploadTask.task.result.storage.downloadUrl.await()
+				updatedUrls.add(downloadUrl.toString())
+			}
+
+			val createdBy = database.collection("user").document(episodeModel.createdBy)
+			val group = database.collection("group").document(episodeModel.group)
+			database.document("episode/${episodeModel.id}")
+				.set(episodeModel.toFirestoreModelForUpdate(createdBy, group, updatedUrls))
+				.await()
+		} catch (e: FirebaseException) {
+			// Firebase 관련 예외 처리
 			throw e
 		} catch (e: Exception) {
 			throw e
