@@ -135,6 +135,14 @@ class NewEpisodeViewModel @Inject constructor(
 				}
 			}
 
+			is NewEpisodeIntent.SetIsCreatingEpisode -> {
+				intent {
+					copy(
+						isCreatingEpisode = intent.isCreatingEpisode,
+					)
+				}
+			}
+
 			is NewEpisodeIntent.CreateNewEpisode -> {
 				viewModelScope.launch {
 					try {
@@ -147,6 +155,11 @@ class NewEpisodeViewModel @Inject constructor(
 						postSideEffect(NewEpisodeSideEffect.NavigateBackToHome)
 					} catch (e: Exception) {
 						postSideEffect(NewEpisodeSideEffect.ShowToast(R.string.new_episode_create_episode_fail))
+						intent {
+							copy(
+								isCreatingEpisode = false,
+							)
+						}
 					}
 				}
 			}
