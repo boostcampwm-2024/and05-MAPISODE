@@ -1,7 +1,10 @@
 package com.boostcamp.mapisode
 
 import android.app.Application
-import com.google.firebase.FirebaseApp
+import com.google.firebase.Firebase
+import com.google.firebase.appcheck.appCheck
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
+import com.google.firebase.initialize
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -11,7 +14,10 @@ class MapisodeApplication : Application() {
 		super.onCreate()
 
 		initTimber()
-		FirebaseApp.initializeApp(this)
+		Firebase.initialize(context = this)
+		Firebase.appCheck.installAppCheckProviderFactory(
+			PlayIntegrityAppCheckProviderFactory.getInstance(),
+		)
 	}
 
 	private fun initTimber() {
