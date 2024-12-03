@@ -2,6 +2,7 @@ package com.boostcamp.mapisode.mypage.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
+import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.mypage.R
 import com.boostcamp.mapisode.mypage.intent.ProfileEditIntent
 import com.boostcamp.mapisode.mypage.sideeffect.ProfileEditSideEffect
@@ -17,6 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
 	private val storageRepository: StorageRepository,
+	private val groupRepository: GroupRepository,
 	private val userRepository: UserRepository,
 	private val userPreferenceDataStore: UserPreferenceDataStore,
 ) : BaseViewModel<ProfileEditIntent, ProfileEditState, ProfileEditSideEffect>(ProfileEditState()) {
@@ -82,6 +84,7 @@ class ProfileEditViewModel @Inject constructor(
 	private fun editClick() {
 		try {
 			viewModelScope.launch {
+				updateMyGroupProfileUrl()
 				updateProfileUrl(getStorageUrl())
 				storeInUserPreferenceDataStore()
 				storeInUserRepository()
@@ -100,6 +103,13 @@ class ProfileEditViewModel @Inject constructor(
 			)
 		} catch (e: Exception) {
 			throw e
+		}
+	}
+
+	private suspend fun updateMyGroupProfileUrl() {
+		viewModelScope.launch {
+			val myGroup = groupRepository.getGroupByGroupId(currentState.uid)
+			groupRepository.updateGroup(myGroup.copy(imageUrl = currentState.profileUrl))
 		}
 	}
 
