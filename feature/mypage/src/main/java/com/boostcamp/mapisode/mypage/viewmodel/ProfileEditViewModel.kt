@@ -76,16 +76,15 @@ class ProfileEditViewModel @Inject constructor(
 	}
 
 	private fun navigateToMypage() {
+		postSideEffect(ProfileEditSideEffect.NavigateToMypage)
 		intent {
 			copy(
 				isLoading = false,
 			)
 		}
-		postSideEffect(ProfileEditSideEffect.NavigateToMypage)
 	}
 
 	private fun editClick() {
-		val localUrl = currentState.profileUrl
 		intent {
 			copy(
 				isLoading = true,
@@ -94,8 +93,11 @@ class ProfileEditViewModel @Inject constructor(
 
 		try {
 			viewModelScope.launch {
-				updateProfileUrl(getStorageUrl())
-				updateMyGroupProfileUrl(localUrl)
+				val localUri = currentState.profileUrl
+				val storageUrl = getStorageUrl()
+
+				updateProfileUrl(storageUrl)
+				updateMyGroupProfileUrl(localUri)
 				storeInUserPreferenceDataStore()
 				storeInUserRepository()
 				navigateToMypage()
