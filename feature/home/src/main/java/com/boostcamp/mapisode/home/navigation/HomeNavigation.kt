@@ -40,11 +40,19 @@ fun NavController.navigateEpisodeEdit(
 	navigate(HomeRoute.Edit(episodeId), navOptions)
 }
 
+fun NavController.navigateStoryViewer(
+	navOptions: NavOptions? = null,
+) {
+	navigate(HomeRoute.Story, navOptions)
+}
+
 fun NavGraphBuilder.addHomeNavGraph(
+	navController: NavController,
 	onTextMarkerClick: (EpisodeLatLng) -> Unit,
 	onEpisodeEditClick: (String) -> Unit,
 	onEpisodeClick: (String) -> Unit,
 	onListFabClick: (String) -> Unit,
+	onStoryClick: () -> Unit,
 	onBackClick: () -> Unit,
 ) {
 	composable<MainRoute.Home> {
@@ -60,6 +68,7 @@ fun NavGraphBuilder.addHomeNavGraph(
 		EpisodeDetailRoute(
 			episodeId = episodeId,
 			onEpisodeEditClick = onEpisodeEditClick,
+			onOpenStoryViewer = onStoryClick,
 			onBackClick = onBackClick,
 		)
 	}
@@ -72,5 +81,16 @@ fun NavGraphBuilder.addHomeNavGraph(
 	composable<HomeRoute.Edit> { backStackEntry ->
 		val episodeId = backStackEntry.toRoute<HomeRoute.Edit>().episodeId
 		EpisodeEditRoute(episodeId = episodeId, onBackClick = onBackClick)
+	}
+
+	composable<HomeRoute.Story> { backStackEntry ->
+		val parentEntry = remember(backStackEntry) {
+			navController.getBackStackEntry<HomeRoute.Detail>()
+		}
+
+		StoryViewerRoute(
+			viewModel = hiltViewModel(parentEntry),
+			onBackClick = onBackClick,
+		)
 	}
 }

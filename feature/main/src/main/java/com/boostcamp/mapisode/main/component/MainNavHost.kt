@@ -26,12 +26,14 @@ internal fun MainNavHost(
 			startDestination = navigator.startDestination,
 		) {
 			addHomeNavGraph(
+				navController = navigator.navController,
 				onTextMarkerClick = { latLng ->
 					navigator.navigate(MainNavTab.EPISODE, latLng)
 				},
 				onEpisodeEditClick = navigator::navigateToEpisodeEdit,
 				onEpisodeClick = navigator::navigateToEpisodeDetail,
 				onListFabClick = navigator::navigateToEpisodeList,
+				onStoryClick = navigator::navigateToStoryViewer,
 				onBackClick = navigator::popBackStackIfNotHome,
 			)
 			addAuthNavGraph(
