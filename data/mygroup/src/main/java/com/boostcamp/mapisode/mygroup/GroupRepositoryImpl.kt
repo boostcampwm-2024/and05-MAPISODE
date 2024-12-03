@@ -75,10 +75,23 @@ class GroupRepositoryImpl @Inject constructor(
 	override suspend fun joinGroup(userId: String, groupId: String) {
 		try {
 			database.runTransaction { transaction ->
-				// 그룹 문서의 멤버 리스트에 사용자 추가
 				val groupDocRef = database
 					.collection(FirestoreConstants.COLLECTION_GROUP)
 					.document(groupId)
+
+				// 그룹 문서의 멤버 리스트에 이미 사용자가 있는지 확인
+				val groupSnapshot = transaction.get(groupDocRef)
+
+				@Suppress("UNCHECKED_CAST")
+				val members = groupSnapshot.get(
+					FirestoreConstants.FIELD_MEMBERS,
+				) as MutableList<DocumentReference>
+
+				if (members.any { it.id == userId }) {
+					throw NullPointerException()
+				}
+
+				// 그룹 문서의 멤버 리스트에 사용자 추가
 				transaction.update(
 					groupDocRef,
 					FirestoreConstants.FIELD_MEMBERS,
@@ -100,6 +113,8 @@ class GroupRepositoryImpl @Inject constructor(
 					),
 				)
 			}.await()
+		} catch (e: NullPointerException) {
+			throw e
 		} catch (e: Exception) {
 			throw e
 		}

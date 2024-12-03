@@ -70,11 +70,14 @@ class GroupJoinViewModel @Inject constructor(
 			try {
 				groupRepository.joinGroup(userId, group.id)
 				intent { copy(isJoinedSuccess = true) }
+				postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_success))
+			} catch (e: NullPointerException) {
+				intent { copy(isGroupLoading = false, isJoinedSuccess = false, group = null) }
+				postSideEffect(GroupJoinSideEffect.ShowToast(R.string.message_already_joined))
 			} catch (e: Exception) {
 				intent { copy(isGroupLoading = false, isJoinedSuccess = false, group = null) }
 				postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_failure))
 			}
-			postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_success))
 			delay(100)
 			postSideEffect(GroupJoinSideEffect.NavigateToGroupScreen)
 		}
