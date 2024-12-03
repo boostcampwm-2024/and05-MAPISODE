@@ -3,9 +3,6 @@ package com.boostcamp.mapisode.home.edit
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -46,6 +43,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
@@ -68,6 +66,8 @@ import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTextStyle
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.model.EpisodeLatLng
+import com.boostcamp.mapisode.ui.photopicker.MapisodePhotoPicker
+import com.boostcamp.mapisode.ui.photopicker.model.PhotoInfo
 import com.naver.maps.map.CameraPosition
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -118,29 +118,31 @@ fun EpisodeEditRoute(
 		) {
 			MapisodeCircularLoadingIndicator()
 		}
-	} else if (uiState.isSelectingPicture) {
-		PictureSelectionScreen(
-			onPickPhotos = { viewModel.onIntent(EpisodeEditIntent.OnSetPictures(it)) },
-		)
-	} else if (uiState.isSelectingLocation) {
-		LocationSelectionScreen(
-			episodeAddress = uiState.episode.searchedAddress,
-			cameraPosition = CameraPosition(
-				uiState.episode.location.toLatLng(),
-				16.0,
-			),
-			onSetEpisodeLocation = { viewModel.onIntent(EpisodeEditIntent.OnSetLocation(it)) },
-			onRequestSelection = { viewModel.onIntent(EpisodeEditIntent.OnRequestSelection(it)) },
-			onDismissSelection = { viewModel.onIntent(EpisodeEditIntent.OnDismissSelection) },
-		)
 	} else {
 		EpisodeEditScreen(
 			state = uiState,
-			onPickPhotos = { viewModel.onIntent(EpisodeEditIntent.OnPictureClick) },
+			onPictureClick = { viewModel.onIntent(EpisodeEditIntent.OnPictureClick) },
 			onLocationClick = { viewModel.onIntent(EpisodeEditIntent.OnLocationClick(it)) },
 			onEditClick = { viewModel.onIntent(EpisodeEditIntent.OnEditClick(it)) },
 			onBackClick = onBackClick,
 		)
+		if (uiState.isSelectingPicture) {
+			PictureSelectionScreen(
+				onPictureClick = { viewModel.onIntent(EpisodeEditIntent.OnPictureClick) },
+				onPickPhotos = { viewModel.onIntent(EpisodeEditIntent.OnSetPictures(it)) },
+			)
+		} else if (uiState.isSelectingLocation) {
+			LocationSelectionScreen(
+				episodeAddress = uiState.episode.searchedAddress,
+				cameraPosition = CameraPosition(
+					uiState.episode.location.toLatLng(),
+					16.0,
+				),
+				onSetEpisodeLocation = { viewModel.onIntent(EpisodeEditIntent.OnSetLocation(it)) },
+				onRequestSelection = { viewModel.onIntent(EpisodeEditIntent.OnRequestSelection(it)) },
+				onDismissSelection = { viewModel.onIntent(EpisodeEditIntent.OnDismissSelection) },
+			)
+		}
 
 		if (uiState.isEditingInProgress) {
 			Box(
@@ -159,7 +161,7 @@ fun EpisodeEditRoute(
 fun EpisodeEditScreen(
 	state: EpisodeEditState,
 	modifier: Modifier = Modifier,
-	onPickPhotos: () -> Unit,
+	onPictureClick: () -> Unit,
 	onLocationClick: (EpisodeLatLng) -> Unit,
 	onEditClick: (EpisodeEditInfo) -> Unit,
 	onBackClick: () -> Unit = {},
@@ -240,7 +242,7 @@ fun EpisodeEditScreen(
 						)
 					}
 					MapisodeImageButton(
-						onClick = onPickPhotos,
+						onClick = onPictureClick,
 						showImage = true,
 						modifier = Modifier
 							.size(110.dp),
@@ -520,17 +522,21 @@ fun EpisodeEditScreen(
 
 @Composable
 fun PictureSelectionScreen(
+	onPictureClick: () -> Unit,
 	onPickPhotos: (PersistentList<Uri>) -> Unit,
 ) {
-	val photoPickLauncher = rememberLauncherForActivityResult(
-		contract = ActivityResultContracts.PickMultipleVisualMedia(4),
-		onResult = { uris ->
-			onPickPhotos(uris.toPersistentList())
-		},
-	)
-	LaunchedEffect(Unit) {
-		photoPickLauncher.launch(
-			PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+	Box(
+		modifier = Modifier.fillMaxSize(),
+		contentAlignment = Alignment.Center,
+	) {
+		MapisodePhotoPicker(
+			numOfPhoto = 4,
+			onPhotoSelected = { photoInfo ->
+				onPickPhotos(photoInfo.map { it.uri.toUri() }.toPersistentList())
+			},
+			onPermissionDenied = onPictureClick,
+			onBackPressed = onPictureClick,
+			modifier = Modifier.fillMaxSize(),
 		)
 	}
 }
@@ -600,5 +606,27 @@ fun TagInputField(
 				),
 			),
 		)
+	}
+}
+
+@Composable
+fun PhotoPickerScreen(
+	localSelectedUrls: PersistentList<PhotoInfo>,
+	modifier: Modifier = Modifier,
+) {
+	Box(
+		modifier = Modifier.fillMaxSize(),
+		contentAlignment = Alignment.Center,
+	) {
+		val localSelectedUrl: PersistentList<PhotoInfo> = remember { persistentListOf() }
+		MapisodePhotoPicker(
+			numOfPhoto = 4,
+			onPhotoSelected = { photoInfo ->
+				localSelectedUrl + photoInfo
+			},
+			onPermissionDenied = {},
+			onBackPressed = {},
+
+			)
 	}
 }
