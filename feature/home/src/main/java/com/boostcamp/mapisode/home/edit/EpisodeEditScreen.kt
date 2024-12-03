@@ -244,8 +244,7 @@ fun EpisodeEditScreen(
 					MapisodeImageButton(
 						onClick = onPictureClick,
 						showImage = true,
-						modifier = Modifier
-							.size(110.dp),
+						modifier = Modifier.size(110.dp),
 						imageContent = {},
 					)
 				}
@@ -264,8 +263,7 @@ fun EpisodeEditScreen(
 			Spacer(modifier = Modifier.height(8.dp))
 
 			MapisodeTextField(
-				modifier = modifier
-					.fillMaxWidth(),
+				modifier = modifier.fillMaxWidth(),
 				value = state.episode.selectedAddress,
 				readOnly = true,
 				placeholder = "장소를 입력해주세요",
@@ -626,7 +624,6 @@ fun PhotoPickerScreen(
 			},
 			onPermissionDenied = {},
 			onBackPressed = {},
-
-			)
+		)
 	}
 }
