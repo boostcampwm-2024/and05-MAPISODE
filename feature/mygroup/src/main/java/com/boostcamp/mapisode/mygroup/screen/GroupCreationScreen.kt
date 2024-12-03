@@ -232,7 +232,7 @@ fun GroupCreationField(
 							modifier = Modifier
 								.fillMaxSize()
 								.aspectRatio(1f),
-							contentScale = ContentScale.FillBounds,
+							contentScale = ContentScale.Crop,
 						)
 					}
 				}

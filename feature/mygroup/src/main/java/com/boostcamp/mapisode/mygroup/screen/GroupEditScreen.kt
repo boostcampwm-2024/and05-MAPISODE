@@ -234,7 +234,7 @@ fun GroupEditField(
 							model = profileUrl,
 							contentDescription = "그룹 이미지",
 							modifier = Modifier.fillMaxSize(),
-							contentScale = ContentScale.FillBounds,
+							contentScale = ContentScale.Crop,
 						)
 					}
 				}
