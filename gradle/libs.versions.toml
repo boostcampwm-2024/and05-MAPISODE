@@ -120,6 +120,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
 firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
 firebase-storage = { group = "com.google.firebase", name = "firebase-storage" }
+firebase-appcheck = { group = "com.google.firebase", name = "firebase-appcheck-playintegrity" }
 
 # Google
 google-play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "google-play-services-auth" }
@@ -233,7 +234,8 @@ datastore = [
 firebase = [
 	"firebase-auth",
 	"firebase-firestore",
-	"firebase-storage"
+	"firebase-storage",
+	"firebase-appcheck"
 ]
 
 # Navigation
