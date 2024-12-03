@@ -10,6 +10,7 @@ import com.boostcamp.mapisode.network.repository.NaverMapsRepository
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.naver.maps.map.CameraPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -49,9 +50,10 @@ class NewEpisodeViewModel @Inject constructor(
 					postSideEffect(NewEpisodeSideEffect.ShowToast(R.string.new_episode_pictures_empty))
 					return
 				}
+				val episodePics = intent.pics.take(4).toPersistentList()
 				intent {
 					copy(
-						episodeContent = episodeContent.copy(images = intent.pics),
+						episodeContent = episodeContent.copy(images = episodePics),
 					)
 				}
 			}
