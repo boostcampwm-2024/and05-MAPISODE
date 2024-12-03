@@ -4,7 +4,8 @@ import com.boostcamp.mapisode.model.AuthData
 import com.boostcamp.mapisode.ui.base.UiState
 
 data class AuthState(
-	val isLoading: Boolean = true,
+	val showSplash: Boolean = true,
+	val isLoading: Boolean = false,
 	val isLoginSuccess: Boolean = false,
 	val authData: AuthData? = null,
 	val nickname: String = "",
