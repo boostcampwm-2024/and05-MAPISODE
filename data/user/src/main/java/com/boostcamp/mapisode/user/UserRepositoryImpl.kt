@@ -1,14 +1,20 @@
 package com.boostcamp.mapisode.user
 
+import androidx.core.net.toUri
 import com.boostcamp.mapisode.firebase.firestore.FirestoreConstants
+import com.boostcamp.mapisode.firebase.firestore.StorageConstants.PATH_IMAGES
 import com.boostcamp.mapisode.model.UserModel
 import com.boostcamp.mapisode.user.model.toUserFirestoreModel
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import java.util.Date
 import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(database: FirebaseFirestore) : UserRepository {
+class UserRepositoryImpl @Inject constructor(
+	private val database: FirebaseFirestore,
+	private val storage: FirebaseStorage,
+) : UserRepository {
 	private val userCollection = database.collection(FirestoreConstants.COLLECTION_USER)
 
 	override suspend fun createUser(userModel: UserModel) {
@@ -72,6 +78,20 @@ class UserRepositoryImpl @Inject constructor(database: FirebaseFirestore) : User
 			).await()
 		} catch (e: Exception) {
 			throw Exception("Failed to update user", e)
+		}
+	}
+
+	override suspend fun uploadSingleImageToStorage(
+		imageUri: String,
+		uid: String,
+	): String {
+		val imageRef = storage.reference.child("$PATH_IMAGES/$uid/0")
+		return try {
+			val uploadTask = imageRef.putFile(imageUri.toUri()).await()
+			val downloadUrl = uploadTask.task.result.storage.downloadUrl.await()
+			downloadUrl.toString()
+		} catch (e: Exception) {
+			throw e
 		}
 	}
 }

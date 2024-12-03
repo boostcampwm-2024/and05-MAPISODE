@@ -7,7 +7,6 @@ import com.boostcamp.mapisode.mypage.R
 import com.boostcamp.mapisode.mypage.intent.ProfileEditIntent
 import com.boostcamp.mapisode.mypage.sideeffect.ProfileEditSideEffect
 import com.boostcamp.mapisode.mypage.state.ProfileEditState
-import com.boostcamp.mapisode.storage.StorageRepository
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import com.boostcamp.mapisode.user.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileEditViewModel @Inject constructor(
-	private val storageRepository: StorageRepository,
 	private val groupRepository: GroupRepository,
 	private val userRepository: UserRepository,
 	private val userPreferenceDataStore: UserPreferenceDataStore,
@@ -109,7 +107,7 @@ class ProfileEditViewModel @Inject constructor(
 
 	private suspend fun getStorageUrl(): String {
 		try {
-			return storageRepository.uploadSingleImageToStorage(
+			return userRepository.uploadSingleImageToStorage(
 				imageUri = currentState.profileUrl,
 				uid = currentState.uid,
 			)
