@@ -115,7 +115,7 @@ fun StoryViewer(
 			model = imageUrls[currentIndex],
 			contentDescription = "애피소드 이미지",
 			modifier = Modifier.fillMaxSize(),
-			contentScale = ContentScale.Crop,
+			contentScale = ContentScale.FillWidth,
 		)
 
 		StoryProgressBars(
