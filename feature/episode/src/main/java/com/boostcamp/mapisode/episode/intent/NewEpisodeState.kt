@@ -34,7 +34,7 @@ data class NewEpisodeState(
 		location = EpisodeLatLng(episodeInfo.location.latitude, episodeInfo.location.longitude),
 		group = requireNotNull(myGroups.find { it.name == episodeInfo.group }?.groupId),
 		category = requireNotNull(episodeInfo.category?.name),
-		tags = episodeInfo.tags.split(","),
+		tags = episodeInfo.tags,
 		memoryDate = episodeInfo.date,
 		createdBy = createdBy,
 	)
@@ -52,7 +52,7 @@ data class NewEpisodeInfo(
 	val location: LatLng = LatLng(0.0, 0.0),
 	val group: String = "",
 	val category: EpisodeCategory? = null,
-	val tags: String = "",
+	val tags: List<String> = emptyList(),
 	val date: Date = Date(),
 )
 
