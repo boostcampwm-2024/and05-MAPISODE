@@ -15,7 +15,6 @@ fun Modifier.throttleClickable(
 	throttleTime: Long = DEFAULT_THROTTLE_TIME,
 	onClick: () -> Unit,
 ): Modifier {
-
 	var lastClickTime by rememberSaveable { mutableLongStateOf(0L) }
 
 	return this.clickable {
