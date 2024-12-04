@@ -28,12 +28,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePreviewHandler
 import coil3.compose.LocalAsyncImagePreviewHandler
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import coil3.test.FakeImage
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.theme.AppTypography
@@ -53,6 +56,7 @@ fun StoryViewer(
 	var isPaused by rememberSaveable { mutableStateOf(false) }
 	val coroutineScope = rememberCoroutineScope()
 	var isClosed by rememberSaveable { mutableStateOf(false) }
+	val context = LocalContext.current
 
 	LaunchedEffect(
 		key1 = currentIndex,
@@ -123,7 +127,10 @@ fun StoryViewer(
 			},
 	) {
 		AsyncImage(
-			model = imageUrls[currentIndex],
+			model = ImageRequest.Builder(context)
+				.data(imageUrls[currentIndex])
+				.crossfade(true)
+				.build(),
 			contentDescription = "애피소드 이미지",
 			modifier = Modifier.fillMaxSize(),
 			contentScale = ContentScale.FillWidth,
