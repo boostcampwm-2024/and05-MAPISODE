@@ -65,6 +65,7 @@ import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTextStyle
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.boostcamp.mapisode.home.common.HomeConstant.MAX_NUM_OF_PHOTOS
 import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.boostcamp.mapisode.ui.photopicker.MapisodePhotoPicker
 import com.naver.maps.map.CameraPosition
@@ -527,7 +528,7 @@ fun PictureSelectionScreen(
 		contentAlignment = Alignment.Center,
 	) {
 		MapisodePhotoPicker(
-			numOfPhoto = 4,
+			numOfPhoto = MAX_NUM_OF_PHOTOS,
 			onPhotoSelected = { photoInfo ->
 				onPickPhotos(photoInfo.map { it.uri.toUri() }.toPersistentList())
 			},
