@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.R.drawable
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
+import com.boostcamp.mapisode.designsystem.compose.ripple.MapisodeRippleAIndication
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 
 @Composable
@@ -98,7 +99,12 @@ fun LoginScreen(
 					color = MapisodeTheme.colorScheme.outlineButtonStroke,
 					shape = RoundedCornerShape(4.dp),
 				)
-				.clickable { googleSignInClicked() },
+				.clickable(
+					interactionSource = null,
+					indication = MapisodeRippleAIndication,
+				) {
+					googleSignInClicked()
+				},
 			verticalAlignment = Alignment.CenterVertically,
 			horizontalArrangement = Arrangement.Center,
 		) {
