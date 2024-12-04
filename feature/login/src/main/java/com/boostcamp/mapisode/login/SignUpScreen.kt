@@ -44,7 +44,6 @@ fun SignUpScreen(
 	onPhotopickerClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
-
 	BackHandler {
 		if (isPhotopickerClicked) {
 			onPhotopickerClick()
