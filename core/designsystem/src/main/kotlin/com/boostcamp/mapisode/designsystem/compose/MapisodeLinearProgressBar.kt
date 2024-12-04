@@ -16,7 +16,7 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 fun MapisodeLinearProgressBar(
 	modifier: Modifier = Modifier,
 	progress: Float,
-	backgroundColor: Color = Color.Gray,
+	backgroundColor: Color = Color.White,
 	progressColor: Color = MapisodeTheme.colorScheme.circularIndicator,
 ) {
 	Canvas(modifier = modifier) {
