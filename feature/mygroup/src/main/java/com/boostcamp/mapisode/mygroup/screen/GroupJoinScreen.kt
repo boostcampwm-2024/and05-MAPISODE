@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -59,7 +58,7 @@ fun GroupJoinScreen(
 	viewModel: GroupJoinViewModel = hiltViewModel(),
 ) {
 	val context = LocalContext.current
-	val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+	val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 	val effect = rememberFlowWithLifecycle(
 		flow = viewModel.sideEffect,
 		initialValue = GroupJoinSideEffect.Idle,
@@ -95,7 +94,7 @@ fun GroupJoinScreen(
 
 @Composable
 fun GroupJoinContent(
-	uiState: State<GroupJoinState>,
+	uiState: GroupJoinState,
 	onBackClick: () -> Unit,
 	onGetGroup: (String) -> Unit,
 	onJoinGroup: () -> Unit,
@@ -193,13 +192,13 @@ fun GroupJoinContent(
 					MapisodeDivider(direction = Direction.Horizontal, thickness = Thickness.Thin)
 					Spacer(modifier = Modifier.padding(10.dp))
 				}
-				if (uiState.value.isGroupExist && uiState.value.group != null) {
+				if (uiState.isGroupExist && uiState.group != null) {
 					item {
-						ConfirmJoinGroup(uiState.value.group!!)
+						ConfirmJoinGroup(uiState.group.toGroupModel())
 						Spacer(modifier = Modifier.padding(bottom = 70.dp))
 					}
 				}
-				if (uiState.value.isGroupExist.not() || uiState.value.group == null) {
+				if (uiState.isGroupExist.not() || uiState.group == null) {
 					item {
 						MapisodeText(
 							text = "존재하지 않는 그룹입니다.",
@@ -208,7 +207,7 @@ fun GroupJoinContent(
 					}
 				}
 			}
-			if (uiState.value.isGroupExist && uiState.value.group != null) {
+			if (uiState.isGroupExist && uiState.group != null) {
 				Column(
 					modifier = Modifier
 						.fillMaxWidth()
