@@ -38,6 +38,7 @@
 	<string name="new_episode_content_placeholder_description">내용을 입력해주세요</string>
 
 	<string name="new_episode_create_episode">생성하기</string>
+	<string name="new_episode_creating_episode">에피소드 생성 중…</string>
 	<string name="new_episode_create_episode_success">에피소드 생성이 완료되었습니다.</string>
 	<string name="new_episode_create_episode_fail">에피소드 생성에 실패하였습니다.</string>
 </resources>
