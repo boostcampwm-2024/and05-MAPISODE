@@ -8,6 +8,7 @@ sealed interface AuthIntent : UiIntent {
 	data class OnGoogleSignInClick(val googleOauth: GoogleOauth) : AuthIntent
 	data class OnNicknameChange(val nickname: String) : AuthIntent
 	data class OnProfileUrlChange(val profileUrl: String) : AuthIntent
+	data object OnPhotopickerClick : AuthIntent
 	data object OnSignUpClick : AuthIntent
 	data object OnLoginSuccess : AuthIntent
 	data object OnBackClickedInSignUp : AuthIntent
