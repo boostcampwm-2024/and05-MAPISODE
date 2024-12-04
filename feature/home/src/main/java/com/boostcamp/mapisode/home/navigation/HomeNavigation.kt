@@ -1,5 +1,7 @@
 package com.boostcamp.mapisode.home.navigation
 
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -9,6 +11,7 @@ import com.boostcamp.mapisode.home.HomeRoute
 import com.boostcamp.mapisode.home.detail.EpisodeDetailRoute
 import com.boostcamp.mapisode.home.edit.EpisodeEditRoute
 import com.boostcamp.mapisode.home.list.EpisodeListRoute
+import com.boostcamp.mapisode.home.story.StoryViewerRoute
 import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.boostcamp.mapisode.navigation.HomeRoute
 import com.boostcamp.mapisode.navigation.MainRoute
