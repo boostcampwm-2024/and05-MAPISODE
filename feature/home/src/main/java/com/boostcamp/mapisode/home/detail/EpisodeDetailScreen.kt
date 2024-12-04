@@ -41,6 +41,10 @@ import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePreviewHandler
 import coil3.compose.LocalAsyncImagePreviewHandler
+import coil3.imageLoader
+import coil3.request.ImageRequest
+import coil3.request.crossfade
+import coil3.size.Size
 import coil3.test.FakeImage
 import com.boostcamp.mapisode.designsystem.R
 import com.boostcamp.mapisode.designsystem.compose.Direction
@@ -119,6 +123,17 @@ internal fun EpisodeDetailScreen(
 	onBackClick: () -> Unit = {},
 ) {
 	val context = LocalContext.current
+	val imageLoader = context.imageLoader
+
+	LaunchedEffect(state.episode.imageUrls) {
+		state.episode.imageUrls.forEach { imageUrl ->
+			val request = ImageRequest.Builder(context)
+				.data(imageUrl)
+				.size(Size.ORIGINAL) // 원본 크기로 로드
+				.build()
+			imageLoader.enqueue(request)
+		}
+	}
 
 	MapisodeScaffold(
 		modifier = Modifier.fillMaxSize(),
@@ -170,7 +185,10 @@ internal fun EpisodeDetailScreen(
 				) {
 					imageUrls.forEach { imageUrl ->
 						AsyncImage(
-							model = imageUrl,
+							model = ImageRequest.Builder(context)
+								.data(imageUrl)
+								.crossfade(true)
+								.build(),
 							contentDescription = "애피소드 이미지",
 							modifier = Modifier
 								.size(110.dp)
