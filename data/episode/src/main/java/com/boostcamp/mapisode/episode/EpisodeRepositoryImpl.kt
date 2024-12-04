@@ -184,9 +184,15 @@ class EpisodeRepositoryImpl @Inject constructor(
 				updatedUrls.add(downloadUrl.toString())
 			}
 
-			val createdBy = database.collection("user").document(episodeModel.createdBy)
-			val group = database.collection("group").document(episodeModel.group)
-			database.document("episode/${episodeModel.id}")
+			val createdBy = database.collection(
+				FirestoreConstants.COLLECTION_USER,
+			).document(episodeModel.createdBy)
+			val group = database.collection(
+				FirestoreConstants.COLLECTION_GROUP,
+			).document(episodeModel.group)
+			database.document(
+				"${FirestoreConstants.COLLECTION_EPISODE}/${episodeModel.id}",
+			)
 				.set(episodeModel.toFirestoreModelForUpdate(createdBy, group, updatedUrls))
 				.await()
 		} catch (e: FirebaseException) {
