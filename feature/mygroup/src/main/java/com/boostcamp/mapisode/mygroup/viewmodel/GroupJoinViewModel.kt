@@ -5,6 +5,7 @@ import com.boostcamp.mapisode.datastore.UserPreferenceDataStore
 import com.boostcamp.mapisode.mygroup.GroupRepository
 import com.boostcamp.mapisode.mygroup.R
 import com.boostcamp.mapisode.mygroup.intent.GroupJoinIntent
+import com.boostcamp.mapisode.mygroup.model.toGroupCreationModel
 import com.boostcamp.mapisode.mygroup.sideeffect.GroupJoinSideEffect
 import com.boostcamp.mapisode.mygroup.state.GroupJoinState
 import com.boostcamp.mapisode.ui.base.BaseViewModel
@@ -54,7 +55,7 @@ class GroupJoinViewModel @Inject constructor(
 			intent { copy(isGroupLoading = true) }
 			try {
 				val group = groupRepository.getGroupByInviteCodes(inviteCodes)
-				intent { copy(isGroupExist = true, group = group) }
+				intent { copy(isGroupExist = true, group = group.toGroupCreationModel()) }
 			} catch (e: Exception) {
 				intent { copy(isGroupExist = false) }
 				postSideEffect(GroupJoinSideEffect.ShowToast(R.string.group_join_not_exist))
