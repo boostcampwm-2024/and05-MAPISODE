@@ -23,6 +23,7 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -79,7 +80,8 @@ fun MapisodeDateSelector(
 			modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
 			horizontalArrangement = Arrangement.SpaceBetween,
 		) {
-			persistentListOf("월", "화", "수", "목", "금", "토", "일").forEach { day ->
+			persistentListOf("일", "월", "화", "수", "목", "금", "토")
+				.toImmutableList().forEach { day ->
 				MapisodeText(
 					text = day,
 					style = MapisodeTheme.typography.labelLarge,
