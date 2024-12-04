@@ -14,7 +14,7 @@ sealed class NewEpisodeIntent : UiIntent {
 	data class SetEpisodeAddress(val latLng: LatLng) : NewEpisodeIntent()
 	data class SetEpisodeGroup(val group: String) : NewEpisodeIntent()
 	data class SetEpisodeCategory(val category: EpisodeCategory) : NewEpisodeIntent()
-	data class SetEpisodeTags(val tags: String) : NewEpisodeIntent()
+	data class SetEpisodeTags(val tags: List<String>) : NewEpisodeIntent()
 	data class SetEpisodeDate(val date: Date) : NewEpisodeIntent()
 	data class SetEpisodeInfo(val episodeInfo: NewEpisodeInfo) : NewEpisodeIntent()
 	data class SetEpisodeContent(val episodeContent: NewEpisodeContent) : NewEpisodeIntent()
