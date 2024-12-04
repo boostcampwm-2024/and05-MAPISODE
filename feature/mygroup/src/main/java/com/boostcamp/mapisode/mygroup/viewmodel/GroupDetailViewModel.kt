@@ -9,10 +9,12 @@ import com.boostcamp.mapisode.mygroup.R
 import com.boostcamp.mapisode.mygroup.intent.GroupDetailIntent
 import com.boostcamp.mapisode.mygroup.model.GroupUiMemberModel
 import com.boostcamp.mapisode.mygroup.model.toGroupUiEpisodeModel
+import com.boostcamp.mapisode.mygroup.model.toGroupUiModel
 import com.boostcamp.mapisode.mygroup.sideeffect.GroupDetailSideEffect
 import com.boostcamp.mapisode.mygroup.state.GroupDetailState
 import com.boostcamp.mapisode.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -97,7 +99,7 @@ class GroupDetailViewModel @Inject constructor(
 				intent {
 					copy(
 						isGroupLoading = false,
-						group = group,
+						group = group.toGroupUiModel(),
 					)
 				}
 				if (group.adminUser == userPreferenceDataStore.getUserId().first()) {
@@ -154,7 +156,7 @@ class GroupDetailViewModel @Inject constructor(
 
 			intent {
 				copy(
-					membersInfo = memberInfo,
+					membersInfo = memberInfo.toImmutableList(),
 				)
 			}
 		}
@@ -186,7 +188,7 @@ class GroupDetailViewModel @Inject constructor(
 								member.id == it.createdBy
 							}?.name ?: ""
 							it.toGroupUiEpisodeModel(name)
-						},
+						}.toImmutableList(),
 					)
 				}
 			} catch (e: Exception) {

@@ -266,7 +266,7 @@ fun GroupDetailContent(
 					0 -> {
 						if (uiState.group != null) {
 							GroupDetailContent(
-								group = uiState.group,
+								group = uiState.group.toGroupModel(),
 								members = uiState.membersInfo,
 								onIssueCodeClick = onIssueCodeClick,
 								onGroupOutClick = onGroupOutClick,
