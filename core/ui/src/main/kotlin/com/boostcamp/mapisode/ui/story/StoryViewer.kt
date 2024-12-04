@@ -2,6 +2,7 @@ package com.boostcamp.mapisode.ui.story
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -86,6 +87,7 @@ fun StoryViewer(
 	Box(
 		modifier = Modifier
 			.fillMaxSize()
+			.background(Color.Gray)
 			.pointerInput(Unit) {
 				detectTapGestures(
 					onPress = {
