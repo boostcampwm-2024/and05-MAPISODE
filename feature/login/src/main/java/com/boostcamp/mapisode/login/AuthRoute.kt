@@ -69,6 +69,8 @@ fun AuthRoute(
 					viewModel.onIntent(AuthIntent.OnProfileUrlChange(profileUrl))
 				},
 				onSignUpClick = { viewModel.onIntent(AuthIntent.OnSignUpClick) },
+				isPhotopickerClicked = uiState.isPhotopickerClicked,
+				onPhotopickerClick = { viewModel.onIntent(AuthIntent.OnPhotopickerClick) },
 				onBackClickedInSignUp = { viewModel.onIntent(AuthIntent.OnBackClickedInSignUp) },
 			)
 		}

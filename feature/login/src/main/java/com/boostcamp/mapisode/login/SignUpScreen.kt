@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -42,27 +40,28 @@ fun SignUpScreen(
 	onProfileUrlChange: (String) -> Unit,
 	onSignUpClick: () -> Unit,
 	onBackClickedInSignUp: () -> Unit,
+	isPhotopickerClicked: Boolean,
+	onPhotopickerClick: () -> Unit,
 	modifier: Modifier = Modifier,
 ) {
-	val isPhotoPickerClicked = rememberSaveable { mutableStateOf(false) }
 
 	BackHandler {
-		if (isPhotoPickerClicked.value) {
-			isPhotoPickerClicked.value = false
+		if (isPhotopickerClicked) {
+			onPhotopickerClick()
 		} else {
 			onBackClickedInSignUp()
 		}
 	}
 
-	if (isPhotoPickerClicked.value) {
+	if (isPhotopickerClicked) {
 		MapisodePhotoPicker(
 			numOfPhoto = 1,
 			onPhotoSelected = { selectedPhotos ->
 				onProfileUrlChange(selectedPhotos[0].uri)
-				isPhotoPickerClicked.value = false
+				onPhotopickerClick()
 			},
-			onPermissionDenied = { isPhotoPickerClicked.value = false },
-			onBackPressed = { isPhotoPickerClicked.value = false },
+			onPermissionDenied = onPhotopickerClick,
+			onBackPressed = onPhotopickerClick,
 			isCameraNeeded = false,
 		)
 	} else {
@@ -115,7 +114,7 @@ fun SignUpScreen(
 					Spacer(modifier = Modifier.height(12.dp))
 
 					MapisodeImageButton(
-						onClick = { isPhotoPickerClicked.value = true },
+						onClick = onPhotopickerClick,
 						showImage = profileUrl.isBlank(),
 						modifier = Modifier
 							.fillMaxWidth()
@@ -179,12 +178,14 @@ fun SignUpTopBar(
 fun SignUpScreenPreview() {
 	MapisodeTheme {
 		SignUpScreen(
-			nickname = "닉네임",
+			nickname = "nickname",
 			onNicknameChanged = {},
 			profileUrl = "",
 			onProfileUrlChange = {},
 			onSignUpClick = {},
 			onBackClickedInSignUp = {},
+			isPhotopickerClicked = false,
+			onPhotopickerClick = {},
 		)
 	}
 }

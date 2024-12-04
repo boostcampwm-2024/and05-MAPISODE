@@ -11,4 +11,5 @@ data class AuthState(
 	val nickname: String = "",
 	val profileUrl: String = "",
 	val isNicknameValid: Boolean = false,
+	val isPhotopickerClicked: Boolean = false,
 ) : UiState

@@ -31,6 +31,7 @@ class AuthViewModel @Inject constructor(
 			is AuthIntent.OnSignUpClick -> handleSignUp()
 			is AuthIntent.OnLoginSuccess -> handleLoginSuccess()
 			is AuthIntent.OnBackClickedInSignUp -> onBackClickedInSignUp()
+			is AuthIntent.OnPhotopickerClick -> handlePhotopickerClick()
 		}
 	}
 
@@ -232,5 +233,11 @@ class AuthViewModel @Inject constructor(
 			userDataStore.updateIsLoggedIn(true)
 		}
 		postSideEffect(AuthSideEffect.NavigateToMain)
+	}
+
+	private fun handlePhotopickerClick() {
+		intent {
+			copy(isPhotopickerClicked = !isPhotopickerClicked)
+		}
 	}
 }
