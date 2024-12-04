@@ -67,7 +67,6 @@ import com.boostcamp.mapisode.designsystem.theme.MapisodeTextStyle
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.model.EpisodeLatLng
 import com.boostcamp.mapisode.ui.photopicker.MapisodePhotoPicker
-import com.boostcamp.mapisode.ui.photopicker.model.PhotoInfo
 import com.naver.maps.map.CameraPosition
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -603,27 +602,6 @@ fun TagInputField(
 					LineHeightStyle.Default.trim,
 				),
 			),
-		)
-	}
-}
-
-@Composable
-fun PhotoPickerScreen(
-	localSelectedUrls: PersistentList<PhotoInfo>,
-	modifier: Modifier = Modifier,
-) {
-	Box(
-		modifier = Modifier.fillMaxSize(),
-		contentAlignment = Alignment.Center,
-	) {
-		val localSelectedUrl: PersistentList<PhotoInfo> = remember { persistentListOf() }
-		MapisodePhotoPicker(
-			numOfPhoto = 4,
-			onPhotoSelected = { photoInfo ->
-				localSelectedUrl + photoInfo
-			},
-			onPermissionDenied = {},
-			onBackPressed = {},
 		)
 	}
 }
