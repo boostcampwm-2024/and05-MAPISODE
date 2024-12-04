@@ -6,11 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerColors
-import androidx.compose.material3.DatePickerDefaults
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,14 +25,14 @@ import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
-import com.boostcamp.mapisode.designsystem.compose.button.MapisodeOutlinedButton
+import com.boostcamp.mapisode.designsystem.compose.datepicker.MapisodeDatePicker
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenu
 import com.boostcamp.mapisode.designsystem.compose.menu.MapisodeDropdownMenuItem
-import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.buttonModifier
 import com.boostcamp.mapisode.episode.intent.EpisodeCategory
 import com.boostcamp.mapisode.episode.intent.NewEpisodeIntent
 import com.boostcamp.mapisode.episode.intent.NewEpisodeViewModel
+import java.time.ZoneId
 import java.util.Date
 
 @Composable
@@ -57,7 +52,6 @@ internal fun NewEpisodeInfoScreen(
 		mutableStateOf(TextFieldValue(uiState.episodeInfo.tags))
 	}
 	var showDatePickerDialog by remember { mutableStateOf(false) }
-	val datePickerState = rememberDatePickerState()
 	var showClearDialog by rememberSaveable { mutableStateOf(false) }
 
 	LaunchedEffect(Unit) {
@@ -99,38 +93,25 @@ internal fun NewEpisodeInfoScreen(
 			verticalArrangement = Arrangement.SpaceBetween,
 		) {
 			if (showDatePickerDialog) {
-				DatePickerDialog(
-					onDismissRequest = {
+				MapisodeDatePicker(
+					onDismissRequest = { showDatePickerDialog = false },
+					onDateSelected = { localDate ->
+						viewModel.onIntent(
+							NewEpisodeIntent.SetEpisodeDate(
+								Date.from(
+									localDate.atStartOfDay(
+										ZoneId.systemDefault(),
+									).toInstant(),
+								),
+							),
+						)
 						showDatePickerDialog = false
 					},
-					confirmButton = {
-						MapisodeOutlinedButton(
-							modifier = Modifier.padding(top = 8.dp),
-							onClick = {
-								showDatePickerDialog = false
-								datePickerState.selectedDateMillis?.let {
-									viewModel.onIntent(NewEpisodeIntent.SetEpisodeDate(Date(it)))
-								}
-							},
-							text = stringResource(R.string.new_episode_menu_ok),
-						)
-					},
-					dismissButton = {
-						MapisodeOutlinedButton(
-							onClick = {
-								showDatePickerDialog = false
-							},
-							text = stringResource(R.string.new_episode_menu_cancel),
-						)
-					},
-					colors = datePickerDialogColors(),
-				) {
-					DatePicker(
-						state = datePickerState,
-						colors = datePickerDialogColors(),
-						showModeToggle = false,
-					)
-				}
+					initialDate = uiState.episodeInfo.date
+						.toInstant()
+						.atZone(ZoneId.systemDefault())
+						.toLocalDate(),
+				)
 			}
 			Column {
 				EpisodeTextFieldGroup(
@@ -258,15 +239,6 @@ internal fun NewEpisodeInfoScreen(
 }
 
 private fun checkCategoryIsNull(category: EpisodeCategory?) = category == null
-
-@Composable
-private fun datePickerDialogColors(): DatePickerColors =
-	DatePickerDefaults.colors().copy(
-		containerColor = MapisodeTheme.colorScheme.dialogBackground,
-		selectedYearContainerColor = MapisodeTheme.colorScheme.dialogConfirm,
-		selectedDayContainerColor = MapisodeTheme.colorScheme.dialogConfirm,
-		todayDateBorderColor = MapisodeTheme.colorScheme.dialogConfirm,
-	)
 
 private const val DATE_STRING_FORMAT = "yyyy. MM. dd"
 private fun dateString(date: Date): String =
