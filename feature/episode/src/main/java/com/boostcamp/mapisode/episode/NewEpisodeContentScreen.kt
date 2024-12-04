@@ -19,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,12 +31,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
-import com.boostcamp.mapisode.common.util.throttleFirst
 import com.boostcamp.mapisode.designsystem.compose.MapisodeCircularLoadingIndicator
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
 import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.Surface
-import com.boostcamp.mapisode.designsystem.compose.button.MapisodeFilledButton
+import com.boostcamp.mapisode.designsystem.compose.button.MapisodeThrottleFilledButton
 import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.buttonModifier
 import com.boostcamp.mapisode.episode.common.NewEpisodeConstant.textFieldModifier
@@ -82,29 +80,6 @@ internal fun NewEpisodeContentScreen(
 				}
 			}
 		}
-	}
-
-	LaunchedEffect(uiState.isCreatingEpisode) {
-		snapshotFlow { uiState.isCreatingEpisode }
-			.throttleFirst(1000L)
-			.collect { isCreating ->
-				if (isCreating) {
-					viewModel.onIntent(
-						NewEpisodeIntent.SetEpisodeContent(
-							NewEpisodeContent(
-								titleValue.text,
-								descriptionValue.text,
-								uiState.episodeContent.images,
-							),
-						),
-					)
-					try {
-						viewModel.onIntent(NewEpisodeIntent.CreateNewEpisode)
-					} catch (e: Exception) {
-						Timber.e(e)
-					}
-				}
-			}
 	}
 
 	if (showClearDialog) {
@@ -175,14 +150,29 @@ internal fun NewEpisodeContentScreen(
 					}
 				}
 			}
-			MapisodeFilledButton(
+			MapisodeThrottleFilledButton(
 				modifier = buttonModifier,
 				onClick = {
 					if (uiState.isCreatingEpisode.not()) {
 						viewModel.onIntent(NewEpisodeIntent.SetIsCreatingEpisode(true))
+						viewModel.onIntent(
+							NewEpisodeIntent.SetEpisodeContent(
+								NewEpisodeContent(
+									titleValue.text,
+									descriptionValue.text,
+									uiState.episodeContent.images,
+								),
+							),
+						)
+						try {
+							viewModel.onIntent(NewEpisodeIntent.CreateNewEpisode)
+						} catch (e: Exception) {
+							Timber.e(e)
+						}
 					}
 				},
 				text = stringResource(R.string.new_episode_create_episode),
+				disabledText = stringResource(R.string.new_episode_creating_episode),
 				enabled = uiState.isCreatingEpisode.not(),
 			)
 		}
