@@ -65,6 +65,8 @@ import com.boostcamp.mapisode.home.component.MapisodeChip
 @Composable
 internal fun EpisodeDetailRoute(
 	episodeId: String,
+	onEpisodeEditClick: (String) -> Unit,
+	onOpenStoryViewer: () -> Unit,
 	viewModel: EpisodeDetailViewModel = hiltViewModel(),
 	onBackClick: () -> Unit = {},
 ) {
@@ -102,7 +104,7 @@ internal fun EpisodeDetailRoute(
 			state = uiState,
 			onBackClick = onBackClick,
 			onEpisodeEditClick = { onEpisodeEditClick(episodeId) },
-			onOpenStoryViewer = { viewModel.onIntent(EpisodeDetailIntent.OpenStoryViewer) },
+			onStoryViewerClick = { viewModel.onIntent(EpisodeDetailIntent.OpenStoryViewer) },
 		)
 	}
 }
@@ -113,6 +115,7 @@ internal fun EpisodeDetailScreen(
 	state: EpisodeDetailState,
 	modifier: Modifier = Modifier,
 	onEpisodeEditClick: () -> Unit,
+	onStoryViewerClick: () -> Unit,
 	onBackClick: () -> Unit = {},
 ) {
 	val context = LocalContext.current
@@ -171,7 +174,8 @@ internal fun EpisodeDetailScreen(
 							contentDescription = "애피소드 이미지",
 							modifier = Modifier
 								.size(110.dp)
-								.clip(RoundedCornerShape(16.dp)),
+								.clip(RoundedCornerShape(16.dp))
+								.clickable { onStoryViewerClick() },
 							contentScale = ContentScale.Crop,
 						)
 					}
@@ -318,6 +322,6 @@ fun EpisodeDetailScreenPreview(
 	}
 
 	CompositionLocalProvider(LocalAsyncImagePreviewHandler provides previewHandler) {
-		EpisodeDetailScreen(state = state, onEpisodeEditClick = {})
+		EpisodeDetailScreen(state = state, onEpisodeEditClick = {}, onStoryViewerClick = {})
 	}
 }

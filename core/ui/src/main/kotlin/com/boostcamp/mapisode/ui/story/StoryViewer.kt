@@ -52,12 +52,14 @@ fun StoryViewer(
 	val progressAnimatable = remember { Animatable(0f) }
 	var isPaused by rememberSaveable { mutableStateOf(false) }
 	val coroutineScope = rememberCoroutineScope()
+	var isClosed by rememberSaveable { mutableStateOf(false) }
 
 	LaunchedEffect(
 		key1 = currentIndex,
 		key2 = isPaused,
 	) {
 		if (!isPaused) {
+			progressAnimatable.stop()
 			progressAnimatable.snapTo(0f)
 			progressAnimatable.animateTo(
 				targetValue = 1f,
@@ -68,7 +70,10 @@ fun StoryViewer(
 				if (currentIndex < imageUrls.size - 1) {
 					currentIndex += 1
 				} else {
-					onClose()
+					if (!isClosed) {
+						isClosed = true
+						onClose()
+					}
 				}
 			}
 		}
@@ -95,7 +100,10 @@ fun StoryViewer(
 									currentIndex -= 1
 									progressAnimatable.snapTo(0f)
 								} else {
-									onClose()
+									if (!isClosed) {
+										isClosed = true
+										onClose()
+									}
 								}
 							} else {
 								// 오른쪽 터치 동작
@@ -103,7 +111,10 @@ fun StoryViewer(
 									currentIndex += 1
 									progressAnimatable.snapTo(0f)
 								} else {
-									onClose()
+									if (!isClosed) {
+										isClosed = true
+										onClose()
+									}
 								}
 							}
 						}
