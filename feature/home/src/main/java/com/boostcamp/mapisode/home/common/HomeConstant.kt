@@ -38,4 +38,5 @@ object HomeConstant {
 	const val EXTRA_RANGE = 0.01 // 약 1 ~ 1.5km
 	const val MOCK_IMAGE_URL =
 		"https://github.com/user-attachments/assets/411506ef-5fbf-4c6b-b68d-d00343a0b50e"
+	const val MAX_NUM_OF_PHOTOS = 4
 }
