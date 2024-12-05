@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,11 +19,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIcon
 import com.boostcamp.mapisode.designsystem.compose.MapisodeIconButton
 import com.boostcamp.mapisode.designsystem.compose.MapisodeScaffold
+import com.boostcamp.mapisode.designsystem.compose.MapisodeText
 import com.boostcamp.mapisode.designsystem.compose.topbar.TopAppBar
+import com.boostcamp.mapisode.designsystem.theme.MapisodeTheme
+import com.boostcamp.mapisode.ui.R
 import com.boostcamp.mapisode.ui.photopicker.component.CameraItem
 import com.boostcamp.mapisode.ui.photopicker.component.PhotoItem
 import com.boostcamp.mapisode.ui.photopicker.model.PhotoInfo
@@ -82,7 +85,11 @@ fun MapisodePhotoPicker(
 				cameraPhotos.add(photo)
 			}
 		} catch (e: IOException) {
-			Toast.makeText(context, "사진 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
+			Toast.makeText(
+				context,
+				context.getString(R.string.photopicker_fail),
+				Toast.LENGTH_SHORT,
+			).show()
 		}
 	}
 
@@ -151,7 +158,10 @@ fun PhotoPicker(
 						},
 						enabled = selectedPhotos.size > 0,
 					) {
-						Text("완료")
+						MapisodeText(
+							text = stringResource(R.string.photopicker_confirm),
+							style = MapisodeTheme.typography.titleMedium,
+						)
 					}
 				},
 			)
