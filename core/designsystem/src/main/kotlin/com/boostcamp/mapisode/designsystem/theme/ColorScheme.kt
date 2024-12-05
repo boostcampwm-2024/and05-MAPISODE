@@ -310,7 +310,7 @@ val darkColorScheme = CustomColorScheme(
 	outlineButtonContent = Neutral40,
 
 	// Chip
-	chipSelectedBackground = Neutral80,
+	chipSelectedBackground = Neutral70,
 	chipUnselectedBackground = Neutral100,
 	chipText = Neutral10,
 	chipSelectedStroke = Primary30,
