@@ -207,10 +207,13 @@ internal fun EpisodeDetailScreen(
 					.fillMaxWidth()
 					.padding(horizontal = 20.dp)
 					.clip(RoundedCornerShape(12.dp))
-					.background(color = Color.White, shape = RoundedCornerShape(12.dp))
+					.background(
+						color = MapisodeTheme.colorScheme.episodeBoxBackground,
+						shape = RoundedCornerShape(12.dp),
+					)
 					.border(
 						width = 1.dp,
-						color = Color.Black,
+						color = MapisodeTheme.colorScheme.episodeBoxStroke,
 						shape = RoundedCornerShape(12.dp),
 					),
 			) {
