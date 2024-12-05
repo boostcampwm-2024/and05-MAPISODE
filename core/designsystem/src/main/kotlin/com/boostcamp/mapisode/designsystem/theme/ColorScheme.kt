@@ -304,7 +304,7 @@ val darkColorScheme = CustomColorScheme(
 	// Button
 	filledButtonEnableBackground = Primary50,
 	filledButtonDisableBackground = Neutral80,
-	filledButtonContent = Neutral110,
+	filledButtonContent = Neutral40,
 	outlineButtonBackground = Neutral110,
 	outlineButtonStroke = Neutral40,
 	outlineButtonContent = Neutral40,
