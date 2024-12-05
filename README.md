@@ -53,11 +53,13 @@
    <td><img align=top width="200" src="https://github.com/user-attachments/assets/39fccfd3-ecaf-4662-b580-5c6467500108"></td>
     <td><img align=top width="200" src="https://github.com/user-attachments/assets/93c32af3-e08c-43ed-9f56-228493a4dfe8"></td>
     <td><img align=top width="200" src="https://github.com/user-attachments/assets/4e8a4e57-b339-49b9-9365-20461290efe4"></td>
+    <td><img align=top width="200" src="https://github.com/user-attachments/assets/163ea1b8-044e-405e-b201-752b493cbc71"></td>
  </tr>
 <tr>
-  <td>에피소드 상세</td>
-  <td>에피소드 목록</td>
-  <td>꾹 눌러 생성</td>
+  <td align="center">에피소드 상세</td>
+  <td align="center">에피소드 목록</td>
+  <td align="center">꾹 눌러 생성</td>
+  <td align="center">스토리 몰입모드</td>
 </tr>
 
 </table>
