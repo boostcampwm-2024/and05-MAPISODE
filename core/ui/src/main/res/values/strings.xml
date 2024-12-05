@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="photopicker_confirm">선택</string>
+	<string name="photopicker_fail">사진 저장에 실패했습니다.</string>
+</resources>
