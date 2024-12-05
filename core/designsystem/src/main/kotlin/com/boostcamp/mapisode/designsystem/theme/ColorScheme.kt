@@ -122,6 +122,10 @@ data class CustomColorScheme(
 	// Checkbox
 	val checkboxBackground: Color,
 	val checkboxStroke: Color,
+
+	// EpisodeCard
+	val episodeBoxBackground: Color,
+	val episodeBoxStroke: Color,
 )
 
 // Light Theme Color Scheme
@@ -243,6 +247,10 @@ val lightColorScheme = CustomColorScheme(
 	// Checkbox
 	checkboxBackground = Primary20.copy(alpha = 0.5f),
 	checkboxStroke = Primary50.copy(alpha = 0.5f),
+
+	// EpisodeCard
+	episodeBoxBackground = Neutral10,
+	episodeBoxStroke = Neutral40,
 )
 
 // Dark Theme Color Scheme
@@ -364,4 +372,8 @@ val darkColorScheme = CustomColorScheme(
 	// Checkbox
 	checkboxBackground = Primary20.copy(alpha = 0.6f),
 	checkboxStroke = Neutral40,
+
+	// EpisodeCard
+	episodeBoxBackground = Neutral50,
+	episodeBoxStroke = Neutral40,
 )

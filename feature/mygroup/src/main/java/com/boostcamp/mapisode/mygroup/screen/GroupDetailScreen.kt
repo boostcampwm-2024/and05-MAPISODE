@@ -42,7 +42,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -157,7 +156,8 @@ fun GroupDetailScreen(
 			}
 
 			is GroupDetailSideEffect.IssueInvitationCode -> {
-				val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+				val clipboard =
+					context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 				val clip = ClipData.newPlainText("label", effect.invitationCode)
 				clipboard.setPrimaryClip(clip)
 			}
@@ -545,8 +545,15 @@ fun EpisodeCard(
 		modifier = Modifier
 			.fillMaxWidth()
 			.height(130.dp)
-			.background(Color.White, shape = RoundedCornerShape(8.dp))
-			.border(1.dp, Color.LightGray, shape = RoundedCornerShape(8.dp))
+			.background(
+				color = MapisodeTheme.colorScheme.episodeBoxBackground,
+				shape = RoundedCornerShape(8.dp),
+			)
+			.border(
+				width = 1.dp,
+				color = MapisodeTheme.colorScheme.episodeBoxStroke,
+				shape = RoundedCornerShape(8.dp),
+			)
 			.padding(10.dp)
 			.clickable {
 				onEpisodeClick(episode.id)
