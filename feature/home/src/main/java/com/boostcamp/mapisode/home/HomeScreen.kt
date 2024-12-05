@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -64,6 +65,7 @@ import com.naver.maps.map.compose.CameraPositionState
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.LocationTrackingMode
 import com.naver.maps.map.compose.MapProperties
+import com.naver.maps.map.compose.MapType
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.MarkerState
@@ -304,6 +306,8 @@ private fun HomeScreen(
 			properties = MapProperties(
 				locationTrackingMode = LocationTrackingMode.NoFollow,
 				isIndoorEnabled = true,
+				isNightModeEnabled = isSystemInDarkTheme(),
+				mapType = MapType.Navi,
 			),
 			uiSettings = MapUiSettings(
 				isZoomGesturesEnabled = true,
