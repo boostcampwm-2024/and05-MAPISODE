@@ -84,11 +84,6 @@ fun GroupInfoCard(
 			)
 
 			Spacer(modifier = Modifier.height(4.dp))
-
-			MapisodeText(
-				text = stringResource(R.string.group_recent_upload),
-				style = MapisodeTheme.typography.labelMedium,
-			)
 		}
 	}
 }

@@ -502,12 +502,7 @@ fun GroupMemberContent(
 				maxLines = 1,
 			)
 			Spacer(modifier = Modifier.padding(2.dp))
-			MapisodeText(
-				text = stringResource(S.string.content_member_joined_at) +
-					member.joinedAt.toFormattedString(),
-				style = MapisodeTheme.typography.labelMedium,
-				maxLines = 1,
-			)
+
 			MapisodeText(
 				text = buildString {
 					append(stringResource(S.string.content_recent_episode_upload))
