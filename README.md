@@ -7,7 +7,7 @@
 
 ## 👨‍👨‍👦‍👦 팀원 소개 
 
-| [김동역](https://github.com/Ameri-Kano) | [류태웅](https://github.com/TaewoongR) | [이태희](https://github.com/taeheeL) | [홍사인](https://github.com/shinythinking) |
+| [김동역](https://github.com/Ameri-Kano) | [류태웅](https://github.com/TaewoongR) | [이태희](https://github.com/haeti-dev) | [홍사인](https://github.com/shinythinking) |
 |:---:|:---:|:---:|:---:|
 |<img width="250" alt="image" src="https://github.com/user-attachments/assets/f7ef338d-ce54-4435-b7fb-3180dfaf0059" />|<img width="250" alt="image" src="https://github.com/user-attachments/assets/97081ec7-e86e-4f77-89b9-1548ad837a09" />|<img width="250" alt="image" src="https://github.com/user-attachments/assets/eb231a8a-d0e4-47c2-9ca8-a80f51f95e6f" />|<img width="250" alt="image" src="https://github.com/user-attachments/assets/1555b029-7449-41da-80a1-dc1b4562bcdc" />|
 </br>
